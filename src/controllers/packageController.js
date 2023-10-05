@@ -1,5 +1,5 @@
 // #Task route solution
-const PackageModel = require("../odels/package.js");
+const PackageModel = require("../models/packages");
 const { default: mongoose } = require("mongoose");
 
 const createPackage = async (req, res) => {
