@@ -12,7 +12,7 @@ const systemUsers = new Schema(
       required: true,
     },
     Email: {
-      typer: String,
+      type: String,
       required: true,
     },
     Type: {
