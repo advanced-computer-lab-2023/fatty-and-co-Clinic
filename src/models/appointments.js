@@ -14,7 +14,7 @@ const prescriptionMade = new Schema({
     required: true,
   },
   Advised: {
-    type: [manyMeds],
+    type: manyMeds,
     required: true,
   },
 });

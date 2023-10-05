@@ -1,5 +1,5 @@
 const users = require("../models/systemusers.js");
-const doctors = require('../models/doctors.js');
+const requests = require('../models/requests.js');
 const { default: mongoose } = require('mongoose');
 
 const createAdmin = async(req,res) => {
@@ -18,9 +18,9 @@ try {
 const getRequests = async (req, res) => {
  
  try{
-    const doctors = await doctors.find();
+    const requests = await requests.find();
 
-    res.status(200).json(doctors);
+    res.status(200).json(requests);
  } catch (error){
     res.status(400).json({ error: error.message });
  }

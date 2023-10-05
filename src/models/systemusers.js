@@ -11,6 +11,10 @@ const systemUsers = new Schema(
       type: String,
       required: true,
     },
+    Email: {
+      typer: String,
+      required: true,
+    },
     Type: {
       type: String,
       enum: ["Admin", "Patient", "Doctor"],
