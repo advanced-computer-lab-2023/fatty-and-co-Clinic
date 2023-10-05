@@ -10,6 +10,7 @@ const doctorRoutes = require("./routes/doctors");
 const patientRoutes = require("./routes/patients");
 const adminRoutes = require("./routes/admins");
 const testRoutes = require("./routes/tests");
+const packageRoutes = require("./routes/package");
 
 // ENV Variables
 const port = process.env.PORT || 8000;
@@ -32,6 +33,7 @@ app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/test", testRoutes);
+app.use("/package", packageRoutes);
 
 // Server
 mongoose
