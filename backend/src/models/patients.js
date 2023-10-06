@@ -30,6 +30,11 @@ const patientSchema = new Schema(
       type: [ImportFamObject.FamilyMem], //NOT SURE MEN LAW DA VALID TYPE
       required: false,
     },
+    PackageName: {
+      type: String,
+      required: false,
+    },
+
   },
   { timestamps: true }
 );
