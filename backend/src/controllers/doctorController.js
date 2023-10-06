@@ -83,8 +83,25 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
   }
 };
 
+//filter doctors by speciality or/and (date and time)
+const filterDoctor = async (req,res) => {
+  try{  
+    console.log(req.query);
+    const doctors = await doctorModel.find({Speciality: req.query.speciality});
+    res.status(200).json(doctors);
+  }catch(err){
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
+
+
 module.exports = {
   getDoctorByID,
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
+  filterDoctor,
 };
