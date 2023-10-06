@@ -5,6 +5,8 @@ const doctors = new Schema(
     Username: {
       type: String,
       required: true,
+      trim: true,
+      unique: true,
     },
     Name: {
       type: String,

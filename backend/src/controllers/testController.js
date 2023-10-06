@@ -6,9 +6,14 @@ const systemUser = require("../models/systemusers");
 
 // create a new user
 const createSystemUser = async (req, res) => {
-  const { Username, Password, Type } = req.body;
+  const { Username, Password, Email, Type } = req.body;
   try {
-    const newUser = await systemUser.create({ Username, Password, Type });
+    const newUser = await systemUser.create({
+      Username,
+      Password,
+      Email,
+      Type,
+    });
     res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: error.message });

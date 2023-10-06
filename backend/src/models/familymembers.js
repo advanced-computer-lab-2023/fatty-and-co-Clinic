@@ -9,6 +9,8 @@ const relatives = new Schema({
   NationalId: {
     type: String,
     required: true,
+    trim: true,
+    unique: true,
   },
   Age: {
     type: Number,
