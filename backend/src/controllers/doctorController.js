@@ -1,5 +1,5 @@
 const doctorModel = require("../models/doctors");
-const mongoose = require("mongoose");
+const { default: mongoose } = require("mongoose");
 
 // get a doctor by ID
 const getDoctorByID = async (req, res) => {

@@ -4,6 +4,7 @@ const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
 const requests = require("../models/requests");
+const { default: mongoose } = require("mongoose");
 const {
   generateUsername,
   generateName,
