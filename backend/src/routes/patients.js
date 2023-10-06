@@ -1,5 +1,5 @@
 const express = require("express");
-const patientController = require("../controllers/patientController");
+const { session_index } = require("../controllers/patientController");
 
 const router = express.Router();
 
@@ -7,6 +7,7 @@ router.get("/", (req, res) => {
   res.send("Patients");
 });
 
-router.get("/view/doctors/:id", patientController.session_index);
+// view a list of all doctors with speciality and session price for a patient
+router.get("/view/doctors/:id", session_index);
 
 module.exports = router;
