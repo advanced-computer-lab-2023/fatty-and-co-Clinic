@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ImportFamObject = require("./familymembers");
 
-const patients = new Schema(
+const patientSchema = new Schema(
   {
     Username: {
       type: String,
@@ -32,5 +32,5 @@ const patients = new Schema(
   { timestamps: true }
 );
 
-const Patient = mongoose.model("Patient", patients);
+const Patient = mongoose.model("Patient", patientSchema);
 module.exports = Patient;

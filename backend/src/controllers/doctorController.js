@@ -1,3 +1,3 @@
-const doctor = require("../models/doctors");
+const doctorModel = require("../models/doctors");
 
 module.exports = {};

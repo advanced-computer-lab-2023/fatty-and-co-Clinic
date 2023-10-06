@@ -1,3 +1,3 @@
-const appointment = require("../models/appointments");
+const appointmentModel = require("../models/appointments");
 
 module.exports = {};
