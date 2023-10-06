@@ -28,6 +28,19 @@ const getPackages = async (req, res) => {
   }
 };
 
+
+const getPackage = async (req, res) => {
+// retrieve a specific Package by Name
+  try {
+    const { Name } = req.params;
+    const package = await packageModel.find({Name:Name});
+    res.status(200).json(package);
+  }
+  catch (err) {
+    res.status(404).json({ message: "No Package found" });
+  }
+};
+
 // Update a Package
 const updatePackage = async (req, res) => {
   try {
@@ -56,4 +69,4 @@ const deletePackage = async (req, res) => {
   }
 };
 
-module.exports = { createPackage, getPackages, updatePackage, deletePackage };
+module.exports = { createPackage, getPackages, getPackage, updatePackage, deletePackage };
