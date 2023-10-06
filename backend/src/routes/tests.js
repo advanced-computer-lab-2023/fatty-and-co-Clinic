@@ -7,6 +7,7 @@ const {
   getPatients,
   getRequests,
   createDoctor,
+  createPatient,
 } = require("../controllers/testController");
 
 const router = express.Router();
@@ -41,6 +42,10 @@ router.post("/createUser", (req, res) => {
 
 router.post("/createDoctor", (req, res) => {
   createDoctor(req, res);
+});
+
+router.post("/createPatient", (req, res) => {
+  createPatient(req, res);
 });
 
 module.exports = router;

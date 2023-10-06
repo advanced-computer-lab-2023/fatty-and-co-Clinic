@@ -138,6 +138,16 @@ function generateSpeciality() {
   return specialties[Math.floor(Math.random() * specialties.length)];
 }
 
+function generateMobileNum() {
+  const mobileNum = Math.floor(Math.random() * 1000000000) + 1000000000;
+  return mobileNum;
+}
+
+function generatePackage() {
+  const packages = ["Silver", "Gold", "Platinum"];
+  return packages[Math.floor(Math.random() * packages.length)];
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -146,4 +156,6 @@ module.exports = {
   generateAffiliation,
   generateEducationalBackground,
   generateSpeciality,
+  generateMobileNum,
+  generatePackage,
 };
