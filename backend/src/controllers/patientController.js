@@ -23,13 +23,12 @@ const createFamilymember = async (req, res) => {
    
   }
  const GetFamilymembers = async (req, res) => {
-    try {
-        const currentPatientuser="mariam";
-     
-       const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
+      const currentPatientuser="Mariam";
+      const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
+      if(fam.length!=0)
        res.status(200).json(fam);
   
-      } catch (error) {
+      else {
         res.status(400).send("khkhs");
       }}
      
