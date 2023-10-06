@@ -52,5 +52,5 @@ module.exports = {
   createPatient,
   getAllPatients,
   deletePatient,
-  getPatient
+  getPatient 
 };
