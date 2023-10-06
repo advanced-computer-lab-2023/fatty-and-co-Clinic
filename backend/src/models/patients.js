@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ImportFamObject = require("./familymembers");
-
 const patientSchema = new Schema(
   {
     Username: {
