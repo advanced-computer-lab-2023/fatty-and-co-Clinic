@@ -8,7 +8,7 @@ const systemUserModel = require("../models/systemusers");
 const createSystemUser = async (req, res) => {
   const { Username, Password, Email, Type } = req.body;
   try {
-    const newUser = await systemUser.create({
+    const newUser = await systemUserModel.create({
       Username,
       Password,
       Email,
