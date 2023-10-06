@@ -4,9 +4,9 @@ const requests = require('../models/requests.js');
 const { default: mongoose } = require('mongoose');
 
 const createAdmin = async (req, res) => {
-  const { Username, Password } = req.body;
+  const { Username, Password , Email} = req.body;
   try {
-    const admin = await userModel.create({ Username: Username, Password: Password, Type: "Admin" });
+    const admin = await userModel.create({ Username: Username, Password: Password, Email: Email, Type: "Admin" });
     res.status(200).json(admin);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -28,7 +28,8 @@ const acceptRequest = async (req, res) => {
   const { Username } = req.body;
   try {
     const request = await requests.findOneAndUpdate({Username: Username, Status: "Accepted"});
-    const doc= await doctorModel.create({Username: Username, Name:request.Name,Password: request.Password, Email: request.Email, DateOfBirth:request.DateOfBirth,HourlyRate:request.HourlyRate,Affiliation:request.Affiliation,EducationalBackground:request.EducationalBackground} );
+    const doc= await doctorModel.create({Username: Username, Name:request.Name, DateOfBirth:request.DateOfBirth,HourlyRate:request.HourlyRate,Affiliation:request.Affiliation,EducationalBackground:request.EducationalBackground} );
+    const user = await userModel.create({Username: Username, Password: request.Password, Email: request.Email});
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
