@@ -29,6 +29,10 @@ const doctorSchema = new Schema(
       type: String, //Assuming just medicine degree aw 7aga
       required: true,
     },
+    Speciality: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
