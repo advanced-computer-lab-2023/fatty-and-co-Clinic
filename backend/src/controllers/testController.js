@@ -3,6 +3,7 @@ const doctorModel = require("../models/doctors");
 const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
+const requests = require("../models/requests");
 const {
   generateUsername,
   generateName,
@@ -108,6 +109,15 @@ const getAdmins = async (req, res) => {
   }
 };
 
+const getRequests = async (req, res) => {
+  try {
+    const request = await requests.find();
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -115,4 +125,5 @@ module.exports = {
   getPatients,
   getDoctors,
   getAdmins,
+  getRequests,
 };
