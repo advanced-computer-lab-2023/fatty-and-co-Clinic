@@ -5,6 +5,7 @@ const {
   getAdmins,
   getDoctors,
   getPatients,
+  getRequests,
   createDoctor,
 } = require("../controllers/testController");
 
@@ -28,6 +29,10 @@ router.get("/Doctors", (req, res) => {
 
 router.get("/Patients", (req, res) => {
   getPatients(req, res);
+});
+
+router.get("/Requests", (req, res) => {
+  getRequests(req, res);
 });
 
 router.post("/createUser", (req, res) => {

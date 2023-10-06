@@ -3,6 +3,8 @@ const doctorModel = require("../models/doctors");
 const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
+const requests = require("../models/requests");
+const { default: mongoose } = require("mongoose");
 const {
   generateUsername,
   generateName,
@@ -10,6 +12,7 @@ const {
   generateHourlyRate,
   generateAffiliation,
   generateEducationalBackground,
+  generateSpeciality,
 } = require("../common/utils/generators");
 
 // create a new user
@@ -37,6 +40,7 @@ const createDoctor = async (req, res) => {
     HourlyRate,
     Affiliation,
     EducationalBackground,
+    Speciality,
   } = req.body;
 
   const username = Username || generateUsername();
@@ -46,6 +50,7 @@ const createDoctor = async (req, res) => {
   const affiliation = Affiliation || generateAffiliation();
   const educationalBackground =
     EducationalBackground || generateEducationalBackground();
+  const speciality = Speciality || generateSpeciality();
 
   try {
     const newDoctor = await doctorModel.create({
@@ -55,6 +60,7 @@ const createDoctor = async (req, res) => {
       HourlyRate: hourlyRate,
       Affiliation: affiliation,
       EducationalBackground: educationalBackground,
+      Speciality: speciality,
     });
     res.status(201).json(newDoctor);
   } catch (error) {
@@ -104,6 +110,15 @@ const getAdmins = async (req, res) => {
   }
 };
 
+const getRequests = async (req, res) => {
+  try {
+    const request = await requests.find();
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -111,6 +126,7 @@ module.exports = {
   getPatients,
   getDoctors,
   getAdmins,
+  getRequests,
 };
 
 

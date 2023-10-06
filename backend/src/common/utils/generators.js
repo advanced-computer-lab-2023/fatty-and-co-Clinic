@@ -114,6 +114,30 @@ function generateEducationalBackground() {
   return `${degree} from ${school} (${year})`;
 }
 
+function generateSpeciality() {
+  const specialties = [
+    "Cardiology",
+    "Dermatology",
+    "Endocrinology",
+    "Gastroenterology",
+    "Hematology",
+    "Infectious Disease",
+    "Nephrology",
+    "Neurology",
+    "Oncology",
+    "Ophthalmology",
+    "Orthopedics",
+    "Otolaryngology",
+    "Pediatrics",
+    "Psychiatry",
+    "Pulmonology",
+    "Radiology",
+    "Rheumatology",
+    "Urology",
+  ];
+  return specialties[Math.floor(Math.random() * specialties.length)];
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -121,4 +145,5 @@ module.exports = {
   generateHourlyRate,
   generateAffiliation,
   generateEducationalBackground,
+  generateSpeciality,
 };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { } = require("../controllers/guestController");
+const { createRequest } = require("../controllers/guestController");
 
 const router = express.Router();
 
@@ -7,5 +7,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("Guests");
 });
+
+router.post("/reg", createRequest);
 
 module.exports = router;
