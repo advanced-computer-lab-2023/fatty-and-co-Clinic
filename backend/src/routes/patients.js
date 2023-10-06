@@ -7,6 +7,6 @@ router.get("/", (req, res) => {
   res.send("Patients");
 });
 
-router.get("/:id", patientController.session_index);
+router.get("/view/doctors/:id", patientController.session_index);
 
 module.exports = router;
