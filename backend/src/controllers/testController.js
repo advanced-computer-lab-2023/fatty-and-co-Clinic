@@ -13,6 +13,8 @@ const {
   generateAffiliation,
   generateEducationalBackground,
   generateSpeciality,
+  generateMobileNum,
+  generatePackage,
 } = require("../common/utils/generators");
 
 // create a new user
@@ -63,6 +65,30 @@ const createDoctor = async (req, res) => {
       Speciality: speciality,
     });
     res.status(201).json(newDoctor);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// create a new patient
+const createPatient = async (req, res) => {
+  const { Username, Name, MobileNum, DateOfBirth, PackageName } = req.body;
+
+  const username = Username || generateUsername();
+  const name = Name || generateName();
+  const mobileNum = MobileNum || generateMobileNum();
+  const dateOfBirth = DateOfBirth || generateDateOfBirth();
+  const packageName = PackageName || generatePackage();
+
+  try {
+    const newPatient = await patientModel.create({
+      Username: username,
+      Name: name,
+      MobileNum: mobileNum,
+      DateOfBirth: dateOfBirth,
+      PackageName: packageName,
+    });
+    res.status(201).json(newPatient);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -122,6 +148,7 @@ const getRequests = async (req, res) => {
 module.exports = {
   createSystemUser,
   createDoctor,
+  createPatient,
   getSystemUsers,
   getPatients,
   getDoctors,
