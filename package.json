@@ -32,6 +32,7 @@
     "dotenv": "^16.3.1",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",
+    "env": "^0.0.2",
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
     "express": "^4.18.2",
@@ -124,7 +125,6 @@
     "whatwg-url": "^11.0.0",
     "yallist": "^4.0.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
