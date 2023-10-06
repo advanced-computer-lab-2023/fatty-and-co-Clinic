@@ -7,6 +7,7 @@ router.get("/", (req, res) => {
   res.send("Patients");
 });
 router.post("/createFamilymemeber", (req, res) => {
-  createFamilymember(req, res);
+  createFamilymember(req, res) ;
 });
+
 module.exports = router;
