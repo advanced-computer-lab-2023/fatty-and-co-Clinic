@@ -13,8 +13,8 @@ const prescription = new Schema({
     type: String,
     required: true,
   },
-  Advised: {
-    type: medicine,
+  Medicine: {
+    type: [medicine],
     required: true,
   },
 });
