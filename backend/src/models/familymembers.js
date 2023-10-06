@@ -23,6 +23,7 @@ const familyMemberSchema = new Schema({
   },
   Relation: {
     type: String,
+    enum: ["Spouse", "Child"],
     required: true,
   },
 });
