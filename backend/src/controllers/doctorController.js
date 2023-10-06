@@ -45,8 +45,6 @@ const getDoctorByUsername = async (req, res) => {
       Affiliation,
       EducationalBackground,
     };
-    console.log(doctor);
-    console.log(doctorDetails);
     res.status(200).json(doctorDetails);
   } catch (error) {
     res.status(500).json({ error: error.message });
