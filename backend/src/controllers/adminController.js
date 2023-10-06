@@ -51,4 +51,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-module.exports = { createAdmin, getRequests, deleteUser };
+module.exports = { createAdmin, getRequests, deleteUser, acceptRequest, declineRequest};
