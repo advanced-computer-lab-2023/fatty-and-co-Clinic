@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  createAppointment,
   createSystemUser,
   createPatient,
   getSystemUsers,
@@ -48,4 +49,6 @@ router.post("/createDoctor", (req, res) => {
   createDoctor(req, res);
 });
 
+router.post("/createAppointment",(req,res)=>{
+  createAppointment(req,res)})
 module.exports = router;
