@@ -11,7 +11,7 @@ const getAppointments= async(req,res)=>{
     const dateSearch= "2023-10-06"  //khod input men el front end
     if(statusInput==="Pending" || statusInput==="Done"){
     const statusValue=(statusInput==="Pending"?false:true)
-    const result= current_type==="Doctor"?await appointmentModel.find({DoctorUsername:current_user, Status:statusValue}) :await appointmentModel.find({PatientUsername:current_user,Status:statusValue}) 
+    const result= current_type==="Doctor"?await appointmentModel.find({Doccurrent_usertorUsername, Status:statusValue}) :await appointmentModel.find({PatientUsername:current_user,Status:statusValue}) 
     res.status(200).send(result)
 }
     else if(dateSearch!=null && !isNaN(new Date(dateSearch))){            //Gets date greater than or equal 

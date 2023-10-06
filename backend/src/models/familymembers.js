@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const familyMemberSchema = new Schema({
-  UserName: {
+  PatientUserName: {
     type: String,
     required: true,
   },

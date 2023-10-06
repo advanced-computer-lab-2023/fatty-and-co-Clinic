@@ -2,15 +2,18 @@ const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 
 const createFamilymember = async (req, res) => {
-    const { UserName,Name, NationalId, Age, Gender,Relation } = req.body;
+// from front end
+    const  {Name, NationalId, Age, Gender,Relation } = req.body;
+    const current_user="Mariam";
+    console.log(Age);
     try {
       const newFamilymember = await familyMemberModel.create({
-        UserName,
-        Name,
-        NationalId,
-        Age,
-        Gender,
-        Relation
+        PatientUserName:current_user,
+        Name:Name,
+        NationalId:NationalId,
+        Age:Age,
+        Gender:Gender,
+        Relation:Relation
       });
       res.status(200).json(newFamilymember);
     
@@ -19,20 +22,17 @@ const createFamilymember = async (req, res) => {
     }
    
   }
- const UpdateFamilymember = async (req, res) => {
+ const GetFamilymembers = async (req, res) => {
     try {
-        const filter={Username:"Khalkhoola"}
-       // console.log(req.body.Email)
-       const doc= await patientModel.findOneAndUpdate(filter,newFamilymember );
-       res.status(200).json(doc);
+        const currentPatientuser="mariam";
      
-     // console.log(req.body.HourlyRate);
-       
+       const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
+       res.status(200).json(fam);
+    
       } catch (error) {
-        res.status(400).json({ error: error.message });
-      }
-   
-  }
+        res.status(400).send("khkhs");
+      }}
+     
 
   
-module.exports = {createFamilymember,UpdateFamilymember};
+module.exports = {createFamilymember,GetFamilymembers};
