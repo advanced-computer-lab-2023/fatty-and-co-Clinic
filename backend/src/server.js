@@ -11,7 +11,6 @@ const patientRoutes = require("./routes/patients");
 const adminRoutes = require("./routes/admins");
 const testRoutes = require("./routes/tests");
 const packageRoutes = require("./routes/package");
-
 // ENV Variables
 const port = process.env.PORT || 8000;
 const mongoURI = process.env.MONGO_URI;

@@ -26,15 +26,37 @@ const patientSchema = new Schema(
     EmergencyContact: {
       type: { FullName: String, PhoneNumber: Number }, //NOT SURE OF THIS SYNTAX
     },
-    FamilyMem: {
-      type: [ImportFamObject.FamilyMem], //NOT SURE MEN LAW DA VALID TYPE
-      required: false,
-    },
+    FamilyMem: [
+      {
+        Name: {
+          type: String,
+          required: true,
+        },
+        NationalId: {
+          type: String,
+          required: true,
+          trim: true,
+          unique: true,
+        },
+        Age: {
+          type: Number,
+          required: true,
+        },
+        Gender: {
+          type: String,
+          enum: ["M", "F"],
+          required: true,
+        },
+        Relation: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     PackageName: {
       type: String,
       required: false,
     },
-
   },
   { timestamps: true }
 );
