@@ -1,6 +1,6 @@
 const express = require("express");
 // HEAD:src/routes/doctors.js
-const {createDoctor} = require("../controllers/doctorController");
+const {createDoctor,updateDoctor} = require("../controllers/doctorController");
 // main:backend/src/routes/doctors.js
 
 const router = express.Router();
@@ -10,5 +10,7 @@ router.get("/", (req, res) => {
 });
 
  router.post("/createDoctor",createDoctor)
+
+ router.patch("/updateDoctor",updateDoctor)
 
 module.exports = router;
