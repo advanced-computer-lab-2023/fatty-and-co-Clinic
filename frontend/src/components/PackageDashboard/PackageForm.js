@@ -47,7 +47,7 @@ const PackageForm = () => {
 
   return (
     <div>
-      <Card style={{ width: "40%", margin: "10px" }}>
+      <Card style={{ width: "40%", margin: "10px" }}> 
         <CardHeader>Add Package</CardHeader>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
@@ -57,7 +57,7 @@ const PackageForm = () => {
               id="Name"
               required
               style={{ width: "80%", margin: "10px" }}
-              placeholder="Enter Name"
+              placeholder="Name"
               onChange={(e) => setName(e.target.value)}
               value={Name}
             />
@@ -67,7 +67,7 @@ const PackageForm = () => {
               id="Price"
               required
               style={{ width: "80%", margin: "10px" }}
-              placeholder="Enter Price"
+              placeholder="Price in L.E"
               onChange={(e) => setPrice(e.target.value)}
               value={Price}
             />
@@ -77,7 +77,7 @@ const PackageForm = () => {
               id="Session_Discount"
               required
               style={{ width: "80%", margin: "10px" }}
-              placeholder="Enter Session Discount %"
+              placeholder="Session Discount %"
               onChange={(e) => setSession_Discount(e.target.value)}
               value={Session_Discount}
             />
@@ -87,7 +87,7 @@ const PackageForm = () => {
               id="Medicine_Discount"
               required
               style={{ width: "80%", margin: "10px" }}
-              placeholder="Enter Medicine Discount %"
+              placeholder="Medicine Discount %"
               onChange={(e) => setMedicine_Discount(e.target.value)}
               value={Medicine_Discount}
             />
@@ -97,7 +97,7 @@ const PackageForm = () => {
               id="Family_Discount"
               required
               style={{ width: "80%", margin: "10px" }}
-              placeholder="Enter Family Discount %"
+              placeholder="Family Discount %"
               onChange={(e) => setFamily_Discount(e.target.value)}
               value={Family_Discount}
             />

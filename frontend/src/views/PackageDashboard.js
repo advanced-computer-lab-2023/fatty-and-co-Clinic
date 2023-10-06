@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import PackageCard from "../components/PackageCard";
-import PackageForm from "../components/PackageForm";
+import PackageCard from "../components/PackageDashboard/PackageCard";
+import PackageForm from "../components/PackageDashboard/PackageForm";
 import { CardGroup } from "reactstrap";
 
 const PackageDashboard = () => {
@@ -20,17 +20,17 @@ const PackageDashboard = () => {
   }, []);
 
   return (
-    //show all packages
     <div>
       <h2>Package Dashboard</h2>
-      <CardGroup style={{margin:"10px"}}>
+      {/** view packages */}
+      <CardGroup style={{ margin: "10px" }}>
         {packages &&
           packages.map((Package) => (
             <PackageCard key={Package._id} Package={Package} />
           ))}
       </CardGroup>
+      {/* add packages */}
       <PackageForm />
-
     </div>
   );
 };
