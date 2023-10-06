@@ -17,7 +17,7 @@ const session_index = (req,res) => {
     .then(result => {
         const packageName = result.PackageName;
              if(!packageName == null){
-            packages.find({Name: packageName})
+            packageModel.find({Name: packageName})
              .then(result => {
              packageDis = result.SessionDiscount;
             })
