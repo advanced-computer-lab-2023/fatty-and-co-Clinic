@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const relatives = new Schema({
+const familyMemberSchema = new Schema({
   Name: {
     type: String,
     required: true,
@@ -27,5 +27,5 @@ const relatives = new Schema({
   },
 });
 
-const FamilyMem = mongoose.model("FamilyMem", relatives);
-module.exports = FamilyMem;
+const FamilyMember = mongoose.model("FamilyMem", familyMemberSchema);
+module.exports = FamilyMember;

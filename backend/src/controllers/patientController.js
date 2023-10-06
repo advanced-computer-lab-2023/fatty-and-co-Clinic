@@ -1,4 +1,4 @@
-const patient = require("../models/patients");
-const familyMember = require("../models/familymembers");
+const patientModel = require("../models/patients");
+const familyMemberModel = require("../models/familymembers");
 
 module.exports = {};

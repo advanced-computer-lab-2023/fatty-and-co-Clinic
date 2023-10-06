@@ -1,3 +1,3 @@
-const systemUser = require("../models/systemusers");
+const systemUserModel = require("../models/systemusers");
 
 module.exports = {};

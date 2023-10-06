@@ -6,7 +6,7 @@ var validateEmail = function (email) {
   return re.test(email);
 };
 
-const systemUsers = new Schema(
+const systemUsersSchema = new Schema(
   {
     Username: {
       type: String,
@@ -35,5 +35,5 @@ const systemUsers = new Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model("User", systemUsers);
+const User = mongoose.model("User", systemUsersSchema);
 module.exports = User;

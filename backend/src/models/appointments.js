@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const manyMeds = new Schema({
-  Medicine: {
+const medicine = new Schema({
+  Name: {
     type: String,
     required: true,
   },
 });
 
-const prescriptionMade = new Schema({
+const prescription = new Schema({
   Diagnosis: {
     type: String,
     required: true,
   },
   Advised: {
-    type: manyMeds,
+    type: medicine,
     required: true,
   },
 });
-const appointments = new Schema(
+
+const appointmentSchema = new Schema(
   {
     DoctorUsername: {
       //Doctor's USERNAME
@@ -34,12 +35,12 @@ const appointments = new Schema(
       default: 0, //Check if cancelling is an option ----Note: 0= not yet made    AND   1= appointment is made
     },
     Prescription: {
-      type: [prescriptionMade],
+      type: prescription,
       required: true,
     },
   },
   { timestamps: true }
 );
 
-const Appointment = mongoose.model("Appointment", appointments);
+const Appointment = mongoose.model("Appointment", appointmentSchema);
 module.exports = Appointment;

@@ -24,5 +24,5 @@ const packageSchema = new Schema({
   }
 }, { timestamps: true });
 
-const package = mongoose.model('packageSchema', packageSchema);
-module.exports = package;
+const Package = mongoose.model('packageSchema', packageSchema);
+module.exports = Package;
