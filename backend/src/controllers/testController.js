@@ -20,6 +20,21 @@ const createSystemUser = async (req, res) => {
   }
 };
 
+// create patient 
+const createPatient = async (req, res) => {
+  const { Username, Name,  MobileNum,DateOfBirth,EmergencyContact, 
+    FamilyMem} = req.body;
+  try {
+    const newPatient = await  patientModel.create({
+      Username, Name,  MobileNum,DateOfBirth,EmergencyContact, 
+      FamilyMem
+    });
+    res.status(201).json(newPatient);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // get all users
 const getSystemUsers = async (req, res) => {
   try {
@@ -68,6 +83,7 @@ const getAdmins = async (req, res) => {
 
 module.exports = {
   createSystemUser,
+  createPatient,
   getSystemUsers,
   getPatients,
   getDoctors,
