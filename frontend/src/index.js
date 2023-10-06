@@ -1,17 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import PackageDashboard from './views/PackageDashboard';
-import reportWebVitals from './reportWebVitals';
-import CustomNavbar  from './components/Navbar';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import PackageDashboard from "./views/PackageDashboard";
+import reportWebVitals from "./reportWebVitals";
+import CustomNavbar from "./components/Navbar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
     <CustomNavbar />
-    <PackageDashboard />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/PackageDashboard" element={<PackageDashboard />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
