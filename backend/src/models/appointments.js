@@ -12,10 +12,10 @@ const appointmentSchema = new Schema(
       required: true,
     },
     Status: {
-      type: Boolean,
-      default: 0, //Check if cancelling is an option ----Note: 0= not yet made    AND   1= appointment is made
+      type: String,
+      enum: ["Upcoming", "Completed", "Rescheduled", "Cancelled"],
+      default: "Upcoming",
     },
-
     Date: {
       type: Date,
       required: true,

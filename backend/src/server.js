@@ -2,9 +2,6 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
-//added menny delwa2ty to test
-const Parse=require('parse/node')
-Parse.initialize()
 
 // Route Variables
 const guestRoutes = require("./routes/guests");
