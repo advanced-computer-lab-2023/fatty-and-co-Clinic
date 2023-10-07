@@ -31,7 +31,7 @@ const createFamilymember = async (req, res) => {
        const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
        res.status(200).json(fam);
       } catch (error) {
-        res.status(400).json({error:error});
+        res.status(400).json({error:error.message});
       }}
      
  
