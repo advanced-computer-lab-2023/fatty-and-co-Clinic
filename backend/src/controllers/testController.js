@@ -17,6 +17,8 @@ const {
   generatePackage,
   generateEmail,
   generatePassword,
+  generateWorkingDays,
+  generateStartTimeAndEndTime,
 } = require("../common/utils/generators");
 
 // create a new user
@@ -68,6 +70,9 @@ const createDoctor = async (req, res) => {
     Affiliation,
     EducationalBackground,
     Speciality,
+    WorkingDays,
+    StartTime,
+    EndTime,
   } = req.body;
 
   const username = Username || generateUsername();
@@ -78,6 +83,11 @@ const createDoctor = async (req, res) => {
   const educationalBackground =
     EducationalBackground || generateEducationalBackground();
   const speciality = Speciality || generateSpeciality();
+  const workingDays = WorkingDays || generateWorkingDays();
+  const { startTime, endTime } =
+    StartTime && EndTime
+      ? { startTime: StartTime, endTime: EndTime }
+      : generateStartTimeAndEndTime();
 
   try {
     const newDoctor = await doctorModel.create({
@@ -88,6 +98,9 @@ const createDoctor = async (req, res) => {
       Affiliation: affiliation,
       EducationalBackground: educationalBackground,
       Speciality: speciality,
+      WorkingDays: workingDays,
+      StartTime: startTime,
+      EndTime: endTime,
     });
     res.status(201).json(newDoctor);
   } catch (error) {

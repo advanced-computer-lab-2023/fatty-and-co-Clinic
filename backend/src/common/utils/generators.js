@@ -171,6 +171,25 @@ function generatePassword() {
   return password;
 }
 
+function generateWorkingDays() {
+  const workingDays = [];
+  const numOfWorkingDays = Math.floor(Math.random() * 7) + 1;
+  for (let i = 0; i < numOfWorkingDays; i++) {
+    let day = Math.floor(Math.random() * 7);
+    while (workingDays.includes(day)) {
+      day = Math.floor(Math.random() * 7);
+    }
+    workingDays.push(day);
+  }
+  return workingDays;
+}
+
+function generateStartTimeAndEndTime() {
+  const startTime = Math.floor(Math.random() * 10);
+  const endTime = Math.floor(Math.random() * 10) + 10;
+  return { startTime, endTime };
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -183,4 +202,6 @@ module.exports = {
   generatePackage,
   generateEmail,
   generatePassword,
+  generateWorkingDays,
+  generateStartTimeAndEndTime,
 };

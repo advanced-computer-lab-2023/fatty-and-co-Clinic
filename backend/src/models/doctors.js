@@ -37,19 +37,18 @@ const doctorSchema = new Schema(
     //to get available timings of sessions for patients.
     WorkingDays: {
       //type is number so it's easier to compare with the getDay method
-      //for example (1-7 ---> Sunday-Saturday)
+      //for example (0-6 ---> Sunday-Saturday)
       type: [Number],
       required: false,
     },
-     StartTime: {
+    StartTime: {
       type: Number,
       required: false,
-     },
-     EndTime: {
+    },
+    EndTime: {
       type: Number,
       required: false,
-     },
-    
+    },
   },
   { timestamps: true }
 );

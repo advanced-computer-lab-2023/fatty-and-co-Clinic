@@ -147,7 +147,7 @@ const filterDoctor = async (req, res) => {
         EndTime: { $gt: hour },
       });
 
-      if (urlParams.has('speciality')) {
+      if (urlParams.has("speciality")) {
         dateDocs.forEach((element) => {
           if (element.Speciality == req.query.speciality) {
             myDoctors.push(element);
@@ -164,9 +164,9 @@ const filterDoctor = async (req, res) => {
       }
     }
     res.status(200).json(myDoctors);
- } catch (err) {
+  } catch (err) {
     console.log(err);
- }
+  }
 };
 
    
@@ -176,6 +176,7 @@ module.exports = {
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
+  filterDoctor2,
   createDoctor,
   updateDoctor,
 };
