@@ -73,5 +73,6 @@ const session_index = (req, res) => {
 
 
 
+//filter by speciality and / or
 
 module.exports = { session_index };

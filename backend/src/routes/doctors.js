@@ -3,7 +3,7 @@ const {
   getDoctorByID,
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
-  filterDoctor,
+  filterDoctor2,
 } = require("../controllers/doctorController");
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.get("/username/:username", getDoctorByUsername);
 
 router.get("/search/", getDoctorByNameAndSpeciality);
 
-router.get("/filter/", filterDoctor);
+router.get("/filter/", filterDoctor2);
 
 
 module.exports = router;

@@ -41,7 +41,6 @@ const doctorSchema = new Schema(
       type: [Number],
       required: false,
     },
-    WorkingHours: {
      StartTime: {
       type: Number,
       required: false,
@@ -50,7 +49,7 @@ const doctorSchema = new Schema(
       type: Number,
       required: false,
      },
-    },
+    
   },
   { timestamps: true }
 );
