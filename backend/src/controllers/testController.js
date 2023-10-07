@@ -3,7 +3,7 @@ const doctorModel = require("../models/doctors");
 const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
-const requests = require("../models/requests");
+const requestModel = require("../models/requests");
 const { default: mongoose } = require("mongoose");
 const {
   generateUsername,
@@ -163,7 +163,7 @@ const getAdmins = async (req, res) => {
 
 const getRequests = async (req, res) => {
   try {
-    const request = await requests.find();
+    const request = await requestModel.find();
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
