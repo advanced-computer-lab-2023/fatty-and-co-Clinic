@@ -14,8 +14,12 @@ const createPackage = async (req, res) => {
     Family_Discount: Family_Discount,
   });
 
-  await newPackage.save();
-  res.status(200).json(newPackage);
+  try {
+    await newPackage.save();
+    res.status(200).json(newPackage);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 const getPackages = async (req, res) => {
