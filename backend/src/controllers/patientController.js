@@ -25,7 +25,7 @@ const createFamilymember = async (req, res) => {
   const GetFamilymembers = async (req, res) => {
     try {
         
-       const currentPatientuser="ahmed";
+       const currentPatientuser="Mariam";
        const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
        res.status(200).json(fam);
       
@@ -35,6 +35,6 @@ const createFamilymember = async (req, res) => {
         res.status(400).send("khkhs");
       }}
      
-
+ 
   
 module.exports = {createFamilymember,GetFamilymembers};
