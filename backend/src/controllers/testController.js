@@ -19,7 +19,13 @@ const {
   generatePassword,
   generateWorkingDays,
   generateStartTimeAndEndTime,
+  generateAppointmentStatus,
+  generateAppointmentDate,
 } = require("../common/utils/generators");
+const {
+  getPatientUsername,
+  getDoctorUsername,
+} = require("../common/utils/dbGetters");
 
 // create a new user
 // create a new System User
@@ -132,6 +138,29 @@ const createPatient = async (req, res) => {
   }
 };
 
+// create a random appointment
+const createRandomAppointment = async (req, res) => {
+  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
+  const doctorUsername = DoctorUsername || String(await getDoctorUsername());
+  const patientUsername = PatientUsername || String(await getPatientUsername());
+  const status = Status || generateAppointmentStatus();
+  const date = Date || generateAppointmentDate();
+
+  console.log(doctorUsername, patientUsername, status, date);
+
+  try {
+    const newApp = await appointmentModel.create({
+      DoctorUsername: doctorUsername,
+      PatientUsername: patientUsername,
+      Status: status,
+      Date: date,
+    });
+    res.status(201).json(newApp);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // get all users
 const getSystemUsers = async (req, res) => {
   try {
@@ -193,4 +222,5 @@ module.exports = {
   getAdmins,
   getRequests,
   createAppointment,
+  createRandomAppointment,
 };

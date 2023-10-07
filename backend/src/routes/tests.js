@@ -9,6 +9,7 @@ const {
   getPatients,
   getRequests,
   createDoctor,
+  createRandomAppointment,
 } = require("../controllers/testController");
 
 const router = express.Router();
@@ -51,4 +52,9 @@ router.post("/createDoctor", (req, res) => {
 router.post("/createAppointment", (req, res) => {
   createAppointment(req, res);
 });
+
+router.post("/createRandomAppointment", (req, res) => {
+  createRandomAppointment(req, res);
+});
+
 module.exports = router;

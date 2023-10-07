@@ -190,6 +190,21 @@ function generateStartTimeAndEndTime() {
   return { startTime, endTime };
 }
 
+function generateAppointmentStatus() {
+  const status = ["Upcoming", "Completed", "Rescheduled", "Cancelled"];
+  return status[Math.floor(Math.random() * status.length)];
+}
+
+function generateAppointmentDate() {
+  const today = new Date();
+  const next30Days = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const randomTimestamp = Math.floor(
+    Math.random() * (next30Days.getTime() - today.getTime())
+  );
+  const randomDate = new Date(today.getTime() + randomTimestamp);
+  return randomDate.toISOString().slice(0, 10);
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -204,4 +219,6 @@ module.exports = {
   generatePassword,
   generateWorkingDays,
   generateStartTimeAndEndTime,
+  generateAppointmentStatus,
+  generateAppointmentDate,
 };
