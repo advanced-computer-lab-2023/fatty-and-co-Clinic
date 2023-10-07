@@ -148,6 +148,29 @@ function generatePackage() {
   return packages[Math.floor(Math.random() * packages.length)];
 }
 
+function generateEmail() {
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  let email = "";
+  for (let i = 0; i < 10; i++) {
+    email += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  email += Math.floor(Math.random() * 1000);
+  email += "@gmail.com";
+  return email;
+}
+
+function generatePassword() {
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  let password = "";
+  for (let i = 0; i < 10; i++) {
+    password += characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
+  }
+  password += Math.floor(Math.random() * 1000);
+  return password;
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -158,4 +181,6 @@ module.exports = {
   generateSpeciality,
   generateMobileNum,
   generatePackage,
+  generateEmail,
+  generatePassword,
 };

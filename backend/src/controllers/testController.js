@@ -3,7 +3,7 @@ const doctorModel = require("../models/doctors");
 const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
-const requests = require("../models/requests");
+const requestModel = require("../models/requests");
 const { default: mongoose } = require("mongoose");
 const {
   generateUsername,
@@ -15,19 +15,44 @@ const {
   generateSpeciality,
   generateMobileNum,
   generatePackage,
+  generateEmail,
+  generatePassword,
 } = require("../common/utils/generators");
 
 // create a new user
+// create a new System User
 const createSystemUser = async (req, res) => {
   const { Username, Password, Email, Type } = req.body;
+
+  const username = Username || generateUsername();
+  const password = Password || generatePassword();
+  const email = Email || generateEmail();
+  const type = Type || "Admin";
+  console.log(username, password, email, type);
   try {
     const newUser = await systemUserModel.create({
-      Username,
-      Password,
-      Email,
-      Type,
+      Username: username,
+      Password: password,
+      Email: email,
+      Type: type,
     });
     res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//Create a new appointment
+const createAppointment = async (req, res) => {
+  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
+  try {
+    const newApp = await appointmentModel.create({
+      DoctorUsername,
+      PatientUsername,
+      Status,
+      Date,
+    });
+    res.status(201).json(newApp);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -128,7 +153,7 @@ const getDoctors = async (req, res) => {
 const getAdmins = async (req, res) => {
   try {
     const admins = await systemUserModel
-      .find({ Type: "admin" })
+      .find({ Type: "Admin" })
       .sort({ Username: 1 }); // sorts by username in ascending order
     res.status(200).json(admins);
   } catch (error) {
@@ -138,16 +163,12 @@ const getAdmins = async (req, res) => {
 
 const getRequests = async (req, res) => {
   try {
-    const request = await requests.find();
+    const request = await requestModel.find();
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
-
-
-
 
 module.exports = {
   createSystemUser,
@@ -158,6 +179,5 @@ module.exports = {
   getDoctors,
   getAdmins,
   getRequests,
+  createAppointment,
 };
-
-
