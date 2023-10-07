@@ -176,7 +176,6 @@ module.exports = {
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
-  filterDoctor2,
   createDoctor,
   updateDoctor,
 };

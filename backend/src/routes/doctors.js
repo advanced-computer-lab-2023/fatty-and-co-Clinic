@@ -4,7 +4,6 @@ const {
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
-  filterDoctor2,
   createDoctor,
   updateDoctor,
 } = require("../controllers/doctorController");
