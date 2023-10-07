@@ -34,6 +34,10 @@ const appointmentSchema = new Schema(
       type: Boolean,
       default: 0, //Check if cancelling is an option ----Note: 0= not yet made    AND   1= appointment is made
     },
+    Date:{
+      type:Date,
+      required:true
+    },
     Prescription: {
       type: prescription,
       required: true,
