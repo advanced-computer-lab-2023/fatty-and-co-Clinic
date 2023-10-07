@@ -24,6 +24,6 @@ router.get("/username/:username", getDoctorByUsername);
 
 router.get("/search", getDoctorByNameAndSpeciality);
 
-router.get("/filter", filterDoctor2);
+router.get("/filter", filterDoctor);
 
 module.exports = router;

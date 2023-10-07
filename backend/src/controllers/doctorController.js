@@ -128,76 +128,23 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 };
 
 //filter doctors by speciality or/and (date and time)
-const filterDoctor = async (req,res) => { 
-  try
-    {console.log(req.query);
-   const urlParams = new URLSearchParams(req.query);
-   var myDoctors = new Array(); 
 
-   console.log(urlParams);
-
-    if (urlParams.has('date')){
-
-      const date = new Date(req.query.date);
-      const day = date.getDay();
-      const time = date.getHours();
-
-      doctorModel.
-      filter(function (el){
-      return el.WorkingDays.includes(day) &&
-             el.StartTime<=time && 
-             el.EndTime>time
-      })
-      .then((dateDocs)=> {
-          if (urlParams.has('speciality')){
-            dateDocs.array.forEach(element => {
-            if (element.Speciality == req.query.speciality)
-            {
-              myDoctors.push(element)
-            }
-            });
-          }
-          else{
-            myDoctors = dateDocs;
-          }
-          })
-      .catch((err) => {
-          console.log(err);
-          })
-    }else{
-      if (urlParams.has('speciality')){
-        console.log('ana hena');
-        myDoctors = doctorModel.find({Speciality: req.body.speciality});
-      }
-      else{
-        //get all doctors.
-      }
-    }
-    res.status(200).json(myDoctors);
-  }
-  catch(err){
-    console.log(err);
-  }
-}
-
-
-const filterDoctor2 = async (req, res) => {
+const filterDoctor = async (req, res) => {
  try {
+
     console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
     var myDoctors = new Array();
 
-    console.log(urlParams);
 
-    if (urlParams.has('date')) {
+    if (urlParams.has('date') && urlParams.has('hour')) {
       const date = new Date(req.query.date);
       const day = date.getDay();
-      const time = date.getHours();
-
+      const hour = req.query.hour;
       const dateDocs = await doctorModel.find({
         WorkingDays: {$in: [day]},
-        StartTime: { $lte: time },
-        EndTime: { $gte: time },
+        StartTime: { $lte: hour },
+        EndTime: { $gt: hour },
       });
 
       if (urlParams.has('speciality')) {
@@ -212,8 +159,7 @@ const filterDoctor2 = async (req, res) => {
     } else {
       if (urlParams.has('speciality')) {
         myDoctors = await doctorModel.find({ Speciality: req.query.speciality });
-      } else {
-        //get all doctors.
+      }else {
         myDoctors = await doctorModel.find();
       }
     }
@@ -222,15 +168,6 @@ const filterDoctor2 = async (req, res) => {
     console.log(err);
  }
 };
-  
-  
-
-
-
-
-
-
-
 
    
 
