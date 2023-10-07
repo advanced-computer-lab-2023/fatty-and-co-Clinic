@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ImportFamObject = require("./familymembers");
-
 const patientSchema = new Schema(
   {
     Username: {
@@ -25,16 +23,13 @@ const patientSchema = new Schema(
     },
     EmergencyContact: {
       type: { FullName: String, PhoneNumber: Number }, //NOT SURE OF THIS SYNTAX
-    },
-    FamilyMem: {
-      type: [ImportFamObject.FamilyMem], //NOT SURE MEN LAW DA VALID TYPE
       required: false,
     },
     PackageName: {
       type: String,
+      enum: ["Silver", "Gold", "Platinum"],
       required: false,
     },
-
   },
   { timestamps: true }
 );
