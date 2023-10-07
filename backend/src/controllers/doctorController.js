@@ -127,22 +127,19 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
   }
 };
 
-//filter doctors by speciality or/and (date and time)
-
+// filter doctors by speciality or/and (date and time)
 const filterDoctor = async (req, res) => {
- try {
-
+  try {
     console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
     var myDoctors = new Array();
 
-
-    if (urlParams.has('date') && urlParams.has('hour')) {
+    if (urlParams.has("date") && urlParams.has("hour")) {
       const date = new Date(req.query.date);
       const day = date.getDay();
       const hour = req.query.hour;
       const dateDocs = await doctorModel.find({
-        WorkingDays: {$in: [day]},
+        WorkingDays: { $in: [day] },
         StartTime: { $lte: hour },
         EndTime: { $gt: hour },
       });
@@ -157,9 +154,11 @@ const filterDoctor = async (req, res) => {
         myDoctors = dateDocs;
       }
     } else {
-      if (urlParams.has('speciality')) {
-        myDoctors = await doctorModel.find({ Speciality: req.query.speciality });
-      }else {
+      if (urlParams.has("speciality")) {
+        myDoctors = await doctorModel.find({
+          Speciality: req.query.speciality,
+        });
+      } else {
         myDoctors = await doctorModel.find();
       }
     }
@@ -168,8 +167,6 @@ const filterDoctor = async (req, res) => {
     console.log(err);
   }
 };
-
-   
 
 module.exports = {
   getDoctorByID,
