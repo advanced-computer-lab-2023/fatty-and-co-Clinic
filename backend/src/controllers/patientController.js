@@ -3,7 +3,7 @@ const familyMemberModel = require("../models/familymembers");
 
 const createFamilymember = async (req, res) => {
     const  {Name, NationalId, Age, Gender,Relation } = req.body;
-    const current_user="Mariam";
+    const current_user="Mariam";  //hardcoded for now
     console.log(Age);
     try {
       const newFamilymember = await familyMemberModel.create({
@@ -27,7 +27,7 @@ const createFamilymember = async (req, res) => {
   const GetFamilymembers = async (req, res) => {
     try {
         
-       const currentPatientuser="Mariam";
+       const currentPatientuser=req.body.Username;
        const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
        res.status(200).json(fam);
       } catch (error) {
