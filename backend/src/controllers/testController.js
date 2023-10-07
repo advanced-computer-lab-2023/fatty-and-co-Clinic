@@ -28,8 +28,38 @@ const createSystemUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
+
+// create patient 
+const createPatient = async (req, res) => {
+  const { Username, Name,  MobileNum,DateOfBirth,EmergencyContact, 
+    FamilyMem} = req.body;
+  try {
+    const newPatient = await  patientModel.create({
+      Username, Name,  MobileNum,DateOfBirth,EmergencyContact, FamilyMem})
+      res.status(201).json(newPatient)}
+   catch(error){
+      res.status(400).json({error:error.message})
+   }}
+
+//Create a new appointment
+
+const createAppointment = async (req, res) => {
+  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
+  try {
+    const newApp = await appointmentModel.create({
+      DoctorUsername,
+      PatientUsername,
+      Status,
+      Date
+    });
+    res.status(201).json(newApp);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// =======
 // create a new doctor
 const createDoctor = async (req, res) => {
   const {
@@ -48,7 +78,7 @@ const createDoctor = async (req, res) => {
   const hourlyRate = HourlyRate || generateHourlyRate();
   const affiliation = Affiliation || generateAffiliation();
   const educationalBackground =
-    EducationalBackground || generateEducationalBackground();
+  EducationalBackground || generateEducationalBackground();
   const speciality = Speciality || generateSpeciality();
 
   try {
@@ -62,6 +92,7 @@ const createDoctor = async (req, res) => {
       Speciality: speciality,
     });
     res.status(201).json(newDoctor);
+// >>>>>>> main
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -95,7 +126,7 @@ const getDoctors = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 // get all admins
 const getAdmins = async (req, res) => {
@@ -107,7 +138,7 @@ const getAdmins = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 const getRequests = async (req, res) => {
   try {
@@ -120,10 +151,12 @@ const getRequests = async (req, res) => {
 
 module.exports = {
   createSystemUser,
+  createPatient,
   createDoctor,
   getSystemUsers,
   getPatients,
   getDoctors,
   getAdmins,
   getRequests,
-};
+  createAppointment
+}
