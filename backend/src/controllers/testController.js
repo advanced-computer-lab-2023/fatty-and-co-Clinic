@@ -46,14 +46,13 @@ const createPatient = async (req, res) => {
 //Create a new appointment
 
 const createAppointment = async (req, res) => {
-  const { DoctorUsername, PatientUsername, Status, Date,Prescription } = req.body;
+  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
   try {
     const newApp = await appointmentModel.create({
       DoctorUsername,
       PatientUsername,
       Status,
-      Date,
-      Prescription,
+      Date
     });
     res.status(201).json(newApp);
   } catch (error) {
