@@ -1,5 +1,5 @@
 const express = require("express");
-const { createAdmin, getRequests, deleteUser } = require("../controllers/adminController");
+const { createAdmin, getRequest, deleteUser, acceptRequest, rejectRequest } = require("../controllers/adminController");
 
 const router = express.Router();
 
@@ -8,7 +8,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/addAdmin", createAdmin);
-router.get("/requests", getRequests);
+router.get("/getRequest", getRequest);
+router.post("/acceptRequest", acceptRequest);
+router.put("/rejectRequest", rejectRequest);
 router.delete("/deleteUser", deleteUser);
 
 module.exports = router;
