@@ -28,7 +28,7 @@ const systemUsersSchema = new Schema(
       required: true,
     },
     JwtToken: {
-      type: String, 
+      type: String,
     },
   },
   { timestamps: true }

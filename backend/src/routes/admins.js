@@ -1,5 +1,11 @@
 const express = require("express");
-const { createAdmin, getRequest, deleteUser, acceptRequest, rejectRequest } = require("../controllers/adminController");
+const {
+  createAdmin,
+  getRequest,
+  deleteUser,
+  acceptRequest,
+  rejectRequest,
+} = require("../controllers/adminController");
 
 const router = express.Router();
 
