@@ -128,79 +128,75 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 };
 
 //filter doctors by speciality or/and (date and time)
-const filterDoctor = async (req,res) => { 
-  try
-    {console.log(req.query);
-   const urlParams = new URLSearchParams(req.query);
-   var myDoctors = new Array(); 
-
-   console.log(urlParams);
-
-    if (urlParams.has('date')){
-
-      const date = new Date(req.query.date);
-      const day = date.getDay();
-      const time = date.getHours();
-
-      doctorModel.
-      filter(function (el){
-      return el.WorkingDays.includes(day) &&
-             el.StartTime<=time && 
-             el.EndTime>time
-      })
-      .then((dateDocs)=> {
-          if (urlParams.has('speciality')){
-            dateDocs.array.forEach(element => {
-            if (element.Speciality == req.query.speciality)
-            {
-              myDoctors.push(element)
-            }
-            });
-          }
-          else{
-            myDoctors = dateDocs;
-          }
-          })
-      .catch((err) => {
-          console.log(err);
-          })
-    }else{
-      if (urlParams.has('speciality')){
-        console.log('ana hena');
-        myDoctors = doctorModel.find({Speciality: req.body.speciality});
-      }
-      else{
-        //get all doctors.
-      }
-    }
-    res.status(200).json(myDoctors);
-  }
-  catch(err){
-    console.log(err);
-  }
-}
-
-
-const filterDoctor2 = async (req, res) => {
- try {
+const filterDoctor = async (req, res) => {
+  try {
     console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
     var myDoctors = new Array();
 
     console.log(urlParams);
 
-    if (urlParams.has('date')) {
+    if (urlParams.has("date")) {
+      const date = new Date(req.query.date);
+      const day = date.getDay();
+      const time = date.getHours();
+
+      doctorModel
+        .filter(function (el) {
+          return (
+            el.WorkingDays.includes(day) &&
+            el.StartTime <= time &&
+            el.EndTime > time
+          );
+        })
+        .then((dateDocs) => {
+          if (urlParams.has("speciality")) {
+            dateDocs.array.forEach((element) => {
+              if (element.Speciality == req.query.speciality) {
+                myDoctors.push(element);
+              }
+            });
+          } else {
+            myDoctors = dateDocs;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      if (urlParams.has("speciality")) {
+        console.log("ana hena");
+        myDoctors = doctorModel.find({ Speciality: req.body.speciality });
+      } else {
+        //get all doctors.
+      }
+    }
+    res.status(200).json(myDoctors);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const filterDoctor2 = async (req, res) => {
+  try {
+    console.log(req.query);
+    const urlParams = new URLSearchParams(req.query);
+    var myDoctors = new Array();
+
+    console.log(urlParams);
+
+    if (urlParams.has("date")) {
       const date = new Date(req.query.date);
       const day = date.getDay();
       const time = date.getHours();
 
       const dateDocs = await doctorModel.find({
-        WorkingDays: {$in: [day]},
+        WorkingDays: { $in: [day] },
         StartTime: { $lte: time },
         EndTime: { $gte: time },
       });
 
-      if (urlParams.has('speciality')) {
+      if (urlParams.has("speciality")) {
         dateDocs.forEach((element) => {
           if (element.Speciality == req.query.speciality) {
             myDoctors.push(element);
@@ -210,35 +206,27 @@ const filterDoctor2 = async (req, res) => {
         myDoctors = dateDocs;
       }
     } else {
-      if (urlParams.has('speciality')) {
-        myDoctors = await doctorModel.find({ Speciality: req.query.speciality });
+      if (urlParams.has("speciality")) {
+        myDoctors = await doctorModel.find({
+          Speciality: req.query.speciality,
+        });
       } else {
         //get all doctors.
         myDoctors = await doctorModel.find();
       }
     }
     res.status(200).json(myDoctors);
- } catch (err) {
+  } catch (err) {
     console.log(err);
- }
+  }
 };
-  
-  
-
-
-
-
-
-
-
-
-   
 
 module.exports = {
   getDoctorByID,
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
+  filterDoctor2,
   createDoctor,
   updateDoctor,
 };

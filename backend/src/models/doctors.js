@@ -41,15 +41,14 @@ const doctorSchema = new Schema(
       type: [Number],
       required: false,
     },
-     StartTime: {
+    StartTime: {
       type: Number,
       required: false,
-     },
-     EndTime: {
+    },
+    EndTime: {
       type: Number,
       required: false,
-     },
-    
+    },
   },
   { timestamps: true }
 );
