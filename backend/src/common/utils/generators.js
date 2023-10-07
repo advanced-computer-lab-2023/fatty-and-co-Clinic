@@ -175,9 +175,9 @@ function generateWorkingDays() {
   const workingDays = [];
   const numOfWorkingDays = Math.floor(Math.random() * 7) + 1;
   for (let i = 0; i < numOfWorkingDays; i++) {
-    let day = Math.floor(Math.random() * 7) + 1;
+    let day = Math.floor(Math.random() * 7);
     while (workingDays.includes(day)) {
-      day = Math.floor(Math.random() * 7) + 1;
+      day = Math.floor(Math.random() * 7);
     }
     workingDays.push(day);
   }
