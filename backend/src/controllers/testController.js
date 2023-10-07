@@ -42,6 +42,22 @@ const createSystemUser = async (req, res) => {
   }
 };
 
+//Create a new appointment
+const createAppointment = async (req, res) => {
+  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
+  try {
+    const newApp = await appointmentModel.create({
+      DoctorUsername,
+      PatientUsername,
+      Status,
+      Date,
+    });
+    res.status(201).json(newApp);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // create a new doctor
 const createDoctor = async (req, res) => {
   const {
@@ -163,4 +179,5 @@ module.exports = {
   getDoctors,
   getAdmins,
   getRequests,
+  createAppointment,
 };

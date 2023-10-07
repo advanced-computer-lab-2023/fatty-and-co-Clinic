@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const familyMemberSchema = new Schema({
+  PatientUserName: {
+    type: String,
+    required: true,
+  },
   Name: {
     type: String,
     required: true,
@@ -23,6 +27,7 @@ const familyMemberSchema = new Schema({
   },
   Relation: {
     type: String,
+    enum: ["Spouse", "Child"],
     required: true,
   },
 });
