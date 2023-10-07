@@ -33,6 +33,7 @@ app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/test", testRoutes);
 app.use("/package", packageRoutes);
+app.use("/guest", guestRoutes);
 
 // Server
 mongoose

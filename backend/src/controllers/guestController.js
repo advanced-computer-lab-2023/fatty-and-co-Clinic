@@ -1,5 +1,5 @@
 const systemUserModel = require("../models/systemusers");
-
+const requestModel = require("../models/requests");
 
 
 const createRequest = async (req, res) => {
@@ -26,7 +26,6 @@ const createRequest = async (req, res) => {
 
 
 module.exports = {
-  createRequest,
-  acceptRequest,
-  declineRequest
+  createRequest
 };
+ 
