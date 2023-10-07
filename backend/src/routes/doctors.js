@@ -1,10 +1,9 @@
 const express = require("express");
-const { } = require("../controllers/doctorController");
+const {getDoctor } = require("../controllers/doctorController");
+const doctorModel = require("../models/doctors")
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("Doctors");
-});
+router.get("/", getDoctor);
 
 module.exports = router;
