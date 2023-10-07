@@ -1,18 +1,29 @@
 const express = require("express");
-// HEAD:src/routes/doctors.js
-const {createDoctor,updateDoctor} = require("../controllers/doctorController");
-// main:backend/src/routes/doctors.js
+const {
+  getDoctorByID,
+  getDoctorByUsername,
+  getDoctorByNameAndSpeciality,
+  filterDoctor,
+  createDoctor,
+  updateDoctor,
+} = require("../controllers/doctorController");
 
 const router = express.Router();
-
-
 
 router.get("/", (req, res) => {
   res.send("Doctors");
 });
 
- router.post("/createDoctor",createDoctor)
+router.post("/createDoctor", createDoctor);
 
- router.patch("/updateDoctor",updateDoctor)
+router.patch("/updateDoctor", updateDoctor);
+
+router.get("/id/:id", getDoctorByID);
+
+router.get("/username/:username", getDoctorByUsername);
+
+router.get("/search", getDoctorByNameAndSpeciality);
+
+router.get("/filter", filterDoctor);
 
 module.exports = router;

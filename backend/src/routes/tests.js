@@ -44,11 +44,11 @@ router.post("/createPatient", (req, res) => {
   createPatient(req, res);
 });
 
-
 router.post("/createDoctor", (req, res) => {
   createDoctor(req, res);
 });
 
-router.post("/createAppointment",(req,res)=>{
-  createAppointment(req,res)})
+router.post("/createAppointment", (req, res) => {
+  createAppointment(req, res);
+});
 module.exports = router;

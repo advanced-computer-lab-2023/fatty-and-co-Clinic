@@ -39,7 +39,9 @@ app.use("/test", testRoutes);
 app.use("/package", packageRoutes);
 
 // Server
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
     console.log("MongoDB Connected");
     // Listen for requests
     app.listen(port, () => {

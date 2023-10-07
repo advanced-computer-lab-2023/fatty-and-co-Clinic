@@ -138,6 +138,58 @@ function generateSpeciality() {
   return specialties[Math.floor(Math.random() * specialties.length)];
 }
 
+function generateMobileNum() {
+  const mobileNum = Math.floor(Math.random() * 1000000000) + 1000000000;
+  return mobileNum;
+}
+
+function generatePackage() {
+  const packages = ["Silver", "Gold", "Platinum"];
+  return packages[Math.floor(Math.random() * packages.length)];
+}
+
+function generateEmail() {
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  let email = "";
+  for (let i = 0; i < 10; i++) {
+    email += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  email += Math.floor(Math.random() * 1000);
+  email += "@gmail.com";
+  return email;
+}
+
+function generatePassword() {
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  let password = "";
+  for (let i = 0; i < 10; i++) {
+    password += characters.charAt(
+      Math.floor(Math.random() * characters.length)
+    );
+  }
+  password += Math.floor(Math.random() * 1000);
+  return password;
+}
+
+function generateWorkingDays() {
+  const workingDays = [];
+  const numOfWorkingDays = Math.floor(Math.random() * 7) + 1;
+  for (let i = 0; i < numOfWorkingDays; i++) {
+    let day = Math.floor(Math.random() * 7);
+    while (workingDays.includes(day)) {
+      day = Math.floor(Math.random() * 7);
+    }
+    workingDays.push(day);
+  }
+  return workingDays;
+}
+
+function generateStartTimeAndEndTime() {
+  const startTime = Math.floor(Math.random() * 10);
+  const endTime = Math.floor(Math.random() * 10) + 10;
+  return { startTime, endTime };
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -146,4 +198,10 @@ module.exports = {
   generateAffiliation,
   generateEducationalBackground,
   generateSpeciality,
+  generateMobileNum,
+  generatePackage,
+  generateEmail,
+  generatePassword,
+  generateWorkingDays,
+  generateStartTimeAndEndTime,
 };

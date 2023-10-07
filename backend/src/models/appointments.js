@@ -16,12 +16,12 @@ const appointmentSchema = new Schema(
       default: 0, //Check if cancelling is an option ----Note: 0= not yet made    AND   1= appointment is made
     },
 
-    Date:{
-      type:Date,
-      required:true
-    }
+    Date: {
+      type: Date,
+      required: true,
+    },
   },
-  {timestamps: true }
+  { timestamps: true }
 );
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
