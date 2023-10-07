@@ -2,7 +2,6 @@ const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 
 const createFamilymember = async (req, res) => {
-// from front end
     const  {Name, NationalId, Age, Gender,Relation } = req.body;
     const current_user="Mariam";
     console.log(Age);
@@ -22,17 +21,17 @@ const createFamilymember = async (req, res) => {
     }
    
   }
+
+
+
   const GetFamilymembers = async (req, res) => {
     try {
         
        const currentPatientuser="Mariam";
        const fam= await familyMemberModel.find({PatientUserName:currentPatientuser});
        res.status(200).json(fam);
-      
-  
-       
       } catch (error) {
-        res.status(400).send("khkhs");
+        res.status(400).json({error:error});
       }}
      
  
