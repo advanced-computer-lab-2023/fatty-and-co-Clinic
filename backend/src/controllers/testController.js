@@ -15,17 +15,26 @@ const {
   generateSpeciality,
   generateMobileNum,
   generatePackage,
+  generateEmail,
+  generatePassword,
 } = require("../common/utils/generators");
 
 // create a new user
+// create a new System User
 const createSystemUser = async (req, res) => {
   const { Username, Password, Email, Type } = req.body;
+
+  const username = Username || generateUsername();
+  const password = Password || generatePassword();
+  const email = Email || generateEmail();
+  const type = Type || "Admin";
+  console.log(username, password, email, type);
   try {
     const newUser = await systemUserModel.create({
-      Username,
-      Password,
-      Email,
-      Type,
+      Username: username,
+      Password: password,
+      Email: email,
+      Type: type,
     });
     res.status(201).json(newUser);
   } catch (error) {
@@ -128,7 +137,7 @@ const getDoctors = async (req, res) => {
 const getAdmins = async (req, res) => {
   try {
     const admins = await systemUserModel
-      .find({ Type: "admin" })
+      .find({ Type: "Admin" })
       .sort({ Username: 1 }); // sorts by username in ascending order
     res.status(200).json(admins);
   } catch (error) {
@@ -145,10 +154,6 @@ const getRequests = async (req, res) => {
   }
 };
 
-
-
-
-
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -159,5 +164,3 @@ module.exports = {
   getAdmins,
   getRequests,
 };
-
-
