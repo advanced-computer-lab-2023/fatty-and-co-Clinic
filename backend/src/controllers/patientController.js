@@ -87,7 +87,7 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const currentPatientuser = "Mariam";
+    const currentPatientuser = req.body.Username;
     const fam = await familyMemberModel.find({
       PatientUserName: currentPatientuser,
     });

@@ -6,18 +6,35 @@ const { default: mongoose } = require("mongoose");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
-  const current_type = "Doctor"; //session
-  const current_user = req.body.Username; //session
   const statusInput = req.body.Status; //khod input men el front end
+  console.log(statusInput);
   const dateSearch = req.body.Date; //khod input men el front end
+  const current_user = req.body.Username; //session
+  //Check this username is in our table
+  const doc = await appointmentModel.find({
+    DoctorUsername: req.body.Username,
+  });
+  const pat = await appointmentModel.find({
+    PatientUsername: req.body.Username,
+  });
+  const current_type = doc
+    ? "Doctor"
+    : pat
+    ? "Patient"
+    : "You have no appointments";
+  if (current_type === "You have no appointments") {
+    res.status(400).send(current_type + " :)");
+  }
+
   //Check if both are present
   if (
-    (statusInput === 0 || statusInput === 1) &&
+    (statusInput === "0" || statusInput === "1") &&
     dateSearch != null &&
     !isNaN(new Date(dateSearch))
   ) {
-    const statusValue = statusInput === 0 ? false : true;
+    const statusValue = statusInput === "0" ? false : true;
     const dateValue = new Date(dateSearch);
+    const dayIncr = dateValue.getDay() + 1;
     if (dateValue.getUTCHours() === 0) {
       //Gets all appointments on a certain day
       const result =
@@ -27,9 +44,9 @@ const getAppointments = async (req, res) => {
               Status: statusValue,
               Date: {
                 $lt: new Date(
-                  dateValue.getFullYear,
-                  dateValue.getMonth,
-                  dateValue.getDay + 1
+                  dateValue.getFullYear(),
+                  dateValue.getMonth(),
+                  dayIncr
                 ),
               },
               Date: { $gte: dateValue },
@@ -39,9 +56,9 @@ const getAppointments = async (req, res) => {
               Status: statusValue,
               Date: {
                 $lt: new Date(
-                  dateValue.getFullYear,
-                  dateValue.getMonth,
-                  dateValue.getDay + 1
+                  dateValue.getFullYear(),
+                  dateValue.getMonth(),
+                  dayIncr
                 ),
               },
               Date: { $gte: dateValue },
@@ -87,9 +104,9 @@ const getAppointments = async (req, res) => {
               DoctorUsername: current_user,
               Date: {
                 $lt: new Date(
-                  dateValue.getFullYear,
-                  dateValue.getMonth,
-                  dateValue.getDay + 1
+                  dateValue.getFullYear(),
+                  dateValue.getMonth(),
+                  dateValue.getDay() + 1
                 ),
               },
               Date: { $gte: dateValue },
@@ -98,9 +115,9 @@ const getAppointments = async (req, res) => {
               PatientUsername: current_user,
               Date: {
                 $lt: new Date(
-                  dateValue.getFullYear,
-                  dateValue.getMonth,
-                  dateValue.getDay + 1
+                  dateValue.getFullYear(),
+                  dateValue.getMonth(),
+                  dateValue.getDay() + 1
                 ),
               },
               Date: { $gte: dateValue },
