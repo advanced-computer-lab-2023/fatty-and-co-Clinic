@@ -21,6 +21,7 @@ const {
   generateStartTimeAndEndTime,
   generateAppointmentStatus,
   generateAppointmentDate,
+  generateUserType,
 } = require("../common/utils/generators");
 const {
   getPatientUsername,
@@ -35,7 +36,7 @@ const createSystemUser = async (req, res) => {
   const username = Username || generateUsername();
   const password = Password || generatePassword();
   const email = Email || generateEmail();
-  const type = Type || "Admin";
+  const type = Type || generateUserType();
   console.log(username, password, email, type);
   try {
     const newUser = await systemUserModel.create({

@@ -205,6 +205,11 @@ function generateAppointmentDate() {
   return randomDate.toISOString().slice(0, 10);
 }
 
+function generateUserType() {
+  const types = ["Patient", "Doctor", "Admin"];
+  return types[Math.floor(Math.random() * types.length)];
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -221,4 +226,5 @@ module.exports = {
   generateStartTimeAndEndTime,
   generateAppointmentStatus,
   generateAppointmentDate,
+  generateUserType,
 };
