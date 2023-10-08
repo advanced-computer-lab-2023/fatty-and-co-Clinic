@@ -11,6 +11,7 @@ const {
   GetFamilymembers,
   getPrescriptions,
   selectPatient,
+  filterPrescriptions,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -63,5 +64,7 @@ router.get("/getFamilymember", GetFamilymembers);
 router.get("/getPrescriptions", getPrescriptions);
 
 router.get("/selectPatient", selectPatient);
+
+router.get("/filterPrescriptions", filterPrescriptions);
 
 module.exports = router;
