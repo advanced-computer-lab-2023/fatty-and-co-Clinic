@@ -42,6 +42,7 @@ const acceptRequest = async (req, res) => {
       HourlyRate: request.HourlyRate,
       Affiliation: request.Affiliation,
       EducationalBackground: request.EducationalBackground,
+      Speciality: request.Speciality,
     });
     const user = await userModel.create({
       Username: Username,

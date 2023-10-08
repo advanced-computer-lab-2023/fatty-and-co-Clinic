@@ -3,7 +3,6 @@ const requestModel = require("../models/requests");
 
 
 const createRequest = async (req, res) => {
-  const {} = req.body;
   try {
     const request = await requestModel.create({
       Username: req.body.Username,
