@@ -188,25 +188,24 @@ const findDoctorPatients= async (req, res) => {
     // Return the unique patient names.
     res.status(200).send( uniquePatientNamesArray);
   };
- const  searchPatient = async (req, res) => {
+  const searchPatient = async (req, res) => {
     const doctorUsername = req.body.DoctorUsername;
     const patientName = req.body.PatientUsername;
     const appointments = await appointmentModel.find({ DoctorUsername: doctorUsername });
   
     // Get the names of all the patients from the appointments.
     const patientNames = appointments.map((appointment) => appointment.PatientUsername);
-    // Get the patients of the doctor.
-    
   
-    const foundPatient = patientNames.find((patientNamee) => patientNamee === patientName);
-
-    // If the patient was found, return the patient.
-    if (foundPatient) {
-      res.status(200).send(foundPatient);
+    // Filter the patient names to only include patients whose name contains the search query.
+    const filteredPatientNames = patientNames.filter((patientNamee) => patientNamee.includes(patientName));
+  
+    // If at least one patient was found, return the filtered patient names.
+    if (filteredPatientNames.length > 0) {
+      res.status(200).send(filteredPatientNames);
     } else {
       res.status(404).send("Patient not found.");
     }
-  }; 
+  };
   
   // Export the router.
 
