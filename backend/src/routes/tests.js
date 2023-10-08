@@ -8,9 +8,10 @@ const {
   getDoctors,
   getPatients,
   getRequests,
+  getAppointments,
   createDoctor,
   createRandomAppointment,
-  getAppointments
+  createPrescription,
 } = require("../controllers/testController");
 
 const router = express.Router();
@@ -116,6 +117,10 @@ router.post("/createAppointment", (req, res) => {
  */
 router.post("/createRandomAppointment", (req, res) => {
   createRandomAppointment(req, res);
+});
+
+router.post("/createPrescription", (req, res) => {
+  createPrescription(req, res);
 });
 
 module.exports = router;
