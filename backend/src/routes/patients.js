@@ -3,6 +3,7 @@ const {
   session_index,
   createFamilymember,
   GetFamilymembers,
+  selectPatient,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -17,5 +18,7 @@ router.get("/view/doctors/:id", session_index);
 router.post("/createFamilymember", createFamilymember);
 
 router.get("/getFamilymember", GetFamilymembers);
+
+router.get("/selectPatient", selectPatient);
 
 module.exports = router;
