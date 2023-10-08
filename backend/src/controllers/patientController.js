@@ -9,7 +9,7 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
 const createPatient = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -209,29 +209,31 @@ const filterPrescriptions = async (req, res) => {
 
   // Check if a 'DoctorUsername' query is provided
   if (query.DoctorUsername) {
-    regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, 'i');
+    regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
   }
 
   // Check if a 'Date' query is provided
   if (query.Date) {
     // Assuming 'Date' is a field in your schema
-    regexQuery.Date = new RegExp(query.Date, 'i');
+    regexQuery.Date = new RegExp(query.Date, "i");
   }
 
   // Check if a 'Status' query is provided
   if (query.Status) {
-    regexQuery.Status = new RegExp(query.Status, 'i');
+    regexQuery.Status = new RegExp(query.Status, "i");
   }
 
-  const patientPrescriptions = prescriptionModel.find({ PatientUsername: query.PatientUsername });
+  const patientPrescriptions = prescriptionModel.find({
+    PatientUsername: query.PatientUsername,
+  });
   // Use the regexQuery in the find method
   try {
     // Use the regexQuery in the find method and await the result
     const prescriptions = await patientPrescriptions.find(regexQuery);
     res.status(200).send(prescriptions);
   } catch (err) {
-    console.error('Error:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

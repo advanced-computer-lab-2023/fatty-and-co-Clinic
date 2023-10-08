@@ -1,7 +1,6 @@
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 
-
 const createRequest = async (req, res) => {
   try {
     const request = await requestModel.create({
@@ -13,7 +12,7 @@ const createRequest = async (req, res) => {
       Affiliation: req.body.Affiliation,
       EducationalBackground: req.body.EducationalBackground,
       Speciality: req.body.Speciality,
-      Status: 'Pending',
+      Status: "Pending",
     });
     res.status(200).send({ request });
   } catch (error) {
@@ -23,8 +22,6 @@ const createRequest = async (req, res) => {
 
 //turn the data from the request into a doctor object using the doctor controller function createDoctor
 
-
 module.exports = {
-  createRequest
+  createRequest,
 };
- 
