@@ -1,6 +1,7 @@
 const userModel = require("../models/systemusers.js");
 const requestModel = require("../models/requests");
 const doctorModel = require("../models/doctors");
+const patientModel = require("../models/patients");
 const { default: mongoose } = require('mongoose');
 
 const createAdmin = async (req, res) => {
@@ -71,7 +72,13 @@ const rejectRequest = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { Username } = req.body;
   try {
-    const user = await userModel.deleteOne({ Username: Username });
+    const user = await userModel.findOneAndDelete({ Username: Username });
+    if(user.Type == "Patient"){
+      const patient =await patientModel.findOneAndDelete({ Username: Username });
+    } else if (user.Type == "Doctor"){
+      const doctor =await doctorModel.findOneAndDelete({ Username: Username });
+    }
+      
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
