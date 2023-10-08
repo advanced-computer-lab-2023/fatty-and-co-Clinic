@@ -14,7 +14,7 @@ const createRequest = async (req, res) => {
       Affiliation: req.body.Affiliation,
       EducationalBackground: req.body.EducationalBackground,
       Speciality: req.body.Speciality,
-      Status: req.body.Status,
+      Status: 'Pending',
     });
     res.status(200).send({ request });
   } catch (error) {

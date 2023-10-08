@@ -18,8 +18,6 @@ const createPatient = async (req, res) => {
       DateOfBirth: req.body.DateOfBirth,
       Gender: req.body.Gender,
       EmergencyContact: req.body.EmergencyContact,
-      FamilyMem: req.body.FamilyMem,
-      PackageName: req.body.PackageName,
     });
     res.status(200).send({ patient });
   } catch (error) {
