@@ -1,5 +1,6 @@
 const doctorModel = require("../models/doctors");
 
+
 const createDoctor = async (req, res) => {
   const {} = req.body;
   try {
@@ -35,6 +36,7 @@ const getDoctor = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
 
 const deleteDoctor = async (req, res) => {
   try {

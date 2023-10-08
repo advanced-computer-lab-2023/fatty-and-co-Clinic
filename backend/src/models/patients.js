@@ -23,6 +23,11 @@ const patientSchema = new Schema(
       type: Date,
       required: true,
     },
+    Gender: {
+      type: String,
+      enum: ["M", "F"],
+      required: true,
+    },
     EmergencyContact: {
       type: { FullName: String, PhoneNumber: Number }, //NOT SURE OF THIS SYNTAX
     },
