@@ -185,6 +185,15 @@ const getPatients = async (req, res) => {
   }
 };
 
+const getAppointments = async (req, res) => {
+  try {
+    const appointments = await appointmentModel.find({}); // sorts by username in ascending order
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // get all doctors
 const getDoctors = async (req, res) => {
   try {
@@ -211,15 +220,6 @@ const getRequests = async (req, res) => {
   try {
     const request = await requestModel.find();
     res.status(200).json(request);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-const getAppointments = async (req, res) => {
-  try {
-    const appointments = await appointmentModel.find({});
-    res.status(200).json(appointments);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

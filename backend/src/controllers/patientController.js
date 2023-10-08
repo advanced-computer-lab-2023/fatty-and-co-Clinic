@@ -97,6 +97,25 @@ const GetFamilymembers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+const selectPatient = async (req, res) => {
+  const id = req.body.id;
+
+  // Get the patient.
+  const patient = await patientModel.findById(id);
+
+  // If the patient is not found, return a 404 error.
+  if (!patient) {
+    res.status(404).send("Patient not found.");
+    return;
+  }
+
+  // Remove the timestamp from the patient object.
+  delete patient.createdAt;
+  delete patient.updatedAt;
+
+  // Return the patient object.
+  res.status(200).send(patient);
+};
 
 const getPrescriptions = async (req, res) => {
   try {
@@ -113,4 +132,4 @@ const getPrescriptions = async (req, res) => {
   }
 }
 
-module.exports = { session_index, createFamilymember, GetFamilymembers, getPrescriptions };
+module.exports = { session_index, createFamilymember, GetFamilymembers, selectPatient, getPrescriptions };

@@ -4,6 +4,7 @@ const {
   createFamilymember,
   GetFamilymembers,
   getPrescriptions,
+  selectPatient,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -46,5 +47,7 @@ router.post("/createFamilymember", createFamilymember);
 router.get("/getFamilymember", GetFamilymembers);
 
 router.get("/getPrescriptions", getPrescriptions);
+
+router.get("/selectPatient", selectPatient);
 
 module.exports = router;

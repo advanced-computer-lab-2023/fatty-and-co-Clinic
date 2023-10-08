@@ -61,6 +61,10 @@ router.get("/Patients", (req, res) => {
   getPatients(req, res);
 });
 
+router.get("/Appointments", (req, res) => {
+  getAppointments(req, res);
+});
+
 /**
  * @route GET /tests/Requests
  * @desc Get all requests
