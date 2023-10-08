@@ -36,6 +36,10 @@ const requestSchema = new Schema(
       type: String, //Assuming just medicine degree aw 7aga
       required: true,
     },
+    Speciality: {
+      type: String,
+      required: true,
+    },
     Status: {
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],

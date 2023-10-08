@@ -1,7 +1,7 @@
 const userModel = require("../models/systemusers.js");
-const doctorModel = require("../models/doctors.js");
-const requests = require("../models/requests.js");
-const { default: mongoose } = require("mongoose");
+const requestModel = require("../models/requests");
+const doctorModel = require("../models/doctors");
+const { default: mongoose } = require('mongoose');
 
 const createAdmin = async (req, res) => {
   const { Username, Password, Email } = req.body;
