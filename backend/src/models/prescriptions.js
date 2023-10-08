@@ -18,6 +18,11 @@ const prescriptionSchema = new Schema({
     type: String,
     required: true,
   },
+  Status: {
+    type: String,
+    enum: ["Filled", "Unfilled"],
+    default: "Unfilled",
+  },
   Medicine: [
     {
       Name: {

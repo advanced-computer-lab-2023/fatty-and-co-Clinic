@@ -96,5 +96,39 @@ const GetFamilymembers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+const selectPatient = async (req, res) => {
+  const id = req.body.id;
 
-module.exports = { session_index, createFamilymember, GetFamilymembers };
+  // Get the patient.
+  const patient = await patientModel.findById(id);
+
+  // If the patient is not found, return a 404 error.
+  if (!patient) {
+    res.status(404).send("Patient not found.");
+    return;
+  }
+
+  // Remove the timestamp from the patient object.
+  delete patient.createdAt;
+  delete patient.updatedAt;
+
+  // Return the patient object.
+  res.status(200).send(patient);
+};
+
+const getPrescriptions = async (req, res) => {
+  try {
+    const id = req.body._id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "Invalid ID" });
+      return;
+    }
+    const patient = await patientModel.findById(id);
+    const prescriptions = await prescriptionModel.find({ PatientUsername: patient.Username });
+    res.status(200).send(prescriptions);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
+module.exports = { session_index, createFamilymember, GetFamilymembers, selectPatient, getPrescriptions };
