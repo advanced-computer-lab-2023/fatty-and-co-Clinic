@@ -10,19 +10,39 @@ const {
 // Create the router
 const router = express.Router();
 
-// GET All packages
+/**
+ * @route GET /packages
+ * @desc Get all packages
+ * @access Public
+ */
 router.get("/packages", getPackages);
 
-// GET a package by Name
+/**
+ * @route GET /packages/:Name
+ * @desc Get a package by Name
+ * @access Public
+ */
 router.get("/:Name", getPackage);
 
-// POST create a new package
+/**
+ * @route POST /addPackage
+ * @desc Create a new package
+ * @access Public
+ */
 router.post("/addPackage", createPackage);
 
-// DELETE a package
+/**
+ * @route DELETE /deletePackage/:id
+ * @desc Delete a package
+ * @access Public
+ */
 router.delete("/deletePackage/:id", deletePackage);
 
-// update a package by id
+/**
+ * @route PATCH /updatePackage/:id
+ * @desc Update a package by id
+ * @access Public
+ */
 router.patch("/updatePackage/:id", updatePackage);
 
 module.exports = router;
