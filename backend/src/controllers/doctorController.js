@@ -2,6 +2,7 @@ const doctorModel = require("../models/doctors");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 
+// create a doctor
 const createDoctor = async (req, res) => {
   const {
     Username,
@@ -28,6 +29,7 @@ const createDoctor = async (req, res) => {
   }
 };
 
+// update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
     const filter = { Username: "Khalkhoola" };
@@ -75,7 +77,7 @@ const getDoctorByID = async (req, res) => {
 
 // get a doctor by username
 const getDoctorByUsername = async (req, res) => {
-  const { username } = req.params;
+  const { Username } = req.params;
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     if (!doctor) {
