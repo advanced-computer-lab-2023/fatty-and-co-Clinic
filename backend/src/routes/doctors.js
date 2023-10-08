@@ -27,7 +27,7 @@ router.get("/getDoctor/:id", getDoctor);
 router.get("/getAllDoctors", getAllDoctors);
 
 router.delete("/deleteDoctor/:id", deleteDoctor);
- 
+
 /**
  * @route GET /doctors
  * @desc Returns a message indicating that the request was successful
