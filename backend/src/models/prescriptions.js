@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const prescriptionSchema = new Schema({
   AppointmentId: {
-    type: Number,
+    type: String,
     required: true,
   },
   DoctorUsername: {

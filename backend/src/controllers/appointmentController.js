@@ -1,12 +1,10 @@
 const { trusted } = require("mongoose");
 const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
-
-//filter by  date or status
+const patientModel = require("../models/patients");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
-
   const statusInput = req.body.Status; //khod input men el front end
   console.log(statusInput);
   const dateSearch = req.body.Date; //khod input men el front end
@@ -33,7 +31,7 @@ const getAppointments = async (req, res) => {
     dateSearch != null &&
     !isNaN(new Date(dateSearch))
   ) {
-    const statusValue = statusInput === "0" ? false : true;
+    const statusValue = statusInput
     const dateValue = new Date(dateSearch);
     const newDate = new Date(dateValue)
     newDate.setDate(dateValue.getDate() + 1)

@@ -4,6 +4,7 @@ const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
+const prescriptionModel = require("../models/prescriptions");
 const { default: mongoose } = require("mongoose");
 const {
   generateUsername,
@@ -22,13 +23,15 @@ const {
   generateAppointmentStatus,
   generateAppointmentDate,
   generateUserType,
+  generateMedicine,
+  generateDiagnosis,
 } = require("../common/utils/generators");
 const {
   getPatientUsername,
   getDoctorUsername,
+  getAppointment,
 } = require("../common/utils/dbGetters");
 
-// create a new user
 // create a new System User
 const createSystemUser = async (req, res) => {
   const { Username, Password, Email, Type } = req.body;
@@ -182,6 +185,15 @@ const getPatients = async (req, res) => {
   }
 };
 
+const getAppointments = async (req, res) => {
+  try {
+    const appointments = await appointmentModel.find({}); // sorts by username in ascending order
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // get all doctors
 const getDoctors = async (req, res) => {
   try {
@@ -213,6 +225,31 @@ const getRequests = async (req, res) => {
   }
 };
 
+const createPrescription = async (req, res) => {
+  const { AppointmentId, DoctorUsername, PatientUsername, Diagnosis, Medicine } = req.body;
+  const appointment = await getAppointment();
+  const appointmentId = AppointmentId || appointment._id;
+  const doctorUsername = DoctorUsername || appointment.DoctorUsername;
+  const patientUsername = PatientUsername || appointment.PatientUsername;
+  const diagnosis = Diagnosis || generateDiagnosis();
+  const medicine = Medicine || generateMedicine();
+
+  console.log(appointmentId, doctorUsername, patientUsername, diagnosis, medicine);
+
+  try {
+    const newPrescription = await prescriptionModel.create({
+      AppointmentId: appointmentId,
+      DoctorUsername: doctorUsername,
+      PatientUsername: patientUsername,
+      Diagnosis: diagnosis,
+      Medicine: medicine,
+    });
+    res.status(201).json(newPrescription);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -222,6 +259,8 @@ module.exports = {
   getDoctors,
   getAdmins,
   getRequests,
+  getAppointments,
   createAppointment,
   createRandomAppointment,
+  createPrescription,
 };
