@@ -6,6 +6,7 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
+import UpdateDoc from "views/Doctors/UpdateDoc.js"  //Zawedna de
 
 import {
   HomeIcon,
@@ -16,6 +17,11 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+
+
+//path da el url el added lama ben doos 3ala a certain component fel ui
+//icon ben7ot fe el component name
+//component de 7aga fe views
 
 var dashRoutes = [
   {
@@ -84,5 +90,21 @@ var dashRoutes = [
       },
     ],
   },
+  {
+    name: "UPDATE ACCOUNT",
+    category: "update",
+    rtlName: "صفحات",
+    state: "pageCollapse",  //not sure
+    views: [
+      {
+        path: "/updateProfile",
+        name: "Profile",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateDoc ,
+        layout: "/updateDoctor",     //Not sure men ay 7aga
+      }]
+  }
 ];
 export default dashRoutes;
