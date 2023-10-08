@@ -6,6 +6,7 @@ const { default: mongoose } = require("mongoose");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
+  
   const statusInput = req.body.Status; //khod input men el front end
   console.log(statusInput);
   const dateSearch = req.body.Date; //khod input men el front end
@@ -28,13 +29,13 @@ const getAppointments = async (req, res) => {
 
   //Check if both are present
   if (
-    (statusInput === "0" || statusInput === "1") &&
-    dateSearch != null &&
+    (statusInput === "Upcoming"|| statusInput==="Completed" || statusInput==="Rescheduled"||statusInput==="Cancelled" ) &&
+     dateSearch != null &&
     !isNaN(new Date(dateSearch))
   ) {
-    const statusValue = statusInput === "0" ? false : true;
+    const statusValue = statusInput
     const dateValue = new Date(dateSearch);
-    const dayIncr = dateValue.getDay() + 1;
+
     if (dateValue.getUTCHours() === 0) {
       //Gets all appointments on a certain day
       const result =
@@ -44,9 +45,9 @@ const getAppointments = async (req, res) => {
               Status: statusValue,
               Date: {
                 $lt: new Date(
-                  dateValue.getFullYear(),
-                  dateValue.getMonth(),
-                  dayIncr
+                  dateValue.getUTCFullYear(),
+                  dateValue.getUTCMonth(),
+                  dateValue.getUTCDay()+1,
                 ),
               },
               Date: { $gte: dateValue },
@@ -56,9 +57,9 @@ const getAppointments = async (req, res) => {
               Status: statusValue,
               Date: {
                 $lt: new Date(
-                  dateValue.getFullYear(),
-                  dateValue.getMonth(),
-                  dayIncr
+                  dateValue.getUTCFullYear(),
+                  dateValue.getUTCMonth(),
+                  dateValue.getUTCDay()+1,
                 ),
               },
               Date: { $gte: dateValue },
@@ -80,8 +81,8 @@ const getAppointments = async (req, res) => {
             });
       res.status(200).send(result);
     }
-  } else if (statusInput === "0" || statusInput === "1") {
-    const statusValue = statusInput === "0" ? false : true;
+  } else if (statusInput === "Upcoming"|| statusInput==="Completed" || statusInput==="Rescheduled"||statusInput==="Cancelled" ) {
+    const statusValue = statusInput 
     const result =
       current_type === "Doctor"
         ? await appointmentModel.find({
@@ -96,6 +97,11 @@ const getAppointments = async (req, res) => {
   } else if (dateSearch != null && !isNaN(new Date(dateSearch))) {
     //Gets date on exact day
     const dateValue = new Date(dateSearch);
+    const incr=new Date(
+        dateValue.getFullYear(),
+        dateValue.getMonth(),
+        dateValue.getDay())
+        console.log(incr)
     if (dateValue.getUTCHours() === 0) {
       //Gets all appointments on a certain day
       const result =
@@ -103,22 +109,14 @@ const getAppointments = async (req, res) => {
           ? await appointmentModel.find({
               DoctorUsername: current_user,
               Date: {
-                $lt: new Date(
-                  dateValue.getFullYear(),
-                  dateValue.getMonth(),
-                  dateValue.getDay() + 1
-                ),
+                $lt: incr
               },
               Date: { $gte: dateValue },
             })
           : await appointmentModel.find({
               PatientUsername: current_user,
               Date: {
-                $lt: new Date(
-                  dateValue.getFullYear(),
-                  dateValue.getMonth(),
-                  dateValue.getDay() + 1
-                ),
+                $lt: incr
               },
               Date: { $gte: dateValue },
             });
