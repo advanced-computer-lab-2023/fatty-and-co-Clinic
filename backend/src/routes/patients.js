@@ -12,6 +12,7 @@ const {
   getPrescriptions,
   selectPatient,
   filterPrescriptions,
+  selectPrescription,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -66,5 +67,7 @@ router.get("/getPrescriptions", getPrescriptions);
 router.get("/selectPatient", selectPatient);
 
 router.get("/filterPrescriptions", filterPrescriptions);
+
+router.get("/selectPrescription", selectPrescription);
 
 module.exports = router;

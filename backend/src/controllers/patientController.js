@@ -235,6 +235,16 @@ const filterPrescriptions = async (req, res) => {
   }
 };
 
+const selectPrescription = async (req, res) => {
+  const prescriptionId = req.body.id;
+  try {
+    const prescription = await prescriptionModel.findById(prescriptionId);
+    res.status(200).send(prescription);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
 module.exports = {
   session_index,
   createFamilymember,
@@ -248,4 +258,5 @@ module.exports = {
   deletePatient,
   getPatient,
   updatePatient,
+  selectPrescription,
 };
