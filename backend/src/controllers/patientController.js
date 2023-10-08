@@ -4,6 +4,7 @@ const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
+const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 
 // view all doctors with speciality and session price
@@ -97,4 +98,19 @@ const GetFamilymembers = async (req, res) => {
   }
 };
 
-module.exports = { session_index, createFamilymember, GetFamilymembers };
+const getPrescriptions = async (req, res) => {
+  try {
+    const id = req.body._id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "Invalid ID" });
+      return;
+    }
+    const patient = await patientModel.findById(id);
+    const prescriptions = await prescriptionModel.find({ PatientUsername: patient.Username });
+    res.status(200).send(prescriptions);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
+module.exports = { session_index, createFamilymember, GetFamilymembers, getPrescriptions };
