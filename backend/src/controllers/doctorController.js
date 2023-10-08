@@ -2,32 +2,34 @@ const doctorModel = require("../models/doctors");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 
-const createDoctor = async (req, res) => {
-  const {
-    Username,
-    Name,
-    DateOfBirth,
-    HourlyRate,
-    Affiliation,
-    EducationalBackground,
-  } = req.body;
+// create a doctor
+// const createDoctor = async (req, res) => {
+//   const {
+//     Username,
+//     Name,
+//     DateOfBirth,
+//     HourlyRate,
+//     Affiliation,
+//     EducationalBackground,
+//   } = req.body;
 
-  try {
-    const doc = await doctorModel.create({
-      Username: Username,
-      Name: Name,
-      DateOfBirth: DateOfBirth,
-      HourlyRate: HourlyRate,
-      Affiliation: Affiliation,
-      EducationalBackground: EducationalBackground,
-    });
+//   try {
+//     const doc = await doctorModel.create({
+//       Username: Username,
+//       Name: Name,
+//       DateOfBirth: DateOfBirth,
+//       HourlyRate: HourlyRate,
+//       Affiliation: Affiliation,
+//       EducationalBackground: EducationalBackground,
+//     });
 
-    res.status(200).json(doc);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+//     res.status(200).json(doc);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 
+// update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
     const filter = { Username: "Khalkhoola" };
@@ -75,7 +77,7 @@ const getDoctorByID = async (req, res) => {
 
 // get a doctor by username
 const getDoctorByUsername = async (req, res) => {
-  const { username } = req.params;
+  const { Username } = req.params;
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     if (!doctor) {
@@ -173,6 +175,6 @@ module.exports = {
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
-  createDoctor,
+  // createDoctor,
   updateDoctor,
 };
