@@ -1,8 +1,8 @@
 const { trusted } = require("mongoose");
 const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
+const patientModel = require("../models/patients")
 
-//filter by  date or status
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
@@ -141,4 +141,74 @@ const getAppointments = async (req, res) => {
     res.status(404).send("Error occured");
   }
 };
-module.exports = { getAppointments };
+
+// Get all the patients of a certain doctor.
+const findDoctorPatients= async (req, res) => {
+    const doctorUsername = req.body.DoctorUsername;
+  
+    // Get all the appointments of the doctor.
+    const appointments = await appointmentModel.find({ DoctorUsername: doctorUsername });
+  
+    // Get the names of all the patients from the appointments.
+    const patientNames = appointments.map((appointment) => appointment.PatientUsername);
+  
+  // Create a set to store the unique patient names.
+  const uniquePatientNames = new Set();
+
+  // Add each patient name to the set.
+  for (const patientName of patientNames) {
+    uniquePatientNames.add(patientName);
+  }
+
+  // Convert the set back to an array.
+  const uniquePatientNamesArray = [...uniquePatientNames];
+
+  // Return the unique patient names.
+  res.status(200).send( uniquePatientNamesArray);
+  };
+  const upcomingAppforDoc= async (req, res) => {
+    const doctorUsername = req.body.DoctorUsername;
+  
+    // Get all the appointments of the doctor.
+    const appointments = await appointmentModel.find({ DoctorUsername: doctorUsername, Status: "Upcoming" });
+  
+    // Get the names of all the patients from the appointments.
+    const patientNames = appointments.map((appointment) => appointment.PatientUsername);
+  
+    const uniquePatientNames = new Set();
+
+    // Add each patient name to the set.
+    for (const patientName of patientNames) {
+      uniquePatientNames.add(patientName);
+    }
+  
+    // Convert the set back to an array.
+    const uniquePatientNamesArray = [...uniquePatientNames];
+  
+    // Return the unique patient names.
+    res.status(200).send( uniquePatientNamesArray);
+  };
+ const  searchPatient = async (req, res) => {
+    const doctorUsername = req.body.DoctorUsername;
+    const patientName = req.body.PatientUsername;
+    const appointments = await appointmentModel.find({ DoctorUsername: doctorUsername });
+  
+    // Get the names of all the patients from the appointments.
+    const patientNames = appointments.map((appointment) => appointment.PatientUsername);
+    // Get the patients of the doctor.
+    
+  
+    const foundPatient = patientNames.find((patientNamee) => patientNamee === patientName);
+
+    // If the patient was found, return the patient.
+    if (foundPatient) {
+      res.status(200).send(foundPatient);
+    } else {
+      res.status(404).send("Patient not found.");
+    }
+  }; 
+  
+  // Export the router.
+
+
+module.exports = { getAppointments,findDoctorPatients,upcomingAppforDoc,searchPatient };
