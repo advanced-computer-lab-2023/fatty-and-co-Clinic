@@ -32,7 +32,6 @@ const {
   getAppointment,
 } = require("../common/utils/dbGetters");
 
-// create a new user
 // create a new System User
 const createSystemUser = async (req, res) => {
   const { Username, Password, Email, Type } = req.body;
