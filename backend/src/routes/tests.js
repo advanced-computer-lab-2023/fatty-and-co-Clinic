@@ -41,6 +41,7 @@ router.get("/Requests", (req, res) => {
 router.post("/createUser", (req, res) => {
   createSystemUser(req, res);
 });
+
 router.post("/createPatient", (req, res) => {
   createPatient(req, res);
 });
