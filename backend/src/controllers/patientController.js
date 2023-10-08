@@ -177,7 +177,7 @@ const selectPatient = async (req, res) => {
     res.status(404).send("Patient not found.");
     return;
   }
- 
+
   // Remove the timestamp from the patient object.
   delete patient.createdAt;
   delete patient.updatedAt;
