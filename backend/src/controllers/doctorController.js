@@ -28,18 +28,55 @@ const systemUserModel = require("../models/systemusers");
 //     res.status(400).json({ error: error.message });
 //   }
 // };
+const createDoctor = async (req, res) => {
+  const {} = req.body;
+  try {
+    const doctor = await doctorModel.create({
+      Username: req.body.Username,
+      Name: req.body.Name,
+      DateOfBirth: req.body.DateOfBirth,
+      HourlyRate: req.body.HourlyRate,
+      Affiliation: req.body.Affiliation,
+      EducationalBackground: req.body.EducationalBackground,
+      Speciality: req.body.Speciality,
+    });
+    res.status(200).send({ doctor });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const getAllDoctors = async (req, res) => {
+  try {
+    const doctors = await doctorModel.find();
+    res.status(200).send({ doctors });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const deleteDoctor = async (req, res) => {
+  try {
+    const doctor = await doctorModel.findByIdAndDelete(req.params.id);
+    res.status(200).send({ doctor });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 
 // update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
-    const filter = { Username: "Khalkhoola" };
+    const filter = { Username: req.body.Username };
     // console.log(req.body.Email)
     if (req.body.HourlyRate || req.body.Affiliation) {
       const doc = await doctorModel.findOneAndUpdate(filter, req.body);
-      res.status(200).json(doc);
+      const doc2 = await doctorModel.findOneAndUpdate(filter, req.body);
+      res.status(200).json(doc2);
     } else {
       const doc = await systemUserModel.findOneAndUpdate(filter, req.body);
-      res.status(200).json(doc);
+      const doc1=await systemUserModel.findOneAndUpdate(filter, req.body);
+      res.status(200).json(doc1);
     }
     // console.log(req.body.HourlyRate);
   } catch (error) {
@@ -175,6 +212,8 @@ module.exports = {
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
-  // createDoctor,
   updateDoctor,
+  createDoctor,
+  getAllDoctors,
+  deleteDoctor,
 };

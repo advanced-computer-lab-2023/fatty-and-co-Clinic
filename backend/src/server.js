@@ -11,7 +11,6 @@ const patientRoutes = require("./routes/patients");
 const adminRoutes = require("./routes/admins");
 const testRoutes = require("./routes/tests");
 const packageRoutes = require("./routes/package");
-
 // ENV Variables
 const port = process.env.PORT || 8000;
 const mongoURI = process.env.MONGO_URI;
@@ -34,6 +33,7 @@ app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/test", testRoutes);
 app.use("/package", packageRoutes);
+app.use("/guest", guestRoutes);
 
 // Server
 mongoose
