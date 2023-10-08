@@ -8,10 +8,10 @@ router.get("/", (req, res) => {
   res.send("Appointments");
 });
 
-router.get("/DoctorUsername/:DoctorUsername", findDoctorPatients);
-router.get("/upcoming/:DoctorUsername", upcomingAppforDoc);
-router.get("/searchpatient/:DoctorUsername/:Username", searchPatient);
+router.get("/findPatients", findDoctorPatients);
+router.get("/upcoming", upcomingAppforDoc);
+router.get("/searchpatient", searchPatient);
 
 router.get("/getAppointments", getAppointments);
 
-module.exports = router;
+module.exports = router; 
