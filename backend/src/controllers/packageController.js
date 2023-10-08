@@ -14,8 +14,12 @@ const createPackage = async (req, res) => {
     Family_Discount: Family_Discount,
   });
 
-  await newPackage.save();
-  res.status(200).json(newPackage);
+  try {
+    await newPackage.save();
+    res.status(200).json(newPackage);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 const getPackages = async (req, res) => {
@@ -28,15 +32,39 @@ const getPackages = async (req, res) => {
   }
 };
 
+const getPackage = async (req, res) => {
+  // retrieve a specific Package by Name
+  try {
+    const { Name } = req.params;
+    const package = await packageModel.find({ Name: Name });
+    res.status(200).json(package);
+  } catch (err) {
+    res.status(404).json({ message: "No Package found" });
+  }
+};
+
 // Update a Package
 const updatePackage = async (req, res) => {
   try {
     const { id } = req.params;
-    const { Name, Price, Session_Discount, Medicine_Discount, Family_Discount } = req.body;
+    const {
+      Name,
+      Price,
+      Session_Discount,
+      Medicine_Discount,
+      Family_Discount,
+    } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send(`No Package with id: ${id}`);
 
-    const updatedPackage = { Name, Price, Session_Discount, Medicine_Discount, Family_Discount, _id: id };
+    const updatedPackage = {
+      Name,
+      Price,
+      Session_Discount,
+      Medicine_Discount,
+      Family_Discount,
+      _id: id,
+    };
     await packageModel.findByIdAndUpdate(id, updatedPackage, { new: true });
     res.status(200).json(updatedPackage);
   } catch (err) {
@@ -56,4 +84,10 @@ const deletePackage = async (req, res) => {
   }
 };
 
-module.exports = { createPackage, getPackages, updatePackage, deletePackage };
+module.exports = {
+  createPackage,
+  getPackages,
+  getPackage,
+  updatePackage,
+  deletePackage,
+};
