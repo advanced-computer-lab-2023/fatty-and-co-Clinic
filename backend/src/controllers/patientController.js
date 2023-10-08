@@ -4,8 +4,79 @@ const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
+const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
+const { getPatients } = require("./testController");
 
+const createPatient = async (req, res) => {
+  const {} = req.body;
+  try {
+    const patient = await patientModel.create({
+      Username: req.body.Username,
+      Name: req.body.Name,
+      MobileNum: req.body.MobileNum,
+      DateOfBirth: req.body.DateOfBirth,
+      Gender: req.body.Gender,
+      EmergencyContact: req.body.EmergencyContact,
+      FamilyMem: req.body.FamilyMem,
+      PackageName: req.body.PackageName,
+    });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const getAllPatients = async (req, res) => {
+  try {
+    const patients = await patientModel.find();
+    res.status(200).send({ patients });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//find patient by id
+const getPatient = async (req, res) => {
+  try {
+    const patient = await patientModel.findById(req.params.id);
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//find patient by username
+const getPatientUsername = async (req, res) => {
+  try {
+    const { Username } = req.params;
+    const patient = await patientModel.find({ Username: Username });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const deletePatient = async (req, res) => {
+  try {
+    const patient = await patientModel.findByIdAndDelete(req.params.id);
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const updatePatient = async (req, res) => {
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 // view all doctors with speciality and session price
 const session_index = (req, res) => {
   // Package discount starts with 0
@@ -96,5 +167,53 @@ const GetFamilymembers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+const selectPatient = async (req, res) => {
+  const id = req.body.id;
 
-module.exports = { session_index, createFamilymember, GetFamilymembers };
+  // Get the patient.
+  const patient = await patientModel.findById(id);
+
+  // If the patient is not found, return a 404 error.
+  if (!patient) {
+    res.status(404).send("Patient not found.");
+    return;
+  }
+
+  // Remove the timestamp from the patient object.
+  delete patient.createdAt;
+  delete patient.updatedAt;
+
+  // Return the patient object.
+  res.status(200).send(patient);
+};
+
+const getPrescriptions = async (req, res) => {
+  try {
+    const id = req.body._id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "Invalid ID" });
+      return;
+    }
+    const patient = await patientModel.findById(id);
+    const prescriptions = await prescriptionModel.find({
+      PatientUsername: patient.Username,
+    });
+    res.status(200).send(prescriptions);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+module.exports = {
+  session_index,
+  createFamilymember,
+  GetFamilymembers,
+  selectPatient,
+  getPrescriptions,
+  getPatientUsername,
+  createPatient,
+  getAllPatients,
+  deletePatient,
+  getPatient,
+  updatePatient,
+};

@@ -1,8 +1,16 @@
 const express = require("express");
 const {
+  createPatient,
+  getAllPatients,
+  deletePatient,
+  getPatient,
+  updatePatient,
+  getPatientUsername,
   session_index,
   createFamilymember,
   GetFamilymembers,
+  getPrescriptions,
+  selectPatient,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -12,9 +20,17 @@ const router = express.Router();
  * @desc Returns a string indicating that the route is for patients
  * @access Public
  */
-router.get("/", (req, res) => {
-  res.send("Patients");
-});
+router.post("/addPatient", createPatient);
+
+router.get("/getAllPatients", getAllPatients);
+
+router.delete("/deletePatient/:id", deletePatient);
+
+router.get("/getPatient/:id", getPatient);
+
+router.patch("/updatePatient/:id", updatePatient);
+
+router.get("/getPatientUsername/:Username", getPatientUsername);
 
 /**
  * @route GET /patients/view/doctors/:id
@@ -43,5 +59,9 @@ router.post("/createFamilymember", createFamilymember);
  * @prop {string} Username - The username of the patient to get family members for
  */
 router.get("/getFamilymember", GetFamilymembers);
+
+router.get("/getPrescriptions", getPrescriptions);
+
+router.get("/selectPatient", selectPatient);
 
 module.exports = router;

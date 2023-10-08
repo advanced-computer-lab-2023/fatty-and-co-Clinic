@@ -7,15 +7,26 @@
 
 const express = require("express");
 const {
+  createDoctor,
+  deleteDoctor,
+  getAllDoctors,
   getDoctorByID,
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
-  createDoctor,
   updateDoctor,
 } = require("../controllers/doctorController");
 
 const router = express.Router();
+
+router.post("/addDoctor", createDoctor);
+router.get("/getAllDoctors", getAllDoctors);
+router.delete("/deleteDoctor/:id", deleteDoctor);
+router.get("/getDoctor/:id", getDoctor);
+
+router.get("/getAllDoctors", getAllDoctors);
+
+router.delete("/deleteDoctor/:id", deleteDoctor);
 
 /**
  * @route GET /doctors
