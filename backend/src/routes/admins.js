@@ -22,6 +22,9 @@ router.get("/", (req, res) => {
  * @route POST /admins/addAdmin
  * @desc Creates a new admin
  * @access Public
+ * @prop {string} Username - The username of the admin
+ * @prop {string} Password - The password of the admin
+ * @prop {string} Email - The email of the admin
  */
 router.post("/addAdmin", createAdmin);
 
@@ -29,6 +32,7 @@ router.post("/addAdmin", createAdmin);
  * @route GET /admins/getRequest
  * @desc Gets a list of admin requests
  * @access Public
+ * @prop {string} Username - The username of the requesting doctor
  */
 router.get("/getRequest", getRequest);
 
@@ -36,6 +40,7 @@ router.get("/getRequest", getRequest);
  * @route POST /admins/acceptRequest
  * @desc Accepts an admin request
  * @access Public
+ * @prop {string} Username - The username of the requesting doctor
  */
 router.post("/acceptRequest", acceptRequest);
 
@@ -43,6 +48,7 @@ router.post("/acceptRequest", acceptRequest);
  * @route PUT /admins/rejectRequest
  * @desc Rejects an admin request
  * @access Public
+ * @prop {string} Username - The username of the requesting doctor
  */
 router.put("/rejectRequest", rejectRequest);
 
@@ -50,6 +56,7 @@ router.put("/rejectRequest", rejectRequest);
  * @route DELETE /admins/deleteUser
  * @desc Deletes a user
  * @access Public
+ * @prop {string} Username - The username of the user to be deleted
  */
 router.delete("/deleteUser", deleteUser);
 

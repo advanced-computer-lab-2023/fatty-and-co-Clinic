@@ -169,6 +169,8 @@ const findDoctorPatients = async (req, res) => {
   // Return the unique patient names.
   res.status(200).send(uniquePatientNamesArray);
 };
+
+// Get all the upcoming appointments of a certain doctor.
 const upcomingAppforDoc = async (req, res) => {
   const doctorUsername = req.body.DoctorUsername;
 
@@ -196,6 +198,8 @@ const upcomingAppforDoc = async (req, res) => {
   // Return the unique patient names.
   res.status(200).send(uniquePatientNamesArray);
 };
+
+// Search for a patient by name.
 const searchPatient = async (req, res) => {
   const doctorUsername = req.body.DoctorUsername;
   const patientName = req.body.PatientUsername;

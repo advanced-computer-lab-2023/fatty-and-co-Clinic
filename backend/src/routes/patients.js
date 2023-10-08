@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
  * @route GET /patients/view/doctors/:id
  * @desc Returns a list of all doctors with speciality and session price for a patient
  * @access Public
- * @param {string} id - The ID of the patient
+ * @param {string} id - The ID of the patient to view doctors for
  */
 router.get("/view/doctors/:id", session_index);
 
@@ -28,11 +28,11 @@ router.get("/view/doctors/:id", session_index);
  * @route POST /patients/createFamilymember
  * @desc Creates a new family member for a patient
  * @access Public
- * @body {string} Name - The name of the family member
- * @body {string} NationalID - The national ID of the family member
- * @body {number} Age - The age of the family member
- * @body {string} Gender - The gender of the family member ["M", "F"]
- * @body {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
+ * @prop {string} Name - The name of the family member
+ * @prop {string} NationalID - The national ID of the family member
+ * @prop {number} Age - The age of the family member
+ * @prop {string} Gender - The gender of the family member ["M", "F"]
+ * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
 router.post("/createFamilymember", createFamilymember);
 
@@ -40,6 +40,7 @@ router.post("/createFamilymember", createFamilymember);
  * @route GET /patients/getFamilymember
  * @desc Returns a list of all family members for a patient
  * @access Public
+ * @prop {string} Username - The username of the patient to get family members for
  */
 router.get("/getFamilymember", GetFamilymembers);
 
