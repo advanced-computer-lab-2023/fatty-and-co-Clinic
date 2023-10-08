@@ -3,6 +3,7 @@ const {
   session_index,
   createFamilymember,
   GetFamilymembers,
+  getPrescriptions,
   selectPatient,
 } = require("../controllers/patientController");
 
@@ -44,6 +45,8 @@ router.post("/createFamilymember", createFamilymember);
  * @prop {string} Username - The username of the patient to get family members for
  */
 router.get("/getFamilymember", GetFamilymembers);
+
+router.get("/getPrescriptions", getPrescriptions);
 
 router.get("/selectPatient", selectPatient);
 
