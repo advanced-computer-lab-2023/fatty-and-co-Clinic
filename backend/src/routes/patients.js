@@ -9,6 +9,7 @@ const {
   session_index,
   createFamilymember,
   GetFamilymembers,
+  selectPatient,
 } = require("../controllers/patientController");
 
 const router = express.Router();
@@ -57,5 +58,7 @@ router.post("/createFamilymember", createFamilymember);
  * @prop {string} Username - The username of the patient to get family members for
  */
 router.get("/getFamilymember", GetFamilymembers);
+
+router.get("/selectPatient", selectPatient);
 
 module.exports = router;
