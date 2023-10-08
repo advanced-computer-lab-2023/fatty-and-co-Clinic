@@ -23,8 +23,13 @@ const patientSchema = new Schema(
     },
     EmergencyContact: {
       type: { FullName: String, PhoneNumber: Number }, //NOT SURE OF THIS SYNTAX
+      required: false,
     },
-
+    PackageName: {
+      type: String,
+      enum: ["Silver", "Gold", "Platinum"],
+      required: false,
+    },
   },
   { timestamps: true }
 );

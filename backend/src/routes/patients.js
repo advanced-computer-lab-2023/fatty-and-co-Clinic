@@ -1,16 +1,21 @@
 const express = require("express");
-const { createFamilymember,GetFamilymembers} = require("../controllers/patientController");
+const {
+  session_index,
+  createFamilymember,
+  GetFamilymembers,
+} = require("../controllers/patientController");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
   res.send("Patients");
 });
-router.post("/createFamilymember", (req, res) => {
-  createFamilymember(req, res) ;
-});
-router.get("/getFamilymember", (req, res) => {
-  GetFamilymembers(req,res) ;
-});
+
+// view a list of all doctors with speciality and session price for a patient
+router.get("/view/doctors/:id", session_index);
+
+router.post("/createFamilymember", createFamilymember);
+
+router.get("/getFamilymember", GetFamilymembers);
 
 module.exports = router;
