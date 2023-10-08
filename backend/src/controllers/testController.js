@@ -181,6 +181,15 @@ const getPatients = async (req, res) => {
   }
 };
 
+const getAppointments = async (req, res) => {
+  try {
+    const appointments = await appointmentModel.find({}); // sorts by username in ascending order
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // get all doctors
 const getDoctors = async (req, res) => {
   try {
@@ -223,4 +232,5 @@ module.exports = {
   getRequests,
   createAppointment,
   createRandomAppointment,
+  getAppointments,
 };
