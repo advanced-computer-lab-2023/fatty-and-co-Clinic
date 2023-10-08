@@ -10,6 +10,7 @@ const {
   getRequests,
   createDoctor,
   createRandomAppointment,
+  getAppointments
 } = require("../controllers/testController");
 
 const router = express.Router();
@@ -57,6 +58,10 @@ router.get("/Doctors", (req, res) => {
  */
 router.get("/Patients", (req, res) => {
   getPatients(req, res);
+});
+
+router.get("/Appointments", (req, res) => {
+  getAppointments(req, res);
 });
 
 /**
