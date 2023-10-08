@@ -75,7 +75,7 @@ const updateDoctor = async (req, res) => {
       res.status(200).json(doc2);
     } else {
       const doc = await systemUserModel.findOneAndUpdate(filter, req.body);
-      const doc1=await systemUserModel.findOneAndUpdate(filter, req.body);
+      const doc1 = await systemUserModel.findOneAndUpdate(filter, req.body);
       res.status(200).json(doc1);
     }
     // console.log(req.body.HourlyRate);
