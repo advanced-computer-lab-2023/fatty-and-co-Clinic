@@ -63,6 +63,7 @@ function UpdateEmail() {
                 type='text'
                 placeholder='Your old email'
                 size='lg'
+                
               />
               <FormLabel ms='4px' fontSize='sm' fontWeight='normal'>
                 New email

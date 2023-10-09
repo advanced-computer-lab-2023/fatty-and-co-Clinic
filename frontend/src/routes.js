@@ -9,6 +9,7 @@ import SignUp from "views/Auth/SignUp.js";
 // <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 import UpdateAffiliation from "views/Doctors/UpdateAffiliation.js"
+import UpdateHourly from "views/Doctors/UpdateHourlyRate.js";
 import Package from "views/Admin/Package/package";
 
 
@@ -128,6 +129,15 @@ var dashRoutes = [
         secondaryNavbar: true,
         component:UpdateAffiliation ,
         layout: "/updateAffiliation",     //Not sure men ay 7aga
+      },
+      {
+        path: "/profile",
+        name: "Profile",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateHourly ,
+        layout: "/updateHourlyRate",     //Not sure men ay 7aga
       }]
   }
 ];

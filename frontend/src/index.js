@@ -26,6 +26,7 @@ import AdminLayout from "layouts/Admin.js";
 import RTLLayout from "layouts/RTL.js";
 import UpdateDocMail from "layouts/Doctor/ChangeMail"
 import UpdateAffiliation from "layouts/Doctor/ChangeAffiliation";
+import UpdateHourly from "layouts/Doctor/ChangeHourly"
 
 //NOTE: Route path hena bet represent el LAYOUT from routes.js 
 //NOTE: Component hena bet represent el imported layout  
@@ -38,7 +39,9 @@ ReactDOM.render(
       <Route path={`/rtl`} component={RTLLayout} />
       <Route path={`/updateEmail`} component={UpdateDocMail}/>  
       <Route path={'/updateAffiliation'} component={UpdateAffiliation}/>
-      <Redirect from={`/`} to="/admin/dashboard" />
+      <Route path={'/updateHourlyRate'} component={UpdateHourly}/>
+
+      <Redirect from={`/`} to="/updateHourlyRate" />
     </Switch>
   </HashRouter>,
   document.getElementById("root")
