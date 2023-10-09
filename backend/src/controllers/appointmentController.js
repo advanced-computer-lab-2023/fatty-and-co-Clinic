@@ -5,7 +5,6 @@ const patientModel = require("../models/patients");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
-  
   const statusInput = req.body.Status; //khod input men el front end
   console.log(statusInput);
   const dateSearch = req.body.Date; //khod input men el front end
@@ -28,14 +27,17 @@ const getAppointments = async (req, res) => {
 
   //Check if both are present
   if (
-    (statusInput === "Upcoming"|| statusInput==="Completed" || statusInput==="Rescheduled"||statusInput==="Cancelled" ) &&
-     dateSearch != null &&
+    (statusInput === "Upcoming" ||
+      statusInput === "Completed" ||
+      statusInput === "Rescheduled" ||
+      statusInput === "Cancelled") &&
+    dateSearch != null &&
     !isNaN(new Date(dateSearch))
   ) {
-    const statusValue = statusInput
+    const statusValue = statusInput;
     const dateValue = new Date(dateSearch);
-    const newDate= new Date(dateValue)
-    newDate.setDate(dateValue.getDate()+1)
+    const newDate = new Date(dateValue);
+    newDate.setDate(dateValue.getDate() + 1);
 
     if (dateValue.getUTCHours() === 0) {
       //Gets all appointments on a certain day
@@ -46,14 +48,16 @@ const getAppointments = async (req, res) => {
               Status: statusValue,
               Date: {
                 $lt: newDate,
-                 $gte: dateValue },
+                $gte: dateValue,
+              },
             })
           : await appointmentModel.find({
               PatientUsername: current_user,
               Status: statusValue,
               Date: {
-                $lt: newDate
-                , $gte: dateValue },
+                $lt: newDate,
+                $gte: dateValue,
+              },
             });
       res.status(200).send(result);
     } else {
@@ -72,8 +76,13 @@ const getAppointments = async (req, res) => {
             });
       res.status(200).send(result);
     }
-  } else if (statusInput === "Upcoming"|| statusInput==="Completed" || statusInput==="Rescheduled"||statusInput==="Cancelled" ) {
-    const statusValue = statusInput 
+  } else if (
+    statusInput === "Upcoming" ||
+    statusInput === "Completed" ||
+    statusInput === "Rescheduled" ||
+    statusInput === "Cancelled"
+  ) {
+    const statusValue = statusInput;
     const result =
       current_type === "Doctor"
         ? await appointmentModel.find({
@@ -88,9 +97,9 @@ const getAppointments = async (req, res) => {
   } else if (dateSearch != null && !isNaN(new Date(dateSearch))) {
     //Gets date on exact day
     const dateValue = new Date(dateSearch);
-    const newDate= new Date(dateValue)
-    newDate.setDate(dateValue.getDate()+1)
-    console.log(dateValue + " Hee")
+    const newDate = new Date(dateValue);
+    newDate.setDate(dateValue.getDate() + 1);
+    console.log(dateValue + " Hee");
     if (dateValue.getUTCHours() === 0) {
       //Gets all appointments on a certain day
       const result =
@@ -98,14 +107,16 @@ const getAppointments = async (req, res) => {
           ? await appointmentModel.find({
               DoctorUsername: current_user,
               Date: {
-                $lt: newDate
-              , $gte: dateValue },
+                $lt: newDate,
+                $gte: dateValue,
+              },
             })
           : await appointmentModel.find({
               PatientUsername: current_user,
               Date: {
-                $lt: newDate
-                ,$gte: dateValue },
+                $lt: newDate,
+                $gte: dateValue,
+              },
             });
       res.status(200).send(result);
     } else {
@@ -173,37 +184,43 @@ const upcomingAppforDoc = async (req, res) => {
 
   const uniquePatientNames = new Set();
 
-    // Add each patient name to the set.
-    for (const patientName of patientNames) {
-      uniquePatientNames.add(patientName);
-    }
-  
-    // Convert the set back to an array.
-    const uniquePatientNamesArray = [...uniquePatientNames];
-  
-    // Return the unique patient names.
-    res.status(200).send( uniquePatientNamesArray);
-  };
-  const searchPatient = async (req, res) => {
-    const doctorUsername = req.body.DoctorUsername;
-    const patientName = req.body.PatientUsername;
-    const appointments = await appointmentModel.find({ DoctorUsername: doctorUsername });
-  
-    // Get the names of all the patients from the appointments.
-    const patientNames = appointments.map((appointment) => appointment.PatientUsername);
-  
-    // Filter the patient names to only include patients whose name contains the search query.
-    const filteredPatientNames = patientNames.filter((patientNamee) => patientNamee.includes(patientName));
-  
-    // If at least one patient was found, return the filtered patient names.
-    if (filteredPatientNames.length > 0) {
-      res.status(200).send(filteredPatientNames);
-    } else {
-      res.status(404).send("Patient not found.");
-    }
-  };
-  
-  // Export the router.
+  // Add each patient name to the set.
+  for (const patientName of patientNames) {
+    uniquePatientNames.add(patientName);
+  }
+
+  // Convert the set back to an array.
+  const uniquePatientNamesArray = [...uniquePatientNames];
+
+  // Return the unique patient names.
+  res.status(200).send(uniquePatientNamesArray);
+};
+const searchPatient = async (req, res) => {
+  const doctorUsername = req.body.DoctorUsername;
+  const patientName = req.body.PatientUsername;
+  const appointments = await appointmentModel.find({
+    DoctorUsername: doctorUsername,
+  });
+
+  // Get the names of all the patients from the appointments.
+  const patientNames = appointments.map(
+    (appointment) => appointment.PatientUsername
+  );
+
+  // Filter the patient names to only include patients whose name contains the search query.
+  const filteredPatientNames = patientNames.filter((patientNamee) =>
+    patientNamee.includes(patientName)
+  );
+
+  // If at least one patient was found, return the filtered patient names.
+  if (filteredPatientNames.length > 0) {
+    res.status(200).send(filteredPatientNames);
+  } else {
+    res.status(404).send("Patient not found.");
+  }
+};
+
+// Export the router.
 
 module.exports = {
   getAppointments,

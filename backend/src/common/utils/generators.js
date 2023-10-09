@@ -222,15 +222,15 @@ function generateMedicine() {
     "Omeprazole",
     "Ranitidine",
     "Prednisone",
-    "Albuterol"
-  ]
+    "Albuterol",
+  ];
   const numberOfMedicinesToGenerate = 5; // Change this number to generate a different list length
   const medicineList = [];
   for (let i = 0; i < numberOfMedicinesToGenerate; i++) {
     const randomIndex = Math.floor(Math.random() * meds.length);
     const randomMedicine = meds[randomIndex];
     const medicineObject = {
-      Name: randomMedicine
+      Name: randomMedicine,
     };
     medicineList.push(medicineObject);
   }
@@ -239,26 +239,26 @@ function generateMedicine() {
 
 function generateDiagnosis() {
   const diagnosis = [
-    'Hypertension',
-    'Diabetes',
-    'Influenza',
-    'Bronchitis',
-    'Pneumonia',
-    'Migraine',
-    'Asthma',
-    'Arthritis',
-    'Gastritis',
-    'Anxiety Disorder',
-    'Depression',
-    'Strep Throat',
-    'Fibromyalgia',
-    'Chronic Fatigue Syndrome',
-    'Allergies',
-    'Common Cold',
-    'Osteoporosis',
-    'Rheumatoid Arthritis',
-    'Gastroesophageal Reflux Disease (GERD)',
-    'Cancer'
+    "Hypertension",
+    "Diabetes",
+    "Influenza",
+    "Bronchitis",
+    "Pneumonia",
+    "Migraine",
+    "Asthma",
+    "Arthritis",
+    "Gastritis",
+    "Anxiety Disorder",
+    "Depression",
+    "Strep Throat",
+    "Fibromyalgia",
+    "Chronic Fatigue Syndrome",
+    "Allergies",
+    "Common Cold",
+    "Osteoporosis",
+    "Rheumatoid Arthritis",
+    "Gastroesophageal Reflux Disease (GERD)",
+    "Cancer",
   ];
 
   return diagnosis[Math.floor(Math.random() * diagnosis.length)];
