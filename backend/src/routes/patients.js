@@ -82,6 +82,8 @@ router.get("/getPatientUsername/:Username", getPatientUsername);
  * @desc Returns a list of all doctors with speciality and session price for a patient
  * @access Public
  * @param {string} id - The ID of the patient to view doctors for
+ * @prop {string} Name - The name of the doctor to search for
+ * @prop {string} Speciality - The speciality of the doctor to search for
  */
 router.get("/view/doctors/:id", session_index);
 
