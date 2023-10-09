@@ -67,7 +67,7 @@ export default function Pages(props) {
 			if (prop.category === 'update') {
 				return getRoutes(prop.views);
 			}
-			if (prop.layout === '/updateDoctor') {
+			if (prop.layout === '/updateEmail') {
 				return <Route path={prop.layout + prop.path} component={prop.component} key={key} />;
 			} else {
 				return null;
@@ -89,7 +89,7 @@ export default function Pages(props) {
 					<Box ref={wrapper} w='100%'>
 						<Switch>
 							{getRoutes(routes)}
-							<Redirect from='/updateDoctor' to='/updateDoctor/updateProfile' />
+							<Redirect from='/updateEmail' to='/updateEmail/Profile' />
 						</Switch>
 					</Box>
 				</Box>

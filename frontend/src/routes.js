@@ -6,7 +6,7 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
-import UpdateDoc from "views/Doctors/UpdateDoc.js"  //Zawedna de
+import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 
 import {
   HomeIcon,
@@ -97,13 +97,13 @@ var dashRoutes = [
     state: "pageCollapse",  //not sure
     views: [
       {
-        path: "/updateProfile",
+        path: "/profile",
         name: "Profile",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
         secondaryNavbar: true,
-        component:UpdateDoc ,
-        layout: "/updateDoctor",     //Not sure men ay 7aga
+        component:UpdateEmail ,
+        layout: "/updateEmail",     //Not sure men ay 7aga
       }]
   }
 ];

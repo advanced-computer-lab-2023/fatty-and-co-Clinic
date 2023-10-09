@@ -16,7 +16,7 @@ import {
 // Assets
 import signInImage from "assets/img/signInImage.png";
 
-function UpdateDoc() {
+function UpdateEmail() {
   // Chakra color mode
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.400", "white");
@@ -128,4 +128,4 @@ function UpdateDoc() {
   );
 }
 
-export default UpdateDoc;
+export default UpdateEmail;
