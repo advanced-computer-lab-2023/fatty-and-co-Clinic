@@ -9,7 +9,7 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
 const createPatient = async (req, res) => {
-  const {} = req.body;
+  const { } = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -202,6 +202,7 @@ const getPrescriptions = async (req, res) => {
   }
 };
 
+// Filter prescriptions by doctor or status or filled or unfilled.
 const filterPrescriptions = async (req, res) => {
   const query = req.body;
 
@@ -237,6 +238,7 @@ const filterPrescriptions = async (req, res) => {
   }
 };
 
+// Use prescription Id to select a prescription.
 const selectPrescription = async (req, res) => {
   const prescriptionId = req.body.id;
   try {
