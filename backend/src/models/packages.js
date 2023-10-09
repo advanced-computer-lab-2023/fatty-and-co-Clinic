@@ -5,7 +5,6 @@ const packageSchema = new Schema(
   {
     Name: {
       type: String,
-      enum: ["Silver", "Gold", "Platinum"],
       required: true,
     },
     Price: {
