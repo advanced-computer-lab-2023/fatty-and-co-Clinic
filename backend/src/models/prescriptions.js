@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const prescriptionSchema = new Schema({
   AppointmentId: {
-    type: Number,
+    type: String,
     required: true,
   },
   DoctorUsername: {
@@ -17,6 +17,11 @@ const prescriptionSchema = new Schema({
   Diagnosis: {
     type: String,
     required: true,
+  },
+  Status: {
+    type: String,
+    enum: ["Filled", "Unfilled"],
+    default: "Unfilled",
   },
   Medicine: [
     {

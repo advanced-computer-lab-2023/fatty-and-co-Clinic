@@ -8,6 +8,8 @@ router.get("/", (req, res) => {
   res.send("Guests");
 });
 
+router.post("/addRequest", createRequest);
+
 router.post("/reg", createRequest);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines routes for doctor related operations
+ * Defines routes for doctor related operations
  * @module routes/doctors
  * @requires express
  * @requires ../controllers/doctorController
@@ -7,11 +7,13 @@
 
 const express = require("express");
 const {
+  createDoctor,
+  deleteDoctor,
+  getAllDoctors,
   getDoctorByID,
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
   filterDoctor,
-  createDoctor,
   updateDoctor,
 } = require("../controllers/doctorController");
 
@@ -83,5 +85,41 @@ router.get("/search", getDoctorByNameAndSpeciality);
  * @param {number} hour - The hour you're looking for an appointment on
  */
 router.get("/filter", filterDoctor);
+
+/**
+ * @route POST /doctors/addDoctor
+ * @desc Creates a new doctor
+ * @access Public
+ * @prop {string} Username - The username of the doctor
+ * @prop {string} Name - The name of the doctor
+ * @prop {date} DateOfBirth - The date of birth of the doctor
+ * @prop {number} HourlyRate - The hourly rate of the doctor
+ * @prop {string} Affiliation - The affiliation of the doctor
+ * @prop {string} EducationalBackground - The educational background of the doctor
+ */
+router.post("/addDoctor", createDoctor);
+
+/**
+ * @route GET /doctors/getAllDoctors
+ * @desc Returns a list of all doctors
+ * @access Public
+ */
+router.get("/getAllDoctors", getAllDoctors);
+
+/**
+ * @route DELETE /doctors/deleteDoctor/:id
+ * @desc Deletes a doctor by ID
+ * @access Public
+ * @param {string} id - The ID of the doctor to delete
+ */
+router.delete("/deleteDoctor/:id", deleteDoctor);
+
+/**
+ * @route GET /doctors/getDoctor/:id
+ * @desc Returns a doctor by ID
+ * @access Public
+ * @param {string} id - The ID of the doctor
+ */
+router.get("/getDoctor/:id", getDoctorByID);
 
 module.exports = router;

@@ -4,8 +4,77 @@ const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
+const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
+const { getPatients } = require("./testController");
 
+const createPatient = async (req, res) => {
+  const {} = req.body;
+  try {
+    const patient = await patientModel.create({
+      Username: req.body.Username,
+      Name: req.body.Name,
+      MobileNum: req.body.MobileNum,
+      DateOfBirth: req.body.DateOfBirth,
+      Gender: req.body.Gender,
+      EmergencyContact: req.body.EmergencyContact,
+    });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const getAllPatients = async (req, res) => {
+  try {
+    const patients = await patientModel.find();
+    res.status(200).send({ patients });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//find patient by id
+const getPatient = async (req, res) => {
+  try {
+    const patient = await patientModel.findById(req.params.id);
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//find patient by username
+const getPatientUsername = async (req, res) => {
+  try {
+    const { Username } = req.params;
+    const patient = await patientModel.find({ Username: Username });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const deletePatient = async (req, res) => {
+  try {
+    const patient = await patientModel.findByIdAndDelete(req.params.id);
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const updatePatient = async (req, res) => {
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 // view all doctors with speciality and session price
 const session_index = (req, res) => {
   // Package discount starts with 0
@@ -96,7 +165,7 @@ const GetFamilymembers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-const selectPatient= async (req, res) => {
+const selectPatient = async (req, res) => {
   const id = req.body.id;
 
   // Get the patient.
@@ -115,4 +184,81 @@ const selectPatient= async (req, res) => {
   // Return the patient object.
   res.status(200).send(patient);
 };
-module.exports = { session_index, createFamilymember, GetFamilymembers,selectPatient };
+
+const getPrescriptions = async (req, res) => {
+  try {
+    const id = req.body._id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "Invalid ID" });
+      return;
+    }
+    const patient = await patientModel.findById(id);
+    const prescriptions = await prescriptionModel.find({
+      PatientUsername: patient.Username,
+    });
+    res.status(200).send(prescriptions);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const filterPrescriptions = async (req, res) => {
+  const query = req.body;
+
+  const regexQuery = {};
+
+  // Check if a 'DoctorUsername' query is provided
+  if (query.DoctorUsername) {
+    regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
+  }
+
+  // Check if a 'Date' query is provided
+  if (query.Date) {
+    // Assuming 'Date' is a field in your schema
+    regexQuery.Date = new RegExp(query.Date, "i");
+  }
+
+  // Check if a 'Status' query is provided
+  if (query.Status) {
+    regexQuery.Status = new RegExp(query.Status, "i");
+  }
+
+  const patientPrescriptions = prescriptionModel.find({
+    PatientUsername: query.PatientUsername,
+  });
+  // Use the regexQuery in the find method
+  try {
+    // Use the regexQuery in the find method and await the result
+    const prescriptions = await patientPrescriptions.find(regexQuery);
+    res.status(200).send(prescriptions);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const selectPrescription = async (req, res) => {
+  const prescriptionId = req.body.id;
+  try {
+    const prescription = await prescriptionModel.findById(prescriptionId);
+    res.status(200).send(prescription);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+module.exports = {
+  session_index,
+  createFamilymember,
+  GetFamilymembers,
+  selectPatient,
+  getPrescriptions,
+  filterPrescriptions,
+  getPatientUsername,
+  createPatient,
+  getAllPatients,
+  deletePatient,
+  getPatient,
+  updatePatient,
+  selectPrescription,
+};
