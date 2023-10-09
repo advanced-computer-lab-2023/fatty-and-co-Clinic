@@ -8,10 +8,10 @@ import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
 // <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
-import UpdateAffiliation from "views/Doctors/UpdateAffiliation.js"
-import UpdateHourly from "views/Doctors/UpdateHourlyRate.js";
+import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import Patient from "views/Patient";
+
 
 // ======
 
@@ -128,24 +128,22 @@ var dashRoutes = [
         secondaryNavbar: true,
         component:UpdateEmail ,
         layout: "/updateEmail",     //Not sure men ay 7aga
-      },
+      }]
+  },
+  {
+    name: "Create family member ",
+    category: "create",
+    rtlName: "صفحات",
+    state: "pageCollapse",  //not sure
+    views: [
       {
-        path: "/profile",
+        path: "/Add",
         name: "Profile",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
         secondaryNavbar: true,
-        component:UpdateAffiliation ,
-        layout: "/updateAffiliation",     //Not sure men ay 7aga
-      },
-      {
-        path: "/profile",
-        name: "Profile",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:UpdateHourly ,
-        layout: "/updateHourlyRate",     //Not sure men ay 7aga
+        component:createFamilymember ,
+        layout: "/Createfamilymem",     //Not sure men ay 7aga
       }]
   }
 ];
