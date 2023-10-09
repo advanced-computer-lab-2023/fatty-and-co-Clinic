@@ -22,7 +22,7 @@ const router = express.Router();
 router.post("/addDoctor", createDoctor);
 router.get("/getAllDoctors", getAllDoctors);
 router.delete("/deleteDoctor/:id", deleteDoctor);
-router.get("/getDoctor/:id", getDoctor);
+router.get("/getDoctor/:id", getDoctorByID);
 
 router.get("/getAllDoctors", getAllDoctors);
 
