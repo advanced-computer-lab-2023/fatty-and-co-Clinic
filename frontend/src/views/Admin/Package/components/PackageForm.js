@@ -16,6 +16,7 @@ import { usePackageContext } from "../hooks/usePackageContext";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
+import { API_PATHS } from "API/api_paths";
 
 function PackageForm() {
   const { dispatch } = usePackageContext();
@@ -45,7 +46,7 @@ function PackageForm() {
       </CardHeader>
       <CardBody>
         <Flex direction="column" w="100%">
-          <form 
+          <form
             id="myForm"
             onSubmit={async (e) => {
               e.preventDefault();
@@ -57,7 +58,7 @@ function PackageForm() {
                 Family_Discount,
               };
 
-              const response = await fetch("/package/addPackage", {
+              const response = await fetch(API_PATHS.addPackage, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
