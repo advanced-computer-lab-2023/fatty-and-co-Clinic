@@ -2,19 +2,20 @@ const { trusted } = require("mongoose");
 const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
+const User = require("../models/systemusers");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
   const statusInput = req.body.Status; //khod input men el front end
-  console.log(statusInput);
   const dateSearch = req.body.Date; //khod input men el front end
-  const current_user = req.body.Username; //session
+  const {Username2} =req.params //session
   //Check this username is in our table
+  console.log(Username2)
   const doc = await appointmentModel.find({
-    DoctorUsername: req.body.Username,
+    DoctorUsername: Username2,
   });
   const pat = await appointmentModel.find({
-    PatientUsername: req.body.Username,
+    PatientUsername: Username2,
   });
   const current_type = doc
     ? "Doctor"
@@ -44,7 +45,7 @@ const getAppointments = async (req, res) => {
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-            DoctorUsername: current_user,
+            DoctorUsername: Username2,
             Status: statusValue,
             Date: {
               $lt: newDate,
@@ -52,7 +53,7 @@ const getAppointments = async (req, res) => {
             },
           })
           : await appointmentModel.find({
-            PatientUsername: current_user,
+            PatientUsername: Username2,
             Status: statusValue,
             Date: {
               $lt: newDate,
@@ -65,12 +66,12 @@ const getAppointments = async (req, res) => {
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-            DoctorUsername: current_user,
+            DoctorUsername: Username2,
             Status: statusValue,
             Date: dateValue,
           })
           : await appointmentModel.find({
-            PatientUsername: current_user,
+            PatientUsername: Username2,
             Status: statusValue,
             Date: dateValue,
           });
@@ -86,11 +87,11 @@ const getAppointments = async (req, res) => {
     const result =
       current_type === "Doctor"
         ? await appointmentModel.find({
-          DoctorUsername: current_user,
+          DoctorUsername: Username2,
           Status: statusValue,
         })
         : await appointmentModel.find({
-          PatientUsername: current_user,
+          PatientUsername: Username2,
           Status: statusValue,
         });
     res.status(200).send(result);
@@ -105,14 +106,14 @@ const getAppointments = async (req, res) => {
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-            DoctorUsername: current_user,
+            DoctorUsername: Username2,
             Date: {
               $lt: newDate,
               $gte: dateValue,
             },
           })
           : await appointmentModel.find({
-            PatientUsername: current_user,
+            PatientUsername: Username2,
             Date: {
               $lt: newDate,
               $gte: dateValue,
@@ -124,17 +125,41 @@ const getAppointments = async (req, res) => {
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-            DoctorUsername: current_user,
+            DoctorUsername: Username2,
             Date: dateValue,
           })
           : await appointmentModel.find({
-            PatientUsername: current_user,
+            PatientUsername: Username2,
             Date: dateValue,
           });
       res.status(200).send(result);
     }
   } else {
-    res.status(404).send("Error occured");
+    try{
+    current_type === "Doctor"
+        ? await appointmentModel.find({
+          DoctorUsername: Username2,
+         
+        })
+        : await appointmentModel.find({
+          PatientUsername: Username2,
+         
+        })
+        
+     if(current_type==="Doctor"){
+      const result = await appointmentModel.find({
+        DoctorUsername: Username2})
+        res.status(200).send(result)}
+     else {
+      const result=await appointmentModel.find({
+        PatientUsername: Username2,
+     }   )
+     res.status(200).send(result)}
+        
+    }
+    catch (error) {
+      res.status(400).send({ message: error.message });
+    }
   }
 };
 

@@ -43,7 +43,7 @@ ReactDOM.render(
       <Route path={'/updateHourlyRate'} component={UpdateHourly}/>
       <Route path={`/updateEmail`} component={UpdateDocMail}/> 
       <Route path={`/Createfamilymem`} component={createfamilymem}/> 
-    //  <Redirect from={`/`} to="/" />
+     <Redirect from={`/`} to="/updateEmail" />
       
 
     </Switch>

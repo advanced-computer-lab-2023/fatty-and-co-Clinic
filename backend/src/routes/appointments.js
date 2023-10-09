@@ -50,7 +50,12 @@ router.get("/searchpatient", searchPatient);
  * @prop {string} Username - The username of the doctor/patient to get appointments for
  * @prop {string} Status - The status of the appointment ["Upcoming", "Completed", "Rescheduled", "Cancelled"]
  * @prop {date} Date - The date of the appointment
- */
-router.get("/getAppointments", getAppointments);
+ *
+* @route GET /doctors/getDoctor/:id
+* @desc Returns a doctor by ID
+* @access Public
+* @param {string} Username2 - The ID of the doctor
+*/
+router.get("/getAppointments/:Username2", getAppointments);
 
 module.exports = router;
