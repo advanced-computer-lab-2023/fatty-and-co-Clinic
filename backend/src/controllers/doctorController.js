@@ -1,4 +1,6 @@
 const doctorModel = require("../models/doctors");
+const appointmentModel = require("../models/appointments");
+const prescriptionsModel = require("../models/prescriptions");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 
@@ -29,7 +31,7 @@ const systemUserModel = require("../models/systemusers");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const {} = req.body;
+  const { } = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -207,6 +209,19 @@ const filterDoctor = async (req, res) => {
   }
 };
 
+// TODO: Make sure health record consists of appointments and prescriptions.
+// View information and health records of a doctor's patient
+const viewPatientInfoAndHealthRecords = async (req, res) => {
+  const patientUsername = req.body.PatientUsername;
+  try {
+    const appointments = await appointmentModel.find({ PatientUsername: patientUsername });
+    const prescriptions = await prescriptionsModel.find({ PatientUsername: patientUsername });
+    res.status(200).json({ appointments, prescriptions });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getDoctorByID,
   getDoctorByUsername,
@@ -216,4 +231,5 @@ module.exports = {
   createDoctor,
   getAllDoctors,
   deleteDoctor,
+  viewPatientInfoAndHealthRecords
 };

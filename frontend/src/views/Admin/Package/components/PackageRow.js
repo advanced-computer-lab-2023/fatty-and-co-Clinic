@@ -20,6 +20,7 @@ import {
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { usePackageContext } from "../hooks/usePackageContext";
+import { API_PATHS } from "API/api_paths";
 
 function PackageRow(props) {
   const { dispatch } = usePackageContext();
@@ -39,7 +40,7 @@ function PackageRow(props) {
 
   // handle delete
   const handleDelete = async () => {
-    const response = await fetch("/package/deletePackage/" + props._id, {
+    const response = await fetch(API_PATHS.deletePackage + props._id, {
       method: "DELETE",
     });
     const data = await response.json();
@@ -208,7 +209,7 @@ function PackageRow(props) {
               colorScheme="blue"
               onClick={async () => {
                 const response = await fetch(
-                  "/package/updatePackage/" + props._id,
+                  API_PATHS.updatePackage + props._id,
                   {
                     method: "PATCH",
                     headers: {
