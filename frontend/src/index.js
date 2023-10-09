@@ -35,7 +35,7 @@ ReactDOM.render(
       <Route path={`/admin`} component={AdminLayout} />
       <Route path={`/rtl`} component={RTLLayout} />
       <Route path={`/updateDoctor`} component={UpdateDocLayout}/>  
-      <Redirect from={`/`} to="/admin/dashboard" />
+      <Redirect from={`/`} to="/updateDoctor" />
     </Switch>
   </HashRouter>,
   document.getElementById("root")

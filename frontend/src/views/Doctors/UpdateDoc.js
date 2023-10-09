@@ -42,7 +42,7 @@ function UpdateDoc() {
             p='48px'
             mt={{ md: "150px", lg: "80px" }}>
             <Heading color={titleColor} fontSize='32px' mb='10px'>
-              Change your account info here
+              Change Email Address
             </Heading>
             <Text
               mb='36px'
@@ -50,18 +50,18 @@ function UpdateDoc() {
               color={textColor}
               fontWeight='bold'
               fontSize='14px'>
-              Change your email :)
+                Fill in the below form to change your email!
             </Text>
             <FormControl>
               <FormLabel ms='4px' fontSize='sm' fontWeight='normal'>
-                old email
+                Old email
               </FormLabel>
               <Input
                 borderRadius='15px'
                 mb='24px'
                 fontSize='sm'
                 type='text'
-                placeholder='Your email adress'
+                placeholder='Your old email'
                 size='lg'
               />
               <FormLabel ms='4px' fontSize='sm' fontWeight='normal'>
@@ -72,21 +72,12 @@ function UpdateDoc() {
                 mb='36px'
                 fontSize='sm'
                 type='password'
-                placeholder='Your password'
+                placeholder='Your new email'
                 size='lg'
               />
-              <FormControl display='flex' alignItems='center'>
-                <Switch id='remember-login' colorScheme='teal' me='10px' />
-                <FormLabel
-                  htmlFor='remember-login'
-                  mb='0'
-                  ms='1'
-                  fontWeight='normal'>
-                  new email
-                </FormLabel>
-              </FormControl>
+
               <Button
-                fontSize='10px'
+                fontSize='20px'
                 type='submit'
                 bg='teal.300'
                 w='100%'
@@ -100,7 +91,7 @@ function UpdateDoc() {
                 _active={{
                   bg: "teal.400",
                 }}>
-                save
+                Save
               </Button>
             </FormControl>
             <Flex
@@ -114,11 +105,15 @@ function UpdateDoc() {
         </Flex>
         <Box
           display={{ base: "none", md: "block" }}
-          overflowX='hidden'
+          // overflowX='hidden'
           h='100%'
           w='40vw'
-          position='absolute'
-          right='0px'>
+          position='relative'
+          margin-top='auto'
+          margin-right="30px"
+          margin-bottom='auto'
+          
+          >
           <Box
             bgImage={signInImage}
             w='100%'
