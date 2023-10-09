@@ -6,10 +6,14 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
+// <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 import Package from "views/Admin/Package/package";
 
 
+// ======
+
+// >>>>>>> 941a373669f5126473758cc34a32e5d0857e25f4
 
 import {
   HomeIcon,
