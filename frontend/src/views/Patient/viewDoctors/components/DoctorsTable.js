@@ -46,7 +46,7 @@ import {
               {data.map((row) => {
                 return (
                   <DoctorsRow
-                    key={row.Name}
+                    key={row.Username}
                     Name={row.Name}
                     Speciality={row.Speciality}
                     Cost={row.Cost}

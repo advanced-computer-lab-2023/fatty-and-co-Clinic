@@ -31,7 +31,7 @@ const systemUserModel = require("../models/systemusers");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -169,6 +169,7 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 };
 
 // filter doctors by speciality or/and (date and time)
+// TODO: replace query with body
 const filterDoctor = async (req, res) => {
   try {
     console.log(req.query);
@@ -214,13 +215,17 @@ const filterDoctor = async (req, res) => {
 const viewPatientInfoAndHealthRecords = async (req, res) => {
   const patientUsername = req.body.PatientUsername;
   try {
-    const appointments = await appointmentModel.find({ PatientUsername: patientUsername });
-    const prescriptions = await prescriptionsModel.find({ PatientUsername: patientUsername });
+    const appointments = await appointmentModel.find({
+      PatientUsername: patientUsername,
+    });
+    const prescriptions = await prescriptionsModel.find({
+      PatientUsername: patientUsername,
+    });
     res.status(200).json({ appointments, prescriptions });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 module.exports = {
   getDoctorByID,
@@ -231,5 +236,5 @@ module.exports = {
   createDoctor,
   getAllDoctors,
   deleteDoctor,
-  viewPatientInfoAndHealthRecords
+  viewPatientInfoAndHealthRecords,
 };

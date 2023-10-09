@@ -10,7 +10,7 @@ import SignUp from "views/Auth/SignUp.js";
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
-import Patient from "views/Patient";
+import viewDoctors from "views/Patient/viewDoctors";
 
 
 // ======
@@ -41,10 +41,10 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/patient",
-    name: "Patient",
+    path: "/viewDoctors",
+    name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
-    component: Patient,
+    component: viewDoctors,
     layout: "/admin",
   },
 
