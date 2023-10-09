@@ -19,8 +19,8 @@ const getAppointments = async (req, res) => {
   const current_type = doc
     ? "Doctor"
     : pat
-    ? "Patient"
-    : "You have no appointments";
+      ? "Patient"
+      : "You have no appointments";
   if (current_type === "You have no appointments") {
     res.status(400).send(current_type + " :)");
   }
@@ -44,36 +44,36 @@ const getAppointments = async (req, res) => {
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-              DoctorUsername: current_user,
-              Status: statusValue,
-              Date: {
-                $lt: newDate,
-                $gte: dateValue,
-              },
-            })
+            DoctorUsername: current_user,
+            Status: statusValue,
+            Date: {
+              $lt: newDate,
+              $gte: dateValue,
+            },
+          })
           : await appointmentModel.find({
-              PatientUsername: current_user,
-              Status: statusValue,
-              Date: {
-                $lt: newDate,
-                $gte: dateValue,
-              },
-            });
+            PatientUsername: current_user,
+            Status: statusValue,
+            Date: {
+              $lt: newDate,
+              $gte: dateValue,
+            },
+          });
       res.status(200).send(result);
     } else {
       // Gets all appointments on a certain day and time
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-              DoctorUsername: current_user,
-              Status: statusValue,
-              Date: dateValue,
-            })
+            DoctorUsername: current_user,
+            Status: statusValue,
+            Date: dateValue,
+          })
           : await appointmentModel.find({
-              PatientUsername: current_user,
-              Status: statusValue,
-              Date: dateValue,
-            });
+            PatientUsername: current_user,
+            Status: statusValue,
+            Date: dateValue,
+          });
       res.status(200).send(result);
     }
   } else if (
@@ -86,13 +86,13 @@ const getAppointments = async (req, res) => {
     const result =
       current_type === "Doctor"
         ? await appointmentModel.find({
-            DoctorUsername: current_user,
-            Status: statusValue,
-          })
+          DoctorUsername: current_user,
+          Status: statusValue,
+        })
         : await appointmentModel.find({
-            PatientUsername: current_user,
-            Status: statusValue,
-          });
+          PatientUsername: current_user,
+          Status: statusValue,
+        });
     res.status(200).send(result);
   } else if (dateSearch != null && !isNaN(new Date(dateSearch))) {
     //Gets date on exact day
@@ -105,32 +105,32 @@ const getAppointments = async (req, res) => {
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-              DoctorUsername: current_user,
-              Date: {
-                $lt: newDate,
-                $gte: dateValue,
-              },
-            })
+            DoctorUsername: current_user,
+            Date: {
+              $lt: newDate,
+              $gte: dateValue,
+            },
+          })
           : await appointmentModel.find({
-              PatientUsername: current_user,
-              Date: {
-                $lt: newDate,
-                $gte: dateValue,
-              },
-            });
+            PatientUsername: current_user,
+            Date: {
+              $lt: newDate,
+              $gte: dateValue,
+            },
+          });
       res.status(200).send(result);
     } else {
       // Gets all appointments on a certain day and time
       const result =
         current_type === "Doctor"
           ? await appointmentModel.find({
-              DoctorUsername: current_user,
-              Date: dateValue,
-            })
+            DoctorUsername: current_user,
+            Date: dateValue,
+          })
           : await appointmentModel.find({
-              PatientUsername: current_user,
-              Date: dateValue,
-            });
+            PatientUsername: current_user,
+            Date: dateValue,
+          });
       res.status(200).send(result);
     }
   } else {
@@ -195,6 +195,7 @@ const upcomingAppforDoc = async (req, res) => {
   // Return the unique patient names.
   res.status(200).send(uniquePatientNamesArray);
 };
+
 const searchPatient = async (req, res) => {
   const doctorUsername = req.body.DoctorUsername;
   const patientName = req.body.PatientUsername;
