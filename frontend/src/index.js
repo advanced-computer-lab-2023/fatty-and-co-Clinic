@@ -28,6 +28,7 @@ import UpdateDocMail from "layouts/UpdateDocEmail"
 
 //NOTE: Route path hena bet represent el LAYOUT from routes.js 
 //NOTE: Component hena bet represent el imported layout  
+//NOTE: To test updatedocmail, redirect from '/' to 'updateEmail'
 ReactDOM.render(
   <HashRouter>
     <Switch>
@@ -35,7 +36,7 @@ ReactDOM.render(
       <Route path={`/admin`} component={AdminLayout} />
       <Route path={`/rtl`} component={RTLLayout} />
       <Route path={`/updateEmail`} component={UpdateDocMail}/>  
-      <Redirect from={`/`} to="/updateEmail" />
+      <Redirect from={`/`} to="/admin/dashboard" />
     </Switch>
   </HashRouter>,
   document.getElementById("root")
