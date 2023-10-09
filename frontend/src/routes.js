@@ -7,7 +7,7 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
 import Package from "views/Admin/Package/package";
-
+import Patient from "views/Patient";
 
 import {
   HomeIcon,
@@ -27,6 +27,14 @@ var dashRoutes = [
     component: Package,
     layout: "/admin",
   },
+  {
+    path: "/patient",
+    name: "Patient",
+    icon: <HomeIcon color="inherit" />,
+    component: Patient,
+    layout: "/admin",
+  },
+
   {
     path: "/dashboard",
     name: "Dashboard",
