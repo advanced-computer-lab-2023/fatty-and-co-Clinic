@@ -6,7 +6,11 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
+
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
+
+import Package from "views/Admin/Package/package";
+
 
 import {
   HomeIcon,
@@ -24,6 +28,13 @@ import {
 //component de 7aga fe views
 
 var dashRoutes = [
+  {
+    path: "/package",
+    name: "Package",
+    icon: <HomeIcon color="inherit" />,
+    component: Package,
+    layout: "/admin",
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
