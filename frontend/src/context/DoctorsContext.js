@@ -28,7 +28,7 @@ export const doctorsReducer = (state, action) => {
 };
 
 export const DoctorsContextProvider = () => {
-  const [state, dispatch] = useReducer(doctorsReducer, { doctors: null });
+  const [state, dispatch] = useReducer(doctorsReducer, { doctors: [] });
 
   dispatch({ type: "GET_DOCTORS", payload: {} });
 
