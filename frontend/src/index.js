@@ -24,9 +24,9 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
 import RTLLayout from "layouts/RTL.js";
-import UpdateDocMail from "layouts/Doctor/ChangeMail"
-import UpdateAffiliation from "layouts/Doctor/ChangeAffiliation";
-import UpdateHourly from "layouts/Doctor/ChangeHourly"
+import UpdateDocMail from "layouts/Doctor/ChangeMail.js"
+import UpdateAffiliation from "layouts/Doctor/ChangeAffiliation.js";
+import UpdateHourly from "layouts/Doctor/ChangeHourly.js"
 
 //NOTE: Route path hena bet represent el LAYOUT from routes.js 
 //NOTE: Component hena bet represent el imported layout  
@@ -40,8 +40,7 @@ ReactDOM.render(
       <Route path={`/updateEmail`} component={UpdateDocMail}/>  
       <Route path={'/updateAffiliation'} component={UpdateAffiliation}/>
       <Route path={'/updateHourlyRate'} component={UpdateHourly}/>
-
-      <Redirect from={`/`} to="/updateHourlyRate" />
+      <Redirect from={`/`} to="/admin/dashboard" />
     </Switch>
   </HashRouter>,
   document.getElementById("root")
