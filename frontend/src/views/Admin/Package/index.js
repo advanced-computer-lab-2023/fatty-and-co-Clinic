@@ -6,6 +6,7 @@ import PackageInformation from "./components/PackageInformation";
 import { useEffect } from "react";
 import { usePackageContext } from "./hooks/usePackageContext";
 import PackageForm from "./components/PackageForm";
+import { API_PATHS } from "API/api_paths";
 
 function PackageI() {
   const { packages, dispatch } = usePackageContext();
@@ -13,7 +14,7 @@ function PackageI() {
   // const [packages, setPackages] = useState(null);
   useEffect(() => {
     const fetchPackages = async () => {
-      const response = await fetch("/package/packages");
+      const response = await fetch(API_PATHS.packages);
       const data = await response.json();
       if (response.ok) {
         // setPackages(data);
@@ -29,14 +30,12 @@ function PackageI() {
   return (
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
-        
-          {packages && (
-            <PackageInformation title={"Available Packages"} data={packages} />
-          )}
-        
+        {packages && (
+          <PackageInformation title={"Available Packages"} data={packages} />
+        )}
+
         <PackageForm />
       </Grid>
-      
     </Flex>
   );
 }
