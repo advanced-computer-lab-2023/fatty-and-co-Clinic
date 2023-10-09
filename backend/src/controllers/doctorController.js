@@ -67,14 +67,16 @@ const deleteDoctor = async (req, res) => {
 // update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
-    const filter = { Username: "Khalkhoola" };
+    const filter = { Username: req.body.Username };
     // console.log(req.body.Email)
     if (req.body.HourlyRate || req.body.Affiliation) {
       const doc = await doctorModel.findOneAndUpdate(filter, req.body);
-      res.status(200).json(doc);
+      const doc2 = await doctorModel.findOneAndUpdate(filter, req.body);
+      res.status(200).json(doc2);
     } else {
       const doc = await systemUserModel.findOneAndUpdate(filter, req.body);
-      res.status(200).json(doc);
+      const doc1 = await systemUserModel.findOneAndUpdate(filter, req.body);
+      res.status(200).json(doc1);
     }
     // console.log(req.body.HourlyRate);
   } catch (error) {

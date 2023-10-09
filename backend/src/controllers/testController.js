@@ -226,7 +226,13 @@ const getRequests = async (req, res) => {
 };
 
 const createPrescription = async (req, res) => {
-  const { AppointmentId, DoctorUsername, PatientUsername, Diagnosis, Medicine } = req.body;
+  const {
+    AppointmentId,
+    DoctorUsername,
+    PatientUsername,
+    Diagnosis,
+    Medicine,
+  } = req.body;
   const appointment = await getAppointment();
   const appointmentId = AppointmentId || appointment._id;
   const doctorUsername = DoctorUsername || appointment.DoctorUsername;
@@ -234,7 +240,13 @@ const createPrescription = async (req, res) => {
   const diagnosis = Diagnosis || generateDiagnosis();
   const medicine = Medicine || generateMedicine();
 
-  console.log(appointmentId, doctorUsername, patientUsername, diagnosis, medicine);
+  console.log(
+    appointmentId,
+    doctorUsername,
+    patientUsername,
+    diagnosis,
+    medicine
+  );
 
   try {
     const newPrescription = await prescriptionModel.create({

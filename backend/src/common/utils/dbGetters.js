@@ -39,8 +39,7 @@ async function getAppointment() {
   try {
     const data = await appointmentModel.find().select("_id").exec();
     const ids = data.map((appointment) => appointment._id);
-    const randomId =
-      ids[Math.floor(Math.random() * ids.length)];
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
     console.log(randomId);
     const appointment = appointmentModel.findById(randomId);
     return appointment;
