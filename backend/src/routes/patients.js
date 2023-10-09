@@ -11,25 +11,70 @@ const {
   GetFamilymembers,
   getPrescriptions,
   selectPatient,
+  filterPrescriptions,
+  selectPrescription,
 } = require("../controllers/patientController");
 
 const router = express.Router();
 
 /**
- * @route GET /patients
- * @desc Returns a string indicating that the route is for patients
+ * @route POST /patients/addPatient
+ * @desc Creates a new patient
  * @access Public
+ * @prop {string} Name - The name of the patient
+ * @prop {string} Username - The username of the patient
+ * @prop {string} Password - The password of the patient
+ * @prop {string} Email - The email of the patient
+ * @prop {string} NationalID - The national ID of the patient
+ * @prop {number} Age - The age of the patient
+ * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
 router.post("/addPatient", createPatient);
 
+/**
+ * @route GET /patients/getAllPatients
+ * @desc Returns a list of all patients
+ * @access Public
+ */
 router.get("/getAllPatients", getAllPatients);
 
+/**
+ * @route DELETE /patients/deletePatient/:id
+ * @desc Deletes a patient by ID
+ * @access Public
+ * @param {string} id - The ID of the patient to delete
+ */
 router.delete("/deletePatient/:id", deletePatient);
 
+/**
+ * @route GET /patients/getPatient/:id
+ * @desc Returns a patient by ID
+ * @access Public
+ * @param {string} id - The ID of the patient to get
+ */
 router.get("/getPatient/:id", getPatient);
 
+/**
+ * @route PATCH /patients/updatePatient/:id
+ * @desc Updates a patient by ID
+ * @access Public
+ * @param {string} id - The ID of the patient to update
+ * @prop {string} Name - The name of the patient
+ * @prop {string} Username - The username of the patient
+ * @prop {string} Password - The password of the patient
+ * @prop {string} Email - The email of the patient
+ * @prop {string} NationalID - The national ID of the patient
+ * @prop {number} Age - The age of the patient
+ * @prop {string} Gender - The gender of the patient ["M", "F"]
+ */
 router.patch("/updatePatient/:id", updatePatient);
 
+/**
+ * @route GET /patients/getPatientUsername/:Username
+ * @desc Returns a patient by username
+ * @access Public
+ * @param {string} Username - The username of the patient to get
+ */
 router.get("/getPatientUsername/:Username", getPatientUsername);
 
 /**
@@ -60,8 +105,34 @@ router.post("/createFamilymember", createFamilymember);
  */
 router.get("/getFamilymember", GetFamilymembers);
 
+/**
+ * @route GET /patients/getPrescriptions
+ * @desc Returns a list of all prescriptions
+ * @access Public
+ */
 router.get("/getPrescriptions", getPrescriptions);
 
+/**
+ * @route GET /patients/selectPatient
+ * @desc Returns a list of all patients
+ * @access Public
+ */
 router.get("/selectPatient", selectPatient);
+
+/**
+ * @route GET /patients/filterPrescriptions
+ * @desc Returns a list of all prescriptions filtered by patient ID
+ * @access Public
+ * @param {string} id - The ID of the patient to filter prescriptions for
+ */
+router.get("/filterPrescriptions", filterPrescriptions);
+
+/**
+ * @route GET /patients/selectPrescription
+ * @desc Returns a prescription by ID
+ * @access Public
+ * @param {string} id - The ID of the prescription to get
+ */
+router.get("/selectPrescription", selectPrescription);
 
 module.exports = router;

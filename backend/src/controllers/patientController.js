@@ -18,8 +18,6 @@ const createPatient = async (req, res) => {
       DateOfBirth: req.body.DateOfBirth,
       Gender: req.body.Gender,
       EmergencyContact: req.body.EmergencyContact,
-      FamilyMem: req.body.FamilyMem,
-      PackageName: req.body.PackageName,
     });
     res.status(200).send({ patient });
   } catch (error) {
@@ -204,16 +202,63 @@ const getPrescriptions = async (req, res) => {
   }
 };
 
+const filterPrescriptions = async (req, res) => {
+  const query = req.body;
+
+  const regexQuery = {};
+
+  // Check if a 'DoctorUsername' query is provided
+  if (query.DoctorUsername) {
+    regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
+  }
+
+  // Check if a 'Date' query is provided
+  if (query.Date) {
+    // Assuming 'Date' is a field in your schema
+    regexQuery.Date = new RegExp(query.Date, "i");
+  }
+
+  // Check if a 'Status' query is provided
+  if (query.Status) {
+    regexQuery.Status = new RegExp(query.Status, "i");
+  }
+
+  const patientPrescriptions = prescriptionModel.find({
+    PatientUsername: query.PatientUsername,
+  });
+  // Use the regexQuery in the find method
+  try {
+    // Use the regexQuery in the find method and await the result
+    const prescriptions = await patientPrescriptions.find(regexQuery);
+    res.status(200).send(prescriptions);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const selectPrescription = async (req, res) => {
+  const prescriptionId = req.body.id;
+  try {
+    const prescription = await prescriptionModel.findById(prescriptionId);
+    res.status(200).send(prescription);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
 module.exports = {
   session_index,
   createFamilymember,
   GetFamilymembers,
   selectPatient,
   getPrescriptions,
+  filterPrescriptions,
   getPatientUsername,
   createPatient,
   getAllPatients,
   deletePatient,
   getPatient,
   updatePatient,
+  selectPrescription,
 };
