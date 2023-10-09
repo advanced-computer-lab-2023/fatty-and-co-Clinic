@@ -12,5 +12,7 @@ export const API_PATHS = {
   deletePackage: PACKAGE_BASE + "deletePackage/",
   updatePackage: PACKAGE_BASE + "updatePackage/",
 
-  getDoctorByUsername: DOCTOR_BASE + "getDoctorByUserName/",
+  getDoctorByUsername: DOCTOR_BASE + "getDoctorByUserName/", // add username as a param
+
+  viewDoctors: PATIENT_BASE + "/view/doctors/", // add patient id as a param
 };
