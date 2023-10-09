@@ -3,11 +3,11 @@ import SearchBar from "components/Navbars/SearchBar/SearchBar";
 import DoctorsRow from "components/Tables/DoctorsRow";
 import DoctorsTable from "./components/DoctorsTable";
 import { Flex } from "@chakra-ui/react";
-import { DoctorListContextProvider } from "../../../context/DoctorsContext";
+import { DoctorsContextProvider } from "../../../context/DoctorsContext";
 
 function viewDoctors() {
   return (
-    <DoctorListContextProvider>
+    <DoctorsContextProvider>
       //search bar & filter
       <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
         <DoctorsTable
@@ -22,7 +22,7 @@ function viewDoctors() {
           ]}
         />
       </Flex>
-    </DoctorListContextProvider>
+    </DoctorsContextProvider>
   );
 }
 
