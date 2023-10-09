@@ -57,7 +57,7 @@ router.patch("/updateDoctor", updateDoctor);
  * @access Public
  * @param {string} id - The ID of the doctor
  */
-router.get("/id/:id", getDoctorByID);
+router.get("/getDoctorByid/:id", getDoctorByID);
 
 /**
  * @route GET /doctors/username/:username
@@ -65,7 +65,7 @@ router.get("/id/:id", getDoctorByID);
  * @access Public
  * @param {string} Username - The username of the doctor
  */
-router.get("/username/:username", getDoctorByUsername);
+router.get("/getDoctorByUsername/:username", getDoctorByUsername);
 
 /**
  * @route GET /doctors/search
