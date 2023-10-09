@@ -33,7 +33,10 @@ import {
     // Chakra color mode
     let navbarIcon = useColorModeValue("gray.700", "gray.200");
     let mainText = useColorModeValue("gray.700", "gray.200");
-    let navbarBg ="none"
+    let navbarBg = useColorModeValue(
+      "linear-gradient(112.83deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.8) 110.84%)",
+      "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
+    );
     //  useColorModeValue(
     //   "linear-gradient(112.83deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.8) 110.84%)",
     //   "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
@@ -58,15 +61,18 @@ import {
     let navbarPosition = "fixed";
     let colorButton = "white";
     if (props.secondary === true) {
-      navbarIcon = "white";
-      navbarBg = "none";
+      navbarIcon = "slategrey";
+      navbarBg =  useColorModeValue(
+        "linear-gradient(112.83deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.8) 110.84%)",
+        "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
+      );
       navbarBorder = "none";
       navbarShadow = "initial";
       navbarFilter = "initial";
       navbarBackdrop = "none";
       bgButton = "white";
       colorButton = "gray.700";
-      mainText = "white";
+      mainText = "black";
       navbarPosition = "absolute";
      
     }
