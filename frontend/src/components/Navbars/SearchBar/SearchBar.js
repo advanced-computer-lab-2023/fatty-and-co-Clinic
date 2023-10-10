@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IconButton,
   Input,
@@ -8,6 +8,11 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 export function SearchBar(props) {
+  const [inputValue, setInputValue] = useState("");
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+    if (props.onChange) props.onChange(event.target.value);
+  };
   // Pass the computed styles into the `__css` prop
   const { variant, children, ...rest } = props;
   // Chakra Color Mode
@@ -25,6 +30,8 @@ export function SearchBar(props) {
       _active={{
         borderColor: { mainTeal },
       }}
+      marginRight={props.marginRight || "auto"}
+      marginLeft={props.marginLeft || "auto"}
     >
       <InputLeftElement
         children={
@@ -45,10 +52,12 @@ export function SearchBar(props) {
         }
       />
       <Input
-        fontSize="xs"
-        py="11px"
-        placeholder="Type here..."
-        borderRadius="inherit"
+        fontSize={props.fontSize || "xs"}
+        py={props.py || "11px"}
+        placeholder={props.placeholder || "Type here..."}
+        borderRadius={props.borderRadius || "inherit"}
+        value={inputValue}
+        onChange={handleInputChange}
       />
     </InputGroup>
   );

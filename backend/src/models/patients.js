@@ -7,6 +7,7 @@ const patientSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      ref: "User",
       unique: true,
     },
     Name: {
@@ -32,7 +33,7 @@ const patientSchema = new Schema(
     },
     PackageName: {
       type: String,
-      enum: ["Silver", "Gold", "Platinum"],
+      ref: "Package",
       required: false,
     },
   },
