@@ -3,15 +3,18 @@ const Schema = mongoose.Schema;
 
 const prescriptionSchema = new Schema({
   AppointmentId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Appointment",
     required: true,
   },
   DoctorUsername: {
     type: String,
+    ref: "Doctor",
     required: true,
   },
   PatientUsername: {
     type: String,
+    ref: "Patient",
     required: true,
   },
   Diagnosis: {

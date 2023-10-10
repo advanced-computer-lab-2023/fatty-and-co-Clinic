@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:8000/",
   "name": "purity-dashboard-react",
   "version": "2.0.2",
   "private": true,
@@ -16,6 +15,7 @@
     "@fontsource/raleway": "^4.5.0",
     "@fontsource/roboto": "^4.5.8",
     "apexcharts": "^3.27.3",
+    "axios": "^1.5.1",
     "classnames": "2.3.1",
     "framer-motion": "^4.1.17",
     "match-sorter": "6.3.0",

@@ -11,7 +11,7 @@ import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import viewDoctors from "views/Patient/viewDoctors";
-import ViewAppointments from "views/Doctors/viewAppointments";
+
 
 
 
@@ -48,12 +48,6 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
     layout: "/admin",
-  },{
-    path: "/Appointments",
-    name: "View Appointment",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewAppointments,
-    layout: "/doctor",
   },
 
   {

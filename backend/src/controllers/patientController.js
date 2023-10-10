@@ -9,7 +9,7 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
 const createPatient = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -81,7 +81,7 @@ const session_index = (req, res) => {
   let packageDis = 0;
   // Extract the 'id' parameter from the request object
   const { id } = req.params;
-  const { Name, Speciality } = req.body;
+  const { Name, Speciality } = req.query;
 
   // Check if the 'id' parameter is a valid MongoDB ObjectID
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -112,10 +112,10 @@ const session_index = (req, res) => {
       doctorModel
         .find({
           // Search for documents whose 'Name' field contains the 'Name' variable, if it is not empty
-          ...(Name ? { Name: { $regex: Name, $options: "i" } } : {}),
+          ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
           // Search for documents whose 'Speciality' field contains the 'Speciality' variable, if it is not empty
           ...(Speciality && !Name
-            ? { Speciality: { $regex: Speciality, $options: "i" } }
+            ? { Speciality: { $regex: Speciality.trim(), $options: "i" } }
             : {}),
         })
         .then((doctors) => {
