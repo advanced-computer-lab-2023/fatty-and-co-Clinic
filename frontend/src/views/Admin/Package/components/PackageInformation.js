@@ -8,10 +8,6 @@ import PackageRow from "./PackageRow";
 import React, { useState } from "react";
 
 const PackageInformation = ({ title, data }) => {
-
-  
-
-
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Card my={{ lg: "24px" }} me={{ lg: "24px" }}>
@@ -26,7 +22,8 @@ const PackageInformation = ({ title, data }) => {
             {data.map((row) => {
               return (
                 // Name, Price, Session_Discount,  Medicine_Discount ,Family_Discount
-                <PackageRow key={row._id}
+                <PackageRow
+                  key={row._id}
                   Name={row.Name}
                   Price={row.Price}
                   Session_Discount={row.Session_Discount}

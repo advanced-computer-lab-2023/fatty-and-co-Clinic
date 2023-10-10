@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 
 // Route Variables
@@ -19,14 +20,18 @@ const mongoURI = process.env.MONGO_URI;
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => {
   console.log(req.method, req.path);
   next();
 });
+app.use((req, res, next) => {
+  console.log(req.query);
+  next();
+});
 
 // Routes
-app.use(guestRoutes);
 app.use("/appointment", appointmentRoutes);
 app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);

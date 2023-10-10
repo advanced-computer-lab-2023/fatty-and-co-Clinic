@@ -81,6 +81,7 @@ const session_index = (req, res) => {
   let packageDis = 0;
   // Extract the 'id' parameter from the request object
   const { id } = req.params;
+  const { Name, Speciality } = req.query;
 
   // Check if the 'id' parameter is a valid MongoDB ObjectID
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -109,7 +110,14 @@ const session_index = (req, res) => {
 
       // Use the 'find' method of the 'doctorModel' to retrieve all doctor documents
       doctorModel
-        .find({})
+        .find({
+          // Search for documents whose 'Name' field contains the 'Name' variable, if it is not empty
+          ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
+          // Search for documents whose 'Speciality' field contains the 'Speciality' variable, if it is not empty
+          ...(Speciality && !Name
+            ? { Speciality: { $regex: Speciality.trim(), $options: "i" } }
+            : {}),
+        })
         .then((doctors) => {
           // Create a new array called 'mySessions'
           const mySessions = new Array();
@@ -202,6 +210,7 @@ const getPrescriptions = async (req, res) => {
   }
 };
 
+// Filter prescriptions by doctor or status or filled or unfilled.
 const filterPrescriptions = async (req, res) => {
   const query = req.body;
 
@@ -237,6 +246,7 @@ const filterPrescriptions = async (req, res) => {
   }
 };
 
+// Use prescription Id to select a prescription.
 const selectPrescription = async (req, res) => {
   const prescriptionId = req.body.id;
   try {
