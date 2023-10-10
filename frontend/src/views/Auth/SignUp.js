@@ -18,19 +18,28 @@ import {
 import BgSignUp from "assets/img/BgSignUp.png";
 import React from "react";
 import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
+import { useState } from "react";
+import { API_PATHS } from "API/api_paths";
 
-const genders = ["male", "female", "other"];
+const genders = ["M", "F"];
 
 function SignUp() {
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.700", "white");
   const bgColor = useColorModeValue("white", "gray.700");
   const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
-  const [selectedGender, setSelectedGender] = React.useState("male");
-
+  const [Gender, setGender] = React.useState("");
   const handleGenderChange = (event) => {
-    setSelectedGender(event.target.value);
+    setGender(event.target.value);
   };
+  const [Username, setUsername] = useState("");
+  const [Name, setName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const [DateOfBirth, setDateOfBirth] = useState("");
+  const [Emergency_Contact_Name, setEmergency_Contact_Name] = useState("");
+  const [Emergency_Contact_Number, setEmergency_Contact_Number] = useState("");
+  const [MobileNum, setMobileNumber] = useState("");
   return (
     <Flex
       direction="column"
@@ -73,7 +82,8 @@ function SignUp() {
           mb="26px"
           w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
         >
-          Please fill in this registration form to create a patient account and access our services!
+          Please fill in this registration form to create a patient account and
+          access our services!
         </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center" mb="60px" mt="20px">
@@ -167,126 +177,183 @@ function SignUp() {
           >
             or
           </Text> */}
-          <FormControl>
-            <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-              Username
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="text"
-              placeholder="Enter your username"
-              mb="24px"
-              size="lg"
-            />
-            <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-              Name
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="text"
-              placeholder="Your full name"
-              mb="24px"
-              size="lg"
-            />
-            <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-              Email
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="email"
-              placeholder="Your email address"
-              mb="24px"
-              size="lg"
-            />
-            <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-              Password
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="password"
-              placeholder="Your password"
-              mb="24px"
-              size="lg"
-            />
-            <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-              Date of Birth
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="date"
-              placeholder="..."
-              mb="24px"
-              size="lg"
-            />
+          <form
+            id="signup"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const Patient = {
+                Username,
+                Name,
+                Email,
+                Password,
+                DateOfBirth,
+                MobileNum,
+                Gender,
+                Emergency_Contact_Name,
+                Emergency_Contact_Number,
+              };
+              const response = await fetch(API_PATHS.signup, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(Patient),
+              });
+              const data = await response.json();
+              console.log(data);
+              if (response.ok) {
+                console.log("Patient added successfully!");
+                window.location.href = "/auth/signin";
+              } else {
+                console.log("Error adding patient!");
+              }
+            }}
+          >
             <FormControl>
               <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                Gender
+                Username
               </FormLabel>
-              {genders.map((gender) => (
-                <Flex key={gender} align="center" ms="10px">
-                  <Radio
-                    value={gender}
-                    isChecked={selectedGender === gender}
-                    onChange={handleGenderChange}
-                  >
-                    {gender}
-                  </Radio>
-                </Flex>
-              ))}
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="text"
+                placeholder="Enter your username"
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                Name
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="text"
+                placeholder="Your full name"
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                Email
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="email"
+                placeholder="Your email address"
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                Password
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="password"
+                placeholder="Your password"
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                Date of Birth
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="date"
+                placeholder="..."
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setDateOfBirth(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                Mobile Number
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="number"
+                placeholder="Enter a valid number"
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setMobileNumber(e.target.value)}
+              />
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Gender
+                </FormLabel>
+                {genders.map((gender) => (
+                  <Flex key={gender} align="center" ms="10px">
+                    <Radio
+                      value={gender}
+                      isChecked={Gender === gender}
+                      onChange={handleGenderChange}
+                    >
+                      {gender}
+                    </Radio>
+                  </Flex>
+                ))}
+              </FormControl>
+              <FormLabel ms="4px" mt="16px" fontSize="sm" fontWeight="normal">
+                Emergency Contact Name
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="text"
+                placeholder="Please Enter Full Name"
+                mb="24px"
+                size="lg"
+                onChange={(e) => setEmergency_Contact_Name(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                Emergency Contact Number
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="number"
+                placeholder="Enter a valid phone number"
+                mb="24px"
+                size="lg"
+                onChange={(e) => setEmergency_Contact_Number(e.target.value)}
+              />
+              <Button
+                type="submit"
+                bg="teal.300"
+                fontSize="10px"
+                color="white"
+                fontWeight="bold"
+                w="100%"
+                h="45"
+                mb="24px"
+                _hover={{
+                  bg: "teal.200",
+                }}
+                _active={{
+                  bg: "teal.400",
+                }}
+              >
+                SIGN UP
+              </Button>
             </FormControl>
-            <FormLabel ms="4px" mt="16px" fontSize="sm" fontWeight="normal">
-              Emergency Contact Name
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="email"
-              placeholder="Please Enter Full Name"
-              mb="24px"
-              size="lg"
-            />
-            <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-              Emergency Contact Number
-            </FormLabel>
-            <Input
-              fontSize="sm"
-              ms="4px"
-              borderRadius="15px"
-              type="email"
-              placeholder="Enter a valid phone number"
-              mb="24px"
-              size="lg"
-            />
-            <Button
-              type="submit"
-              bg="teal.300"
-              fontSize="10px"
-              color="white"
-              fontWeight="bold"
-              w="100%"
-              h="45"
-              mb="24px"
-              _hover={{
-                bg: "teal.200",
-              }}
-              _active={{
-                bg: "teal.400",
-              }}
-            >
-              SIGN UP
-            </Button>
-          </FormControl>
+          </form>
           <Flex
             flexDirection="column"
             justifyContent="center"
@@ -300,10 +367,32 @@ function SignUp() {
                 color={titleColor}
                 as="span"
                 ms="5px"
-                href="#"
+                href="/auth/signin "
                 fontWeight="bold"
               >
                 Sign In
+              </Link>
+            </Text>
+            <Text
+              color={textColor}
+              fontWeight="medium"
+              align="center"
+              mb="5px"
+              mt="5px"
+              textColor="grey"
+            >
+              OR
+            </Text>
+            <Text color={textColor} fontWeight="medium">
+              Register as a doctor
+              <Link
+                color={titleColor}
+                as="span"
+                ms="5px"
+                href=""
+                fontWeight="bold"
+              >
+                here
               </Link>
             </Text>
           </Flex>
