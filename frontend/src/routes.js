@@ -7,6 +7,8 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
 import Package from "views/Admin/Package/package";
+import DeleteUser from "views/Admin/Package/components/DeleteUserForm"
+import CreateAdmin from "views/Admin/Package/components/CreateAdminForm"
 import viewDoctors from "views/Patient/viewDoctors";
 
 import {
@@ -25,6 +27,20 @@ var dashRoutes = [
     name: "Package",
     icon: <HomeIcon color="inherit" />,
     component: Package,
+    layout: "/admin",
+  },
+  {
+    path: "/addAdmin",
+    name: "Add Admin",
+    icon: <HomeIcon color="inherit" />,
+    component: CreateAdmin,
+    layout: "/admin",
+  },
+  {
+    path: "/deleteUser",
+    name: "Delete User",
+    icon: <HomeIcon color="inherit" />,
+    component: DeleteUser,
     layout: "/admin",
   },
   {

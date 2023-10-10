@@ -15,4 +15,8 @@ export const API_PATHS = {
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUserName/", // add username as a param
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
+
+  getRequests: ADMIN_BASE + "",
+  deleteUser: ADMIN_BASE + "deleteUser/",
+  createAdmin: ADMIN_BASE + "addAdmin/",
 };
