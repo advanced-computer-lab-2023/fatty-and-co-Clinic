@@ -7,6 +7,7 @@ const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 
 export const API_PATHS = {
+
  
 
 
@@ -21,5 +22,5 @@ export const API_PATHS = {
 
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUserName/", // add username as a param
 
-  viewDoctors: PATIENT_BASE + "/view/doctors/", // add patient id as a param
+  viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
 };
