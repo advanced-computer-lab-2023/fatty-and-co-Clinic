@@ -114,7 +114,7 @@ const session_index = (req, res) => {
           // Search for documents whose 'Name' field contains the 'Name' variable, if it is not empty
           ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
           // Search for documents whose 'Speciality' field contains the 'Speciality' variable, if it is not empty
-          ...((Speciality && !Name) || (Speciality && Name)
+          ...(Speciality
             ? { Speciality: { $regex: Speciality.trim(), $options: "i" } }
             : {}),
         })
