@@ -7,11 +7,21 @@ const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 
 export const API_PATHS = {
+// <<<<<<< HEAD
   
 
   viewAppointments: APPOINTMENT_BASE + "/getAppointments",
 
-  packages: PACKAGE_BASE + "packages/",
+// =======
+
+ 
+
+
+
+  
+
+  viewAllAppointments: APPOINTMENT_BASE + "/getAppointments",
+    packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
   deletePackage: PACKAGE_BASE + "deletePackage/",
   updatePackage: PACKAGE_BASE + "updatePackage/",
