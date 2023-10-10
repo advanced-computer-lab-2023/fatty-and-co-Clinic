@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import DoctorsRow from "components/Tables/DoctorsRow";
 import DoctorsTable from "./components/DoctorsTable";
@@ -12,7 +13,11 @@ function ViewDoctors() {
     Name: "",
     Speciality: "",
   });
-  const id = "6521bece68537b0c5336b14a";
+  const { id } = useParams();
+  console.log("ID:", id);
+  if (!id) {
+    return <div>No ID provided</div>;
+  }
 
   useEffect(() => {
     const url = API_PATHS.viewDoctors + id;
