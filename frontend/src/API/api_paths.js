@@ -14,11 +14,6 @@ export const API_PATHS = {
 
 // =======
 
- 
-
-
-
-  
 
   viewAllAppointments: APPOINTMENT_BASE + "/getAppointments",
     packages: PACKAGE_BASE + "packages/",
@@ -29,4 +24,5 @@ export const API_PATHS = {
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUserName/", // add username as a param
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
+  viewmembers: PATIENT_BASE + "/getFamilymember/",
 };

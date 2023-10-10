@@ -11,6 +11,7 @@ import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import viewDoctors from "views/Patient/viewDoctors";
+import Viewmembers from "views/Patient/viewmembers";
 
 
 
@@ -49,6 +50,14 @@ var dashRoutes = [
     component: viewDoctors,
     layout: "/admin",
   },
+  {
+    path: "/viewmembers",
+    name: "View members",
+    icon: <HomeIcon color="inherit" />,
+    component: Viewmembers,
+    layout: "/admin",
+  },
+
 
   {
     path: "/dashboard",
@@ -58,6 +67,7 @@ var dashRoutes = [
     component: Dashboard,
     layout: "/admin",
   },
+  
   {
     path: "/tables",
     name: "Tables",
