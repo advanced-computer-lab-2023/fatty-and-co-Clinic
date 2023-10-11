@@ -190,8 +190,13 @@ const SidebarContent = ({ logoText, routes }) => {
           alignItems="center"
           fontSize="11px"
         >
-          {/* <CreativeTimLogo w="32px" h="32px" me="10px" /> */}
-          <img src={shebeenElkom} alt="Shebeen Elkom" width="32" height="32" />
+          <img
+            src={shebeenElkom}
+            alt="Shebeen Elkom"
+            width="64"
+            height="64"
+            style={{ margin: "10px" }}
+          />
           <Text fontSize="sm" mt="3px">
             {logoText}
           </Text>
