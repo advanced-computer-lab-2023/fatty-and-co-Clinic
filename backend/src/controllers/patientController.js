@@ -8,6 +8,8 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
+
+
 const createPatient = async (req, res) => {
   const {} = req.body;
   try {
@@ -150,6 +152,7 @@ const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
   const {Createpatameter} = req.params;
   console.log(Createpatameter);
+
   try {
     const newFamilymember = await familyMemberModel.create({
       PatientUserName: Createpatameter,
@@ -159,7 +162,7 @@ const createFamilymember = async (req, res) => {
       Gender: Gender,
       Relation: Relation,
     });
-    res.status(200).json(newFamilymember);
+  
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
