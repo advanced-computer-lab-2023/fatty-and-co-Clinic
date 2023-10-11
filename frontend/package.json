@@ -17,6 +17,7 @@
     "apexcharts": "^3.27.3",
     "axios": "^1.5.1",
     "classnames": "2.3.1",
+    "date-fns": "^2.30.0",
     "framer-motion": "^4.1.17",
     "match-sorter": "6.3.0",
     "moment": "2.29.1",

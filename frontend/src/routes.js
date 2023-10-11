@@ -10,12 +10,12 @@ import SignUp from "views/Auth/SignUp.js";
 import UpdateEmail from "views/Doctors/UpdateEmail.js"; //Zawedna de
 import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
-import DeleteUser from "views/Admin/Package/components/DeleteUserForm";
-import CreateAdmin from "views/Admin/Package/components/CreateAdminForm";
+import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
+import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import viewDoctors from "views/Patient/viewDoctors";
+import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
-import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 
 import {
   HomeIcon,
@@ -37,29 +37,6 @@ var dashRoutes = [
     name: "Package",
     icon: <HomeIcon color="inherit" />,
     component: Package,
-    layout: "/admin",
-  },
-  {
-    path: "/viewAppointments",
-    name: "View Appointments",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewAppointments,
-    layout: "/admin",
-  },
-
-  {
-    path: "/addAdmin",
-    name: "Add Admin",
-    icon: <HomeIcon color="inherit" />,
-    component: CreateAdmin,
-    layout: "/admin",
-  },
-  {
-    path: "/deleteUser",
-    name: "Delete User",
-    icon: <HomeIcon color="inherit" />,
-    component: DeleteUser,
-
     layout: "/admin",
   },
   {

@@ -20,22 +20,22 @@ import React from "react";
 export const FamilymemberTable = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Card my='22px' overflowX={{ sm: "scroll", xl: "hidden" }}>
-      <CardHeader p='6px 0px 22px 0px'>
-        <Flex direction='column'>
-          <Text fontSize='lg' color={textColor} fontWeight='bold' pb='.5rem'>
-              {/* title will be All doctors  */}
+    <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+      <CardHeader p="6px 0px 22px 0px">
+        <Flex direction="column">
+          <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+            {/* title will be All doctors  */}
             {title}
           </Text>
         </Flex>
       </CardHeader>
       <CardBody>
-        <Table variant='simple' color={textColor}>
+        <Table variant="simple" color={textColor}>
           <Thead>
-            <Tr my='.8rem' pl='0px'>
+            <Tr my=".8rem" pl="0px">
               {captions.map((caption, idx) => {
                 return (
-                  <Th color='gray.400' key={idx} ps={idx === 0 ? "0px" : null}>
+                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
                     {caption}
                   </Th>
                 );
@@ -61,5 +61,5 @@ export const FamilymemberTable = ({ title, captions, data }) => {
     </Card>
   );
 };
- 
-export  default FamilymemberTable;
+
+export default FamilymemberTable;
