@@ -7,6 +7,7 @@ const requestSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     Password: {
       type: String,
