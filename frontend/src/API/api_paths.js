@@ -11,7 +11,6 @@ export const API_PATHS = {
   docSignUp: GUEST_BASE + "addRequest/",
   // Add comments that indicate if the path needs a param and what that param is
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
-  viewAllAppointments: APPOINTMENT_BASE + "/getAppointments",
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
   deletePackage: PACKAGE_BASE + "deletePackage/",

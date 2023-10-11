@@ -1,4 +1,4 @@
-// import
+
 import Dashboard from "views/Dashboard/Dashboard";
 import Tables from "views/Dashboard/Tables";
 import Billing from "views/Dashboard/Billing";
@@ -7,7 +7,6 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
-// <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"  //Zawedna de
 //import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
@@ -68,7 +67,6 @@ var dashRoutes = [
     name: "View Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
-// <<<<<<< HEAD
     layout:"/admin"},
 
   {
