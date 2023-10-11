@@ -3,6 +3,7 @@ const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
 const User = require("../models/systemusers");
+const { isNull } = require("util");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
@@ -257,27 +258,27 @@ const getAppointmentsDoc= async (req, res) => {
   // Extract the 'id' parameter from the request object
   const { Username2 } = req.params;
   const { Status, Date2 } = req.query;
-  const dateValue= Date2===""?"":new Date(Date2)
-  const newDate=Date2===""?"":new Date(dateValue)
-  Date2===""?"":newDate.setDate(dateValue.getDate()+1)
-  
+  const dateValue= new Date(Date2)
+  const newDate=new Date(dateValue).setDate(dateValue.getDate()+1)
 
+  const hasDate=(isNaN(new Date(Date2)))?"n":"y"
+ 
+  console.log(hasDate)
   // Check if the 'id' parameter is a valid MongoDB ObjectID
   if (!appointmentModel.findOne({DoctorUsername:Username2})) {
     res.status(404).json({ error: "Invalid Username" });
     return;
   }
-
-  const appointments= (!Status&& dateValue==="")?
+  const appointments= (!Status&& hasDate==="n")?
   await appointmentModel.find({DoctorUsername:Username2 })
-  :(Status && dateValue!=="" &&  dateValue.getUTCHours()===0)?
+  :(Status && hasDate==="y" &&  dateValue.getUTCHours()===0)?
   await appointmentModel.find({DoctorUsername:Username2, Status: Status ,Date:{$lt:dateValue,
     $gte:newDate}})
-  :(Status && dateValue!=="")? 
+  :(Status && hasDate!=="y")? 
     await appointmentModel.find({DoctorUsername:Username2, Status: Status,Date:dateValue})
   :(Status)? await appointmentModel.find({DoctorUsername:Username2, Status:Status})
-  :dateValue!=="" && dateValue.getUTCHours()===0?
-   await appointmentModel.find({DoctorUsername:Username2,Date:{$lt:dateValue,$gte:newDate}}):dateValue?
+  :hasDate==="y" && dateValue.getUTCHours()===0?
+   await appointmentModel.find({DoctorUsername:Username2,Date:{$lt:dateValue,$gte:newDate}}):hasDate==="y"?
    await appointmentModel.find({DoctorUsername:Username2,Date:dateValue}):{}
 
           const mySessions = new Array();

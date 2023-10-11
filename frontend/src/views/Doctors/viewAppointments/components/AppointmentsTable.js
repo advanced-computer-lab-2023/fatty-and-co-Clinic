@@ -17,7 +17,7 @@ import {
 
   import React from "react";
   
-  const AppointmentsTable = ({ title, captions, data }) => {       //Table that uses row
+  export const AppointmentsTable = ({ title, captions, data }) => {       //Table that uses row
     const textColor = useColorModeValue("gray.700", "white");
     return (
       <Card my='22px' overflowX={{ sm: "scroll", xl: "hidden" }}>
