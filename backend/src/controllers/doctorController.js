@@ -1,6 +1,7 @@
 const doctorModel = require("../models/doctors");
 const appointmentModel = require("../models/appointments");
 const prescriptionsModel = require("../models/prescriptions");
+const patientModel = require("../models/patients");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 
@@ -116,7 +117,7 @@ const getDoctorByID = async (req, res) => {
 
 // get a doctor by username
 const getDoctorByUsername = async (req, res) => {
-  const { Username } = req.params;
+  const { username } = req.params;
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     if (!doctor) {
@@ -174,26 +175,54 @@ const filterDoctor = async (req, res) => {
   try {
     console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
+
+    let packageDis = 0;
     var myDoctors = new Array();
+    var myFilteredDoctors = new Array();
+
+    const patientId = req.query.id;
+    if (!mongoose.Types.ObjectId.isValid(patientId)) {
+      res.status(404).json({ error: "Invalid ID" });
+      return;
+    } else {
+      //getting package dis of patient
+      patientModel.findById(patientId).then((result) => {
+        // Extract the 'PackageName' property from the patient document
+        const packageName = result.PackageName;
+        // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
+        if (!packageName == null) {
+          packageModel
+            .find({ Name: packageName })
+            .then((result) => {
+              // Extract the 'SessionDiscount' property from the package document and set the 'packageDis' variable to its value
+              packageDis = result.SessionDiscount;
+            })
+            .catch((err) => {
+              res.status(500).json({ error: error.message });
+            });
+        }
+      });
+    }
 
     if (urlParams.has("date") && urlParams.has("hour")) {
-      const date = new Date(req.query.date);
-      const day = date.getDay();
-      const hour = req.query.hour;
-      const dateDocs = await doctorModel.find({
-        WorkingDays: { $in: [day] },
-        StartTime: { $lte: hour },
-        EndTime: { $gt: hour },
-      });
-
-      if (urlParams.has("speciality")) {
-        dateDocs.forEach((element) => {
-          if (element.Speciality == req.query.speciality) {
-            myDoctors.push(element);
-          }
+      if (req.query.date && req.query.hour) {
+        const date = new Date(req.query.date);
+        const day = date.getDay();
+        const hour = req.query.hour;
+        const dateDocs = await doctorModel.find({
+          WorkingDays: { $in: [day] },
+          StartTime: { $lte: hour },
+          EndTime: { $gt: hour },
         });
-      } else {
-        myDoctors = dateDocs;
+        if (urlParams.has("speciality")) {
+          dateDocs.forEach((element) => {
+            if (element.Speciality == req.query.speciality) {
+              myDoctors.push(element);
+            }
+          });
+        } else {
+          myDoctors = dateDocs;
+        }
       }
     } else {
       if (urlParams.has("speciality")) {
@@ -204,7 +233,17 @@ const filterDoctor = async (req, res) => {
         myDoctors = await doctorModel.find();
       }
     }
-    res.status(200).json(myDoctors);
+
+    myDoctors.forEach((element) => {
+      const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
+      // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
+      myFilteredDoctors.push({
+        Name: element.Name,
+        Speciality: element.Speciality,
+        Cost: calcCost,
+      });
+    });
+    res.status(200).json(myFilteredDoctors);
   } catch (err) {
     console.log(err);
   }
