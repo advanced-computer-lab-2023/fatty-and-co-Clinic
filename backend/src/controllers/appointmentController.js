@@ -141,7 +141,7 @@ const getAppointments = async (req, res) => {
 
 // Get all the patients of a certain doctor.
 const findDoctorPatients = async (req, res) => {
-  const doctorUsername = req.body.DoctorUsername;
+  const doctorUsername = req.query.DoctorUsername;
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
