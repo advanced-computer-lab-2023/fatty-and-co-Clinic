@@ -29,6 +29,15 @@ const getRequest = async (req, res) => {
   }
 };
 
+const getRequests = async (req, res) => {
+  try {
+    const requests = await requestModel.find();
+    res.status(200).json(requests);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 const acceptRequest = async (req, res) => {
   const { Username } = req.body;
   try {
@@ -93,4 +102,5 @@ module.exports = {
   deleteUser,
   acceptRequest,
   rejectRequest,
+  getRequests,
 };

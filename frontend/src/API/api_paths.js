@@ -24,7 +24,8 @@ export const API_PATHS = {
   viewmembers: PATIENT_BASE + "/getFamilymember/",
 // =======
 
-  getRequests: ADMIN_BASE + "",
+  getRequests: ADMIN_BASE + "requests/",
+  getRequest: ADMIN_BASE + "getRequest/",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
 // >>>>>>> main
