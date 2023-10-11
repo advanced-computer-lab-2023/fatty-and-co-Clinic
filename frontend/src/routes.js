@@ -4,8 +4,9 @@ import Tables from "views/Dashboard/Tables";
 import Billing from "views/Dashboard/Billing";
 import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
-import SignIn from "views/Auth/SignIn.js";
-import SignUp from "views/Auth/SignUp.js";
+import SignIn from "views/Auth/SignIn";
+import SignUp from "views/Auth/SignUp";
+import docSignUp from "views/Auth/docSignUp";
 // <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"  //Zawedna de
 //import createFamilymember from "views/Patient/createFamilymember";
@@ -17,7 +18,7 @@ import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
-
+import Requests from "views/Admin/Requests";
 
 
 import {
@@ -67,9 +68,18 @@ var dashRoutes = [
     name: "View Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
+// <<<<<<< HEAD
     layout:"/admin"},
 
-   { path: "/addAdmin",
+  {
+    path: "/viewRequests",
+    name: "View Requests",
+    icon: <HomeIcon color="inherit" />,
+    component: Requests,
+    layout: "/admin",
+  },
+  {
+    path: "/addAdmin",
     name: "Add Admin",
     icon: <HomeIcon color="inherit" />,
     component: CreateAdmin,
@@ -171,6 +181,15 @@ var dashRoutes = [
         component: SignUp,
         layout: "/auth",
       },
+      {
+        path: "/docsignup",
+        name: "Doctor Sign Up",
+        rtlName: "لوحة القيادة",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: docSignUp,
+        layout: "/auth",
+      }
     ],
   }
   ,
