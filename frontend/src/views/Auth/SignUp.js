@@ -37,8 +37,8 @@ function SignUp() {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [DateOfBirth, setDateOfBirth] = useState("");
-  const [Emergency_Contact_Name, setEmergency_Contact_Name] = useState("");
-  const [Emergency_Contact_Number, setEmergency_Contact_Number] = useState("");
+  const [EmergencyContactName, setEmergencyContactName] = useState("");
+  const [EmergenceContactNumber, setEmergencyContactNumber] = useState("");
   const [MobileNum, setMobileNumber] = useState("");
   return (
     <Flex
@@ -189,8 +189,8 @@ function SignUp() {
                 DateOfBirth,
                 MobileNum,
                 Gender,
-                Emergency_Contact_Name,
-                Emergency_Contact_Number,
+                EmergencyContactName,
+                EmergenceContactNumber,
               };
               const response = await fetch(API_PATHS.signup, {
                 method: "POST",
@@ -302,6 +302,7 @@ function SignUp() {
                       value={gender}
                       isChecked={Gender === gender}
                       onChange={handleGenderChange}
+                      required
                     >
                       {gender}
                     </Radio>
@@ -319,7 +320,8 @@ function SignUp() {
                 placeholder="Please Enter Full Name"
                 mb="24px"
                 size="lg"
-                onChange={(e) => setEmergency_Contact_Name(e.target.value)}
+                required
+                onChange={(e) => setEmergencyContactName(e.target.value)}
               />
               <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                 Emergency Contact Number
@@ -332,7 +334,8 @@ function SignUp() {
                 placeholder="Enter a valid phone number"
                 mb="24px"
                 size="lg"
-                onChange={(e) => setEmergency_Contact_Number(e.target.value)}
+                required
+                onChange={(e) => setEmergencyContactNumber(e.target.value)}
               />
               <Button
                 type="submit"
