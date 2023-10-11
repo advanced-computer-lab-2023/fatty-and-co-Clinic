@@ -19,10 +19,10 @@ export const API_PATHS = {
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
-  updateInfo: DOCTOR_BASE+ "updateDoctor/",
+  updateEmail: DOCTOR_BASE+ "updateDoctor/",
   createfamilymember:PATIENT_BASE+"createFamilymember/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/" ,
-  viewfamilymembers:PATIENT_BASE+"/getFamilymember/"
-// >>>>>>> main
+  viewfamilymembers:PATIENT_BASE+"/getFamilymember/",
+  updateAffil:  DOCTOR_BASE+ "updateDoctor/",
 
 };

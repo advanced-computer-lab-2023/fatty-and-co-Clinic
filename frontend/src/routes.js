@@ -16,7 +16,7 @@ import createFamilymember from "views/Patient/viewmembers/components/createFamil
 import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
-
+import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 
 
 
@@ -44,12 +44,21 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-        path: "/updateInfo",
+        path: "/updateEmail",
         name: "Update Email",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
         secondaryNavbar: true,
         component:UpdateEmail ,
+        layout: "/admin",   
+      },
+      {
+        path: "/updateAffil",
+        name: "Update Affiliation",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateAffil ,
         layout: "/admin",   
       },
   {

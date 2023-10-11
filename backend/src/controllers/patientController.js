@@ -172,7 +172,7 @@ const GetFamilymembers = async (req, res) => {
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
-};
+}
 const selectPatient = async (req, res) => {
   const id = req.body.id;
 
