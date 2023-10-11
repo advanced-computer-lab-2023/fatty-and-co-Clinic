@@ -73,12 +73,12 @@ const updateDoctor = async (req, res) => {
     const {Username} = req.params;
     // console.log(req.body.Email)
     if (req.body.HourlyRate || req.body.Affiliation) {
-      const doc = await doctorModel.findOneAndUpdate(Username, req.body);
-      const doc2 = await doctorModel.findOneAndUpdate(Username, req.body);
+      const doc = await doctorModel.findOneAndUpdate({Username:Username}, req.body);
+      const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, req.body);
       res.status(200).json(doc2);
     } else {
-      const doc = await systemUserModel.findOneAndUpdate(Username, req.body);
-      const doc1 = await systemUserModel.findOneAndUpdate(Username, req.body);
+      const doc = await systemUserModel.findOneAndUpdate({Username:Username}, req.body);
+      const doc1 = await systemUserModel.findOneAndUpdate({Username:Username}, req.body);
       res.status(200).json(doc1);
     }
     // console.log(req.body.HourlyRate);

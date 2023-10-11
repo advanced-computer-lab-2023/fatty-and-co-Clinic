@@ -7,7 +7,7 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
 // <<<<<<< HEAD
-import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
+import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"  //Zawedna de
 //import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm"
@@ -43,6 +43,15 @@ var dashRoutes = [
     component: Package,
     layout: "/admin",
   },
+  {
+        path: "/updateInfo",
+        name: "Update Email",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateEmail ,
+        layout: "/admin",   
+      },
   {
 
     path: "/viewAppointments",
@@ -154,23 +163,8 @@ var dashRoutes = [
         layout: "/auth",
       },
     ],
-  },
-  {
-    name: "UPDATE ACCOUNT",
-    category: "update",
-    rtlName: "صفحات",
-    state: "pageCollapse",  //not sure
-    views: [
-      {
-        path: "/profile",
-        name: "Profile",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:UpdateEmail ,
-        layout: "/updateEmail",     //Not sure men ay 7aga
-      }]
-  },
+  }
+  ,
   /*{
     name: "Create family member ",
     category: "create",

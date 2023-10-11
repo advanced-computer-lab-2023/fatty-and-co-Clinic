@@ -14,26 +14,14 @@ export const API_PATHS = {
   addPackage: PACKAGE_BASE + "addPackage/",
   deletePackage: PACKAGE_BASE + "deletePackage/",
   updatePackage: PACKAGE_BASE + "updatePackage/",
-
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
-
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-// <<<<<<< HEAD
-// =======
-
-// >>>>>>> main
-
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
-// <<<<<<< HEAD
-
   updateInfo: DOCTOR_BASE+ "updateDoctor/",
-
   createfamilymember:PATIENT_BASE+"createFamilymember/",
-// =======
-  viewFilteredDoctors: DOCTOR_BASE + "filter/" ,
-   viewfamilymembers:PATIENT_BASE+"getFamilymember/"
-
+  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
+// >>>>>>> main
 
 };
