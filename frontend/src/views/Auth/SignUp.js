@@ -334,6 +334,7 @@ function SignUp() {
                 placeholder="Enter a valid phone number"
                 mb="24px"
                 size="lg"
+                value={EmergencyContactNumber}
                 required
                 onChange={(e) => setEmergencyContactNumber(e.target.value)}
               />
