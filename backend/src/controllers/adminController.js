@@ -22,7 +22,7 @@ const createAdmin = async (req, res) => {
 const getRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requests.find({ Username: Username });
+    const request = await requestModel.find({ Username: Username });
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -32,7 +32,7 @@ const getRequest = async (req, res) => {
 const acceptRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requests.findOneAndUpdate({
+    const request = await requestModel.findOneAndUpdate({
       Username: Username,
       Status: "Accepted",
     });
