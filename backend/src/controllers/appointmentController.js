@@ -2,6 +2,7 @@ const { trusted } = require("mongoose");
 const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
+const { isNull } = require("util");
 
 //Filter by date mengheir time wala be time?
 const getAppointments = async (req, res) => {
@@ -162,14 +163,17 @@ const findDoctorPatients = async (req, res) => {
 
   // Convert the set back to an array.
   const uniquePatientNamesArray = [...uniquePatientNames];
+  const patients = await patientModel.find({
+    Username: { $in: uniquePatientNamesArray },
+  });
 
   // Return the unique patient names.
-  res.status(200).send(uniquePatientNamesArray);
+  res.status(200).send(patients);
 };
 
 // Get all the upcoming appointments of a certain doctor.
 const upcomingAppforDoc = async (req, res) => {
-  const doctorUsername = req.body.DoctorUsername;
+  const doctorUsername = req.query.DoctorUsername;
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
@@ -191,34 +195,60 @@ const upcomingAppforDoc = async (req, res) => {
 
   // Convert the set back to an array.
   const uniquePatientNamesArray = [...uniquePatientNames];
+  const patients = await patientModel.find({
+    Username: { $in: uniquePatientNamesArray },
+  });
 
   // Return the unique patient names.
-  res.status(200).send(uniquePatientNamesArray);
+  res.status(200).send(patients);
 };
 
 const searchPatient = async (req, res) => {
-  const doctorUsername = req.body.DoctorUsername;
-  const patientName = req.body.PatientUsername;
+  const doctorUsername = req.query.DoctorUsername;
+  const patientName = req.query.PatientUsername;
   const appointments = await appointmentModel.find({
     DoctorUsername: doctorUsername,
   });
+  const patients=null;
 
   // Get the names of all the patients from the appointments.
   const patientNames = appointments.map(
     (appointment) => appointment.PatientUsername
   );
+  const uniquePatientNames = new Set();
 
-  // Filter the patient names to only include patients whose name contains the search query.
-  const filteredPatientNames = patientNames.filter((patientNamee) =>
+  // Add each patient name to the set.
+  for (const patientName of patientNames) {
+    uniquePatientNames.add(patientName);
+  }
+
+  // Convert the set back to an array.
+  const uniquePatientNamesArray = [...uniquePatientNames];
+  if (patientName === null || patientName === "") {
+    // patientName is null or an empty string
+    patients = await patientModel.find({
+      Username: { $in: uniquePatientNamesArray },
+    });
+  } else {
+    // patientName is not null or an empty string
+    const filteredPatientNames = patientNames.filter((patientNamee) =>
     patientNamee.includes(patientName)
   );
+  patients = await patientModel.find({
+    Username: { $in: filteredPatientNames },
+  });
+
+  }
+
+
+  // Filter the patient names to only include patients whose name contains the search query.
+
 
   // If at least one patient was found, return the filtered patient names.
-  if (filteredPatientNames.length > 0) {
-    res.status(200).send(filteredPatientNames);
-  } else {
-    res.status(404).send("Patient not found.");
-  }
+  
+
+    res.status(200).send(patients);
+ 
 };
 
 // Export the router.
