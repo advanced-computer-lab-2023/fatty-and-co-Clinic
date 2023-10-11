@@ -7,9 +7,7 @@ const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 
 export const API_PATHS = {
-// <<<<<<< HEAD
-  
-
+  // Add comments that indicate if the path needs a param and what that param is
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAllAppointments: APPOINTMENT_BASE + "/getAppointments",
   packages: PACKAGE_BASE + "packages/",
@@ -20,15 +18,23 @@ export const API_PATHS = {
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
+// <<<<<<< HEAD
+// =======
+  viewmembers: PATIENT_BASE + "getFamilymember/",
+// >>>>>>> main
 
   viewmembers: PATIENT_BASE + "http://localhost:8000/Patient//getFamilymember/",
   viewmembers: PATIENT_BASE + "/getFamilymember/",
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
+// <<<<<<< HEAD
 
   updateInfo: DOCTOR_BASE+ "updateDoctor/",
 
-  createfamilymember:PATIENT_BASE+"createFamilymember/"
+  createfamilymember:PATIENT_BASE+"createFamilymember/",
+// =======
+  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
+// >>>>>>> main
 
 };
