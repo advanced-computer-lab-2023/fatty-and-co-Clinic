@@ -13,21 +13,13 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import DoctorsRow from "components/Tables/DoctorsRow";
+import AppointmentsRow from "components/Tables/AppointmentsRow";
 
-import { useHistory } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 
-const DoctorsTable = ({ title, captions, data }) => {
-  const [selectedRow, setSelectedRow] = useState(null);
-  const history = useHistory();
+export const AppointmentsTable = ({ title, captions, data }) => {
+  //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
-
-  const handleRowClick = (row) => {
-    setSelectedRow(row);
-    history.replace(`/admin/viewDoctors/viewDoctorDetails/${row.Username}`);
-  };
-
   return (
     <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader p="6px 0px 22px 0px">
@@ -54,13 +46,12 @@ const DoctorsTable = ({ title, captions, data }) => {
           <Tbody>
             {data.map((row) => {
               return (
-                <DoctorsRow
-                  key={row.Username}
-                  Name={row.Name}
-                  Speciality={row.Speciality}
-                  Cost={row.Cost}
-                  isSelected={selectedRow === row}
-                  onClick={() => handleRowClick(row)}
+                <AppointmentsRow
+                  key={row.DoctorUsername}
+                  DoctorUsername={row.DoctorUsername}
+                  PatientUsername={row.PatientUsername}
+                  Status={row.Status}
+                  Date={row.Date}
                 />
               );
             })}
@@ -71,4 +62,4 @@ const DoctorsTable = ({ title, captions, data }) => {
   );
 };
 
-export default DoctorsTable;
+export default AppointmentsTable;

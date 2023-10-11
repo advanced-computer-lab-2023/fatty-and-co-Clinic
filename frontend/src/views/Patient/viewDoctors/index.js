@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import DoctorsRow from "components/Tables/DoctorsRow";
 import DoctorsTable from "./components/DoctorsTable";
-import { Flex, Button, Box, Input } from "@chakra-ui/react";
+import { Flex, Button, Box, Text, Input } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 
@@ -12,12 +13,13 @@ function ViewDoctors() {
     Name: "",
     Speciality: "",
   });
+
   const [filterParams, setFilterParams] = useState({
     speciality: "",
     date: [], 
     hour:[],
   });
-  const id = "6521bece68537b0c5336b14a";
+  const { id } = useParams();
   const options = [
     { label: "Cardiology", value: "Cardiology" },
     {
@@ -159,14 +161,20 @@ function ViewDoctors() {
             Clear 
           </Button>
           </Flex>
-
+        {(id && id !== ":id" && (
+  
 
         
         <DoctorsTable
-          title={"Available Doctors"}
-          captions={["Name", "Speciality", "Cost"]}
-          data={data}
-        />
+            title={"Available Doctors"}
+            captions={["Name", "Speciality", "Cost"]}
+            data={data}
+          />
+        )) || (
+          <Text fontSize="3xl" fontWeight="bold">
+            ID not found
+          </Text>
+        )}
       </Flex>
     </Box>
   );

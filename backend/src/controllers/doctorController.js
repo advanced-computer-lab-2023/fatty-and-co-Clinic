@@ -117,7 +117,7 @@ const getDoctorByID = async (req, res) => {
 
 // get a doctor by username
 const getDoctorByUsername = async (req, res) => {
-  const { Username } = req.params;
+  const { username } = req.params;
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     if (!doctor) {

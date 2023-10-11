@@ -67,6 +67,7 @@ export default function AuthNavbar(props) {
     colorButton = "gray.700";
     mainText = "white";
     navbarPosition = "absolute";
+   
   }
   var brand = (
     <Link
