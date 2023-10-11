@@ -18,6 +18,7 @@ import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
+import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 
 
 import {
@@ -50,6 +51,15 @@ var dashRoutes = [
         icon: <PersonIcon color="inherit" />,
         secondaryNavbar: true,
         component:UpdateEmail ,
+        layout: "/admin",   
+      },
+      {
+        path: "/updateHourly",
+        name: "Update Hourly Rate",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateHourly ,
         layout: "/admin",   
       },
       {

@@ -17,14 +17,15 @@ export const API_PATHS = {
   updatePackage: PACKAGE_BASE + "updatePackage/",
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-// <<<<<<< HEAD
+
   getRequests: ADMIN_BASE + "",
-// =======
+  updateHourly: DOCTOR_BASE + "updateDoctor/",
+
   viewmembers: PATIENT_BASE + "getFamilymember/",
 
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
-// >>>>>>> main
+
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
   updateEmail: DOCTOR_BASE+ "updateDoctor/",
