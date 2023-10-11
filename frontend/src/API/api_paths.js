@@ -20,11 +20,9 @@ export const API_PATHS = {
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
 // <<<<<<< HEAD
 // =======
-  viewmembers: PATIENT_BASE + "getFamilymember/",
+
 // >>>>>>> main
 
-  viewmembers: PATIENT_BASE + "http://localhost:8000/Patient//getFamilymember/",
-  viewmembers: PATIENT_BASE + "/getFamilymember/",
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
@@ -34,7 +32,8 @@ export const API_PATHS = {
 
   createfamilymember:PATIENT_BASE+"createFamilymember/",
 // =======
-  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
-// >>>>>>> main
+  viewFilteredDoctors: DOCTOR_BASE + "filter/" ,
+   viewfamilymembers:PATIENT_BASE+"getFamilymember/"
+
 
 };
