@@ -10,7 +10,7 @@ export const API_PATHS = {
 // <<<<<<< HEAD
   
 
-  viewAppointments: APPOINTMENT_BASE + "/getAppointments",
+  viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
 
 // =======
 

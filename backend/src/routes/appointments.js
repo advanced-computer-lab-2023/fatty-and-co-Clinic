@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  getAppointmentsDoc,
   getAppointments,
   findDoctorPatients,
   upcomingAppforDoc,
@@ -57,5 +58,6 @@ router.get("/searchpatient", searchPatient);
 * @param {string} Username2 - The ID of the doctor
 */
 router.get("/getAppointments/:Username2", getAppointments);
+router.get("/getAppointmentsDoc/:Username2", getAppointmentsDoc);
 
 module.exports = router;

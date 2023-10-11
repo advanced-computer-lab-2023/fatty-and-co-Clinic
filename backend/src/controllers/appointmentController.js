@@ -10,7 +10,6 @@ const getAppointments = async (req, res) => {
   const dateSearch = req.body.Date; //khod input men el front end
   const {Username2} =req.params //session
   //Check this username is in our table
-  console.log(Username2)
   const doc = await appointmentModel.find({
     DoctorUsername: Username2,
   });
@@ -94,6 +93,7 @@ const getAppointments = async (req, res) => {
           PatientUsername: Username2,
           Status: statusValue,
         });
+      
     res.status(200).send(result);
   } else if (dateSearch != null && !isNaN(new Date(dateSearch))) {
     //Gets date on exact day
@@ -149,10 +149,11 @@ const getAppointments = async (req, res) => {
      if(current_type==="Doctor"){
       const result = await appointmentModel.find({
         DoctorUsername: Username2})
+        console.log("Fetching Doctor")
         res.status(200).send(result)}
      else {
       const result=await appointmentModel.find({
-        PatientUsername: Username2,
+        PatientUsername: Username2
      }   )
      res.status(200).send(result)}
         
@@ -248,9 +249,56 @@ const searchPatient = async (req, res) => {
 
 // Export the router.
 
+
+
+
+const getAppointmentsDoc= async (req, res) => {
+  // Package discount starts with 0
+  // Extract the 'id' parameter from the request object
+  const { Username2 } = req.params;
+  const { Status, Date2 } = req.query;
+  const dateValue= Date2===""?"":new Date(Date2)
+  const newDate=Date2===""?"":new Date(dateValue)
+  Date2===""?"":newDate.setDate(dateValue.getDate()+1)
+  
+
+  // Check if the 'id' parameter is a valid MongoDB ObjectID
+  if (!appointmentModel.findOne({DoctorUsername:Username2})) {
+    res.status(404).json({ error: "Invalid Username" });
+    return;
+  }
+
+  const appointments= (!Status&& dateValue==="")?
+  await appointmentModel.find({DoctorUsername:Username2 })
+  :(Status && dateValue!=="" &&  dateValue.getUTCHours()===0)?
+  await appointmentModel.find({DoctorUsername:Username2, Status: Status ,Date:{$lt:dateValue,
+    $gte:newDate}})
+  :(Status && dateValue!=="")? 
+    await appointmentModel.find({DoctorUsername:Username2, Status: Status,Date:dateValue})
+  :(Status)? await appointmentModel.find({DoctorUsername:Username2, Status:Status})
+  :dateValue!=="" && dateValue.getUTCHours()===0?
+   await appointmentModel.find({DoctorUsername:Username2,Date:{$lt:dateValue,$gte:newDate}}):dateValue?
+   await appointmentModel.find({DoctorUsername:Username2,Date:dateValue}):{}
+
+          const mySessions = new Array();
+          appointments.forEach((appointment) => {
+
+            mySessions.push({
+              DoctorUsername: appointment.DoctorUsername,
+              PatientUsername: appointment.PatientUsername,
+              Status:appointment.Status ,
+              Date:appointment.Date
+            })
+          })
+          // Return a 200 success response with a JSON object that contains the 'mySessions' array
+          res.status(200).json(appointments);}
+        
+
+        
 module.exports = {
-  getAppointments,
+  getAppointmentsDoc,
   findDoctorPatients,
   upcomingAppforDoc,
   searchPatient,
+  getAppointments
 };

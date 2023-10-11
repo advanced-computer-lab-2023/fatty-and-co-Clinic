@@ -12,6 +12,7 @@ import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
+import ViewAppointments from "views/Doctors/viewAppointments";
 
 
 
@@ -41,6 +42,13 @@ var dashRoutes = [
     name: "Package",
     icon: <HomeIcon color="inherit" />,
     component: Package,
+    layout: "/admin",
+  },
+  {
+    path: "/viewAppointments",
+    name: "View Appointments",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewAppointments,
     layout: "/admin",
   },
   {

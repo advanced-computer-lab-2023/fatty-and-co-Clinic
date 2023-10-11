@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import DoctorsRow from "components/Tables/DoctorsRow";
-import familymemberTable from "./components/FamilymemberTable";
+import{FamilymemberTable} from "./components/FamilymemberTable.js";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
@@ -54,21 +53,8 @@ function Viewmembers() {
         pt="50px"
         justifyContent="flex-start"
       >
-        <Flex direction="row" alignItems="flex-start">
-          <SearchBar
-            placeholder="Doctor Name..."
-            onChange={handleNameSearchValueChange}
-          />
-          <SearchBar
-            placeholder="Doctor Speciality..."
-            onChange={handleSpecialitySearchValueChange}
-            marginLeft={4} // Add margin to the left
-          />
-          <Button onClick={handleSearchButtonClick} marginLeft={4}>
-            Search
-          </Button>
-        </Flex>
-        <familymemberTable
+       
+        <FamilymemberTable
           title={"Registered Family Memebers"}
           captions={["Name", "NationalId", "Age","Gender","Relation"]}
           data={data}
