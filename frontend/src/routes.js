@@ -19,6 +19,8 @@ import ViewAppointments from "views/Doctors/viewAppointments";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
+import PatientAppointments from "views/Patient/viewAppointPat/"
+
 
 
 import {
@@ -45,7 +47,14 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-        path: "/updateEmail",
+    path: "/viewAppointPat",
+    name: "View Patient Appointments ",
+    icon: <HomeIcon color="inherit" />,
+    component: PatientAppointments,
+    layout: "/admin",
+  },
+  {
+        path: "/updateEmailDoc",
         name: "Update Email",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
@@ -74,7 +83,7 @@ var dashRoutes = [
   {
 
     path: "/viewAppointments",
-    name: "View Appointments",
+    name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
     layout:"/admin"},

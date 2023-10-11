@@ -26,15 +26,22 @@ import {
   
       // Send the username to the backend for deletion
       try {
-        const response = await fetch(API_PATHS.updateInfo+ "zmbifqzaqf856", {
+        const response = await fetch(API_PATHS.updateEmailDoc+ "jcgczjkmbn553", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({Email}),
         });
-  
-        if (response.ok) {
+        if(Email==""){
+          toast({
+            title: "Please fill the email field!",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+       else if (response.ok) {
           // Handle success or provide feedback to the user
           toast({
             title: "Email updated successfully",
@@ -42,6 +49,7 @@ import {
             duration: 9000,
             isClosable: true,
           });
+      
           setEmail;(""); // Clear the input field
         } else {
           // Handle errors or provide feedback to the user
@@ -60,7 +68,7 @@ import {
   
     return (
       <Card
-        p="22px"
+        p="80px"
         my={{ sm: "24px", lg: "0px" }}
         ms={{ sm: "0px", lg: "24px" }}
       >
