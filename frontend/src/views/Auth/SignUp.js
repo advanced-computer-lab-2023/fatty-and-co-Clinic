@@ -392,7 +392,7 @@ function SignUp() {
                 color={titleColor}
                 as="span"
                 ms="5px"
-                href=""
+                href="./docSignUp"
                 fontWeight="bold"
               >
                 here
