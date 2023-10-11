@@ -165,11 +165,12 @@ const getAppointments = async (req, res) => {
 
 // Get all the patients of a certain doctor.
 const findDoctorPatients = async (req, res) => {
-  const doctorUsername = req.body.DoctorUsername;
+  const doctorUsername = req.query.DoctorUsername;
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
     DoctorUsername: doctorUsername,
+    DoctorName: { $exists: true },
   });
 
   // Get the names of all the patients from the appointments.
@@ -188,13 +189,20 @@ const findDoctorPatients = async (req, res) => {
   // Convert the set back to an array.
   const uniquePatientNamesArray = [...uniquePatientNames];
 
-  // Return the unique patient names.
-  res.status(200).send(uniquePatientNamesArray);
+  // Find all the patients with the unique patient names.
+  const patients = await patientModel.find({
+    Username: { $in: uniquePatientNamesArray },
+    
+  });
+
+  // Return the patients.
+  res.status(200).send(patients);
+
 };
 
 // Get all the upcoming appointments of a certain doctor.
 const upcomingAppforDoc = async (req, res) => {
-  const doctorUsername = req.body.DoctorUsername;
+  const doctorUsername = req.query.DoctorUsername;
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
@@ -216,34 +224,59 @@ const upcomingAppforDoc = async (req, res) => {
 
   // Convert the set back to an array.
   const uniquePatientNamesArray = [...uniquePatientNames];
+  const patients = await patientModel.find({
+    Username: { $in: uniquePatientNamesArray },
+  });
 
   // Return the unique patient names.
-  res.status(200).send(uniquePatientNamesArray);
+  res.status(200).send(patients);
 };
 
 const searchPatient = async (req, res) => {
-  const doctorUsername = req.body.DoctorUsername;
-  const patientName = req.body.PatientUsername;
+  const doctorUsername = req.query.DoctorUsername;
+  const patientName = req.query.PatientName;
+
+  // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
     DoctorUsername: doctorUsername,
   });
 
   // Get the names of all the patients from the appointments.
   const patientNames = appointments.map(
+    (appointment) => appointment.PatientName
+  );
+  const patientUserNames = appointments.map(
     (appointment) => appointment.PatientUsername
   );
+  const uniquePatientNames = new Set();
 
-  // Filter the patient names to only include patients whose name contains the search query.
-  const filteredPatientNames = patientNames.filter((patientNamee) =>
-    patientNamee.includes(patientName)
-  );
-
-  // If at least one patient was found, return the filtered patient names.
-  if (filteredPatientNames.length > 0) {
-    res.status(200).send(filteredPatientNames);
-  } else {
-    res.status(404).send("Patient not found.");
+  // Add each patient name to the set.
+  for (const patientName of patientUserNames) {
+    uniquePatientNames.add(patientName);
   }
+
+  // Convert the set back to an array.
+  const uniquePatientNamesArray = [...uniquePatientNames];
+
+  // Check if the patientName param is empty.
+  if (!(patientName in req.query)) {
+    // patientName is null or an empty string
+    const patients = await patientModel.find({
+      Username: { $in: uniquePatientNamesArray },
+    });
+    res.status(200).send(patients);
+  } else {
+    // patientName is not null or an empty string
+    const filteredPatientNames = uniquePatientNamesArray.filter((patientNamee) =>
+      patientNamee.includes(patientName)
+    );
+    const patients = await patientModel.find({
+      Name: { $in: filteredPatientNames },
+      Username: {$in: patientUserNames}
+    });
+    res.status(200).send(patients);
+  }
+
 };
 
 // Export the router.
