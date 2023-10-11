@@ -146,9 +146,11 @@ const createPatient = async (req, res) => {
 
 // create a random appointment
 const createRandomAppointment = async (req, res) => {
-  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
+  const { DoctorUsername, PatientUsername,PatientName, DoctorName,Status, Date } = req.body;
   const doctorUsername = DoctorUsername || String(await getDoctorUsername());
   const patientUsername = PatientUsername || String(await getPatientUsername());
+  const patientname = PatientName;
+  const doctorname = DoctorName;
   const status = Status || generateAppointmentStatus();
   const date = Date || generateAppointmentDate();
 
@@ -158,6 +160,8 @@ const createRandomAppointment = async (req, res) => {
     const newApp = await appointmentModel.create({
       DoctorUsername: doctorUsername,
       PatientUsername: patientUsername,
+      PatientName: patientname,
+      DoctorName: doctorname,
       Status: status,
       Date: date,
     });
