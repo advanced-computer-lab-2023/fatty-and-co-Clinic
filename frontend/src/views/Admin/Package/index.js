@@ -4,9 +4,22 @@ import { Box, Flex, Grid, Icon } from "@chakra-ui/react";
 import React from "react";
 import PackageInformation from "./components/PackageInformation";
 import { useEffect } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { usePackageContext } from "./hooks/usePackageContext";
 import PackageForm from "./components/PackageForm";
+import DeleteUserForm from "./components/PackageForm";
 import { API_PATHS } from "API/api_paths";
+
+function DeleteUser() {
+  return (
+    <ChakraProvider>
+      <div className="DeleteUser">
+        <DeleteUserForm />
+        {/* Add other components or routing as needed */}
+      </div>
+    </ChakraProvider>
+  );
+}
 
 function PackageI() {
   const { packages, dispatch } = usePackageContext();
@@ -40,4 +53,4 @@ function PackageI() {
   );
 }
 
-export default PackageI;
+export default PackageI; DeleteUser;
