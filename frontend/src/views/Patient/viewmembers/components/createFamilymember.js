@@ -49,8 +49,15 @@ function createFamilymember() {
             duration: 9000,
             isClosable: true,
           });
-        
     }
+    if(NationalId.length!==16){
+      toast({
+          title: "National id must be 16",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+  }
 
       if (response.ok) {
         // Handle success or provide feedback to the user

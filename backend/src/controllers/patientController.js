@@ -150,9 +150,15 @@ const session_index = (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const {Createpatameter} = req.params;
+  const { Createpatameter } = req.params;
   console.log(Createpatameter);
 
+  // Check if the national ID is not 16.
+  if (NationalId.length !== 16) {
+    // Return an error message.
+    res.status(400).json({ error: 'The national ID must be 16 digits long.' });
+    return;
+  }
   try {
     const newFamilymember = await familyMemberModel.create({
       PatientUserName: Createpatameter,
@@ -161,7 +167,9 @@ const createFamilymember = async (req, res) => {
       Age: Age,
       Gender: Gender,
       Relation: Relation,
+
     });
+    res.status(200).json(newFamilymember);
   
   } catch (error) {
     res.status(500).json({ error: error.message });
