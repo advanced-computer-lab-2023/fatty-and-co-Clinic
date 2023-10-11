@@ -48,7 +48,7 @@ function Sidebar(props) {
           borderRadius={sidebarRadius}
         >
           <SidebarContent routes={routes}
-        logoText={"شبين الكون"}
+        logoText={"SHEBEEN HEALTH CLINIC"}
         display="none"
         sidebarVariant={sidebarVariant}
         />
