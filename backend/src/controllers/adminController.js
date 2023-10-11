@@ -20,7 +20,7 @@ const createAdmin = async (req, res) => {
 };
 
 const getRequest = async (req, res) => {
-  const { Username } = req.body;
+  const { Username } = req.query;
   try {
     const request = await requestModel.find({ Username: Username });
     res.status(200).json(request);
@@ -68,7 +68,7 @@ const acceptRequest = async (req, res) => {
 const rejectRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requests.findOneAndUpdate({
+    const request = await requestModel.findOneAndUpdate({
       Username: Username,
       Status: "Rejected",
     });
