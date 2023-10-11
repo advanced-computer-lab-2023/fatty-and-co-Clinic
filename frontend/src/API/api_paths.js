@@ -21,11 +21,12 @@ export const API_PATHS = {
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
 // <<<<<<< HEAD
-  viewmembers: PATIENT_BASE + "/getFamilymember/",
+  viewmembers: PATIENT_BASE + "http://localhost:8000/Patient//getFamilymember/",
 // =======
 
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
+  createfamilymember:PATIENT_BASE+"createFamilymember/"
 // >>>>>>> main
 };

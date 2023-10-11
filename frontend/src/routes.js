@@ -8,10 +8,11 @@ import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
 // <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
-import createFamilymember from "views/Patient/createFamilymember";
+//import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/Package/components/DeleteUserForm"
 import CreateAdmin from "views/Admin/Package/components/CreateAdminForm"
+import createFamilymember from "views/Patient/viewmembers/components/createFamilymember";
 import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
@@ -56,6 +57,13 @@ var dashRoutes = [
     component: CreateAdmin,
     layout: "/admin",
   },
+  
+  { path: "/addFamilymember",
+  name: "Add Familymember",
+  icon: <HomeIcon color="inherit" />,
+  component: createFamilymember,
+  layout: "/admin",
+},
   {
     path: "/deleteUser",
     name: "Delete User",
@@ -163,7 +171,7 @@ var dashRoutes = [
         layout: "/updateEmail",     //Not sure men ay 7aga
       }]
   },
-  {
+  /*{
     name: "Create family member ",
     category: "create",
     rtlName: "صفحات",
@@ -178,6 +186,6 @@ var dashRoutes = [
         component:createFamilymember ,
         layout: "/Createfamilymem",     //Not sure men ay 7aga
       }]
-  }
+  }*/
 ];
 export default dashRoutes;
