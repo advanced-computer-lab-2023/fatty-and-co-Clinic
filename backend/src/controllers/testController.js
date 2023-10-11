@@ -232,6 +232,7 @@ const createPrescription = async (req, res) => {
     AppointmentId,
     DoctorUsername,
     PatientUsername,
+    Date,
     Diagnosis,
     Medicine,
   } = req.body;
@@ -239,6 +240,7 @@ const createPrescription = async (req, res) => {
   const appointmentId = AppointmentId || appointment._id;
   const doctorUsername = DoctorUsername || appointment.DoctorUsername;
   const patientUsername = PatientUsername || appointment.PatientUsername;
+  const date = Date || appointment.Date;
   const diagnosis = Diagnosis || generateDiagnosis();
   const medicine = Medicine || generateMedicine();
 
@@ -246,6 +248,7 @@ const createPrescription = async (req, res) => {
     appointmentId,
     doctorUsername,
     patientUsername,
+    date,
     diagnosis,
     medicine
   );
@@ -255,6 +258,7 @@ const createPrescription = async (req, res) => {
       AppointmentId: appointmentId,
       DoctorUsername: doctorUsername,
       PatientUsername: patientUsername,
+      Date: date,
       Diagnosis: diagnosis,
       Medicine: medicine,
     });
