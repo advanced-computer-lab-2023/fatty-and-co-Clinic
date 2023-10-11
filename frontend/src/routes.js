@@ -6,18 +6,18 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
-
-
-import createFamilymember from "views/Patient/createFamilymember";
+// <<<<<<< HEAD
+import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
+//import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
-import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
-import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
+import DeleteUser from "views/Admin/Package/components/DeleteUserForm"
+import CreateAdmin from "views/Admin/Package/components/CreateAdminForm"
+import createFamilymember from "views/Patient/viewmembers/components/createFamilymember";
 import viewDoctors from "views/Patient/viewDoctors";
-import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 
-import UpdateEmail from "views/Doctors/updateInfo";
+
 
 
 import {
@@ -29,6 +29,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+
 
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
@@ -43,26 +44,26 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
+
     path: "/viewAppointments",
     name: "View Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
-    layout: "/admin",
-  },
-    {
-      path: "/updateInfoEmail", //not sure
-      name: "Update Email",
-      icon: <HomeIcon color="inherit" />,
-      component: UpdateEmail,
-      layout:"/admin"},
+    layout:"/admin"},
 
-  {
-    path: "/addAdmin",
+   { path: "/addAdmin",
     name: "Add Admin",
     icon: <HomeIcon color="inherit" />,
     component: CreateAdmin,
     layout: "/admin",
   },
+  
+  { path: "/addFamilymember",
+  name: "Add Familymember",
+  icon: <HomeIcon color="inherit" />,
+  component: createFamilymember,
+  layout: "/admin",
+},
   {
     path: "/deleteUser",
     name: "Delete User",
@@ -72,14 +73,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewDoctors/viewDoctorDetails/:username",
-    name: "View Doctor Details",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewDoctorDetails,
-    layout: "/admin",
-  },
-  {
-    path: "/viewDoctors/:id",
+    path: "/viewDoctors",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
@@ -93,6 +87,7 @@ var dashRoutes = [
     layout: "/admin",
   },
 
+
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -101,7 +96,7 @@ var dashRoutes = [
     component: Dashboard,
     layout: "/admin",
   },
-
+  
   {
     path: "/tables",
     name: "Tables",
@@ -160,12 +155,27 @@ var dashRoutes = [
       },
     ],
   },
-  
   {
+    name: "UPDATE ACCOUNT",
+    category: "update",
+    rtlName: "صفحات",
+    state: "pageCollapse",  //not sure
+    views: [
+      {
+        path: "/profile",
+        name: "Profile",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateEmail ,
+        layout: "/updateEmail",     //Not sure men ay 7aga
+      }]
+  },
+  /*{
     name: "Create family member ",
     category: "create",
     rtlName: "صفحات",
-    state: "pageCollapse", //not sure
+    state: "pageCollapse",  //not sure
     views: [
       {
         path: "/Add",
@@ -173,10 +183,9 @@ var dashRoutes = [
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
         secondaryNavbar: true,
-        component: createFamilymember,
-        layout: "/Createfamilymem", //Not sure men ay 7aga
-      },
-    ],
-  },
+        component:createFamilymember ,
+        layout: "/Createfamilymem",     //Not sure men ay 7aga
+      }]
+  }*/
 ];
 export default dashRoutes;
