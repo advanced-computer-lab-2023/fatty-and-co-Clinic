@@ -6,8 +6,15 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
+// <<<<<<< HEAD
+import UpdateEmail from "views/Doctors/UpdateEmail.js"; //Zawedna de
+import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
+import DeleteUser from "views/Admin/Package/components/DeleteUserForm";
+import CreateAdmin from "views/Admin/Package/components/CreateAdminForm";
 import viewDoctors from "views/Patient/viewDoctors";
+import Viewmembers from "views/Patient/viewmembers";
+import ViewAppointments from "views/Doctors/viewAppointments";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 
 import {
@@ -20,12 +27,62 @@ import {
   SupportIcon,
 } from "components/Icons/Icons";
 
+//path da el url el added lama ben doos 3ala a certain component fel ui
+//icon ben7ot fe el component name
+//component de 7aga fe views
+
 var dashRoutes = [
   {
     path: "/package",
     name: "Package",
     icon: <HomeIcon color="inherit" />,
     component: Package,
+    layout: "/admin",
+  },
+  {
+    path: "/viewAppointments",
+    name: "View Appointments",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewAppointments,
+    layout: "/admin",
+  },
+
+  {
+    path: "/addAdmin",
+    name: "Add Admin",
+    icon: <HomeIcon color="inherit" />,
+    component: CreateAdmin,
+    layout: "/admin",
+  },
+  {
+    path: "/deleteUser",
+    name: "Delete User",
+    icon: <HomeIcon color="inherit" />,
+    component: DeleteUser,
+
+    layout: "/admin",
+  },
+  {
+    path: "/viewAppointments",
+    name: "View Appointments",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewAppointments,
+    layout: "/admin",
+  },
+
+  {
+    path: "/addAdmin",
+    name: "Add Admin",
+    icon: <HomeIcon color="inherit" />,
+    component: CreateAdmin,
+    layout: "/admin",
+  },
+  {
+    path: "/deleteUser",
+    name: "Delete User",
+    icon: <HomeIcon color="inherit" />,
+    component: DeleteUser,
+
     layout: "/admin",
   },
   {
@@ -42,6 +99,13 @@ var dashRoutes = [
     component: viewDoctors,
     layout: "/admin",
   },
+  {
+    path: "/viewmembers",
+    name: "View members",
+    icon: <HomeIcon color="inherit" />,
+    component: Viewmembers,
+    layout: "/admin",
+  },
 
   {
     path: "/dashboard",
@@ -51,6 +115,7 @@ var dashRoutes = [
     component: Dashboard,
     layout: "/admin",
   },
+
   {
     path: "/tables",
     name: "Tables",
@@ -106,6 +171,40 @@ var dashRoutes = [
         secondaryNavbar: true,
         component: SignUp,
         layout: "/auth",
+      },
+    ],
+  },
+  {
+    name: "UPDATE ACCOUNT",
+    category: "update",
+    rtlName: "صفحات",
+    state: "pageCollapse", //not sure
+    views: [
+      {
+        path: "/profile",
+        name: "Profile",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: UpdateEmail,
+        layout: "/updateEmail", //Not sure men ay 7aga
+      },
+    ],
+  },
+  {
+    name: "Create family member ",
+    category: "create",
+    rtlName: "صفحات",
+    state: "pageCollapse", //not sure
+    views: [
+      {
+        path: "/Add",
+        name: "Profile",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: createFamilymember,
+        layout: "/Createfamilymem", //Not sure men ay 7aga
       },
     ],
   },

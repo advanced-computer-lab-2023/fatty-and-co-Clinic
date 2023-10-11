@@ -25,17 +25,33 @@ import {
   Redirect,
 } from "react-router-dom";
 
+
+//IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
 import RTLLayout from "layouts/RTL.js";
-
+import UpdateDocMail from "layouts/Doctor/ChangeMail.js"
+import UpdateAffiliation from "layouts/Doctor/ChangeAffiliation.js";
+import UpdateHourly from "layouts/Doctor/ChangeHourly.js"
+import createfamilymem from "layouts/Createfamilymem";
+//NOTE: Route path hena bet represent el LAYOUT from routes.js 
+//NOTE: Component hena bet represent el imported layout  
+//NOTE: To test updatedocmail, redirect from '/' to 'updateEmail'
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route path={`/auth`} component={AuthLayout} />
       <Route path={`/admin`} component={AdminLayout} />
       <Route path={`/rtl`} component={RTLLayout} />
-      <Redirect from={`/`} to="/admin/dashboard" />
+
+       
+      <Route path={'/updateAffiliation'} component={UpdateAffiliation}/>
+      <Route path={'/updateHourlyRate'} component={UpdateHourly}/>
+      <Route path={`/updateEmail`} component={UpdateDocMail}/> 
+      <Route path={`/Createfamilymem`} component={createfamilymem}/> 
+     <Redirect from={`/`} to="/admin/dashboard" />
+      
+
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")
