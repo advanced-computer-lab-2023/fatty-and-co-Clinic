@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import DoctorsRow from "components/Tables/DoctorsRow";
 import DoctorsTable from "./components/DoctorsTable";
-import { Flex, Button, Box } from "@chakra-ui/react";
+import { Flex, Button, Box, Text } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 
@@ -13,11 +13,8 @@ function ViewDoctors() {
     Name: "",
     Speciality: "",
   });
+
   const { id } = useParams();
-  console.log("ID:", id);
-  if (!id) {
-    return <div>No ID provided</div>;
-  }
 
   useEffect(() => {
     const url = API_PATHS.viewDoctors + id;
@@ -72,11 +69,17 @@ function ViewDoctors() {
             Search
           </Button>
         </Flex>
-        <DoctorsTable
-          title={"Available Doctors"}
-          captions={["Name", "Speciality", "Cost"]}
-          data={data}
-        />
+        {(id && id !== ":id" && (
+          <DoctorsTable
+            title={"Available Doctors"}
+            captions={["Name", "Speciality", "Cost"]}
+            data={data}
+          />
+        )) || (
+          <Text fontSize="3xl" fontWeight="bold">
+            ID not found
+          </Text>
+        )}
       </Flex>
     </Box>
   );

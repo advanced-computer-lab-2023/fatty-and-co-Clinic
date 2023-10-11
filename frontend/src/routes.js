@@ -8,6 +8,7 @@ import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
 import Package from "views/Admin/Package/package";
 import viewDoctors from "views/Patient/viewDoctors";
+import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 
 import {
   HomeIcon,
@@ -25,6 +26,13 @@ var dashRoutes = [
     name: "Package",
     icon: <HomeIcon color="inherit" />,
     component: Package,
+    layout: "/admin",
+  },
+  {
+    path: "/viewDoctors/viewDoctorDetails/:username",
+    name: "View Doctor Details",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewDoctorDetails,
     layout: "/admin",
   },
   {
