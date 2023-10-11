@@ -27,7 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use((req, res, next) => {
-  console.log(`Query: ${req.query}`);
+  console.log(req.query);
   next();
 });
 
