@@ -6,8 +6,8 @@ import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn.js";
 import SignUp from "views/Auth/SignUp.js";
-// <<<<<<< HEAD
-import UpdateEmail from "views/Doctors/UpdateEmail.js"; //Zawedna de
+
+
 import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
@@ -16,6 +16,9 @@ import viewDoctors from "views/Patient/viewDoctors";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
+
+import UpdateEmail from "views/Doctors/updateInfo";
+
 
 import {
   HomeIcon,
@@ -46,6 +49,12 @@ var dashRoutes = [
     component: ViewAppointments,
     layout: "/admin",
   },
+    {
+      path: "/updateInfoEmail", //not sure
+      name: "Update Email",
+      icon: <HomeIcon color="inherit" />,
+      component: UpdateEmail,
+      layout:"/admin"},
 
   {
     path: "/addAdmin",
@@ -151,23 +160,7 @@ var dashRoutes = [
       },
     ],
   },
-  {
-    name: "UPDATE ACCOUNT",
-    category: "update",
-    rtlName: "صفحات",
-    state: "pageCollapse", //not sure
-    views: [
-      {
-        path: "/profile",
-        name: "Profile",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component: UpdateEmail,
-        layout: "/updateEmail", //Not sure men ay 7aga
-      },
-    ],
-  },
+  
   {
     name: "Create family member ",
     category: "create",

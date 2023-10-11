@@ -311,16 +311,8 @@ const getAppointmentsDoc = async (req, res) => {
           Date: dateValue,
         })
       : "Bad request";
-
-  const mySessions = new Array();
-  appointments.forEach((appointment) => {
-    mySessions.push({
-      DoctorUsername: appointment.DoctorUsername,
-      PatientUsername: appointment.PatientUsername,
-      Status: appointment.Status,
-      Date: appointment.Date,
-    });
-  });
+  
+  
   // Return a 200 success response with a JSON object that contains the 'mySessions' array
   if (appointments == "bad requests") {
     res.status(404).json("No Appointments Found");

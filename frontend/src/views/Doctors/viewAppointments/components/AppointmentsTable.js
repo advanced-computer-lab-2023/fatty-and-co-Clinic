@@ -48,8 +48,8 @@ export const AppointmentsTable = ({ title, captions, data }) => {
               return (
                 <AppointmentsRow
                   key={row.DoctorUsername}
-                  DoctorUsername={row.DoctorUsername}
-                  PatientUsername={row.PatientUsername}
+                  DoctorName={row.DoctorName}
+                  PatientName={row.PatientName}
                   Status={row.Status}
                   Date={row.Date}
                 />

@@ -12,7 +12,7 @@ export const API_PATHS = {
 
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAllAppointments: APPOINTMENT_BASE + "/getAppointments",
-    packages: PACKAGE_BASE + "packages/",
+  packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
   deletePackage: PACKAGE_BASE + "deletePackage/",
   updatePackage: PACKAGE_BASE + "updatePackage/",
@@ -20,12 +20,10 @@ export const API_PATHS = {
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-// <<<<<<< HEAD
-  viewmembers: PATIENT_BASE + "/getFamilymember/",
-// =======
 
+  viewmembers: PATIENT_BASE + "/getFamilymember/",
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
-// >>>>>>> main
+  updateInfo: DOCTOR_BASE+ "updateDoctor/"
 };
