@@ -57,11 +57,11 @@ function ViewAppointments() {
       >
         <Flex direction="row" alignItems="flex-start">
           <SearchBar
-            placeholder="Status..."
+            placeholder="Status"
             onChange={handleStatusSearchValueChange}
           />
           <SearchBar
-            placeholder="Date..."
+            placeholder="YYYY-MM-DD"
             onChange={handleDateSearchValueChange}
             marginLeft={4} // Add margin to the left
           />

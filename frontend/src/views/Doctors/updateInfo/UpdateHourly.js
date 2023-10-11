@@ -26,7 +26,7 @@ import {
   
       // Send the username to the backend for deletion
       try {
-        const response = await fetch(API_PATHS.updateHourly+ "acbucaookm957", {
+        const response = await fetch(API_PATHS.updateHourly+ "zmbifqzaqf856", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"

@@ -73,9 +73,13 @@ const updateDoctor = async (req, res) => {
     const {Username} = req.params;
     // console.log(req.body.Email)
     if (req.body.HourlyRate || req.body.Affiliation) {
+      if(req.body.HourlyRate && req.body.HourlyRate.length>5){
+        res.status(400).send({error:"New hourly rate cannot exceed maximum value -->99999"})
+      }
+      else if((req.body.HourlyRate&& req.body.HourlyRate.length<=5) || req.body.Affiliation ){
       const doc = await doctorModel.findOneAndUpdate({Username:Username}, req.body);
       const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, req.body);
-      res.status(200).json(doc2);
+      res.status(200).json(doc2);}
     }
     // console.log(req.body.HourlyRate);
   } catch (error) {
