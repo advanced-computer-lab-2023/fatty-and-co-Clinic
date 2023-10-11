@@ -19,10 +19,11 @@ export const API_PATHS = {
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
   viewmembers: PATIENT_BASE + "getFamilymember/",
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/",
 
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
-  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
+  viewFilteredDoctors: DOCTOR_BASE + "filter/"
 
 };

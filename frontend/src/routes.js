@@ -16,6 +16,7 @@ import viewDoctors from "views/Patient/viewDoctors";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
+import viewPrescriptions from "views/Patient/viewPrescriptions/components";
 
 import {
   HomeIcon,
@@ -83,7 +84,13 @@ var dashRoutes = [
     component: Viewmembers,
     layout: "/admin",
   },
-
+  {
+    path: "/viewPrescriptions",
+    name: "View Prescriptions",
+    icon: <HomeIcon color="inherit" />,
+    component: viewPrescriptions,
+    layout: "/admin",
+  },
   {
     path: "/dashboard",
     name: "Dashboard",

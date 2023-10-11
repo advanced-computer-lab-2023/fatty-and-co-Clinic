@@ -9,7 +9,7 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
 const createPatient = async (req, res) => {
-  const {} = req.body;
+  const { } = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -176,6 +176,7 @@ const GetFamilymembers = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 const selectPatient = async (req, res) => {
   const id = req.body.id;
 
@@ -204,8 +205,9 @@ const getPrescriptions = async (req, res) => {
       return;
     }
     const patient = await patientModel.findById(id);
+    const username = patient.Username;
     const prescriptions = await prescriptionModel.find({
-      PatientUsername: patient.Username,
+      PatientUsername: username,
     });
     res.status(200).send(prescriptions);
   } catch (error) {
@@ -213,28 +215,23 @@ const getPrescriptions = async (req, res) => {
   }
 };
 
-// Filter prescriptions by doctor or status or filled or unfilled.
+// Filter prescriptions by doctor or date or filled or unfilled.
 const filterPrescriptions = async (req, res) => {
   const query = req.body;
-
   const regexQuery = {};
-
   // Check if a 'DoctorUsername' query is provided
   if (query.DoctorUsername) {
     regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
   }
-
   // Check if a 'Date' query is provided
   if (query.Date) {
     // Assuming 'Date' is a field in your schema
     regexQuery.Date = new RegExp(query.Date, "i");
   }
-
   // Check if a 'Status' query is provided
   if (query.Status) {
     regexQuery.Status = new RegExp(query.Status, "i");
   }
-
   const patientPrescriptions = prescriptionModel.find({
     PatientUsername: query.PatientUsername,
   });
