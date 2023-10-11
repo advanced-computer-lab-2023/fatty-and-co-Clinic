@@ -14,11 +14,13 @@ function Viewmembers() {
   const PatientUserName = "Mariam";
 
   useEffect(() => {
-    const url = API_PATHS.Viewmembers + PatientUserName;
+
+  const URL1=API_PATHS.viewfamilymembers+PatientUserName;
     console.log("Sending search params:", searchParams);
-    console.log(url);
+    console.log( "here");
+    console.log( URL1);
     axios
-      .get(url, { params: searchParams })
+      .get(URL1, { params: searchParams })
       .then((response) => {
         setData(response.data);
       })

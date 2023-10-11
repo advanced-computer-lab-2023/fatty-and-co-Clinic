@@ -7,23 +7,17 @@ import {
   Text,
   Tr,
   useColorModeValue,
+  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton 
 } from "@chakra-ui/react";
+import RequestButton from "views/Admin/Requests/components/RequestButton";
 import React, { useState } from "react";
-import ExpandableComponent from "components/Misc/ExpandableComponent"; // Import the ExpandableComponent
+
 
 function RequestsRow(props) {
   const { Username, Name, Status } = props;
   const textColor = useColorModeValue("gray.700", "white");
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
   const colorStatus = useColorModeValue("white", "gray.400");
-
-  // State to track the expansion of the ExpandableComponent
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  // Function to toggle the expansion state
-  const toggleExpansion = () => {
-    setIsExpanded(!isExpanded);
-  };
 
   return (
     <Tr>
@@ -38,7 +32,19 @@ function RequestsRow(props) {
             >
               {Name}
             </Text>
-            <Text fontSize="sm" color="gray.400" fontWeight="normal">
+          </Flex>
+        </Flex>
+      </Td>
+
+      <Td minWidth={{ sm: "250px" }} pl="0px">
+        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+          <Flex direction="column">
+            <Text
+              fontSize="md"
+              color={textColor}
+              fontWeight="bold"
+              minWidth="100%"
+            >
               {Username}
             </Text>
           </Flex>
@@ -70,29 +76,9 @@ function RequestsRow(props) {
       </Td>
 
       <Td>
-        <a href="https://example.com">
-          <Button p="0px" bg="teal.300" variant="no-hover">
-            <Text
-              fontSize="md"
-              color="white"
-              fontWeight="bold"
-              cursor="pointer"
-            >
-              Details
-            </Text>
-          </Button>
-        </a>
+        <RequestButton Username = {Username} ></RequestButton>
+        
       </Td>
-
-      {/* Add ExpandableComponent with appropriate props
-      <Td colSpan={3}>
-        <ExpandableComponent
-          apiUrl="http://localhost:4000/admin/getRequest" 
-          requestData={{ Username: Username }} 
-          isExpanded={isExpanded}
-          toggleExpansion={toggleExpansion}
-        />
-      </Td> */}
     </Tr>
   );
 }

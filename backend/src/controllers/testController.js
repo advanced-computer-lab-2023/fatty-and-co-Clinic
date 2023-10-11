@@ -56,11 +56,13 @@ const createSystemUser = async (req, res) => {
 
 //Create a new appointment
 const createAppointment = async (req, res) => {
-  const { DoctorUsername, PatientUsername, Status, Date } = req.body;
+  const { DoctorUsername,DoctorName, PatientUsername,PatientName, Status, Date } = req.body;
   try {
     const newApp = await appointmentModel.create({
       DoctorUsername,
+      DoctorName,
       PatientUsername,
+      PatientName,
       Status,
       Date,
     });
