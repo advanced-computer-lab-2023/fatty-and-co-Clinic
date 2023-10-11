@@ -34,7 +34,6 @@ var dashRoutes = [
     component: viewDoctors,
     layout: "/admin",
   },
-
   {
     path: "/dashboard",
     name: "Dashboard",

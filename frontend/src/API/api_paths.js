@@ -15,4 +15,6 @@ export const API_PATHS = {
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUserName/", // add username as a param
 
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
+  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
+
 };
