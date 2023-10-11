@@ -17,7 +17,13 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import {
+  HashRouter,
+  BrowserRouter,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 
 
 //IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
@@ -32,7 +38,7 @@ import createfamilymem from "layouts/Createfamilymem";
 //NOTE: Component hena bet represent el imported layout  
 //NOTE: To test updatedocmail, redirect from '/' to 'updateEmail'
 ReactDOM.render(
-  <HashRouter>
+  <BrowserRouter>
     <Switch>
       <Route path={`/auth`} component={AuthLayout} />
       <Route path={`/admin`} component={AdminLayout} />
@@ -47,6 +53,6 @@ ReactDOM.render(
       
 
     </Switch>
-  </HashRouter>,
+  </BrowserRouter>,
   document.getElementById("root")
 );

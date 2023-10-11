@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import{FamilymemberTable} from "./components/FamilymemberTable.js";
+import { FamilymemberTable } from "./components/FamilymemberTable.js";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
@@ -11,7 +11,7 @@ function Viewmembers() {
     Name: "",
     Speciality: "",
   });
-  const PatientUserName= "Mariam";
+  const PatientUserName = "Mariam";
 
   useEffect(() => {
     const url = API_PATHS.Viewmembers + PatientUserName;
@@ -53,10 +53,9 @@ function Viewmembers() {
         pt="50px"
         justifyContent="flex-start"
       >
-       
         <FamilymemberTable
           title={"Registered Family Memebers"}
-          captions={["Name", "NationalId", "Age","Gender","Relation"]}
+          captions={["Name", "NationalId", "Age", "Gender", "Relation"]}
           data={data}
         />
       </Flex>
