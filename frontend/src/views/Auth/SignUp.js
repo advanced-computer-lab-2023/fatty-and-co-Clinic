@@ -38,7 +38,7 @@ function SignUp() {
   const [Password, setPassword] = useState("");
   const [DateOfBirth, setDateOfBirth] = useState("");
   const [EmergencyContactName, setEmergencyContactName] = useState("");
-  const [EmergenceContactNumber, setEmergencyContactNumber] = useState("");
+  const [EmergencyContactNumber, setEmergencyContactNumber] = useState("");
   const [MobileNum, setMobileNumber] = useState("");
   return (
     <Flex
@@ -190,7 +190,7 @@ function SignUp() {
                 MobileNum,
                 Gender,
                 EmergencyContactName,
-                EmergenceContactNumber,
+                EmergencyContactNumber,
               };
               const response = await fetch(API_PATHS.signup, {
                 method: "POST",
@@ -334,6 +334,7 @@ function SignUp() {
                 placeholder="Enter a valid phone number"
                 mb="24px"
                 size="lg"
+                value={EmergencyContactNumber}
                 required
                 onChange={(e) => setEmergencyContactNumber(e.target.value)}
               />

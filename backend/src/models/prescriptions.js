@@ -17,6 +17,10 @@ const prescriptionSchema = new Schema({
     ref: "Patient",
     required: true,
   },
+  Date: {
+    type: Date,
+    required: true,
+  },
   Diagnosis: {
     type: String,
     required: true,

@@ -17,20 +17,21 @@ export const API_PATHS = {
   updatePackage: PACKAGE_BASE + "updatePackage/",
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-// <<<<<<< HEAD
+
   getRequests: ADMIN_BASE + "",
-// =======
+
   viewmembers: PATIENT_BASE + "getFamilymember/",
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/",
 
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
-// >>>>>>> main
+
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
-  updateEmail: DOCTOR_BASE+ "updateDoctor/",
-  createfamilymember:PATIENT_BASE+"createFamilymember/",
-  viewFilteredDoctors: DOCTOR_BASE + "filter/" ,
-  viewfamilymembers:PATIENT_BASE+"/getFamilymember/",
-  updateAffil:  DOCTOR_BASE+ "updateDoctor/",
+  updateEmail: DOCTOR_BASE + "updateDoctor/",
+  createfamilymember: PATIENT_BASE + "createFamilymember/",
+  viewFilteredDoctors: DOCTOR_BASE + "filter/",
+  viewfamilymembers: PATIENT_BASE + "/getFamilymember/",
+  updateAffil: DOCTOR_BASE + "updateDoctor/",
 
 };

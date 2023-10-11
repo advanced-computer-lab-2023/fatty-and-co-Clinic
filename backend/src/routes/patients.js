@@ -11,7 +11,6 @@ const {
   GetFamilymembers,
   getPrescriptions,
   selectPatient,
-  filterPrescriptions,
   selectPrescription,
 } = require("../controllers/patientController");
 
@@ -120,14 +119,6 @@ router.get("/getPrescriptions", getPrescriptions);
  * @access Public
  */
 router.get("/selectPatient", selectPatient);
-
-/**
- * @route GET /patients/filterPrescriptions
- * @desc Returns a list of all prescriptions filtered by patient ID
- * @access Public
- * @param {string} id - The ID of the patient to filter prescriptions for
- */
-router.get("/filterPrescriptions", filterPrescriptions);
 
 /**
  * @route GET /patients/selectPrescription
