@@ -21,7 +21,8 @@ export const API_PATHS = {
   createAdmin: ADMIN_BASE + "addAdmin/",
   updateInfo: DOCTOR_BASE+ "updateDoctor/",
   createfamilymember:PATIENT_BASE+"createFamilymember/",
-  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
+  viewFilteredDoctors: DOCTOR_BASE + "filter/" ,
+  viewfamilymembers:PATIENT_BASE+"/getFamilymember/"
 // >>>>>>> main
 
 };

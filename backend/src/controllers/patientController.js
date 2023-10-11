@@ -167,6 +167,7 @@ const GetFamilymembers = async (req, res) => {
     const famemember = await familyMemberModel.find({PatientUserName:PatientUserName} );
     console.log("hi")
     console.log(PatientUserName )
+    console.log(famemember)
     res.status(200).send(famemember);
   } catch (error) {
     res.status(400).send({ message: error.message });
