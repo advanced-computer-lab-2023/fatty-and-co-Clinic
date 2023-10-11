@@ -1,31 +1,22 @@
 // Chakra imports
 import {
     Box,
-    Radio,
     Button,
     Flex,
     FormControl,
     FormLabel,
-    HStack,
-    Icon,
     Input,
-    Link,
-    Switch,
     Text,
-    useColorModeValue,
+    useColorModeValue
   } from "@chakra-ui/react";
   // Assets
   import BgSignUp from "assets/img/BgSignUp.png";
   import React from "react";
-  import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
   import { useState } from "react";
   import { API_PATHS } from "API/api_paths";
   
   function docSignUp() {
-    const titleColor = useColorModeValue("teal.300", "teal.200");
-    const textColor = useColorModeValue("gray.700", "white");
     const bgColor = useColorModeValue("white", "gray.700");
-    const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
     const [Username, setUsername] = useState("");
     const [Password, setPassword] = useState("");
     const [Email, setEmail] = useState("");
@@ -77,8 +68,8 @@ import {
                 mb="26px"
                 w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
             >
-                Please fill in this registration form to create a
-                doctor account and access our services!
+                Please fill in this registration form to request
+                creating a doctor account and access our services!
             </Text>
         </Flex>
         <Flex alignItems="center" justifyContent="center" mb="60px" mt="20px">
@@ -115,7 +106,7 @@ import {
                         const data = await response.json();
                         console.log(data);
                         if (response.ok) {
-                            console.log("Doctor request submitted added successfully!");
+                            console.log("Doctor request submitted successfully!");
                             window.location.href = "/auth/signin";
                         } else {
                             console.log("Error submitting doctor request!");
