@@ -30,9 +30,7 @@ import {
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
 import RTLLayout from "layouts/RTL.js";
-import UpdateDocMail from "layouts/Doctor/ChangeMail.js"
-import UpdateAffiliation from "layouts/Doctor/ChangeAffiliation.js";
-import UpdateHourly from "layouts/Doctor/ChangeHourly.js"
+
 import createfamilymem from "layouts/Createfamilymem";
 //NOTE: Route path hena bet represent el LAYOUT from routes.js 
 //NOTE: Component hena bet represent el imported layout  
@@ -43,15 +41,9 @@ ReactDOM.render(
       <Route path={`/auth`} component={AuthLayout} />
       <Route path={`/admin`} component={AdminLayout} />
       <Route path={`/rtl`} component={RTLLayout} />
-
-       
-      <Route path={'/updateAffiliation'} component={UpdateAffiliation}/>
-      <Route path={'/updateHourlyRate'} component={UpdateHourly}/>
-      <Route path={`/updateEmail`} component={UpdateDocMail}/> 
-      <Route path={`/Createfamilymem`} component={createfamilymem}/> 
-     <Redirect from={`/`} to="/admin/dashboard" />
-      
-
+      <Redirect from={`/`} to="/admin" />
+      {/* <Route path={`/updateEmail`} component={UpdateDocMail}/> 
+      <Route path={`/Createfamilymem`} component={createfamilymem}/>  */}
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

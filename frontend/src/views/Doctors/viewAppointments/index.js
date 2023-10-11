@@ -13,7 +13,7 @@ function ViewAppointments() {
   });
 
   useEffect(() => {
-    const Username = "ikwvdppyyh252";
+    const Username = "Mariom";
     const url = API_PATHS.viewAppointments + Username;
     axios
       .get(url, { params: searchParams })
@@ -38,7 +38,7 @@ function ViewAppointments() {
   console.log(data);
 
   const handleStatusSearchValueChange = (value) => {
-    console.log(value + "Mariammmmmm");
+
     setStatusSearchValue(value);
   };
 
@@ -71,7 +71,7 @@ function ViewAppointments() {
         </Flex>
         <AppointmentsTable
           title={"Available Appointments"}
-          captions={["DoctorUsername", "PatientUsername", "Status", "Date"]}
+          captions={["Doctor Name", "Patient Name", "Status", "Date"]}
           data={data}
         />
       </Flex>

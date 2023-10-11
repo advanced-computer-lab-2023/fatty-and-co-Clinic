@@ -5,6 +5,7 @@ const {
   deleteUser,
   acceptRequest,
   rejectRequest,
+  getRequests,
 } = require("../controllers/adminController");
 
 const router = express.Router();
@@ -17,6 +18,13 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("Admins");
 });
+
+/**
+ * @route GET /admins/requests
+ * @desc Returns all requests
+ * @access Public
+ */
+router.get("/requests", getRequests);
 
 /**
  * @route POST /admins/addAdmin

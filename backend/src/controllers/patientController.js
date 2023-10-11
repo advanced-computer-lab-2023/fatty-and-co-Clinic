@@ -17,7 +17,10 @@ const createPatient = async (req, res) => {
       MobileNum: req.body.MobileNum,
       DateOfBirth: req.body.DateOfBirth,
       Gender: req.body.Gender,
-      EmergencyContact: req.body.EmergencyContact,
+      EmergencyContact: {
+        FullName: req.body.EmergencyContactName,
+        PhoneNumber: req.body.EmergenceContactNumber,
+      },
     });
     res.status(200).send({ patient });
   } catch (error) {
@@ -114,7 +117,7 @@ const session_index = (req, res) => {
           // Search for documents whose 'Name' field contains the 'Name' variable, if it is not empty
           ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
           // Search for documents whose 'Speciality' field contains the 'Speciality' variable, if it is not empty
-          ...(Speciality
+          ...(Speciality && !Name
             ? { Speciality: { $regex: Speciality.trim(), $options: "i" } }
             : {}),
         })
@@ -126,7 +129,6 @@ const session_index = (req, res) => {
             const calcCost = (1 - packageDis / 100) * (doctor.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
             // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
             mySessions.push({
-              Username: doctor.Username,
               Name: doctor.Name,
               Speciality: doctor.Speciality,
               Cost: calcCost,
@@ -146,8 +148,7 @@ const session_index = (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const current_user = "Mariam";
-  console.log(Age);
+  const current_user = "Aly";
   try {
     const newFamilymember = await familyMemberModel.create({
       PatientUserName: current_user,
@@ -165,15 +166,14 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const{patientuser}=req.params
-    console.log(req.params)
-    const fam = await familyMemberModel.find({
-      patientuser
-    });
-    console.log( fam)
-    res.status(200).json(fam);
+    const { PatientUserName } = req.params;
+    const famemember = await familyMemberModel.find({ PatientUserName: PatientUserName });
+    console.log("hi")
+    console.log(PatientUserName)
+    console.log(famemember)
+    res.status(200).send(famemember);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).send({ message: error.message });
   }
 };
 

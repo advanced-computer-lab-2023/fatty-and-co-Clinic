@@ -50,7 +50,7 @@ router.post("/createDoctor", createDoctor);
  * @prop {number} HourlyRate - The new hourly rate of the doctor
  * @prop {string} Affiliation - The new affiliation of the doctor
  */
-router.patch("/updateDoctor", updateDoctor);
+router.patch("/updateDoctor/:Username", updateDoctor);
 
 /**
  * @route GET /doctors/id/:id

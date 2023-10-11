@@ -29,8 +29,10 @@ function Sidebar(props) {
   // SIDEBAR
   return (
     <Box ref={mainPanel}>
-      <Box display={{ sm: "none", xl: "block" }} position="fixed">
+      <Box  display={{ sm: "none", xl: "block" }} position = "fixed" >
         <Box
+          overflowY= "auto"
+          position="sticky"
           bg={sidebarBg}
           transition={variantChange}
           w="260px"
