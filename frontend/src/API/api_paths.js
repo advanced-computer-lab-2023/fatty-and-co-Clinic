@@ -8,6 +8,7 @@ const GUEST_BASE = "http://localhost:8000/guest/";
 
 export const API_PATHS = {
   signup: PATIENT_BASE + "addPatient/",
+  docSignUp: GUEST_BASE + "addRequest/",
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
   deletePackage: PACKAGE_BASE + "deletePackage/",
