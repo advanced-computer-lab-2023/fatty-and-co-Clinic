@@ -16,6 +16,7 @@ import createFamilymember from "views/Patient/viewmembers/components/createFamil
 import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
+import viewPrescriptions from "views/Patient/viewPrescriptions";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
@@ -80,13 +81,31 @@ var dashRoutes = [
         component:UpdateAffil ,
         layout: "/admin",   
       },
+   { path: "/updateEmail",
+    name: "Update Email",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateEmail,
+    layout: "/admin",
+  },
+  {
+    path: "/updateAffil",
+    name: "Update Affiliation",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateAffil,
+    layout: "/admin",
+  },
   {
 
     path: "/viewAppointments",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
-    layout:"/admin"},
+    layout: "/admin"
+  },
 
   {
     path: "/viewRequests",
@@ -102,13 +121,14 @@ var dashRoutes = [
     component: CreateAdmin,
     layout: "/admin",
   },
-  
-  { path: "/addFamilymember",
-  name: "Add Familymember",
-  icon: <HomeIcon color="inherit" />,
-  component: createFamilymember,
-  layout: "/admin",
-},
+
+  {
+    path: "/addFamilymember",
+    name: "Add Familymember",
+    icon: <HomeIcon color="inherit" />,
+    component: createFamilymember,
+    layout: "/admin",
+  },
   {
     path: "/deleteUser",
     name: "Delete User",
@@ -131,8 +151,13 @@ var dashRoutes = [
     component: Viewmembers,
     layout: "/admin",
   },
-
-
+  {
+    path: "/viewPrescriptions",
+    name: "View Prescriptions",
+    icon: <HomeIcon color="inherit" />,
+    component: viewPrescriptions,
+    layout: "/admin",
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -141,7 +166,7 @@ var dashRoutes = [
     component: Dashboard,
     layout: "/admin",
   },
-  
+
   {
     path: "/tables",
     name: "Tables",
@@ -210,21 +235,6 @@ var dashRoutes = [
     ],
   }
   ,
-  /*{
-    name: "Create family member ",
-    category: "create",
-    rtlName: "صفحات",
-    state: "pageCollapse",  //not sure
-    views: [
-      {
-        path: "/Add",
-        name: "Profile",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:createFamilymember ,
-        layout: "/Createfamilymem",     //Not sure men ay 7aga
-      }]
-  }*/
+ 
 ];
 export default dashRoutes;
