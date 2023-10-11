@@ -148,10 +148,11 @@ const session_index = (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const current_user = "Aly";
+  const {Createpatameter} = req.params;
+  console.log(Createpatameter);
   try {
     const newFamilymember = await familyMemberModel.create({
-      PatientUserName: current_user,
+      PatientUserName: Createpatameter,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
