@@ -10,8 +10,8 @@ import SignUp from "views/Auth/SignUp.js";
 import UpdateEmail from "views/Doctors/UpdateEmail.js"  //Zawedna de
 //import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
-import DeleteUser from "views/Admin/Package/components/DeleteUserForm"
-import CreateAdmin from "views/Admin/Package/components/CreateAdminForm"
+import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm"
+import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm"
 import createFamilymember from "views/Patient/viewmembers/components/createFamilymember";
 import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
