@@ -23,4 +23,6 @@ export const API_PATHS = {
   getRequests: ADMIN_BASE + "",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
+  viewFilteredDoctors: DOCTOR_BASE + "filter/" 
+
 };
