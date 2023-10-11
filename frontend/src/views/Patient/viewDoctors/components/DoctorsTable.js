@@ -25,7 +25,6 @@ const DoctorsTable = ({ title, captions, data }) => {
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
-    console.log();
     history.replace(`/admin/viewDoctors/viewDoctorDetails/${row.Username}`);
   };
 
