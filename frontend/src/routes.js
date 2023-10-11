@@ -4,8 +4,9 @@ import Tables from "views/Dashboard/Tables";
 import Billing from "views/Dashboard/Billing";
 import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
-import SignIn from "views/Auth/SignIn.js";
-import SignUp from "views/Auth/SignUp.js";
+import SignIn from "views/Auth/SignIn";
+import SignUp from "views/Auth/SignUp";
+import docSignUp from "views/Auth/docSignUp";
 // <<<<<<< HEAD
 import UpdateEmail from "views/Doctors/UpdateEmail.js"; //Zawedna de
 import createFamilymember from "views/Patient/createFamilymember";
@@ -156,6 +157,15 @@ var dashRoutes = [
         component: SignUp,
         layout: "/auth",
       },
+      {
+        path: "/docsignup",
+        name: "Doctor Sign Up",
+        rtlName: "لوحة القيادة",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: docSignUp,
+        layout: "/auth",
+      }
     ],
   },
   {

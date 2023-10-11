@@ -43,13 +43,11 @@ ReactDOM.render(
       <Route path={`/auth`} component={AuthLayout} />
       <Route path={`/admin`} component={AdminLayout} />
       <Route path={`/rtl`} component={RTLLayout} />
-
-       
+      <Redirect from={`/`} to="/auth/signup" />
       <Route path={'/updateAffiliation'} component={UpdateAffiliation}/>
       <Route path={'/updateHourlyRate'} component={UpdateHourly}/>
       <Route path={`/updateEmail`} component={UpdateDocMail}/> 
       <Route path={`/Createfamilymem`} component={createfamilymem}/> 
-     <Redirect from={`/`} to="/admin/dashboard" />
       
 
     </Switch>

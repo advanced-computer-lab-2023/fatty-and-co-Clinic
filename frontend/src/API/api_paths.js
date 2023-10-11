@@ -7,6 +7,8 @@ const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 
 export const API_PATHS = {
+  signup: PATIENT_BASE + "addPatient/",
+  docSignUp: GUEST_BASE + "addRequest/",
   // Add comments that indicate if the path needs a param and what that param is
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAllAppointments: APPOINTMENT_BASE + "/getAppointments",
