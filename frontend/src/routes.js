@@ -19,6 +19,9 @@ import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
+import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
+import PatientAppointments from "views/Patient/viewAppointPat/"
+
 
 
 import {
@@ -45,27 +48,44 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/updateEmail",
-    name: "Update Email",
-    rtlName: "لوحة القيادة",
-    icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
-    component: UpdateEmail,
+    path: "/viewAppointPat",
+    name: "View Patient Appointments ",
+    icon: <HomeIcon color="inherit" />,
+    component: PatientAppointments,
     layout: "/admin",
   },
   {
-    path: "/updateAffil",
-    name: "Update Affiliation",
-    rtlName: "لوحة القيادة",
-    icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
-    component: UpdateAffil,
-    layout: "/admin",
-  },
+        path: "/updateEmailDoc",
+        name: "Update Email",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateEmail ,
+        layout: "/admin",   
+      },
+      {
+        path: "/updateHourly",
+        name: "Update Hourly Rate",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateHourly ,
+        layout: "/admin",   
+      },
+      {
+        path: "/updateAffil",
+        name: "Update Affiliation",
+        rtlName: "لوحة القيادة",
+        icon: <PersonIcon color="inherit" />,
+        secondaryNavbar: true,
+        component:UpdateAffil ,
+        layout: "/admin",   
+      },
+ 
   {
 
     path: "/viewAppointments",
-    name: "View Appointments",
+    name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
     layout: "/admin"
@@ -199,21 +219,6 @@ var dashRoutes = [
     ],
   }
   ,
-  /*{
-    name: "Create family member ",
-    category: "create",
-    rtlName: "صفحات",
-    state: "pageCollapse",  //not sure
-    views: [
-      {
-        path: "/Add",
-        name: "Profile",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:createFamilymember ,
-        layout: "/Createfamilymem",     //Not sure men ay 7aga
-      }]
-  }*/
+ 
 ];
 export default dashRoutes;

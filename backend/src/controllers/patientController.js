@@ -8,6 +8,8 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
+
+
 const createPatient = async (req, res) => {
   const {EmergencyContactNumber,EmergencyContactName} = req.body;
   try {
@@ -148,17 +150,27 @@ const session_index = (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const current_user = "Aly";
+  const { Createpatameter } = req.params;
+  console.log(Createpatameter);
+
+  // Check if the national ID is not 16.
+  if (NationalId.length !== 16) {
+    // Return an error message.
+    res.status(400).json({ error: 'The national ID must be 16 digits long.' });
+    return;
+  }
   try {
     const newFamilymember = await familyMemberModel.create({
-      PatientUserName: current_user,
+      PatientUserName: Createpatameter,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
       Gender: Gender,
       Relation: Relation,
+
     });
     res.status(200).json(newFamilymember);
+  
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
