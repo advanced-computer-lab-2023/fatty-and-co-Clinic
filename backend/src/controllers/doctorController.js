@@ -71,21 +71,25 @@ const deleteDoctor = async (req, res) => {
 const updateDoctor = async (req, res) => {
   try {
     const {Username} = req.params;
+    const{HourlyRate,Affiliation}=req.body
     // console.log(req.body.Email)
-    if (req.body.HourlyRate || req.body.Affiliation) {
-      const doc = await doctorModel.findOneAndUpdate({Username:Username}, req.body);
-      const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, req.body);
+      if(Affiliation===undefined &&(HourlyRate!==undefined && (HourlyRate.length===0 || HourlyRate.length>5))){
+        res.status(400).send({error:"Please fill in an hourly rate from 1-99999"})
+      }
+      else if(HourlyRate!==undefined){
+      const doc = await doctorModel.findOneAndUpdate({Username:Username},{HourlyRate:HourlyRate});
+      const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, {HourlyRate:HourlyRate});
+      res.status(200).json(doc2);}
+      else if(Affiliation){ const doc = await doctorModel.findOneAndUpdate({Username:Username},{Affiliation:Affiliation});
+      const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, {Affiliation:Affiliation});
       res.status(200).json(doc2);
-    } else {
-      const doc = await systemUserModel.findOneAndUpdate({Username:Username}, req.body);
-      const doc1 = await systemUserModel.findOneAndUpdate({Username:Username}, req.body);
-      res.status(200).json(doc1);
-    }
-    // console.log(req.body.HourlyRate);
-  } catch (error) {
+
+      }else{
+        res.status(404).send({error:"Please fill in Affiliation"})
+      }}
+ catch (error) {
     res.status(400).json({ error: error.message });
-  }
-};
+  }}
 
 // get a doctor by ID
 const getDoctorByID = async (req, res) => {

@@ -16,8 +16,8 @@ import {
   import CardBody from "components/Card/CardBody.js";
   import CardHeader from "components/Card/CardHeader.js";
   
-  function UpdateEmail() {
-    const [Email, setEmail] = useState("");
+  function UpdateHourly() {
+    const [HourlyRate, setHourlyRate] = useState("");
     const toast = useToast();
     const textColor = useColorModeValue("gray.700", "white");
   
@@ -26,36 +26,46 @@ import {
   
       // Send the username to the backend for deletion
       try {
-        const response = await fetch(API_PATHS.updateEmailDoc+ "jcgczjkmbn553", {
+        const response = await fetch(API_PATHS.updateHourly+ "zmbifqzaqf856", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({Email}),
-        });
-        if(Email==""){
-          toast({
-            title: "Please fill the email field!",
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
+          body: JSON.stringify({HourlyRate}),
+        })
+        if(HourlyRate==""){
+            toast({
+                title: "Please fill the new hourly rate field!",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+            
+              
         }
-       else if (response.ok) {
+        else if(HourlyRate.length>5){
+            toast({
+                title: "Maximum hourly rate is 99999 !",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+        }
+  
+        else if (response.ok) {
           // Handle success or provide feedback to the user
           toast({
-            title: "Email updated successfully",
+            title: "Hourly rate updated successfully",
             status: "success",
             duration: 9000,
             isClosable: true,
           });
-      
-          setEmail;(""); // Clear the input field
+          setHourlyRate(""); // Clear the input field
         } else {
           // Handle errors or provide feedback to the user
           toast({
-            title: "Failed to update email",
-            description: "An error occurred while updating the admin.",
+            title: "Failed to update hourly rate",
+            description: "An error occurred while updating the hourly rate.",
             status: "error",
             duration: 9000,
             isClosable: true,
@@ -69,13 +79,14 @@ import {
     return (
       <Card
         p="80px"
+        marginTop="50px"
         my={{ sm: "24px", lg: "0px" }}
         ms={{ sm: "0px", lg: "24px" }}
       >
-        <CardHeader>
+        <CardHeader >
           <Flex justify="space-between" align="center" mb="1rem" w="100%">
             <Text fontSize="lg" color={textColor} fontWeight="bold">
-               Change your email!
+               Change your hourly rate!
             </Text>
           </Flex>
         </CardHeader>
@@ -85,10 +96,11 @@ import {
               <Stack spacing={3}>
                 <Input
                   variant="filled"
-                  type="email"
-                  placeholder="Email"
-                  value={Email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="number"
+                  maxLength={5}
+                  placeholder="Hourly rate"
+                  value={HourlyRate}
+                  onChange={(e) => setHourlyRate(e.target.value)}
                 />
                 <Button
                   colorScheme="teal"
@@ -110,5 +122,5 @@ import {
     );
   }
   
-  export default UpdateEmail;
+  export default UpdateHourly;
   

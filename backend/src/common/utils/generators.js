@@ -47,6 +47,11 @@ function generateDateOfBirth() {
   return `${year}-${month}-${day}`;
 }
 
+function generateGender() {
+  const genders = ["M", "F"];
+  return genders[Math.floor(Math.random() * genders.length)];
+}
+
 function generateHourlyRate() {
   return Math.floor(Math.random() * 100) + 1;
 }
@@ -268,6 +273,7 @@ module.exports = {
   generateUsername,
   generateName,
   generateDateOfBirth,
+  generateGender,
   generateHourlyRate,
   generateAffiliation,
   generateEducationalBackground,

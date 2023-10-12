@@ -96,7 +96,7 @@ router.get("/view/doctors/:id", session_index);
  * @prop {string} Gender - The gender of the family member ["M", "F"]
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
-router.post("/createFamilymember", createFamilymember);
+router.post("/createFamilymember/:Createpatameter", createFamilymember);
 
 /**
  * @route GET /patients/getFamilymember

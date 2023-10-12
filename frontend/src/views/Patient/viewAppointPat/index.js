@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import AppointmentsTable from "./components/AppointmentsTable";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
+import PatientAppTable from "./components/PatientAppTable";
 
-function ViewAppointments() {
+function ViewPatientAppointments() {
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -13,8 +13,8 @@ function ViewAppointments() {
   });
 
   useEffect(() => {
-    const Username = "Mariom";
-    const url = API_PATHS.viewAppointments + Username;
+    const Username = "Marioooom";
+    const url = API_PATHS.viewAppointPat + Username;
     axios
       .get(url, { params: searchParams })
       .then((response) => {
@@ -57,11 +57,11 @@ function ViewAppointments() {
       >
         <Flex direction="row" alignItems="flex-start">
           <SearchBar
-            placeholder="Status"
+            placeholder="Status..."
             onChange={handleStatusSearchValueChange}
           />
           <SearchBar
-            placeholder="YYYY-MM-DD"
+            placeholder="Date..."
             onChange={handleDateSearchValueChange}
             marginLeft={4} // Add margin to the left
           />
@@ -69,9 +69,9 @@ function ViewAppointments() {
             Search
           </Button>
         </Flex>
-        <AppointmentsTable
+        <PatientAppTable
           title={"Available Appointments"}
-          captions={["Doctor Name", "Patient Name", "Status", "Date"]}
+          captions={["Patient Name","Doctor Name", "Status", "Date"]}
           data={data}
         />
       </Flex>
@@ -79,4 +79,4 @@ function ViewAppointments() {
   );
 }
 
-export default ViewAppointments;
+export default ViewPatientAppointments;
