@@ -11,7 +11,7 @@ const { getPatients } = require("./testController");
 
 
 const createPatient = async (req, res) => {
-  const {} = req.body;
+  const {EmergencyContactNumber,EmergencyContactName} = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -20,8 +20,8 @@ const createPatient = async (req, res) => {
       DateOfBirth: req.body.DateOfBirth,
       Gender: req.body.Gender,
       EmergencyContact: {
-        FullName: req.body.EmergencyContactName,
-        PhoneNumber: req.body.EmergenceContactNumber,
+        FullName: EmergencyContactName,
+        PhoneNumber: EmergencyContactNumber,
       },
     });
     res.status(200).send({ patient });
@@ -170,16 +170,18 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientUserName } = req.params;
-    const famemember = await familyMemberModel.find({PatientUserName:PatientUserName} );
-    console.log("hi")
-    console.log(PatientUserName )
-    console.log(famemember)
-    res.status(200).send(famemember);
+    const { patientuser } = req.params
+    console.log(req.params)
+    const fam = await familyMemberModel.find({
+      patientuser
+    });
+    console.log(fam)
+    res.status(200).json(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
-}
+};
+
 const selectPatient = async (req, res) => {
   const id = req.body.id;
 
@@ -200,62 +202,43 @@ const selectPatient = async (req, res) => {
   res.status(200).send(patient);
 };
 
+// Get prescriptions of a given patient. Can also be filtered
+// using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
+  const query = req.query;
+  console.log(query);
+  const patientUsername = query.PatientUsername; // Extract patientUsername
+  console.log(req.params.patientUsername);
+
   try {
-    const id = req.body._id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({ error: "Invalid ID" });
-      return;
+    const baseQuery = { PatientUsername: patientUsername };
+    const regexQuery = {};
+
+    if (query.DoctorUsername) {
+      regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
     }
-    const patient = await patientModel.findById(id);
-    const prescriptions = await prescriptionModel.find({
-      PatientUsername: patient.Username,
+    if (query.Date) {
+      const date = new Date(query.Date);
+      regexQuery.Date = date;
+    }
+    if (query.Status) {
+      regexQuery.Status = query.Status;
+    }
+
+    const patientPrescriptions = await prescriptionModel.find({
+      ...baseQuery,
+      ...regexQuery,
     });
-    res.status(200).send(prescriptions);
+
+    res.status(200).send(patientPrescriptions);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
 };
 
-// Filter prescriptions by doctor or status or filled or unfilled.
-const filterPrescriptions = async (req, res) => {
-  const query = req.body;
-
-  const regexQuery = {};
-
-  // Check if a 'DoctorUsername' query is provided
-  if (query.DoctorUsername) {
-    regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
-  }
-
-  // Check if a 'Date' query is provided
-  if (query.Date) {
-    // Assuming 'Date' is a field in your schema
-    regexQuery.Date = new RegExp(query.Date, "i");
-  }
-
-  // Check if a 'Status' query is provided
-  if (query.Status) {
-    regexQuery.Status = new RegExp(query.Status, "i");
-  }
-
-  const patientPrescriptions = prescriptionModel.find({
-    PatientUsername: query.PatientUsername,
-  });
-  // Use the regexQuery in the find method
-  try {
-    // Use the regexQuery in the find method and await the result
-    const prescriptions = await patientPrescriptions.find(regexQuery);
-    res.status(200).send(prescriptions);
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 // Use prescription Id to select a prescription.
 const selectPrescription = async (req, res) => {
-  const prescriptionId = req.body.id;
+  const prescriptionId = req.query.id;
   try {
     const prescription = await prescriptionModel.findById(prescriptionId);
     res.status(200).send(prescription);
@@ -270,7 +253,6 @@ module.exports = {
   GetFamilymembers,
   selectPatient,
   getPrescriptions,
-  filterPrescriptions,
   getPatientUsername,
   createPatient,
   getAllPatients,
