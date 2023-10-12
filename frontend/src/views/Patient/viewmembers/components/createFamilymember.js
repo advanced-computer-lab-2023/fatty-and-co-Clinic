@@ -34,7 +34,7 @@ function createFamilymember() {
     // Send the username to the backend for deletion
     try {
       
-      const response = await fetch("http://localhost:8000/patient/createFamilymember/Aly", {
+      const response = await fetch("http://localhost:8000/patient/createFamilymember/Zeina", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

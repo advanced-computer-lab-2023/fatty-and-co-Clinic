@@ -16,6 +16,8 @@ const familyMemberSchema = new Schema({
     required: true,
     trim: true,
     unique: true,
+
+   
   },
   Age: {
     type: Number,

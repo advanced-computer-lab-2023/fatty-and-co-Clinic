@@ -4,6 +4,7 @@ import { FamilymemberTable } from "./components/FamilymemberTable.js";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function Viewmembers() {
   const [data, setData] = useState([{}]);
@@ -11,7 +12,7 @@ function Viewmembers() {
     Name: "",
     Speciality: "",
   });
-  const PatientUserName = "Mariam";
+  const { PatientUserName } = useParams();
 
   useEffect(() => {
 
