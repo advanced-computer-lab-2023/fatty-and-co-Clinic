@@ -34,7 +34,7 @@ export const API_PATHS = {
   viewfamilymembers:PATIENT_BASE+"/getFamilymember/",
   updateAffil:  DOCTOR_BASE+ "updateDoctor/",
   viewAppointPat: APPOINTMENT_BASE+"getAppointmentsPat/",
-  updateEmail: DOCTOR_BASE + "updateDoctor/",
+
   createfamilymember: PATIENT_BASE + "createFamilymember/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewfamilymembers: PATIENT_BASE + "/getFamilymember/",

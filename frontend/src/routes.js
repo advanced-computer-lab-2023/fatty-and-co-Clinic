@@ -81,23 +81,7 @@ var dashRoutes = [
         component:UpdateAffil ,
         layout: "/admin",   
       },
-   { path: "/updateEmail",
-    name: "Update Email",
-    rtlName: "لوحة القيادة",
-    icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
-    component: UpdateEmail,
-    layout: "/admin",
-  },
-  {
-    path: "/updateAffil",
-    name: "Update Affiliation",
-    rtlName: "لوحة القيادة",
-    icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
-    component: UpdateAffil,
-    layout: "/admin",
-  },
+ 
   {
 
     path: "/viewAppointments",
