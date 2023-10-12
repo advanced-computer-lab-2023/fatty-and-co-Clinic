@@ -13,7 +13,7 @@ async function getPatient() {
     const ids = data.map((patient) => patient._id);
     const randomId = ids[Math.floor(Math.random() * ids.length)];
     console.log(randomId);
-    const patient = doctorModel.findById(randomId);
+    const patient = await patientModel.findById(randomId);
     return patient;
   } catch (err) {
     console.error(err);
@@ -28,7 +28,7 @@ async function getDoctor() {
     const ids = data.map((doctor) => doctor._id);
     const randomId = ids[Math.floor(Math.random() * ids.length)];
     console.log(randomId);
-    const doctor = doctorModel.findById(randomId);
+    const doctor = await doctorModel.findById(randomId);
     return doctor;
   } catch (err) {
     console.error(err);
