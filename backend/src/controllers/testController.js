@@ -25,10 +25,11 @@ const {
   generateUserType,
   generateMedicine,
   generateDiagnosis,
+  generateGender,
 } = require("../common/utils/generators");
 const {
-  getPatientUsername,
-  getDoctorUsername,
+  getPatient,
+  getDoctor,
   getAppointment,
 } = require("../common/utils/dbGetters");
 
@@ -56,7 +57,7 @@ const createSystemUser = async (req, res) => {
 
 //Create a new appointment
 const createAppointment = async (req, res) => {
-  const { DoctorUsername,DoctorName, PatientUsername,PatientName, Status, Date } = req.body;
+  const { DoctorUsername, DoctorName, PatientUsername, PatientName, Status, Date } = req.body;
   try {
     const newApp = await appointmentModel.create({
       DoctorUsername,
@@ -122,19 +123,23 @@ const createDoctor = async (req, res) => {
 
 // create a new patient
 const createPatient = async (req, res) => {
-  const { Username, Name, MobileNum, DateOfBirth, PackageName } = req.body;
+  const { Username, Name, MobileNum, EmergencyContact, Gender, DateOfBirth, PackageName } = req.body;
 
   const username = Username || generateUsername();
   const name = Name || generateName();
   const mobileNum = MobileNum || generateMobileNum();
   const dateOfBirth = DateOfBirth || generateDateOfBirth();
   const packageName = PackageName || generatePackage();
+  const emergencyContact = EmergencyContact || { generateName, generateMobileNum };
+  const gender = Gender || generateGender();
 
   try {
     const newPatient = await patientModel.create({
       Username: username,
       Name: name,
       MobileNum: mobileNum,
+      Gender: gender,
+      EmergencyContact: emergencyContact,
       DateOfBirth: dateOfBirth,
       PackageName: packageName,
     });
@@ -146,9 +151,9 @@ const createPatient = async (req, res) => {
 
 // create a random appointment
 const createRandomAppointment = async (req, res) => {
-  const { DoctorUsername, PatientUsername,PatientName, DoctorName,Status, Date } = req.body;
-  const doctorUsername = DoctorUsername || String(await getDoctorUsername());
-  const patientUsername = PatientUsername || String(await getPatientUsername());
+  const { DoctorUsername, PatientUsername, PatientName, DoctorName, Status, Date } = req.body;
+  const doctorUsername = DoctorUsername || String(await getDoctor().Username);
+  const patientUsername = PatientUsername || String(await getPatient().Username);
   const patientname = PatientName;
   const doctorname = DoctorName;
   const status = Status || generateAppointmentStatus();

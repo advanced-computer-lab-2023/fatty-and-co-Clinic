@@ -7,13 +7,14 @@ const requestModel = require("../../models/requests");
 const { default: mongoose } = require("mongoose");
 
 // get a random patient username from db
-async function getPatientUsername() {
+async function getPatient() {
   try {
-    const data = await patientModel.find().select("Username").exec();
-    const usernames = data.map((patient) => patient.Username);
-    const randomUsername =
-      usernames[Math.floor(Math.random() * usernames.length)];
-    return String(randomUsername);
+    const data = await patientModel.find().select("_id").exec();
+    const ids = data.map((patient) => patient._id);
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
+    console.log(randomId);
+    const patient = doctorModel.findById(randomId);
+    return patient;
   } catch (err) {
     console.error(err);
     throw err;
@@ -21,13 +22,14 @@ async function getPatientUsername() {
 }
 
 // get a random doctor username from db
-async function getDoctorUsername() {
+async function getDoctor() {
   try {
-    const data = await doctorModel.find().select("Username").exec();
-    const usernames = data.map((doctor) => doctor.Username);
-    const randomUsername =
-      usernames[Math.floor(Math.random() * usernames.length)];
-    return String(randomUsername);
+    const data = await doctorModel.find().select("_id").exec();
+    const ids = data.map((doctor) => doctor._id);
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
+    console.log(randomId);
+    const doctor = doctorModel.findById(randomId);
+    return doctor;
   } catch (err) {
     console.error(err);
     throw err;
@@ -49,4 +51,4 @@ async function getAppointment() {
   }
 }
 
-module.exports = { getPatientUsername, getDoctorUsername, getAppointment };
+module.exports = { getPatient, getDoctor, getAppointment };
