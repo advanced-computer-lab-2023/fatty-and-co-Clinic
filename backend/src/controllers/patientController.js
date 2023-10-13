@@ -8,8 +8,6 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
-
-
 const createPatient = async (req, res) => {
   const { EmergencyContactNumber, EmergencyContactName } = req.body;
   try {
@@ -38,6 +36,34 @@ const getAllPatients = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+//a function to get the details of the emergency contact of a patient by patient username
+const getEmergencyContact = async (req, res) => {
+  try {
+    const { Username } = req.params;
+    const patient = await patientModel.findOne({ Username: Username });
+
+    console.log(patient);
+
+    if (!patient) {
+      res.status(404).send({ message: "Patient not found." });
+      return;
+    }
+
+    const EmergencyContact = patient.EmergencyContact;
+    const Name = patient.Name;
+    console.log(Name);
+    if (!EmergencyContact) {
+      res.status(404).send({ message: "Emergency contact not found for the patient." });
+      return;
+    }
+
+    res.status(200).send({ EmergencyContact });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
 
 //find patient by id
 const getPatient = async (req, res) => {
@@ -80,6 +106,7 @@ const updatePatient = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
 // view all doctors with speciality and session price
 const session_index = (req, res) => {
   // Package discount starts with 0
@@ -119,7 +146,7 @@ const session_index = (req, res) => {
           // Search for documents whose 'Name' field contains the 'Name' variable, if it is not empty
           ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
           // Search for documents whose 'Speciality' field contains the 'Speciality' variable, if it is not empty
-          ...(Speciality && !Name
+          ...(Speciality
             ? { Speciality: { $regex: Speciality.trim(), $options: "i" } }
             : {}),
         })
@@ -157,13 +184,13 @@ const createFamilymember = async (req, res) => {
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
     // Return an error message.
-    res.status(400).json({ error: 'The national ID must be 16 digits long.' });
+    res.status(400).json({ error: "The national ID must be 16 digits long." });
     return;
   }
   // check if age are only 2 digitd
-  if (Age.length === 0 ||Age.length >2|| Age==0 ) {
+  if (Age.length === 0 || Age.length > 2 || Age == 0) {
     // Return an error message.
-    res.status(400).json({ error: 'The age must be 1 or 2 digits' });
+    res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
   try {
@@ -174,7 +201,6 @@ const createFamilymember = async (req, res) => {
       Age: Age,
       Gender: Gender,
       Relation: Relation,
-
     });
     res.status(200).json(newFamilymember);
 
@@ -185,12 +211,12 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const  {PatientUserName}  = req.params
-    console.log(req.params)
+    const { PatientUserName } = req.params;
+    console.log(req.params);
     const fam = await familyMemberModel.find({
-      PatientUserName:PatientUserName
+      PatientUserName: PatientUserName,
     });
-  //  console.log(fam)
+    //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -275,4 +301,5 @@ module.exports = {
   getPatient,
   updatePatient,
   selectPrescription,
+  getEmergencyContact,
 };

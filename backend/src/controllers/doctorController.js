@@ -181,20 +181,23 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 // TODO: replace query with body
 const filterDoctor = async (req, res) => {
   try {
+    console.log("kill");
     console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
 
     let packageDis = 0;
     var myDoctors = new Array();
+    var appointments = new Array();
     var myFilteredDoctors = new Array();
 
-    const patientId = req.query.id;
-    if (!mongoose.Types.ObjectId.isValid(patientId)) {
+    const id = req.query.id;
+    // const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "Invalid ID" });
       return;
     } else {
       //getting package dis of patient
-      patientModel.findById(patientId).then((result) => {
+      patientModel.findById(id).then((result) => {
         // Extract the 'PackageName' property from the patient document
         const packageName = result.PackageName;
         // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
@@ -212,17 +215,23 @@ const filterDoctor = async (req, res) => {
       });
     }
 
+    //TODO: I BELIEVE THIS BIG LOOP (.HAS(DATE) IS REDUNDANT IF REQ.QUERY.DATE SHAGHALA)
     if (urlParams.has("date") && urlParams.has("hour")) {
+      //TODO: TEST THIS WITH NEW SYNTAX
       if (req.query.date && req.query.hour) {
         const date = new Date(req.query.date);
         const day = date.getDay();
+        console.log(day);
         const hour = req.query.hour;
+        console.log(hour);
+        //  TODO: CHANGED THE RANGE TO ACCOMODATE FOR DURATION
         const dateDocs = await doctorModel.find({
           WorkingDays: { $in: [day] },
           StartTime: { $lte: hour },
-          EndTime: { $gt: hour },
+          EndTime: { $gte: hour + 1 },
         });
-        if (urlParams.has("speciality")) {
+        // console.log(dateDocs);
+        if (req.query.speciality) {
           dateDocs.forEach((element) => {
             if (element.Speciality == req.query.speciality) {
               myDoctors.push(element);
@@ -231,9 +240,48 @@ const filterDoctor = async (req, res) => {
         } else {
           myDoctors = dateDocs;
         }
+        //console.log(dateDocs);
+
+        //TODO: NEEDS TESTING BA2A
+        //TODO:added this part in this scope because only if date and hour existed
+        myDoctors.forEach(async (doctor) => {
+          appointments = await appointmentModel.find({
+            DoctorUsername: doctor.Username,
+          });
+          if (appointments.length != 0)
+            appointments.forEach((appointment) => {
+              console.log("hello app3");
+      
+              const appDay = appointment.Date.getDay();
+              const appHour = appointment.Date.getHours();
+              const appMin = appointment.Date.getMinutes();
+              const appHourFilter = appHour + (appMin/100);
+              
+              console.log(appointment.DoctorName);
+              console.log(appointment.PatientName);
+              console.log(appointment.Date);
+
+
+
+              console.log (day);
+              console.log(appDay);
+              console.log(appHourFilter);
+              console.log(Math.abs(appHourFilter - hour));
+              //TODO: send help,put in mind check utchourthing first
+              //USE ABSOLUTE DIFFERENCE BETTER THAN (hour < appHour + 1 || hour < appHour + 1)
+              if (appDay == day && (Math.abs(appHourFilter - hour) < 1)) {
+                //splice takes 2 attributes; index of element to be deleted, how many elements to delete,
+                console.log("helpplease");
+                console.log(appointment);
+                console.log(doctor);
+                myDoctors.splice(myDoctors.indexOf(doctor), 1);
+
+              }
+            });
+        });
       }
     } else {
-      if (urlParams.has("speciality")) {
+      if (req.query.speciality) {
         myDoctors = await doctorModel.find({
           Speciality: req.query.speciality,
         });
@@ -242,14 +290,17 @@ const filterDoctor = async (req, res) => {
       }
     }
 
+    //adding session price to filtered doctors
     myDoctors.forEach((element) => {
-      const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
-      // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
-      myFilteredDoctors.push({
-        Name: element.Name,
-        Speciality: element.Speciality,
-        Cost: calcCost,
-      });
+        const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
+        // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
+        myFilteredDoctors.push({
+          Username: element.Username,
+          Name: element.Name,
+          Speciality: element.Speciality,
+          Cost: calcCost,
+        });
+      
     });
     res.status(200).json(myFilteredDoctors);
   } catch (err) {
