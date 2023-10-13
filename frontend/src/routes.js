@@ -7,11 +7,10 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
-//import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
-import createFamilymember from "views/Patient/viewmembers/components/createFamilymember";
+import createFamilymember from "views/Patient/createFamilyMember";
 import viewDoctors from "views/Patient/viewDoctors";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
@@ -54,7 +53,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/updateEmailDoc",
+    path: "/updateEmailDoc/:DoctorUsername",
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -62,9 +61,8 @@ var dashRoutes = [
     component: UpdateEmail,
     layout: "/admin",
   },
-
   {
-    path: "/updateHourly",
+    path: "/updateHourly/:DoctorUsername",
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -72,9 +70,8 @@ var dashRoutes = [
     component: UpdateHourly,
     layout: "/admin",
   },
-
   {
-    path: "/updateAffil",
+    path: "/updateAffil/:DoctorUsername",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -84,7 +81,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointments",
+    path: "/viewAppointments/:DoctorUsername",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -108,8 +105,8 @@ var dashRoutes = [
   },
 
   {
-    path: "/addFamilymember",
-    name: "Add Familymember",
+    path: "/createFamilymember/:Createparameter",
+    name: "Add Family Member",
     icon: <HomeIcon color="inherit" />,
     component: createFamilymember,
     layout: "/admin",
@@ -146,8 +143,8 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewPrescriptions",
-    name: "View Prescriptions",
+    path: "/prescriptions/:patientUsername",
+    name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
     layout: "/admin",
