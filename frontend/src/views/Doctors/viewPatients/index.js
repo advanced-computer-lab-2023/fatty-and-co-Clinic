@@ -28,10 +28,12 @@ function PatientTable() {
     
 
     const [filters, setFilters] = useState({
-        doctorUsername: '',
+        
         patientName: '',
-       
+        upcoming: '',
+        doctorUsername: ''
     });
+    const doctorUsername = "ikwvdppyyh252";
 
     useEffect(() => {
         fetchPatient();
@@ -40,8 +42,9 @@ function PatientTable() {
     const fetchPatient = () => {
         // Construct the URL based on filters and user ID
         let url = `http://localhost:8000/appointment/searchpatient/?DoctorUsername=${doctorUsername}`;
-
+        if (filters.doctorUsername) url = `http://localhost:8000/appointment/searchpatient/?DoctorUsername=${filters.doctorUsername}`;
         if (filters.patientName) url += `&PatientName=${filters.patientName}`;
+        if (filters.upcoming) url = `http://localhost:8000/appointment/upcoming/?DoctorUsername=${filters.doctorUsername}`;
 
 
         axios.get(url)
@@ -83,10 +86,25 @@ function PatientTable() {
                         <Field name="doctorUsername">
                             {({ field }) => (
                                 <FormControl>
-                                    <Input {...field} type="text" placeholder="enter doctor name" />
+                                    <Input {...field} type="text" placeholder="enter docotr username" />
                                 </FormControl>
                             )}
                         </Field>
+                        <Field name="patientName">
+                            {({ field }) => (
+                                <FormControl>
+                                    <Input {...field} type="text" placeholder="enter Patient name" />
+                                </FormControl>
+                            )}
+                        </Field>
+                        <Field name="upcoming">
+                            {({ field }) => (
+                                <FormControl>
+                                    <Input {...field} type="text" placeholder="filter for upcoming appointments?" />
+                                </FormControl>
+                            )}
+                        </Field>
+
 
 
 
