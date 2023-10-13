@@ -4,6 +4,8 @@ import AppointmentsTable from "./components/AppointmentsTable";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+
 
 function ViewAppointments() {
   const [data, setData] = useState([{}]);
@@ -11,10 +13,11 @@ function ViewAppointments() {
     Status: "",
     Date: "",
   });
+  const { DoctorUsername } = useParams();
 
   useEffect(() => {
     const Username = "Mariom";
-    const url = API_PATHS.viewAppointments + Username;
+    const url = API_PATHS.viewAppointments + DoctorUsername;
     axios
       .get(url, { params: searchParams })
       .then((response) => {

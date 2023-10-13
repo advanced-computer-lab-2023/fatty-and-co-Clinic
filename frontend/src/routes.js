@@ -46,7 +46,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointPat",
+    path: "/viewAppointPat/:PatientUsername",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
@@ -54,7 +54,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/updateEmailDoc",
+    path: "/updateEmailDoc/:DoctorUsername",
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -62,9 +62,8 @@ var dashRoutes = [
     component: UpdateEmail,
     layout: "/admin",
   },
-
   {
-    path: "/updateHourly",
+    path: "/updateHourly/:DoctorUsername",
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -72,9 +71,8 @@ var dashRoutes = [
     component: UpdateHourly,
     layout: "/admin",
   },
-
   {
-    path: "/updateAffil",
+    path: "/updateAffil/:DoctorUsername",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -84,7 +82,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointments",
+    path: "/viewAppointments/:DoctorUsername",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -139,7 +137,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewmembers",
+    path: "/viewmembers/:PatientUserName",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
