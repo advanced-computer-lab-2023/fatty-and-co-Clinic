@@ -8,11 +8,11 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"  //Zawedna de
-//import createFamilymember from "views/Patient/createFamilymember";
+
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm"
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm"
-import createFamilymember from "views/Patient/viewmembers/components/createFamilymember";
+import createFamilymember from "views/Patient/viewmembers/components/createFamilymember.js";
 import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
@@ -107,8 +107,8 @@ var dashRoutes = [
   },
 
   {
-    path: "/addFamilymember",
-    name: "Add Familymember",
+    path: "/createFamilymember/:Createpatameter",
+    name: " createFamilymember",
     icon: <HomeIcon color="inherit" />,
     component: createFamilymember,
     layout: "/admin",
