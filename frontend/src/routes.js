@@ -7,15 +7,16 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
+//import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
-import createFamilymember from "views/Patient/createFamilyMember";
+import createFamilymember from "views/Patient/viewmembers/components/createFamilymember";
 import viewDoctors from "views/Patient/viewDoctors";
+import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
-import viewDoctorPatients from "views/Doctors/viewPatients";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
@@ -43,15 +44,17 @@ var dashRoutes = [
     component: Package,
     layout: "/admin",
   },
+
   {
-    path: "/viewAppointPat/:PatientUsername",
+    path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
     layout: "/admin",
   },
+
   {
-    path: "/updateEmailDoc/:DoctorUsername",
+    path: "/updateEmailDoc",
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -59,8 +62,9 @@ var dashRoutes = [
     component: UpdateEmail,
     layout: "/admin",
   },
+
   {
-    path: "/updateHourly/:DoctorUsername",
+    path: "/updateHourly",
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -68,8 +72,9 @@ var dashRoutes = [
     component: UpdateHourly,
     layout: "/admin",
   },
+
   {
-    path: "/updateAffil/:DoctorUsername",
+    path: "/updateAffil",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -79,7 +84,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointments/:DoctorUsername",
+    path: "/viewAppointments",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -93,6 +98,7 @@ var dashRoutes = [
     component: Requests,
     layout: "/admin",
   },
+
   {
     path: "/addAdmin",
     name: "Add Admin",
@@ -102,29 +108,38 @@ var dashRoutes = [
   },
 
   {
-    path: "/createFamilymember/:Createparameter",
-    name: "Add Family Member",
+    path: "/addFamilymember",
+    name: "Add Familymember",
     icon: <HomeIcon color="inherit" />,
     component: createFamilymember,
     layout: "/admin",
   },
+
   {
     path: "/deleteUser",
     name: "Delete User",
     icon: <HomeIcon color="inherit" />,
     component: DeleteUser,
-
     layout: "/admin",
   },
+
   {
-    path: "/viewDoctors",
+    path: "/viewDoctorDetails/:username",
+    name: "View Doctor Details",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewDoctorDetails,
+    layout: "/admin",
+  },
+
+  {
+    path: "/viewDoctors/:id",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
     layout: "/admin",
   },
   {
-    path: "/viewmembers/:PatientUserName",
+    path: "/viewmembers",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
@@ -135,13 +150,6 @@ var dashRoutes = [
     name: "View Prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
-    layout: "/admin",
-  },
-  {
-    path: "/viewDoctorPatients",
-    name: "View Doctor's Patients",
-    icon: <HomeIcon color="inherit" />,
-    component: viewDoctorPatients,
     layout: "/admin",
   },
   {
