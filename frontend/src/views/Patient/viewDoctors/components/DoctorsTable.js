@@ -25,7 +25,7 @@ const DoctorsTable = ({ title, captions, data }) => {
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
-    history.replace(`/admin/viewDoctors/viewDoctorDetails/${row.Username}`);
+    history.replace(`/admin/viewDoctorDetails/${row.Username}`);
   };
 
   return (
@@ -53,6 +53,7 @@ const DoctorsTable = ({ title, captions, data }) => {
           </Thead>
           <Tbody>
             {data.map((row) => {
+              console.log(row.Username);
               return (
                 <DoctorsRow
                   key={row.Username}

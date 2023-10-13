@@ -19,9 +19,10 @@ export const API_PATHS = {
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
   getRequests: ADMIN_BASE + "",
   updateHourly: DOCTOR_BASE + "updateDoctor/",
-  viewmembers: PATIENT_BASE + "getFamilymember/",
   viewPrescriptions: PATIENT_BASE + "getPrescriptions/", // add patient username as a param
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
+
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/",
 
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
@@ -32,13 +33,12 @@ export const API_PATHS = {
   updateEmailDoc: GUEST_BASE + "updateEmail/",
   createfamilymember: PATIENT_BASE + "createFamilymember/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
-  viewfamilymembers: PATIENT_BASE + "/getFamilymember/",
+  viewfamilymembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
 
   createfamilymember: PATIENT_BASE + "createFamilymember/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
-  viewfamilymembers: PATIENT_BASE + "/getFamilymember/",
+  viewfamilymembers: PATIENT_BASE + "getFamilymember/",
   updateAffil: DOCTOR_BASE + "updateDoctor/",
-
 };
