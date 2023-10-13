@@ -58,7 +58,7 @@ const getEmergencyContact = async (req, res) => {
     }
 
     const EmergencyContact = patient.EmergencyContact;
-    const  Name = patient.Name;
+    const Name = patient.Name;
     console.log(Name);
     if (!EmergencyContact) {
       res.status(404).send({ message: "Emergency contact not found for the patient." });
@@ -210,6 +210,7 @@ const createFamilymember = async (req, res) => {
       Relation: Relation,
     });
     res.status(200).json(newFamilymember);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -261,8 +262,8 @@ const getPrescriptions = async (req, res) => {
     const baseQuery = { PatientUsername: patientUsername };
     const regexQuery = {};
 
-    if (query.DoctorUsername) {
-      regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
+    if (query.DoctorName) {
+      regexQuery.DoctorName = new RegExp(query.DoctorName, "i");
     }
     if (query.Date) {
       const date = new Date(query.Date);

@@ -8,7 +8,10 @@ import CardHeader from "components/Card/CardHeader.js";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import {
     Box,
+    Grid,
+    Input,
     Flex,
+    FormControl,
     Table,
     Thead,
     Tbody,
@@ -23,6 +26,7 @@ import {
     ModalBody,
     Button,
     useColorModeValue,
+    Select,
     Text,
 } from '@chakra-ui/react';
 
@@ -75,6 +79,15 @@ function PrescriptionTable() {
         setModalOpen(false);
     };
 
+    const handleStatusChange = (event) => {
+        console.log(event);
+        setStatus(event.target.value);
+    };
+    const handleDateChange = (event) => {
+        console.log(event);
+        setDate(event.target.value);
+    };
+
     return (
         <Box pt="80px">
             <Flex
@@ -84,23 +97,24 @@ function PrescriptionTable() {
                 justifyContent="flex-start"
             >
                 <Flex direction="row" alignItems="flex-start">
-                    <SearchBar
-                        placeholder="Doctor name"
-                        onChange={setDoctorName}
-                    />
-                    <SearchBar
-                        placeholder="YYYY-MM-DD"
-                        onChange={setDate}
-                        marginLeft={4}
-                    />
-                    <SearchBar
-                        placeholder="Status"
-                        onChange={setStatus}
-                        marginLeft={4}
-                    />
-                    <Button onClick={fetchPrescriptions} marginLeft={4}>
-                        Search
-                    </Button>
+                    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                        <SearchBar w="100%" h="10"
+                            placeholder="Doctor name"
+                            onChange={setDoctorName}
+                        />
+                        <FormControl>
+                            <Input bg="white" type="date" placeholder="Filter by Date" onChange={handleDateChange} />
+                        </FormControl>
+                        <FormControl id="status" w="100%" h="10">
+                            <Select bg="white" placeholder="Select status" value={status} onChange={handleStatusChange}>
+                                <option value="Filled">Filled</option>
+                                <option value="Unfilled">Unfilled</option>
+                            </Select>
+                        </FormControl>
+                        <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
+                            Search
+                        </Button>
+                    </Grid>
                 </Flex>
                 <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
                     <CardHeader p="6px 0px 22px 0px">

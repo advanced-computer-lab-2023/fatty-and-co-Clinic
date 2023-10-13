@@ -71,7 +71,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/updateAffil/:DoctorUsername",
+    path: "/updateAffil/:Username",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -136,7 +136,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewmembers",
+    path: "/viewmembers/:PatientUserName",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
