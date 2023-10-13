@@ -20,13 +20,13 @@ import {
     const [HourlyRate, setHourlyRate] = useState("");
     const toast = useToast();
     const textColor = useColorModeValue("gray.700", "white");
-  
+    const {DoctorUsername}=useParams()
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       // Send the username to the backend for deletion
       try {
-        const {DoctorUsername}=useParams()
+       
         const response = await fetch(API_PATHS.updateHourly+ DoctorUsername, {
           method: "PATCH",
           headers: {

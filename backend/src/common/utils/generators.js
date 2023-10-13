@@ -280,6 +280,11 @@ function generateDiagnosis() {
   return diagnosis[Math.floor(Math.random() * diagnosis.length)];
 }
 
+function generatePrescriptionStatus() {
+  const status = ["Filled", "Unfilled"];
+  return status[Math.floor(Math.random() * status.length)];
+}
+
 module.exports = {
   generateUsername,
   generateName,
@@ -300,4 +305,5 @@ module.exports = {
   generateUserType,
   generateMedicine,
   generateDiagnosis,
+  generatePrescriptionStatus,
 };

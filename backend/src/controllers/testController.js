@@ -25,6 +25,7 @@ const {
   generateUserType,
   generateMedicine,
   generateDiagnosis,
+  generatePrescriptionStatus,
   generateGender,
 } = require("../common/utils/generators");
 const {
@@ -265,22 +266,27 @@ const createPrescription = async (req, res) => {
   const {
     AppointmentId,
     DoctorUsername,
+    DoctorName,
     PatientUsername,
     Date,
+    Status,
     Diagnosis,
     Medicine,
   } = req.body;
   const appointment = await getAppointment();
   const appointmentId = AppointmentId || appointment._id;
   const doctorUsername = DoctorUsername || appointment.DoctorUsername;
+  const doctorName = DoctorName || appointment.DoctorName;
   const patientUsername = PatientUsername || appointment.PatientUsername;
   const date = Date || appointment.Date;
   const diagnosis = Diagnosis || generateDiagnosis();
+  const status = Status || generatePrescriptionStatus();
   const medicine = Medicine || generateMedicine();
 
   console.log(
     appointmentId,
     doctorUsername,
+    doctorName,
     patientUsername,
     date,
     diagnosis,
@@ -291,9 +297,11 @@ const createPrescription = async (req, res) => {
     const newPrescription = await prescriptionModel.create({
       AppointmentId: appointmentId,
       DoctorUsername: doctorUsername,
+      DoctorName: doctorName,
       PatientUsername: patientUsername,
       Date: date,
       Diagnosis: diagnosis,
+      Status: status,
       Medicine: medicine,
     });
     res.status(201).json(newPrescription);
