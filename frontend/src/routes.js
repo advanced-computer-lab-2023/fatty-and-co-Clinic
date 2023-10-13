@@ -55,33 +55,33 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-        path: "/updateEmailDoc",
-        name: "Update Email",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:UpdateEmail ,
-        layout: "/admin",   
-      },
-      {
-        path: "/updateHourly",
-        name: "Update Hourly Rate",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:UpdateHourly ,
-        layout: "/admin",   
-      },
-      {
-        path: "/updateAffil",
-        name: "Update Affiliation",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component:UpdateAffil ,
-        layout: "/admin",   
-      },
- 
+    path: "/updateEmailDoc",
+    name: "Update Email",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateEmail,
+    layout: "/admin",
+  },
+  {
+    path: "/updateHourly",
+    name: "Update Hourly Rate",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateHourly,
+    layout: "/admin",
+  },
+  {
+    path: "/updateAffil",
+    name: "Update Affiliation",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateAffil,
+    layout: "/admin",
+  },
+
   {
 
     path: "/viewAppointments",
@@ -136,8 +136,8 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewPrescriptions",
-    name: "View Prescriptions",
+    path: "/prescriptions/:patientUsername",
+    name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
     layout: "/admin",
@@ -219,6 +219,6 @@ var dashRoutes = [
     ],
   }
   ,
- 
+
 ];
 export default dashRoutes;
