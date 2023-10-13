@@ -1,4 +1,5 @@
 const patientModel = require("../models/patients");
+const userModel = require("../models/systemusers");
 const familyMemberModel = require("../models/familymembers");
 const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
@@ -22,7 +23,13 @@ const createPatient = async (req, res) => {
         PhoneNumber: EmergencyContactNumber,
       },
     });
-    res.status(200).send({ patient });
+    const user = await userModel.create({
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Type: "Patient",
+    });
+    res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
