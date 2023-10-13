@@ -16,6 +16,7 @@ import viewDoctors from "views/Patient/viewDoctors";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
+import viewDoctorPatients from "views/Doctors/viewPatients";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
@@ -139,6 +140,13 @@ var dashRoutes = [
     name: "View Prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
+    layout: "/admin",
+  },
+  {
+    path: "/viewDoctorPatients",
+    name: "View Doctor's Patients",
+    icon: <HomeIcon color="inherit" />,
+    component: viewDoctorPatients,
     layout: "/admin",
   },
   {
