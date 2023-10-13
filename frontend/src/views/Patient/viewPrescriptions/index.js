@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { API_PATHS } from 'API/api_paths';
 import axios from 'axios';
-import { Formik, Form, Field } from 'formik';
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
+import CardHeader from "components/Card/CardHeader.js";
+import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import {
     Box,
+    Grid,
+    Input,
+    Flex,
     FormControl,
     Table,
     Thead,
@@ -17,33 +25,33 @@ import {
     ModalCloseButton,
     ModalBody,
     Button,
-    Input,
+    useColorModeValue,
     Select,
+    Text,
 } from '@chakra-ui/react';
 
 function PrescriptionTable() {
+    const { patientUsername } = useParams();
     const [prescriptions, setPrescriptions] = useState([]);
     const [selectedPrescription, setSelectedPrescription] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
-    const patientUsername = "Marioooom";
+    const [doctorName, setDoctorName] = useState('');
+    const [date, setDate] = useState('');
+    const [status, setStatus] = useState('');
 
-    const [filters, setFilters] = useState({
-        doctorUsername: '',
-        date: '',
-        status: '',
-    });
+    const textColor = useColorModeValue("gray.700", "white");
 
     useEffect(() => {
         fetchPrescriptions();
-    }, [patientUsername, filters]);
+    }, [patientUsername]);
 
     const fetchPrescriptions = () => {
-        // Construct the URL based on filters and user ID
-        let url = `http://localhost:8000/patient/getPrescriptions/?PatientUsername=${patientUsername}`;
+        // Construct the URL based on filters and patient username
+        let url = API_PATHS.viewPrescriptions + `?PatientUsername=${patientUsername}`;
 
-        if (filters.doctorUsername) url += `&DoctorUsername=${filters.doctorUsername}`;
-        if (filters.date) url += `&Date=${filters.date}`;
-        if (filters.status) url += `&Status=${filters.status}`;
+        if (doctorName) url += `&DoctorName=${doctorName}`;
+        if (date) url += `&Date=${date}`;
+        if (status) url += `&Status=${status}`;
 
         axios.get(url)
             .then(response => {
@@ -56,7 +64,9 @@ function PrescriptionTable() {
 
     const openModal = async (prescriptionId) => {
         try {
-            const response = await axios.get(`http://localhost:8000/patient/selectPrescription/?id=${prescriptionId}`);
+            const url = API_PATHS.getPrescription + `?id=${prescriptionId}`;
+            console.log(url);
+            const response = await axios.get(url);
             setSelectedPrescription(response.data);
             setModalOpen(true);
         } catch (error) {
@@ -69,83 +79,75 @@ function PrescriptionTable() {
         setModalOpen(false);
     };
 
+    const handleStatusChange = (event) => {
+        console.log(event);
+        setStatus(event.target.value);
+    };
+    const handleDateChange = (event) => {
+        console.log(event);
+        setDate(event.target.value);
+    };
+
     return (
         <Box pt="80px">
-            <Formik
-                initialValues={filters}
-                onSubmit={(values, actions) => {
-                    setFilters(values); // Update filters state
-                    fetchPrescriptions();
-                    actions.setSubmitting(false);
-                }}
+            <Flex
+                direction="column"
+                alignItems="flex-start"
+                pt="50px"
+                justifyContent="flex-start"
             >
-                {(props) => (
-                    <Form>
-                        <Field name="doctorUsername">
-                            {({ field }) => (
-                                <FormControl>
-                                    <Input {...field} type="text" placeholder="Filter by Doctor Name" />
-                                </FormControl>
-                            )}
-                        </Field>
-
-                        <Field name="date">
-                            {({ field }) => (
-                                <FormControl>
-                                    <Input {...field} type="date" placeholder="Filter by Date" />
-                                </FormControl>
-                            )}
-                        </Field>
-
-                        <Field name="status">
-                            {({ field }) => (
-                                <FormControl>
-                                    <Select {...field} placeholder="Filter by Status">
-                                        <option value="Filled">Filled</option>
-                                        <option value="Unfilled">Unfilled</option>
-                                    </Select>
-                                </FormControl>
-                            )}
-                        </Field>
-
-                        <Button
-                            mt={4}
-                            colorScheme="teal"
-                            isLoading={props.isSubmitting}
-                            type="submit"
-                        >
-                            Filter
+                <Flex direction="row" alignItems="flex-start">
+                    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                        <SearchBar w="100%" h="10"
+                            placeholder="Doctor name"
+                            onChange={setDoctorName}
+                        />
+                        <FormControl>
+                            <Input bg="white" type="date" placeholder="Filter by Date" onChange={handleDateChange} />
+                        </FormControl>
+                        <FormControl id="status" w="100%" h="10">
+                            <Select bg="white" placeholder="Select status" value={status} onChange={handleStatusChange}>
+                                <option value="Filled">Filled</option>
+                                <option value="Unfilled">Unfilled</option>
+                            </Select>
+                        </FormControl>
+                        <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
+                            Search
                         </Button>
-                    </Form>
-                )}
-            </Formik>
-
-            <Table variant="simple">
-                <Thead>
-                    <Tr>
-                        <Th>Doctor Name</Th>
-                        <Th>Date</Th>
-                        <Th>Diagnosis</Th>
-                        <Th>Medicine</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {prescriptions.map(prescription => (
-                        <Tr key={prescription._id} onClick={() => openModal(prescription._id)}>
-                            <Td>{prescription && prescription.DoctorUsername ? prescription.DoctorUsername : 'N/A'}</Td>
-                            <Td>{prescription && prescription.Date ? prescription.Date : 'N/A'}</Td>
-                            <Td>{prescription && prescription.Diagnosis ? prescription.Diagnosis : 'N/A'}</Td>
-                            <Td>
-                                <ul>
-                                    {prescription.Medicine.map((medicine, index) => (
-                                        <li key={index}>{medicine.Name}</li>
-                                    ))}
-                                </ul>
-                            </Td>
-                        </Tr>
-                    ))}
-                </Tbody>
-            </Table>
+                    </Grid>
+                </Flex>
+                <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+                    <CardHeader p="6px 0px 22px 0px">
+                        <Flex direction="column">
+                            <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+                                Prescriptions
+                            </Text>
+                        </Flex>
+                    </CardHeader>
+                    < CardBody >
+                        <Table variant="simple">
+                            <Thead>
+                                <Tr>
+                                    <Th>Doctor Name</Th>
+                                    <Th>Date</Th>
+                                    <Th>Diagnosis</Th>
+                                    <Th>Status</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {prescriptions.map(prescription => (
+                                    <Tr key={prescription._id} onClick={() => openModal(prescription._id)}>
+                                        <Td>{prescription && prescription.DoctorName ? prescription.DoctorName : 'N/A'}</Td>
+                                        <Td>{prescription && prescription.Date ? prescription.Date : 'N/A'}</Td>
+                                        <Td>{prescription && prescription.Diagnosis ? prescription.Diagnosis : 'N/A'}</Td>
+                                        <Td>{prescription && prescription.Status ? prescription.Status : 'N/A'}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                        </Table>
+                    </CardBody >
+                </Card >
+            </Flex >
             {selectedPrescription && (
                 <Modal isOpen={isModalOpen} onClose={closeModal}>
                     <ModalOverlay />
@@ -153,9 +155,10 @@ function PrescriptionTable() {
                         <ModalHeader>Prescription Details</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            <p>Doctor Username: {selectedPrescription.DoctorUsername}</p>
+                            <p>Doctor Name: {selectedPrescription.DoctorName}</p>
                             <p>Date: {selectedPrescription.Date}</p>
                             <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
+                            <p>Status: {selectedPrescription.Status}</p>
                             <p>Medicines:</p>
                             <ul>
                                 {selectedPrescription.Medicine.map((medicine, index) => (
@@ -165,8 +168,9 @@ function PrescriptionTable() {
                         </ModalBody>
                     </ModalContent>
                 </Modal>
-            )}
-        </Box>
+            )
+            }
+        </Box >
     );
 }
 

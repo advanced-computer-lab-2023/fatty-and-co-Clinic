@@ -12,7 +12,9 @@ const {
   getPrescriptions,
   selectPatient,
   selectPrescription,
+  getEmergencyContact
 } = require("../controllers/patientController");
+const { constants } = require("buffer");
 
 const router = express.Router();
 
@@ -127,5 +129,14 @@ router.get("/selectPatient", selectPatient);
  * @param {string} id - The ID of the prescription to get
  */
 router.get("/selectPrescription", selectPrescription);
+
+/**
+ * @route GET /patients/getEmergencyContact
+ * @desc Returns emergency constant of a patient by username
+ * @access Public
+ * @param {string} username - The username of the patient
+ */
+router.get("/getEmergencyContact/:Username", getEmergencyContact);
+
 
 module.exports = router;

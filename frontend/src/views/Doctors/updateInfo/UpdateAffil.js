@@ -20,14 +20,14 @@ import {
     const [Affiliation, setAffiliation] = useState("");
     const toast = useToast();
     const textColor = useColorModeValue("gray.700", "white");
-  
+    const {Username}=useParams()
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       // Send the username to the backend for deletion
       try {
-        const {DoctorUsername}=useParams()
-        const response = await fetch(API_PATHS.updateAffil+ DoctorUsername, {
+        
+        const response = await fetch(API_PATHS.updateAffil+ Username, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
