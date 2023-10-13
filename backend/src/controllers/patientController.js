@@ -131,6 +131,7 @@ const session_index = (req, res) => {
             const calcCost = (1 - packageDis / 100) * (doctor.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
             // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
             mySessions.push({
+              Username: doctor.Username,
               Name: doctor.Name,
               Speciality: doctor.Speciality,
               Cost: calcCost,
@@ -159,6 +160,12 @@ const createFamilymember = async (req, res) => {
     res.status(400).json({ error: 'The national ID must be 16 digits long.' });
     return;
   }
+  // check if age are only 2 digitd
+  if (Age.length === 0 ||Age.length >2|| Age==0 ) {
+    // Return an error message.
+    res.status(400).json({ error: 'The age must be 1 or 2 digits' });
+    return;
+  }
   try {
     const newFamilymember = await familyMemberModel.create({
       PatientUserName: Createpatameter,
@@ -178,12 +185,12 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { patientuser } = req.params
+    const  {PatientUserName}  = req.params
     console.log(req.params)
     const fam = await familyMemberModel.find({
-      patientuser
+      PatientUserName:PatientUserName
     });
-    console.log(fam)
+  //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });

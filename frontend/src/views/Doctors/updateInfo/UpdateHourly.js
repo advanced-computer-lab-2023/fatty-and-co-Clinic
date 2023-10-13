@@ -15,7 +15,7 @@ import {
   import Card from "components/Card/Card.js";
   import CardBody from "components/Card/CardBody.js";
   import CardHeader from "components/Card/CardHeader.js";
-  
+  import {useParams} from "react-router-dom";
   function UpdateHourly() {
     const [HourlyRate, setHourlyRate] = useState("");
     const toast = useToast();
@@ -26,7 +26,8 @@ import {
   
       // Send the username to the backend for deletion
       try {
-        const response = await fetch(API_PATHS.updateHourly+ "zmbifqzaqf856", {
+        const {DoctorUsername}=useParams()
+        const response = await fetch(API_PATHS.updateHourly+ DoctorUsername, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
