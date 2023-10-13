@@ -198,7 +198,7 @@ const GetFamilymembers = async (req, res) => {
 };
 
 const selectPatient = async (req, res) => {
-  const id = req.body.id;
+  const id = req.query.id;
 
   // Get the patient.
   const patient = await patientModel.findById(id);

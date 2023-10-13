@@ -251,7 +251,7 @@ const searchPatient = async (req, res) => {
   const uniquePatientNames = new Set();
 
   // Add each patient name to the set.
-  for (const patientName of patientUserNames) {
+  for (const patientName of patientNames) {
     uniquePatientNames.add(patientName);
   }
 
@@ -259,21 +259,22 @@ const searchPatient = async (req, res) => {
   const uniquePatientNamesArray = [...uniquePatientNames];
 
   // Check if the patientName param is empty.
-  if (!(patientName in req.query)) {
+  if (!(req.query.PatientName)) {
     // patientName is null or an empty string
     const patients = await patientModel.find({
-      Username: { $in: uniquePatientNamesArray },
+      Username: { $in: patientUserNames },
     });
     res.status(200).send(patients);
   } else {
     // patientName is not null or an empty string
     const filteredPatientNames = uniquePatientNamesArray.filter((patientNamee) =>
-      patientNamee.includes(patientName)
+      patientNamee.toLowerCase().includes(patientName.toLowerCase())
     );
     const patients = await patientModel.find({
       Name: { $in: filteredPatientNames },
       Username: {$in: patientUserNames}
     });
+    
     res.status(200).send(patients);
   }
 
