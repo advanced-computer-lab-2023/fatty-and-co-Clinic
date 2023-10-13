@@ -40,15 +40,11 @@ const Requests = ({ title, captions, data }) => {
           <Tbody>
             {data.map((row) => {
               return (
-                <TRequestsRow
+                <RequestsRow
                   key={`${row.Username}-${row.Name}`}
-                  name={row.name}
-                  logo={row.logo}
-                  email={row.email}
-                  subdomain={row.subdomain}
-                  domain={row.domain}
-                  status={row.status}
-                  date={row.date}
+                  Name={row.Name}
+                  Username= {row.Username}
+                  Status={row.Status}
                 />
               );
             })}

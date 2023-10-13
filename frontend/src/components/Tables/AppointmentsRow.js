@@ -12,7 +12,7 @@ import {
 import React from "react";
 
 function AppointmentsRow(props) {
-  const { DoctorUsername, PatientUsername, Status, Date } = props;
+  const { DoctorName, PatientName, Status, Date } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
@@ -24,7 +24,7 @@ function AppointmentsRow(props) {
             fontWeight="bold"
             minWidth="100%"
           >
-            {DoctorUsername}
+            {DoctorName}
           </Text>
         </Flex>
       </Td>
@@ -37,7 +37,7 @@ function AppointmentsRow(props) {
             fontWeight="bold"
             minWidth="100%"
           >
-            {PatientUsername}
+            {PatientName}
           </Text>
         </Flex>
       </Td>

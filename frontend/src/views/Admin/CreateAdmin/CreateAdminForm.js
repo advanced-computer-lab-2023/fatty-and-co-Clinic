@@ -62,6 +62,13 @@ function CreateAdminForm() {
   };
 
   return (
+    <Box pt="80px">
+      <Flex
+        direction="column"
+        alignItems="flex-start"
+        pt="50px"
+        justifyContent="flex-start"
+      >
     <Card
       p="22px"
       my={{ sm: "24px", lg: "0px" }}
@@ -116,6 +123,8 @@ function CreateAdminForm() {
         </Flex>
       </CardBody>
     </Card>
+    </Flex>
+    </Box>
   );
 }
 

@@ -15,6 +15,7 @@ const {
   getDoctorByNameAndSpeciality,
   filterDoctor,
   updateDoctor,
+  viewPatientInfoAndHealthRecords
 } = require("../controllers/doctorController");
 
 const router = express.Router();
@@ -49,7 +50,7 @@ router.post("/createDoctor", createDoctor);
  * @prop {number} HourlyRate - The new hourly rate of the doctor
  * @prop {string} Affiliation - The new affiliation of the doctor
  */
-router.patch("/updateDoctor", updateDoctor);
+router.patch("/updateDoctor/:Username", updateDoctor);
 
 /**
  * @route GET /doctors/id/:id
@@ -121,5 +122,13 @@ router.delete("/deleteDoctor/:id", deleteDoctor);
  * @param {string} id - The ID of the doctor
  */
 router.get("/getDoctor/:id", getDoctorByID);
+
+/**
+ * @route GET /doctors/viewPatientInfoAndHealthRecords
+ * @desc Returns appointments and prescriptions by patient username
+ * @access Public
+* @prop {string} PatientUsername - The username of the patient
+ */
+router.get("/viewPatientInfoAndHealthRecords", viewPatientInfoAndHealthRecords);
 
 module.exports = router;

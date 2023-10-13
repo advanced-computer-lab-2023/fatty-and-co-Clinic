@@ -4,6 +4,7 @@ import { FamilymemberTable } from "./components/FamilymemberTable.js";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function Viewmembers() {
   const [data, setData] = useState([{}]);
@@ -11,14 +12,16 @@ function Viewmembers() {
     Name: "",
     Speciality: "",
   });
-  const PatientUserName = "Mariam";
+  const { PatientUserName } = useParams();
 
   useEffect(() => {
-    const url = API_PATHS.Viewmembers + PatientUserName;
+
+  const URL1=API_PATHS.viewfamilymembers+PatientUserName;
     console.log("Sending search params:", searchParams);
-    console.log(url);
+    console.log( "here");
+    console.log( URL1);
     axios
-      .get(url, { params: searchParams })
+      .get(URL1, { params: searchParams })
       .then((response) => {
         setData(response.data);
       })

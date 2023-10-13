@@ -1,21 +1,25 @@
-// import
 import Dashboard from "views/Dashboard/Dashboard";
 import Tables from "views/Dashboard/Tables";
 import Billing from "views/Dashboard/Billing";
 import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
-import SignIn from "views/Auth/SignIn.js";
-import SignUp from "views/Auth/SignUp.js";
-// <<<<<<< HEAD
-import UpdateEmail from "views/Doctors/UpdateEmail.js"; //Zawedna de
-import createFamilymember from "views/Patient/createFamilymember";
+import SignIn from "views/Auth/SignIn";
+import SignUp from "views/Auth/SignUp";
+import docSignUp from "views/Auth/docSignUp";
+import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
+import createFamilymember from "views/Patient/createFamilyMember";
 import viewDoctors from "views/Patient/viewDoctors";
-import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
+import viewPrescriptions from "views/Patient/viewPrescriptions";
+import viewDoctorPatients from "views/Doctors/viewPatients";
+import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
+import Requests from "views/Admin/Requests";
+import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
+import PatientAppointments from "views/Patient/viewAppointPat/";
 
 import {
   HomeIcon,
@@ -40,18 +44,68 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewAppointments",
-    name: "View Appointments",
+    path: "/viewAppointPat/:PatientUsername",
+    name: "View Patient Appointments ",
+    icon: <HomeIcon color="inherit" />,
+    component: PatientAppointments,
+    layout: "/admin",
+  },
+  {
+    path: "/updateEmailDoc/:DoctorUsername",
+    name: "Update Email",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateEmail,
+    layout: "/admin",
+  },
+  {
+    path: "/updateHourly/:DoctorUsername",
+    name: "Update Hourly Rate",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateHourly,
+    layout: "/admin",
+  },
+  {
+    path: "/updateAffil/:DoctorUsername",
+    name: "Update Affiliation",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: UpdateAffil,
+    layout: "/admin",
+  },
+
+  {
+    path: "/viewAppointments/:DoctorUsername",
+    name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
     layout: "/admin",
   },
 
   {
+    path: "/viewRequests",
+    name: "View Requests",
+    icon: <HomeIcon color="inherit" />,
+    component: Requests,
+    layout: "/admin",
+  },
+  {
     path: "/addAdmin",
     name: "Add Admin",
     icon: <HomeIcon color="inherit" />,
     component: CreateAdmin,
+    layout: "/admin",
+  },
+
+  {
+    path: "/createFamilymember/:Createparameter",
+    name: "Add Family Member",
+    icon: <HomeIcon color="inherit" />,
+    component: createFamilymember,
     layout: "/admin",
   },
   {
@@ -63,27 +117,33 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewDoctors/viewDoctorDetails/:username",
-    name: "View Doctor Details",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewDoctorDetails,
-    layout: "/admin",
-  },
-  {
-    path: "/viewDoctors/:id",
+    path: "/viewDoctors",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
     layout: "/admin",
   },
   {
-    path: "/viewmembers",
+    path: "/viewmembers/:PatientUserName",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
     layout: "/admin",
   },
-
+  {
+    path: "/viewPrescriptions",
+    name: "View Prescriptions",
+    icon: <HomeIcon color="inherit" />,
+    component: viewPrescriptions,
+    layout: "/admin",
+  },
+  {
+    path: "/viewDoctorPatients",
+    name: "View Doctor's Patients",
+    icon: <HomeIcon color="inherit" />,
+    component: viewDoctorPatients,
+    layout: "/admin",
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -149,39 +209,14 @@ var dashRoutes = [
         component: SignUp,
         layout: "/auth",
       },
-    ],
-  },
-  {
-    name: "UPDATE ACCOUNT",
-    category: "update",
-    rtlName: "صفحات",
-    state: "pageCollapse", //not sure
-    views: [
       {
-        path: "/profile",
-        name: "Profile",
+        path: "/docsignup",
+        name: "Doctor Sign Up",
         rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
+        icon: <RocketIcon color="inherit" />,
         secondaryNavbar: true,
-        component: UpdateEmail,
-        layout: "/updateEmail", //Not sure men ay 7aga
-      },
-    ],
-  },
-  {
-    name: "Create family member ",
-    category: "create",
-    rtlName: "صفحات",
-    state: "pageCollapse", //not sure
-    views: [
-      {
-        path: "/Add",
-        name: "Profile",
-        rtlName: "لوحة القيادة",
-        icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
-        component: createFamilymember,
-        layout: "/Createfamilymem", //Not sure men ay 7aga
+        component: docSignUp,
+        layout: "/auth",
       },
     ],
   },
