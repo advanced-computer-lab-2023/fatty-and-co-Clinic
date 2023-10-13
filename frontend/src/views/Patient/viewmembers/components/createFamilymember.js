@@ -17,6 +17,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { useParams } from "react-router-dom";
+import { createParameter } from "typescript";
 
 function createFamilymember() {
   const [Name, setName] = useState("");
@@ -27,14 +28,14 @@ function createFamilymember() {
   const toast = useToast();
 
   const textColor = useColorModeValue("gray.700", "white");
-
+const{Createpatameter}=useParams();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Send the username to the backend for deletion
     try {
-      
-      const response = await fetch("http://localhost:8000/patient/createFamilymember/Zeina", {
+    
+      const response = await fetch("http://localhost:8000/patient/createFamilymember/:"+Createpatameter, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
