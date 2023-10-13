@@ -80,6 +80,8 @@ const updatePatient = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+
 // view all doctors with speciality and session price
 const session_index = (req, res) => {
   // Package discount starts with 0
