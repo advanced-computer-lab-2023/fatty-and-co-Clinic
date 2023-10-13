@@ -71,7 +71,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/updateAffil/:DoctorUsername",
+    path: "/updateAffil/:Username",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,

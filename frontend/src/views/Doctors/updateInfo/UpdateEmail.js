@@ -55,7 +55,7 @@ import {
           // Handle errors or provide feedback to the user
           toast({
             title: "Failed to update email",
-            description: "An error occurred while updating the admin.",
+            description: "You could be typing an invalid mail or an email that is already registered!",
             status: "error",
             duration: 9000,
             isClosable: true,
