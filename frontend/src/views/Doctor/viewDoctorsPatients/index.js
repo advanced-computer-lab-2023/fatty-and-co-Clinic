@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import AppointmentsTable from "./components/AppointmentsTable";
+import PatientRow from "components/Tables/PatientRow";
+import PatientTable from "./components/PatientTable";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
-
-function ViewAppointments() {
+function ViewDoctorsPatients() {
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
-    Status: "",
-    Date: "",
+    Name: "",
+    DoctorUsername:  "",
   });
-  const { DoctorUsername } = useParams();
-
+  
+  setSearchParams({
+    ...searchParams,
+    Name: "",
+    DoctorUsername:"",
+  });
   useEffect(() => {
-    const Username = "Mariom";
-    const url = API_PATHS.viewAppointments + DoctorUsername;
+    const url = API_PATHS.viewPatientsDoctor;
+    console.log("Sending search params:", searchParams);
     axios
       .get(url, { params: searchParams })
       .then((response) => {
@@ -26,29 +29,23 @@ function ViewAppointments() {
       .catch((err) => console.log(err));
   }, [searchParams]);
 
-  const [statusSearchValue, setStatusSearchValue] = useState("");
-  const [dateSearchValue, setDateSearchValue] = useState("");
+  
+  
 
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
     setSearchParams({
       ...searchParams,
-      Status: statusSearchValue,
-      Date: dateSearchValue,
+      Name: "",
+      DoctorUsername:"",
     });
   };
 
-  console.log(data);
-
-  const handleStatusSearchValueChange = (value) => {
-
-    setStatusSearchValue(value);
+  const handleNameSearchValueChange = (value) => {
+    setNameSearchValue(value);
   };
 
-  const handleDateSearchValueChange = (value) => {
-    console.log(value);
-    setDateSearchValue(value);
-  };
+
 
   return (
     <Box pt="80px">
@@ -60,21 +57,17 @@ function ViewAppointments() {
       >
         <Flex direction="row" alignItems="flex-start">
           <SearchBar
-            placeholder="Status"
-            onChange={handleStatusSearchValueChange}
+            placeholder="Patient Name..."
+            onChange={handleNameSearchValueChange}
           />
-          <SearchBar
-            placeholder="YYYY-MM-DD"
-            onChange={handleDateSearchValueChange}
-            marginLeft={4} // Add margin to the left
-          />
+
           <Button onClick={handleSearchButtonClick} marginLeft={4}>
             Search
           </Button>
         </Flex>
-        <AppointmentsTable
-          title={"Available Appointments"}
-          captions={["Doctor Name", "Patient Name", "Status", "Date"]}
+        <PatientTable
+          title={"my patients"}
+          captions={["Name", "MobileNum", "DateOfBirth"]}
           data={data}
         />
       </Flex>
@@ -82,4 +75,4 @@ function ViewAppointments() {
   );
 }
 
-export default ViewAppointments;
+export default ViewDoctorsPatients;

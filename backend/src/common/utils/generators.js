@@ -47,6 +47,11 @@ function generateDateOfBirth() {
   return `${year}-${month}-${day}`;
 }
 
+function generateGender() {
+  const genders = ["M", "F"];
+  return genders[Math.floor(Math.random() * genders.length)];
+}
+
 function generateHourlyRate() {
   return Math.floor(Math.random() * 100) + 1;
 }
@@ -202,7 +207,18 @@ function generateAppointmentDate() {
     Math.random() * (next30Days.getTime() - today.getTime())
   );
   const randomDate = new Date(today.getTime() + randomTimestamp);
-  return randomDate.toISOString().slice(0, 10);
+
+  // Generate random hours, minutes and seconds
+  const randomHours = Math.floor(Math.random() * 24);
+  const randomMinutes = Math.floor(Math.random() * 60);
+  const randomSeconds = Math.floor(Math.random() * 60);
+
+  // Set the random hours, minutes and seconds
+  randomDate.setHours(randomHours);
+  randomDate.setMinutes(randomMinutes);
+  randomDate.setSeconds(randomSeconds);
+
+  return randomDate.toISOString();
 }
 
 function generateUserType() {
@@ -268,6 +284,7 @@ module.exports = {
   generateUsername,
   generateName,
   generateDateOfBirth,
+  generateGender,
   generateHourlyRate,
   generateAffiliation,
   generateEducationalBackground,

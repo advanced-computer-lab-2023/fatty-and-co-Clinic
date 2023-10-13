@@ -15,9 +15,9 @@ import {
   import Card from "components/Card/Card.js";
   import CardBody from "components/Card/CardBody.js";
   import CardHeader from "components/Card/CardHeader.js";
-  import { useParams } from "react-router-dom";
-  function UpdateAffil() {
-    const [Affiliation, setAffiliation] = useState("");
+  import {useParams} from "react-router-dom";
+  function UpdateHourly() {
+    const [HourlyRate, setHourlyRate] = useState("");
     const toast = useToast();
     const textColor = useColorModeValue("gray.700", "white");
   
@@ -27,37 +27,46 @@ import {
       // Send the username to the backend for deletion
       try {
         const {DoctorUsername}=useParams()
-        const response = await fetch(API_PATHS.updateAffil+ DoctorUsername, {
+        const response = await fetch(API_PATHS.updateHourly+ DoctorUsername, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({Affiliation}),
+          body: JSON.stringify({HourlyRate}),
         })
-        if(Affiliation==""){
+        if(HourlyRate==""){
             toast({
-                title: "Please fill the new affiliation field",
+                title: "Please fill the new hourly rate field!",
                 status: "error",
                 duration: 9000,
                 isClosable: true,
               });
             
+              
+        }
+        else if(HourlyRate.length>5){
+            toast({
+                title: "Maximum hourly rate is 99999 !",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
         }
   
         else if (response.ok) {
           // Handle success or provide feedback to the user
           toast({
-            title: "Affiliation updated successfully",
+            title: "Hourly rate updated successfully",
             status: "success",
             duration: 9000,
             isClosable: true,
           });
-          setAffiliation(""); // Clear the input field
+          setHourlyRate(""); // Clear the input field
         } else {
           // Handle errors or provide feedback to the user
           toast({
-            title: "Failed to update Affiliation",
-            description: "An error occurred while updating the affiliation.",
+            title: "Failed to update hourly rate",
+            description: "An error occurred while updating the hourly rate.",
             status: "error",
             duration: 9000,
             isClosable: true,
@@ -78,7 +87,7 @@ import {
         <CardHeader >
           <Flex justify="space-between" align="center" mb="1rem" w="100%">
             <Text fontSize="lg" color={textColor} fontWeight="bold">
-               Change your affiliation!
+               Change your hourly rate!
             </Text>
           </Flex>
         </CardHeader>
@@ -88,10 +97,11 @@ import {
               <Stack spacing={3}>
                 <Input
                   variant="filled"
-                  type="text"
-                  placeholder="Affiliation"
-                  value={Affiliation}
-                  onChange={(e) => setAffiliation(e.target.value)}
+                  type="number"
+                  maxLength={5}
+                  placeholder="Hourly rate"
+                  value={HourlyRate}
+                  onChange={(e) => setHourlyRate(e.target.value)}
                 />
                 <Button
                   colorScheme="teal"
@@ -113,5 +123,5 @@ import {
     );
   }
   
-  export default UpdateAffil;
+  export default UpdateHourly;
   
