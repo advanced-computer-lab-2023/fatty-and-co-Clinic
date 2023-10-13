@@ -11,7 +11,7 @@ const { getPatients } = require("./testController");
 
 
 const createPatient = async (req, res) => {
-  const {EmergencyContactNumber,EmergencyContactName} = req.body;
+  const { EmergencyContactNumber, EmergencyContactName } = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -177,7 +177,7 @@ const createFamilymember = async (req, res) => {
 
     });
     res.status(200).json(newFamilymember);
-  
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -229,8 +229,8 @@ const getPrescriptions = async (req, res) => {
     const baseQuery = { PatientUsername: patientUsername };
     const regexQuery = {};
 
-    if (query.DoctorUsername) {
-      regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
+    if (query.DoctorName) {
+      regexQuery.DoctorName = new RegExp(query.DoctorName, "i");
     }
     if (query.Date) {
       const date = new Date(query.Date);
