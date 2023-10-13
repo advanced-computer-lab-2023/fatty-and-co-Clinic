@@ -5,7 +5,7 @@ const appointmentSchema = new Schema(
   {
     DoctorUsername: {
       type: String,
-      ref: "Doctor",
+       ref: "Doctor",
       required: true,
     },
     PatientUsername: {

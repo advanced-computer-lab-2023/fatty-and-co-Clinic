@@ -233,6 +233,7 @@ const searchPatient = async (req, res) => {
     (appointment) => appointment.PatientUsername
   );
 
+ 
   // Filter the patient names to only include patients whose name contains the search query.
   const filteredPatientNames = patientNames.filter((patientNamee) =>
     patientNamee.includes(patientName)

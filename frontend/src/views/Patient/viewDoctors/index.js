@@ -16,17 +16,25 @@ function ViewDoctors() {
 
   const [filterParams, setFilterParams] = useState({
     speciality: "",
-    date: [], 
-    hour:[],
+    date: [],
+    hour: [],
+    id: "",
   });
   const { id } = useParams();
   const options = [
-    { label: "Cardiology", value: "Cardiology" },
-    {
-      label: "Psychiatry",
-      value: "Psychiatry",
-    },
-  ];
+    { label: 'Cardiology', value: 'Cardiology' },
+    { label: 'Dermatology', value: 'Dermatology' },
+    { label: 'Endocrinology', value: 'Endocrinology' },
+    { label: 'Gastroenterology', value: 'Gastroenterology' },
+    { label: 'Hematology', value: 'Hematology' },
+    { label: 'Infectious Disease', value: 'Infectious Disease' },
+    { label: 'Nephrology', value: 'Nephrology' },
+    { label: 'Neurology', value: 'Neurology' },
+    { label: 'Oncology', value: 'Oncology' },
+    { label: 'Ophthalmology', value: 'Ophthalmology' },
+    { label: 'Orthopedics', value: 'Orthopedics' },
+    { label: 'Otolaryngology', value: 'Otolaryngology' },
+    { label: 'Pediatrics', value: 'Pediatrics' },]
   //const filterRef = useRef(false);
 
   useEffect(() => {
@@ -43,6 +51,7 @@ function ViewDoctors() {
   const [specialityFilterValue, setSpecialityFilterValue] = useState("");
   const [dayFilterValue, setDayFilterValue] = useState([]);
   const [hourFilterValue, setHourFilterValue] = useState([]);
+  const [dayHourFilterValue, setDayHourFilterValue] = useState([]);
 
   //add date and hour
 
@@ -52,6 +61,7 @@ function ViewDoctors() {
       speciality: specialityFilterValue,
       date: dayFilterValue,
       hour: hourFilterValue,
+      id: id,
     });
   };
 
@@ -59,13 +69,22 @@ function ViewDoctors() {
     setSpecialityFilterValue(event.target.value);
   };
 
-  const handleDateFilter = (event) => {
-    setDayFilterValue(event.target.value);
-  };
+  // const handleDateFilter = (event) => {
+  //   setDayFilterValue(event.target.value);
+  // };
 
-  const handleHourFilter = (event) => {
-    setHourFilterValue(event.target.value);
-  };
+  // const handleHourFilter = (event) => {
+  //   setHourFilterValue(event.target.value);
+  // };
+
+  const handleDateHourValue = (event) => {
+    setDayHourFilterValue(event.target.value);
+    const newDate = new Date(event.target.value)
+    const newHour = newDate.getHours() + (newDate.getMinutes()/100);
+    setDayFilterValue(newDate);
+    setHourFilterValue(newHour);
+
+  }
 
   useEffect(() => {
     const url = API_PATHS.viewDoctors + id;
@@ -119,22 +138,19 @@ function ViewDoctors() {
           <Button onClick={handleSearchButtonClick} marginLeft={4}>
             Search
           </Button>
+        </Flex>
 
-    
-          </Flex>
-
-
-          <Flex direction="row" alignItems="flex-start">
+        <Flex direction="row" alignItems="flex-start">
           <select onChange={handleSpecialityFilter}>
-            <option value="">All</option>
+            <option value="">all</option>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
-          
-          <Input
+
+          {/* <Input
             // placeholder="Select Date and Time"
             size="ld"
             type="date"
@@ -149,23 +165,33 @@ function ViewDoctors() {
             placeholder="Time format: HH.MM"
             type="number"
             min="0"
-            max="23" step="0.01"
+            max="23"
+            step="0.01"
             value={hourFilterValue}
             onChange={handleHourFilter}
+          /> */}
+
+
+
+          <Input
+            placeholder="Select Date and Time"
+            size="md"
+            type="datetime-local"
+            value = {dayHourFilterValue}
+            onChange={handleDateHourValue}
+          
           />
+
           <Button onClick={handleFilterOnChange} marginLeft={4}>
-             filter
+            filter
           </Button>
 
           <Button onClick={handleSearchButtonClick} marginLeft={4}>
-            Clear 
+            Clear
           </Button>
-          </Flex>
+        </Flex>
         {(id && id !== ":id" && (
-  
-
-        
-        <DoctorsTable
+          <DoctorsTable
             title={"Available Doctors"}
             captions={["Name", "Speciality", "Cost"]}
             data={data}
