@@ -8,7 +8,6 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"  //Zawedna de
-//import createFamilymember from "views/Patient/createFamilymember";
 import Package from "views/Admin/Package/package";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm"
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm"
@@ -49,14 +48,14 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewAppointPat",
+    path: "/viewAppointPat/:PatientUsername",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
     layout: "/admin",
   },
   {
-        path: "/updateEmailDoc",
+        path: "/updateEmailDoc/:DoctorUsername",
         name: "Update Email",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
@@ -65,7 +64,7 @@ var dashRoutes = [
         layout: "/admin",   
       },
       {
-        path: "/updateHourly",
+        path: "/updateHourly/:DoctorUsername",
         name: "Update Hourly Rate",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
@@ -74,7 +73,7 @@ var dashRoutes = [
         layout: "/admin",   
       },
       {
-        path: "/updateAffil",
+        path: "/updateAffil/:DoctorUsername",
         name: "Update Affiliation",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
@@ -85,7 +84,7 @@ var dashRoutes = [
  
   {
 
-    path: "/viewAppointments",
+    path: "/viewAppointments/:DoctorUsername",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -108,8 +107,8 @@ var dashRoutes = [
   },
 
   {
-    path: "/addFamilymember",
-    name: "Add Familymember",
+    path: "/createFamilymember/:Createpatameter",
+    name: " createFamilymember",
     icon: <HomeIcon color="inherit" />,
     component: createFamilymember,
     layout: "/admin",
@@ -130,7 +129,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewmembers",
+    path: "/viewmembers/:PatientUserName",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,

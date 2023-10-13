@@ -4,6 +4,7 @@ import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import PatientAppTable from "./components/PatientAppTable";
+import { useParams } from "react-router-dom";
 
 function ViewPatientAppointments() {
   const [data, setData] = useState([{}]);
@@ -11,10 +12,9 @@ function ViewPatientAppointments() {
     Status: "",
     Date: "",
   });
-
-  useEffect(() => {
-    const Username = "Marioooom";
-    const url = API_PATHS.viewAppointPat + Username;
+  const {PatientUsername} = useParams();
+    useEffect(() => {
+    const url = API_PATHS.viewAppointPat + PatientUsername;
     axios
       .get(url, { params: searchParams })
       .then((response) => {
