@@ -15,18 +15,18 @@ import {
   import Card from "components/Card/Card.js";
   import CardBody from "components/Card/CardBody.js";
   import CardHeader from "components/Card/CardHeader.js";
-  
+  import { useParams } from "react-router-dom";
   function UpdateEmail() {
     const [Email, setEmail] = useState("");
     const toast = useToast();
     const textColor = useColorModeValue("gray.700", "white");
-  
+    const {DoctorUsername}=useParams()
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       // Send the username to the backend for deletion
       try {
-        const response = await fetch(API_PATHS.updateEmailDoc+ "jcgczjkmbn553", {
+        const response = await fetch(API_PATHS.updateEmailDoc+ DoctorUsername, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
