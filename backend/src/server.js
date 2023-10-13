@@ -26,9 +26,12 @@ app.use((req, res, next) => {
   console.log(req.method, req.path);
   next();
 });
+app.use((req, res, next) => {
+  console.log(req.query);
+  next();
+});
 
 // Routes
-app.use(guestRoutes);
 app.use("/appointment", appointmentRoutes);
 app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);

@@ -13,29 +13,30 @@ import {
   import Card from "components/Card/Card.js";
   import CardBody from "components/Card/CardBody.js";
   import CardHeader from "components/Card/CardHeader.js";
-  import DoctorsRow from "components/Tables/DoctorsRow";
-
+  import PatientAppRow from "components/Tables/PatientAppRow";
+  
   import React from "react";
   
-  const DoctorsTable = ({ title, captions, data }) => {
+  export const PatientAppTable = ({ title, captions, data }) => {
+    //Table that uses row
     const textColor = useColorModeValue("gray.700", "white");
     return (
-      <Card my='22px' overflowX={{ sm: "scroll", xl: "hidden" }}>
-        <CardHeader p='6px 0px 22px 0px'>
-          <Flex direction='column'>
-            <Text fontSize='lg' color={textColor} fontWeight='bold' pb='.5rem'>
-                {/* title will be All doctors  */}
+      <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+        <CardHeader p="6px 0px 22px 0px">
+          <Flex direction="column">
+            <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+              {/* title will be All doctors  */}
               {title}
             </Text>
           </Flex>
         </CardHeader>
         <CardBody>
-          <Table variant='simple' color={textColor}>
+          <Table variant="simple" color={textColor}>
             <Thead>
-              <Tr my='.8rem' pl='0px'>
+              <Tr my=".8rem" pl="0px">
                 {captions.map((caption, idx) => {
                   return (
-                    <Th color='gray.400' key={idx} ps={idx === 0 ? "0px" : null}>
+                    <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
                       {caption}
                     </Th>
                   );
@@ -45,11 +46,12 @@ import {
             <Tbody>
               {data.map((row) => {
                 return (
-                  <DoctorsRow
-                    key={row.Name}
-                    Name={row.Name}
-                    Speciality={row.Speciality}
-                    Cost={row.Cost}
+                  <PatientAppRow
+                    key={row.PatientName}
+                    PatientName={row.PatientName}
+                    DoctorName={row.DoctorName}    
+                    Status={row.Status}
+                    Date={row.Date}
                   />
                 );
               })}
@@ -60,5 +62,5 @@ import {
     );
   };
   
-  export default DoctorsTable;
+  export default PatientAppTable;
   

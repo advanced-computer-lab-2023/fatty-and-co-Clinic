@@ -7,6 +7,7 @@ const patientSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      ref: "User",
       unique: true,
     },
     Name: {
@@ -21,13 +22,18 @@ const patientSchema = new Schema(
       type: Date,
       required: true,
     },
+    Gender: {
+      type: String,
+      enum: ["M", "F"],
+      required: true
+    },
     EmergencyContact: {
-      type: { FullName: String, PhoneNumber: Number }, //NOT SURE OF THIS SYNTAX
-      required: false,
+      type: { FullName: String, PhoneNumber: Number }, 
+      required: true,
     },
     PackageName: {
       type: String,
-      enum: ["Silver", "Gold", "Platinum"],
+      ref: "Package",
       required: false,
     },
   },

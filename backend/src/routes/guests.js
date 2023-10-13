@@ -1,5 +1,5 @@
 const express = require("express");
-const { createRequest } = require("../controllers/guestController");
+const { createRequest, updateRequest,updateEmail } = require("../controllers/guestController");
 
 const router = express.Router();
 
@@ -10,6 +10,8 @@ router.get("/", (req, res) => {
 
 router.post("/addRequest", createRequest);
 
-router.post("/reg", createRequest);
+router.put("/updateRequest/:id", updateRequest);
+
+router.patch("/updateEmail/:Username",updateEmail)
 
 module.exports = router;

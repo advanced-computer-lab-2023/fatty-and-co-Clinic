@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const familyMemberSchema = new Schema({
   PatientUserName: {
     type: String,
+    ref: "Patient",
     required: true,
   },
   Name: {
@@ -15,6 +16,8 @@ const familyMemberSchema = new Schema({
     required: true,
     trim: true,
     unique: true,
+
+   
   },
   Age: {
     type: Number,

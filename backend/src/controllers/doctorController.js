@@ -1,6 +1,7 @@
 const doctorModel = require("../models/doctors");
 const appointmentModel = require("../models/appointments");
 const prescriptionsModel = require("../models/prescriptions");
+const patientModel = require("../models/patients");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 
@@ -31,7 +32,7 @@ const systemUserModel = require("../models/systemusers");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -69,22 +70,26 @@ const deleteDoctor = async (req, res) => {
 // update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
-    const filter = { Username: req.body.Username };
+    const {Username} = req.params;
+    const{HourlyRate,Affiliation}=req.body
     // console.log(req.body.Email)
-    if (req.body.HourlyRate || req.body.Affiliation) {
-      const doc = await doctorModel.findOneAndUpdate(filter, req.body);
-      const doc2 = await doctorModel.findOneAndUpdate(filter, req.body);
+      if(Affiliation===undefined &&(HourlyRate!==undefined && (HourlyRate.length===0 || HourlyRate.length>5))){
+        res.status(400).send({error:"Please fill in an hourly rate from 1-99999"})
+      }
+      else if(HourlyRate!==undefined){
+      const doc = await doctorModel.findOneAndUpdate({Username:Username},{HourlyRate:HourlyRate});
+      const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, {HourlyRate:HourlyRate});
+      res.status(200).json(doc2);}
+      else if(Affiliation){ const doc = await doctorModel.findOneAndUpdate({Username:Username},{Affiliation:Affiliation});
+      const doc2 = await doctorModel.findOneAndUpdate({Username:Username}, {Affiliation:Affiliation});
       res.status(200).json(doc2);
-    } else {
-      const doc = await systemUserModel.findOneAndUpdate(filter, req.body);
-      const doc1 = await systemUserModel.findOneAndUpdate(filter, req.body);
-      res.status(200).json(doc1);
-    }
-    // console.log(req.body.HourlyRate);
-  } catch (error) {
+
+      }else{
+        res.status(404).send({error:"Please fill in Affiliation"})
+      }}
+ catch (error) {
     res.status(400).json({ error: error.message });
-  }
-};
+  }}
 
 // get a doctor by ID
 const getDoctorByID = async (req, res) => {
@@ -116,7 +121,7 @@ const getDoctorByID = async (req, res) => {
 
 // get a doctor by username
 const getDoctorByUsername = async (req, res) => {
-  const { Username } = req.params;
+  const { username } = req.params;
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     if (!doctor) {
@@ -169,30 +174,59 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 };
 
 // filter doctors by speciality or/and (date and time)
+// TODO: replace query with body
 const filterDoctor = async (req, res) => {
   try {
     console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
+
+    let packageDis = 0;
     var myDoctors = new Array();
+    var myFilteredDoctors = new Array();
+
+    const patientId = req.query.id;
+    if (!mongoose.Types.ObjectId.isValid(patientId)) {
+      res.status(404).json({ error: "Invalid ID" });
+      return;
+    } else {
+      //getting package dis of patient
+      patientModel.findById(patientId).then((result) => {
+        // Extract the 'PackageName' property from the patient document
+        const packageName = result.PackageName;
+        // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
+        if (!packageName == null) {
+          packageModel
+            .find({ Name: packageName })
+            .then((result) => {
+              // Extract the 'SessionDiscount' property from the package document and set the 'packageDis' variable to its value
+              packageDis = result.SessionDiscount;
+            })
+            .catch((err) => {
+              res.status(500).json({ error: error.message });
+            });
+        }
+      });
+    }
 
     if (urlParams.has("date") && urlParams.has("hour")) {
-      const date = new Date(req.query.date);
-      const day = date.getDay();
-      const hour = req.query.hour;
-      const dateDocs = await doctorModel.find({
-        WorkingDays: { $in: [day] },
-        StartTime: { $lte: hour },
-        EndTime: { $gt: hour },
-      });
-
-      if (urlParams.has("speciality")) {
-        dateDocs.forEach((element) => {
-          if (element.Speciality == req.query.speciality) {
-            myDoctors.push(element);
-          }
+      if (req.query.date && req.query.hour) {
+        const date = new Date(req.query.date);
+        const day = date.getDay();
+        const hour = req.query.hour;
+        const dateDocs = await doctorModel.find({
+          WorkingDays: { $in: [day] },
+          StartTime: { $lte: hour },
+          EndTime: { $gt: hour },
         });
-      } else {
-        myDoctors = dateDocs;
+        if (urlParams.has("speciality")) {
+          dateDocs.forEach((element) => {
+            if (element.Speciality == req.query.speciality) {
+              myDoctors.push(element);
+            }
+          });
+        } else {
+          myDoctors = dateDocs;
+        }
       }
     } else {
       if (urlParams.has("speciality")) {
@@ -203,7 +237,17 @@ const filterDoctor = async (req, res) => {
         myDoctors = await doctorModel.find();
       }
     }
-    res.status(200).json(myDoctors);
+
+    myDoctors.forEach((element) => {
+      const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
+      // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
+      myFilteredDoctors.push({
+        Name: element.Name,
+        Speciality: element.Speciality,
+        Cost: calcCost,
+      });
+    });
+    res.status(200).json(myFilteredDoctors);
   } catch (err) {
     console.log(err);
   }
@@ -214,13 +258,17 @@ const filterDoctor = async (req, res) => {
 const viewPatientInfoAndHealthRecords = async (req, res) => {
   const patientUsername = req.body.PatientUsername;
   try {
-    const appointments = await appointmentModel.find({ PatientUsername: patientUsername });
-    const prescriptions = await prescriptionsModel.find({ PatientUsername: patientUsername });
+    const appointments = await appointmentModel.find({
+      PatientUsername: patientUsername,
+    });
+    const prescriptions = await prescriptionsModel.find({
+      PatientUsername: patientUsername,
+    });
     res.status(200).json({ appointments, prescriptions });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 module.exports = {
   getDoctorByID,
@@ -231,5 +279,5 @@ module.exports = {
   createDoctor,
   getAllDoctors,
   deleteDoctor,
-  viewPatientInfoAndHealthRecords
+  viewPatientInfoAndHealthRecords,
 };

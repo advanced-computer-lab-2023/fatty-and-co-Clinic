@@ -11,7 +11,6 @@ const {
   GetFamilymembers,
   getPrescriptions,
   selectPatient,
-  filterPrescriptions,
   selectPrescription,
 } = require("../controllers/patientController");
 
@@ -97,7 +96,7 @@ router.get("/view/doctors/:id", session_index);
  * @prop {string} Gender - The gender of the family member ["M", "F"]
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
-router.post("/createFamilymember", createFamilymember);
+router.post("/createFamilymember/:Createpatameter", createFamilymember);
 
 /**
  * @route GET /patients/getFamilymember
@@ -105,7 +104,7 @@ router.post("/createFamilymember", createFamilymember);
  * @access Public
  * @prop {string} Username - The username of the patient to get family members for
  */
-router.get("/getFamilymember", GetFamilymembers);
+router.get("/getFamilymember/:PatientUserName", GetFamilymembers);
 
 /**
  * @route GET /patients/getPrescriptions
@@ -120,14 +119,6 @@ router.get("/getPrescriptions", getPrescriptions);
  * @access Public
  */
 router.get("/selectPatient", selectPatient);
-
-/**
- * @route GET /patients/filterPrescriptions
- * @desc Returns a list of all prescriptions filtered by patient ID
- * @access Public
- * @param {string} id - The ID of the patient to filter prescriptions for
- */
-router.get("/filterPrescriptions", filterPrescriptions);
 
 /**
  * @route GET /patients/selectPrescription

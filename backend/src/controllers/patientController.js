@@ -8,8 +8,10 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
+
+
 const createPatient = async (req, res) => {
-  const { } = req.body;
+  const {EmergencyContactNumber,EmergencyContactName} = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -17,7 +19,10 @@ const createPatient = async (req, res) => {
       MobileNum: req.body.MobileNum,
       DateOfBirth: req.body.DateOfBirth,
       Gender: req.body.Gender,
-      EmergencyContact: req.body.EmergencyContact,
+      EmergencyContact: {
+        FullName: EmergencyContactName,
+        PhoneNumber: EmergencyContactNumber,
+      },
     });
     res.status(200).send({ patient });
   } catch (error) {
@@ -81,7 +86,7 @@ const session_index = (req, res) => {
   let packageDis = 0;
   // Extract the 'id' parameter from the request object
   const { id } = req.params;
-  const { Name, Speciality } = req.body;
+  const { Name, Speciality } = req.query;
 
   // Check if the 'id' parameter is a valid MongoDB ObjectID
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -112,10 +117,10 @@ const session_index = (req, res) => {
       doctorModel
         .find({
           // Search for documents whose 'Name' field contains the 'Name' variable, if it is not empty
-          ...(Name ? { Name: { $regex: Name, $options: "i" } } : {}),
+          ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
           // Search for documents whose 'Speciality' field contains the 'Speciality' variable, if it is not empty
           ...(Speciality && !Name
-            ? { Speciality: { $regex: Speciality, $options: "i" } }
+            ? { Speciality: { $regex: Speciality.trim(), $options: "i" } }
             : {}),
         })
         .then((doctors) => {
@@ -126,6 +131,7 @@ const session_index = (req, res) => {
             const calcCost = (1 - packageDis / 100) * (doctor.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
             // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
             mySessions.push({
+              Username: doctor.Username,
               Name: doctor.Name,
               Speciality: doctor.Speciality,
               Cost: calcCost,
@@ -145,18 +151,33 @@ const session_index = (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const current_user = "Mariam";
-  console.log(Age);
+  const { Createpatameter } = req.params;
+  console.log(Createpatameter);
+
+  // Check if the national ID is not 16.
+  if (NationalId.length !== 16) {
+    // Return an error message.
+    res.status(400).json({ error: 'The national ID must be 16 digits long.' });
+    return;
+  }
+  // check if age are only 2 digitd
+  if (Age.length === 0 ||Age.length >2|| Age==0 ) {
+    // Return an error message.
+    res.status(400).json({ error: 'The age must be 1 or 2 digits' });
+    return;
+  }
   try {
     const newFamilymember = await familyMemberModel.create({
-      PatientUserName: current_user,
+      PatientUserName: Createpatameter,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
       Gender: Gender,
       Relation: Relation,
+
     });
     res.status(200).json(newFamilymember);
+  
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -164,17 +185,20 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const currentPatientuser = req.body.Username;
+    const  {PatientUserName}  = req.params
+    console.log(req.params)
     const fam = await familyMemberModel.find({
-      PatientUserName: currentPatientuser,
+      PatientUserName:PatientUserName
     });
+  //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).send({ message: error.message });
   }
 };
+
 const selectPatient = async (req, res) => {
-  const id = req.body.id;
+  const id = req.query.id;
 
   // Get the patient.
   const patient = await patientModel.findById(id);
@@ -193,62 +217,43 @@ const selectPatient = async (req, res) => {
   res.status(200).send(patient);
 };
 
+// Get prescriptions of a given patient. Can also be filtered
+// using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
+  const query = req.query;
+  console.log(query);
+  const patientUsername = query.PatientUsername; // Extract patientUsername
+  console.log(req.params.patientUsername);
+
   try {
-    const id = req.body._id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({ error: "Invalid ID" });
-      return;
+    const baseQuery = { PatientUsername: patientUsername };
+    const regexQuery = {};
+
+    if (query.DoctorUsername) {
+      regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
     }
-    const patient = await patientModel.findById(id);
-    const prescriptions = await prescriptionModel.find({
-      PatientUsername: patient.Username,
+    if (query.Date) {
+      const date = new Date(query.Date);
+      regexQuery.Date = date;
+    }
+    if (query.Status) {
+      regexQuery.Status = query.Status;
+    }
+
+    const patientPrescriptions = await prescriptionModel.find({
+      ...baseQuery,
+      ...regexQuery,
     });
-    res.status(200).send(prescriptions);
+
+    res.status(200).send(patientPrescriptions);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
 };
 
-// Filter prescriptions by doctor or status or filled or unfilled.
-const filterPrescriptions = async (req, res) => {
-  const query = req.body;
-
-  const regexQuery = {};
-
-  // Check if a 'DoctorUsername' query is provided
-  if (query.DoctorUsername) {
-    regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
-  }
-
-  // Check if a 'Date' query is provided
-  if (query.Date) {
-    // Assuming 'Date' is a field in your schema
-    regexQuery.Date = new RegExp(query.Date, "i");
-  }
-
-  // Check if a 'Status' query is provided
-  if (query.Status) {
-    regexQuery.Status = new RegExp(query.Status, "i");
-  }
-
-  const patientPrescriptions = prescriptionModel.find({
-    PatientUsername: query.PatientUsername,
-  });
-  // Use the regexQuery in the find method
-  try {
-    // Use the regexQuery in the find method and await the result
-    const prescriptions = await patientPrescriptions.find(regexQuery);
-    res.status(200).send(prescriptions);
-  } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 // Use prescription Id to select a prescription.
 const selectPrescription = async (req, res) => {
-  const prescriptionId = req.body.id;
+  const prescriptionId = req.query.id;
   try {
     const prescription = await prescriptionModel.findById(prescriptionId);
     res.status(200).send(prescription);
@@ -263,7 +268,6 @@ module.exports = {
   GetFamilymembers,
   selectPatient,
   getPrescriptions,
-  filterPrescriptions,
   getPatientUsername,
   createPatient,
   getAllPatients,

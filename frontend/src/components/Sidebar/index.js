@@ -29,8 +29,10 @@ function Sidebar(props) {
   // SIDEBAR
   return (
     <Box ref={mainPanel}>
-      <Box display={{ sm: "none", xl: "block" }} position="fixed">
+      <Box  display={{ sm: "none", xl: "block" }} position = "fixed" >
         <Box
+          overflowY= "auto"
+          position="sticky"
           bg={sidebarBg}
           transition={variantChange}
           w="260px"
@@ -48,7 +50,7 @@ function Sidebar(props) {
           borderRadius={sidebarRadius}
         >
           <SidebarContent routes={routes}
-        logoText={"PURITY UI DASHBOARD"}
+        logoText={"SHEBEEN HEALTH CLINIC"}
         display="none"
         sidebarVariant={sidebarVariant}
         />
