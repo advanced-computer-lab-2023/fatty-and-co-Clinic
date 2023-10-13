@@ -28,16 +28,15 @@ export const API_PATHS = {
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
 
-  updateEmailDoc: GUEST_BASE+ "updateEmail/",
-  createfamilymember:PATIENT_BASE+"createFamilymember/",
-  viewFilteredDoctors: DOCTOR_BASE + "filter/" ,
-  viewfamilymembers:PATIENT_BASE+"/getFamilymember/", // get familymember from req.params
-  updateAffil:  DOCTOR_BASE+ "updateDoctor/",
-  viewAppointPat: APPOINTMENT_BASE+"getAppointmentsPat/",
+  updateEmailDoc: GUEST_BASE + "updateEmail/",
+  createfamilymember: PATIENT_BASE + "createFamilymember/",
+  viewFilteredDoctors: DOCTOR_BASE + "filter/",
+  viewfamilymembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
+  updateAffil: DOCTOR_BASE + "updateDoctor/",
+  viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
 
   createfamilymember: PATIENT_BASE + "createFamilymember/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
-  viewfamilymembers: PATIENT_BASE + "/getFamilymember/",
+  viewfamilymembers: PATIENT_BASE + "getFamilymember/",
   updateAffil: DOCTOR_BASE + "updateDoctor/",
-
 };
