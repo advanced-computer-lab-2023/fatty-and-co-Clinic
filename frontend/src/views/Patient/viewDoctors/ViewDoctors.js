@@ -17,16 +17,24 @@ export function ViewDoctors() {
     speciality: "",
     date: [],
     hour: [],
+    id: "",
   });
   const { id } = useParams();
   const options = [
     { label: "Cardiology", value: "Cardiology" },
-    {
-      label: "Psychiatry",
-      value: "Psychiatry",
-    },
+    { label: "Dermatology", value: "Dermatology" },
+    { label: "Endocrinology", value: "Endocrinology" },
+    { label: "Gastroenterology", value: "Gastroenterology" },
+    { label: "Hematology", value: "Hematology" },
+    { label: "Infectious Disease", value: "Infectious Disease" },
+    { label: "Nephrology", value: "Nephrology" },
+    { label: "Neurology", value: "Neurology" },
+    { label: "Oncology", value: "Oncology" },
+    { label: "Ophthalmology", value: "Ophthalmology" },
+    { label: "Orthopedics", value: "Orthopedics" },
+    { label: "Otolaryngology", value: "Otolaryngology" },
+    { label: "Pediatrics", value: "Pediatrics" },
   ];
-
   const initialRender = useRef(true);
   useEffect(() => {
     if (initialRender.current) {
@@ -46,6 +54,7 @@ export function ViewDoctors() {
   const [specialityFilterValue, setSpecialityFilterValue] = useState("");
   const [dayFilterValue, setDayFilterValue] = useState([]);
   const [hourFilterValue, setHourFilterValue] = useState([]);
+  const [dayHourFilterValue, setDayHourFilterValue] = useState([]);
 
   //add date and hour
   const handleFilterOnChange = (value) => {
@@ -54,6 +63,7 @@ export function ViewDoctors() {
       speciality: specialityFilterValue,
       date: dayFilterValue,
       hour: hourFilterValue,
+      id: id,
     });
   };
 
@@ -67,6 +77,14 @@ export function ViewDoctors() {
 
   const handleHourFilter = (event) => {
     setHourFilterValue(event.target.value);
+  };
+
+  const handleDateHourValue = (event) => {
+    setDayHourFilterValue(event.target.value);
+    const newDate = new Date(event.target.value);
+    const newHour = newDate.getHours() + newDate.getMinutes() / 100;
+    setDayFilterValue(newDate);
+    setHourFilterValue(newHour);
   };
 
   useEffect(() => {
@@ -132,7 +150,7 @@ export function ViewDoctors() {
             ))}
           </select>
 
-          <Input
+          {/* <Input
             // placeholder="Select Date and Time"
             size="ld"
             type="date"
@@ -151,7 +169,16 @@ export function ViewDoctors() {
             step="0.01"
             value={hourFilterValue}
             onChange={handleHourFilter}
+          /> */}
+
+          <Input
+            placeholder="Select Date and Time"
+            size="md"
+            type="datetime-local"
+            value={dayHourFilterValue}
+            onChange={handleDateHourValue}
           />
+
           <Button onClick={handleFilterOnChange} marginLeft={4}>
             filter
           </Button>
