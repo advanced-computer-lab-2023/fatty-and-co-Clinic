@@ -66,14 +66,13 @@ const updatePackage = async (req, res) => {
         .send({ message: "Discounts and Price must be positive" });
 
     if (
-      Price > 100 ||
       Session_Discount > 100 ||
       Medicine_Discount > 100 ||
       Family_Discount > 100
     )
       return res
         .status(404)
-        .send({ message: "Discounts and Price must be less than 100" });
+        .send({ message: "Discounts must be less or equal than 100" });
 
     if (!mongoose.Types.ObjectId.isValid(id))
       return res.status(404).send({ message: `No Package with id: ${id}` });

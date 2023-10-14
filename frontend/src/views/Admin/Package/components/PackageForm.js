@@ -107,7 +107,6 @@ function PackageForm() {
                 type="number"
                 step="any"
                 placeholder="Price EGP"
-                max={100}
                 min={0}
                 required
                 onChange={(e) => setPrice(e.target.value)}
