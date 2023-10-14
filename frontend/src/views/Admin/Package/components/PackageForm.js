@@ -66,14 +66,14 @@ function PackageForm() {
                 body: JSON.stringify(Package),
               });
               const data = await response.json();
-              if (response.ok) {
+              if (response.status === 200) {
                 dispatch({ type: "ADD_PACKAGE", payload: data });
                 setMessage(null);
-                setName("");
-                setPrice("");
-                setSession_Discount("");
-                setMedicine_Discount("");
-                setFamily_Discount("");
+                // setName("");
+                // setPrice(0);
+                // setSession_Discount(0);
+                // setMedicine_Discount(0);
+                // setFamily_Discount(0);
                 toast({
                   title: "Package Added.",
                   description: "You Added the package succsefuly.",
@@ -81,12 +81,12 @@ function PackageForm() {
                   duration: 9000,
                   isClosable: true,
                 });
-                document.getElementById("myForm").reset();
+                // document.getElementById("myForm").reset();
               } else {
                 setMessage(data.message);
                 toast({
-                  title: "failed Package Update.",
-                  description: "Something went wrong try again.",
+                  title: "failed Package Add.",
+                  description: "Error: " + data.message,
                   status: "error",
                   duration: 9000,
                   isClosable: true,
@@ -105,28 +105,41 @@ function PackageForm() {
               <Input
                 variant="filled"
                 type="number"
+                step="any"
                 placeholder="Price EGP"
+                max={100}
+                min={0}
                 required
                 onChange={(e) => setPrice(e.target.value)}
               />
               <Input
                 variant="filled"
                 type="number"
+                step="any"
                 placeholder="Session Discount %"
+                max={100}
+                min={0}
                 required
                 onChange={(e) => setSession_Discount(e.target.value)}
               />
               <Input
                 variant="filled"
                 type="number"
+                step="any"
                 placeholder="Medicine Discount %"
+                max={100}
+                min={0}
                 required
                 onChange={(e) => setMedicine_Discount(e.target.value)}
               />
               <Input
                 variant="filled"
                 type="number"
+                step="any"
+                max={100}
+                min={0}
                 placeholder="Family Discount %"
+                required
                 onChange={(e) => setFamily_Discount(e.target.value)}
               />
               <Button
