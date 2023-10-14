@@ -20,6 +20,7 @@ import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
+import ViewDoctorsPatients from "views/Doctors/viewPatients";
 
 import {
   HomeIcon,
@@ -147,6 +148,13 @@ var dashRoutes = [
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
+    layout: "/admin",
+  },
+  {
+    path: "/doctorPatients/:doctorUsername",
+    name: "View doctor Patients",
+    icon: <CreditIcon color="inherit" />,
+    component: ViewDoctorsPatients,
     layout: "/admin",
   },
   {
