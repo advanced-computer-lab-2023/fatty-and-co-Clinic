@@ -90,125 +90,90 @@ function PrescriptionTable() {
     setDate(event.target.value);
   };
 
-  return (
-    <Box pt="80px">
-      <Flex
-        direction="column"
-        alignItems="flex-start"
-        pt="50px"
-        justifyContent="flex-start"
-      >
-        <Flex direction="row" alignItems="flex-start">
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-            <SearchBar
-              w="100%"
-              h="10"
-              placeholder="Doctor name"
-              onChange={setDoctorName}
-            />
-            <FormControl>
-              <Input
-                bg="white"
-                type="date"
-                placeholder="Filter by Date"
-                onChange={handleDateChange}
-              />
-            </FormControl>
-            <FormControl id="status" w="100%" h="10">
-              <Select
-                bg="white"
-                placeholder="Select status"
-                value={status}
-                onChange={handleStatusChange}
-              >
-                <option value="Filled">Filled</option>
-                <option value="Unfilled">Unfilled</option>
-              </Select>
-            </FormControl>
-            <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
-              Search
-            </Button>
-          </Grid>
-        </Flex>
-        <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
-          <CardHeader p="6px 0px 22px 0px">
-            <Flex direction="column">
-              <Text
-                fontSize="lg"
-                color={textColor}
-                fontWeight="bold"
-                pb=".5rem"
-              >
-                Prescriptions
-              </Text>
-            </Flex>
-          </CardHeader>
-          <CardBody>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>Doctor Name</Th>
-                  <Th>Date</Th>
-                  <Th>Diagnosis</Th>
-                  <Th>Status</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {prescriptions.map((prescription) => (
-                  <Tr
-                    key={prescription._id}
-                    onClick={() => openModal(prescription._id)}
-                  >
-                    <Td>
-                      {prescription && prescription.DoctorName
-                        ? prescription.DoctorName
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Date
-                        ? prescription.Date
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Diagnosis
-                        ? prescription.Diagnosis
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Status
-                        ? prescription.Status
-                        : "N/A"}
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </CardBody>
-        </Card>
-      </Flex>
-      {selectedPrescription && (
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Prescription Details</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <p>Doctor Name: {selectedPrescription.DoctorName}</p>
-              <p>Date: {selectedPrescription.Date}</p>
-              <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
-              <p>Status: {selectedPrescription.Status}</p>
-              <p>Medicines:</p>
-              <ul>
-                {selectedPrescription.Medicine.map((medicine, index) => (
-                  <li key={index}>{medicine.Name}</li>
-                ))}
-              </ul>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
-    </Box>
-  );
+    return (
+        <Box pt="80px">
+            <Flex
+                direction="column"
+                alignItems="flex-start"
+                pt="50px"
+                justifyContent="flex-start"
+            >
+                <Flex direction="row" alignItems="flex-start">
+                    <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+                        <SearchBar w="100%" h="10"
+                            placeholder="Doctor name"
+                            onChange={setDoctorName}
+                        />
+                        <FormControl>
+                            <Input bg="white" type="date" placeholder="Filter by Date" onChange={handleDateChange} />
+                        </FormControl>
+                        <FormControl id="status" w="100%" h="10">
+                            <Select bg="white" placeholder="Select status" value={status} onChange={handleStatusChange}>
+                                <option value="Filled">Filled</option>
+                                <option value="Unfilled">Unfilled</option>
+                            </Select>
+                        </FormControl>
+                        <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
+                            Search
+                        </Button>
+                    </Grid>
+                </Flex>
+                <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+                    <CardHeader p="6px 0px 22px 0px">
+                        <Flex direction="column">
+                            <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+                                Prescriptions
+                            </Text>
+                        </Flex>
+                    </CardHeader>
+                    < CardBody >
+                        <Table variant="simple">
+                            <Thead>
+                                <Tr>
+                                    <Th>Doctor Name</Th>
+                                    <Th>Date</Th>
+                                    <Th>Diagnosis</Th>
+                                    <Th>Status</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {prescriptions.map(prescription => (
+                                    <Tr key={prescription._id} onClick={() => openModal(prescription._id)}>
+                                        <Td>{prescription && prescription.DoctorName ? prescription.DoctorName : 'N/A'}</Td>
+                                        <Td>{prescription && prescription.Date ? prescription.Date : 'N/A'}</Td>
+                                        <Td>{prescription && prescription.Diagnosis ? prescription.Diagnosis : 'N/A'}</Td>
+                                        <Td>{prescription && prescription.Status ? prescription.Status : 'N/A'}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                        </Table>
+                    </CardBody >
+                </Card >
+            </Flex >
+            {selectedPrescription && (
+                <Modal isOpen={isModalOpen} onClose={closeModal}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Prescription Details</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <p>Doctor Name: {selectedPrescription.DoctorName}</p>
+                            <p>Date: {selectedPrescription.Date}</p>
+                            <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
+                            <p>Status: {selectedPrescription.Status}</p>
+                            <p>Medicines:</p>
+                            <ul style={{ listStyleType: 'lower-alpha', marginLeft: '40px' }}>
+                                {selectedPrescription.Medicine.map((medicine, index) => (
+                                    <li key={index}>{medicine.Name}</li>
+                                ))}
+                            </ul>
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
+            )
+            }
+        </Box >
+    );
 }
 
 export default PrescriptionTable;
