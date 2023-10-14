@@ -115,8 +115,6 @@ const updatePatient = async (req, res) => {
   }
 };
 
-// FILEPATH: /d:/important_stuff/GUC/Sem7/ACL/Project/fatty-and-co-Clinic/backend/src/controllers/patientController.js
-// BEGIN: ed8c6549bwf9
 const session_index = async (req, res) => {
   const { id } = req.params;
   const { Name, Speciality } = req.query;
@@ -158,7 +156,6 @@ const session_index = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-// END: ed8c6549bwf9
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
