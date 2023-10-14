@@ -17,7 +17,6 @@ export const API_PATHS = {
   getRequest: ADMIN_BASE + "getRequest/",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
-  getRequests: ADMIN_BASE + "",
 
   // Doctor
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param

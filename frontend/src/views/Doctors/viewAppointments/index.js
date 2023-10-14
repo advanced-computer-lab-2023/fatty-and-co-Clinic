@@ -6,7 +6,6 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-
 function ViewAppointments() {
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
@@ -41,7 +40,6 @@ function ViewAppointments() {
   console.log(data);
 
   const handleStatusSearchValueChange = (value) => {
-
     setStatusSearchValue(value);
   };
 

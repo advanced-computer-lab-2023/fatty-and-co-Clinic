@@ -33,7 +33,7 @@ const packageModel = require("../models/packages");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -72,29 +72,41 @@ const deleteDoctor = async (req, res) => {
 const updateDoctor = async (req, res) => {
   try {
     const { Username } = req.params;
-    const { HourlyRate, Affiliation } = req.body
+    const { HourlyRate, Affiliation } = req.body;
     // console.log(req.body.Email)
-    if (Affiliation === undefined && (HourlyRate !== undefined && (HourlyRate.length === 0 || HourlyRate.length > 5))) {
-      res.status(400).send({ error: "Please fill in an hourly rate from 1-99999" })
-    }
-    else if (HourlyRate !== undefined) {
-      const doc = await doctorModel.findOneAndUpdate({ Username: Username }, { HourlyRate: HourlyRate });
-      const doc2 = await doctorModel.findOneAndUpdate({ Username: Username }, { HourlyRate: HourlyRate });
+    if (
+      Affiliation === undefined &&
+      HourlyRate !== undefined &&
+      (HourlyRate.length === 0 || HourlyRate.length > 5)
+    ) {
+      res
+        .status(400)
+        .send({ error: "Please fill in an hourly rate from 1-99999" });
+    } else if (HourlyRate !== undefined) {
+      const doc = await doctorModel.findOneAndUpdate(
+        { Username: Username },
+        { HourlyRate: HourlyRate }
+      );
+      const doc2 = await doctorModel.findOneAndUpdate(
+        { Username: Username },
+        { HourlyRate: HourlyRate }
+      );
       res.status(200).json(doc2);
-    }
-    else if (Affiliation) {
-      const doc = await doctorModel.findOneAndUpdate({ Username: Username }, { Affiliation: Affiliation });
-      const doc2 = await doctorModel.findOneAndUpdate({ Username: Username }, { Affiliation: Affiliation });
+    } else if (Affiliation) {
+      const doc = await doctorModel.findOneAndUpdate(
+        { Username: Username },
+        { Affiliation: Affiliation }
+      );
+      const doc2 = await doctorModel.findOneAndUpdate(
+        { Username: Username },
+        { Affiliation: Affiliation }
+      );
       res.status(200).json(doc2);
-
     } else {
-      res.status(404).send({ error: "Please fill in Affiliation" })
+      res.status(404).send({ error: "Please fill in Affiliation" });
     }
-  }
-  catch (error) {
+  } catch (error) {
     res.status(400).json({ error: error.message });
-  }
-}
   }
 };
 
@@ -181,7 +193,6 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 };
 
 // filter doctors by speciality or/and (date and time)
-// TODO: replace query with body
 const filterDoctor = async (req, res) => {
   try {
     console.log("kill");
@@ -290,7 +301,7 @@ const filterDoctor = async (req, res) => {
       // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
       if (packageName) {
         await packageModel
-          .find({ Name: packageName })
+          .findOne({ Name: packageName })
           .then((result) => {
             // Extract the 'SessionDiscount' property from the package document and set the 'packageDis' variable to its value
             packageDis = result.Session_Discount;
@@ -309,11 +320,9 @@ const filterDoctor = async (req, res) => {
           Speciality: element.Speciality,
           Cost: calcCost,
         });
-        
-      }res.status(200).json(myFilteredDoctors);
+      }
+      res.status(200).json(myFilteredDoctors);
     });
-
-    
   } catch (err) {
     console.log(err);
   }

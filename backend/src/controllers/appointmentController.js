@@ -192,12 +192,10 @@ const findDoctorPatients = async (req, res) => {
   // Find all the patients with the unique patient names.
   const patients = await patientModel.find({
     Username: { $in: uniquePatientNamesArray },
-    
   });
 
   // Return the patients.
   res.status(200).send(patients);
-
 };
 
 // Get all the upcoming appointments of a certain doctor.
@@ -259,7 +257,7 @@ const searchPatient = async (req, res) => {
   const uniquePatientNamesArray = [...uniquePatientNames];
 
   // Check if the patientName param is empty.
-  if (!(req.query.PatientName)) {
+  if (!req.query.PatientName) {
     // patientName is null or an empty string
     const patients = await patientModel.find({
       Username: { $in: patientUserNames },
@@ -267,17 +265,17 @@ const searchPatient = async (req, res) => {
     res.status(200).send(patients);
   } else {
     // patientName is not null or an empty string
-    const filteredPatientNames = uniquePatientNamesArray.filter((patientNamee) =>
-      patientNamee.toLowerCase().includes(patientName.toLowerCase())
+    const filteredPatientNames = uniquePatientNamesArray.filter(
+      (patientNamee) =>
+        patientNamee.toLowerCase().includes(patientName.toLowerCase())
     );
     const patients = await patientModel.find({
       Name: { $in: filteredPatientNames },
-      Username: {$in: patientUserNames}
+      Username: { $in: patientUserNames },
     });
-    
+
     res.status(200).send(patients);
   }
-
 };
 
 // Export the router.
@@ -345,8 +343,7 @@ const getAppointmentsDoc = async (req, res) => {
           Date: dateValue,
         })
       : "Bad request";
-  
-  
+
   // Return a 200 success response with a JSON object that contains the 'mySessions' array
   if (appointments == "bad requests") {
     res.status(404).json("No Appointments Found");
@@ -355,10 +352,8 @@ const getAppointmentsDoc = async (req, res) => {
   }
 };
 
-
 const getAppointmentsPat = async (req, res) => {
-  
-  const {PatientUser} = req.params;
+  const { PatientUser } = req.params;
   const { Status, Date } = req.query;
   const dateValue = new global.Date(Date);
   const newDate = new global.Date(Date);
@@ -418,8 +413,7 @@ const getAppointmentsPat = async (req, res) => {
           Date: dateValue,
         })
       : "Bad request";
-  
-  
+
   // Return a 200 success response with a JSON object that contains the 'mySessions' array
   if (appointments == "bad requests") {
     res.status(404).json("No Appointments Found");
@@ -427,7 +421,6 @@ const getAppointmentsPat = async (req, res) => {
     res.status(200).json(appointments);
   }
 };
-
 
 module.exports = {
   getAppointmentsDoc,

@@ -25,10 +25,10 @@ const patientSchema = new Schema(
     Gender: {
       type: String,
       enum: ["M", "F"],
-      required: true
+      required: true,
     },
     EmergencyContact: {
-      type: { FullName: String, PhoneNumber: Number }, 
+      type: { FullName: String, PhoneNumber: Number },
       required: true,
     },
     PackageName: {

@@ -53,4 +53,5 @@ function PackageI() {
   );
 }
 
-export default PackageI; DeleteUser;
+export default PackageI;
+DeleteUser;

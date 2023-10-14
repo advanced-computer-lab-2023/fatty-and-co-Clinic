@@ -15,7 +15,7 @@ const {
   getDoctorByNameAndSpeciality,
   filterDoctor,
   updateDoctor,
-  viewPatientInfoAndHealthRecords
+  viewPatientInfoAndHealthRecords,
 } = require("../controllers/doctorController");
 
 const router = express.Router();
@@ -127,7 +127,7 @@ router.get("/getDoctor/:id", getDoctorByID);
  * @route GET /doctors/viewPatientInfoAndHealthRecords
  * @desc Returns appointments and prescriptions by patient username
  * @access Public
-* @prop {string} PatientUsername - The username of the patient
+ * @prop {string} PatientUsername - The username of the patient
  */
 router.get("/viewPatientInfoAndHealthRecords", viewPatientInfoAndHealthRecords);
 

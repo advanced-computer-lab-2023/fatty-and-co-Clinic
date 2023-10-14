@@ -112,8 +112,7 @@ export function ViewDoctors() {
   };
 
   const handleClrButtonClick = () => {
-    
-    console.log('hell');
+    console.log("hell");
     setDayFilterValue([]);
     setHourFilterValue([]);
     setFilterParams({
@@ -121,8 +120,8 @@ export function ViewDoctors() {
       date: [],
       hour: [],
       id: id,
-    })
-  }
+    });
+  };
 
   const handleNameSearchValueChange = (value) => {
     setNameSearchValue(value);
