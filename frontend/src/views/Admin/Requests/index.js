@@ -9,19 +9,18 @@ function ViewRequests() {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-    
     fetch(API_PATHS.getRequests, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
-      .then(data => {
+      .then((data) => {
         setData(data); // Set the fetched data in the state
       })
       .catch((error) => {
-        console.error('Error fetching data: ', error);
+        console.error("Error fetching data: ", error);
       });
   }, []);
 

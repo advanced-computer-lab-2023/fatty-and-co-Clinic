@@ -12,7 +12,7 @@ const {
   getPrescriptions,
   selectPatient,
   selectPrescription,
-  getEmergencyContact
+  getEmergencyContact,
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 
@@ -137,6 +137,5 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-
 
 module.exports = router;
