@@ -130,7 +130,6 @@ var dashRoutes = [
 
   {
     path: "/viewDoctors/:id",
-    path: "/viewDoctors/:id",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
