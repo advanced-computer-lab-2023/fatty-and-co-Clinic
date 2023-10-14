@@ -73,7 +73,6 @@ const updateDoctor = async (req, res) => {
   try {
     const { Username } = req.params;
     const { HourlyRate, Affiliation } = req.body;
-    // console.log(req.body.Email)
     if (
       Affiliation === undefined &&
       HourlyRate !== undefined &&
@@ -195,8 +194,6 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 // filter doctors by speciality or/and (date and time)
 const filterDoctor = async (req, res) => {
   try {
-    //console.log("kill");
-    console.log(req.query);
     const urlParams = new URLSearchParams(req.query);
 
     let packageDis = 0;
@@ -206,7 +203,6 @@ const filterDoctor = async (req, res) => {
 
     const id = req.query.id;
     //const { id } = req.params;
-    //console.log(id);
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "Invalid ID" });
       return;
@@ -220,7 +216,7 @@ const filterDoctor = async (req, res) => {
         const day = date.getDay();
         const hours = date.getHours();
         const mins = date.getMinutes();
-        const hour = hours + (mins/100);
+        const hour = hours + mins / 100;
 
         //const hour = req.query.hour;
         // console.log('here');
@@ -233,7 +229,6 @@ const filterDoctor = async (req, res) => {
           StartTime: { $lte: hour },
           EndTime: { $gte: hour + 1 },
         });
-        //console.log(dateDocs);
         if (req.query.speciality) {
           dateDocs.forEach((element) => {
             if (element.Speciality == req.query.speciality) {
@@ -251,6 +246,7 @@ const filterDoctor = async (req, res) => {
             DoctorUsername: doctor.Username,
           });
           if (appointments.length != 0) {
+            console.log("inIf");
             for (let appointment of appointments) {
               const appDay = appointment.Date.getDay();
               const appHour = appointment.Date.getUTCHours();
@@ -261,19 +257,12 @@ const filterDoctor = async (req, res) => {
               const appDateWithoutTime =
                 appointment.Date.toISOString().split("T")[0];
 
-              // console.log(appointment.DoctorName);
-              // console.log(appointment.PatientName);
-              // console.log(appointment.Date);
-
-              // console.log (dateWithoutTime);
-              // console.log(appDateWithoutTime);
-
-              // console.log (day);
-              // console.log(appDay);
-              // console.log(appHour);
-              // console.log(appHourFilter);
-              // console.log(hour)
-              // console.log(Math.abs(appHourFilter - hour));
+              console.log(day);
+              console.log(appDay);
+              console.log(appHour);
+              console.log(appHourFilter);
+              console.log(hour);
+              console.log(Math.abs(appHourFilter - hour));
 
               //TODO: send help,put in mind check utchourthing first
               //USE ABSOLUTE DIFFERENCE BETTER THAN (hour < appHour + 1 || hour < appHour + 1)
@@ -283,7 +272,6 @@ const filterDoctor = async (req, res) => {
                 appointment.Status == "Upcoming"
               ) {
                 //splice takes 2 attributes; index of element to be deleted, how many elements to delete,
-                // console.log("helpplease");
                 myDoctors.splice(myDoctors.indexOf(doctor), 1);
               }
             }
