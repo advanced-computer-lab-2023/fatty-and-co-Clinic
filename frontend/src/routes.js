@@ -45,7 +45,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointPat",
+    path: "/viewAppointPat/:PatientUsername",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
