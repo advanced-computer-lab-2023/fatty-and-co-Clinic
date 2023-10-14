@@ -12,10 +12,10 @@ import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import createFamilymember from "views/Patient/createFamilyMember";
 import viewDoctors from "views/Patient/viewDoctors";
+import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
-import viewDoctorPatients from "views/Doctors/viewPatients";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
@@ -43,13 +43,15 @@ var dashRoutes = [
     component: Package,
     layout: "/admin",
   },
+
   {
-    path: "/viewAppointPat/:PatientUsername",
+    path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
     layout: "/admin",
   },
+
   {
     path: "/updateEmailDoc/:DoctorUsername",
     name: "Update Email",
@@ -69,7 +71,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/updateAffil/:DoctorUsername",
+    path: "/updateAffil/:Username",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -93,6 +95,7 @@ var dashRoutes = [
     component: Requests,
     layout: "/admin",
   },
+
   {
     path: "/addAdmin",
     name: "Add Admin",
@@ -108,15 +111,25 @@ var dashRoutes = [
     component: createFamilymember,
     layout: "/admin",
   },
+
   {
     path: "/deleteUser",
     name: "Delete User",
     icon: <HomeIcon color="inherit" />,
     component: DeleteUser,
-
     layout: "/admin",
   },
+
   {
+    path: "/viewDoctorDetails/:username",
+    name: "View Doctor Details",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewDoctorDetails,
+    layout: "/admin",
+  },
+
+  {
+    path: "/viewDoctors/:id",
     path: "/viewDoctors/:id",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
@@ -131,17 +144,10 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewPrescriptions",
-    name: "View Prescriptions",
+    path: "/prescriptions/:patientUsername",
+    name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
-    layout: "/admin",
-  },
-  {
-    path: "/viewDoctorPatients",
-    name: "View Doctor's Patients",
-    icon: <HomeIcon color="inherit" />,
-    component: viewDoctorPatients,
     layout: "/admin",
   },
   {

@@ -34,7 +34,7 @@ export function CreateFamilyMember() {
     // Send the username to the backend for deletion
     try {
       const response = await fetch(
-        API_PATHS.createfamilymember + Createparameter,
+        API_PATHS.createFamilyMember + Createparameter,
         {
           method: "POST",
           headers: {

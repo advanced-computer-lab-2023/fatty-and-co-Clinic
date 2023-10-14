@@ -1,4 +1,5 @@
 const patientModel = require("../models/patients");
+const userModel = require("../models/systemusers");
 const familyMemberModel = require("../models/familymembers");
 const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
@@ -8,10 +9,8 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 
-
-
 const createPatient = async (req, res) => {
-  const {EmergencyContactNumber,EmergencyContactName} = req.body;
+  const { EmergencyContactNumber, EmergencyContactName } = req.body;
   try {
     const patient = await patientModel.create({
       Username: req.body.Username,
@@ -24,7 +23,13 @@ const createPatient = async (req, res) => {
         PhoneNumber: EmergencyContactNumber,
       },
     });
-    res.status(200).send({ patient });
+    const user = await userModel.create({
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Type: "Patient",
+    });
+    res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -34,6 +39,35 @@ const getAllPatients = async (req, res) => {
   try {
     const patients = await patientModel.find();
     res.status(200).send({ patients });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//a function to get the details of the emergency contact of a patient by patient username
+const getEmergencyContact = async (req, res) => {
+  try {
+    const { Username } = req.params;
+    const patient = await patientModel.findOne({ Username: Username });
+
+    console.log(patient);
+
+    if (!patient) {
+      res.status(404).send({ message: "Patient not found." });
+      return;
+    }
+
+    const EmergencyContact = patient.EmergencyContact;
+    const Name = patient.Name;
+    console.log(Name);
+    if (!EmergencyContact) {
+      res
+        .status(404)
+        .send({ message: "Emergency contact not found for the patient." });
+      return;
+    }
+
+    res.status(200).send({ EmergencyContact });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -133,13 +167,13 @@ const createFamilymember = async (req, res) => {
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
     // Return an error message.
-    res.status(400).json({ error: 'The national ID must be 16 digits long.' });
+    res.status(400).json({ error: "The national ID must be 16 digits long." });
     return;
   }
   // check if age are only 2 digitd
-  if (Age.length === 0 ||Age.length >2|| Age==0 ) {
+  if (Age.length === 0 || Age.length > 2 || Age == 0) {
     // Return an error message.
-    res.status(400).json({ error: 'The age must be 1 or 2 digits' });
+    res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
   try {
@@ -150,10 +184,8 @@ const createFamilymember = async (req, res) => {
       Age: Age,
       Gender: Gender,
       Relation: Relation,
-
     });
     res.status(200).json(newFamilymember);
-  
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -161,12 +193,12 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const  {PatientUserName}  = req.params
-    console.log(req.params)
+    const { PatientUserName } = req.params;
+    console.log(req.params);
     const fam = await familyMemberModel.find({
-      PatientUserName:PatientUserName
+      PatientUserName: PatientUserName,
     });
-  //  console.log(fam)
+    //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -205,8 +237,8 @@ const getPrescriptions = async (req, res) => {
     const baseQuery = { PatientUsername: patientUsername };
     const regexQuery = {};
 
-    if (query.DoctorUsername) {
-      regexQuery.DoctorUsername = new RegExp(query.DoctorUsername, "i");
+    if (query.DoctorName) {
+      regexQuery.DoctorName = new RegExp(query.DoctorName, "i");
     }
     if (query.Date) {
       const date = new Date(query.Date);
@@ -251,4 +283,5 @@ module.exports = {
   getPatient,
   updatePatient,
   selectPrescription,
+  getEmergencyContact,
 };

@@ -33,7 +33,7 @@ const packageModel = require("../models/packages");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const {} = req.body;
+  const { } = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -72,41 +72,29 @@ const deleteDoctor = async (req, res) => {
 const updateDoctor = async (req, res) => {
   try {
     const { Username } = req.params;
-    const { HourlyRate, Affiliation } = req.body;
+    const { HourlyRate, Affiliation } = req.body
     // console.log(req.body.Email)
-    if (
-      Affiliation === undefined &&
-      HourlyRate !== undefined &&
-      (HourlyRate.length === 0 || HourlyRate.length > 5)
-    ) {
-      res
-        .status(400)
-        .send({ error: "Please fill in an hourly rate from 1-99999" });
-    } else if (HourlyRate !== undefined) {
-      const doc = await doctorModel.findOneAndUpdate(
-        { Username: Username },
-        { HourlyRate: HourlyRate }
-      );
-      const doc2 = await doctorModel.findOneAndUpdate(
-        { Username: Username },
-        { HourlyRate: HourlyRate }
-      );
-      res.status(200).json(doc2);
-    } else if (Affiliation) {
-      const doc = await doctorModel.findOneAndUpdate(
-        { Username: Username },
-        { Affiliation: Affiliation }
-      );
-      const doc2 = await doctorModel.findOneAndUpdate(
-        { Username: Username },
-        { Affiliation: Affiliation }
-      );
-      res.status(200).json(doc2);
-    } else {
-      res.status(404).send({ error: "Please fill in Affiliation" });
+    if (Affiliation === undefined && (HourlyRate !== undefined && (HourlyRate.length === 0 || HourlyRate.length > 5))) {
+      res.status(400).send({ error: "Please fill in an hourly rate from 1-99999" })
     }
-  } catch (error) {
+    else if (HourlyRate !== undefined) {
+      const doc = await doctorModel.findOneAndUpdate({ Username: Username }, { HourlyRate: HourlyRate });
+      const doc2 = await doctorModel.findOneAndUpdate({ Username: Username }, { HourlyRate: HourlyRate });
+      res.status(200).json(doc2);
+    }
+    else if (Affiliation) {
+      const doc = await doctorModel.findOneAndUpdate({ Username: Username }, { Affiliation: Affiliation });
+      const doc2 = await doctorModel.findOneAndUpdate({ Username: Username }, { Affiliation: Affiliation });
+      res.status(200).json(doc2);
+
+    } else {
+      res.status(404).send({ error: "Please fill in Affiliation" })
+    }
+  }
+  catch (error) {
     res.status(400).json({ error: error.message });
+  }
+}
   }
 };
 
@@ -334,7 +322,7 @@ const filterDoctor = async (req, res) => {
 // TODO: Make sure health record consists of appointments and prescriptions.
 // View information and health records of a doctor's patient
 const viewPatientInfoAndHealthRecords = async (req, res) => {
-  const patientUsername = req.body.PatientUsername;
+  const patientUsername = req.query.PatientUsername;
   try {
     const appointments = await appointmentModel.find({
       PatientUsername: patientUsername,
