@@ -223,9 +223,9 @@ const filterDoctor = async (req, res) => {
         const hour = hours + (mins/100);
 
         //const hour = req.query.hour;
-        console.log('here');
-        console.log(day);
-        console.log(hour);
+        // console.log('here');
+        // console.log(day);
+        // console.log(hour);
 
         //  TODO: CHANGED THE RANGE TO ACCOMODATE FOR DURATION
         const dateDocs = await doctorModel.find({
@@ -268,12 +268,12 @@ const filterDoctor = async (req, res) => {
               // console.log (dateWithoutTime);
               // console.log(appDateWithoutTime);
 
-              console.log (day);
-              console.log(appDay);
-              console.log(appHour);
-              console.log(appHourFilter);
-              console.log(hour)
-              console.log(Math.abs(appHourFilter - hour));
+              // console.log (day);
+              // console.log(appDay);
+              // console.log(appHour);
+              // console.log(appHourFilter);
+              // console.log(hour)
+              // console.log(Math.abs(appHourFilter - hour));
 
               //TODO: send help,put in mind check utchourthing first
               //USE ABSOLUTE DIFFERENCE BETTER THAN (hour < appHour + 1 || hour < appHour + 1)
