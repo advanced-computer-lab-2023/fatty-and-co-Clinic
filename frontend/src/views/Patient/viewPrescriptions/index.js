@@ -160,7 +160,7 @@ function PrescriptionTable() {
                             <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
                             <p>Status: {selectedPrescription.Status}</p>
                             <p>Medicines:</p>
-                            <ul>
+                            <ul style={{ listStyleType: 'lower-alpha', marginLeft: '40px' }}>
                                 {selectedPrescription.Medicine.map((medicine, index) => (
                                     <li key={index}>{medicine.Name}</li>
                                 ))}
