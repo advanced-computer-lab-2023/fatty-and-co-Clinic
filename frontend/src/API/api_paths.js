@@ -41,4 +41,6 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
+  viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
+  viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
 };

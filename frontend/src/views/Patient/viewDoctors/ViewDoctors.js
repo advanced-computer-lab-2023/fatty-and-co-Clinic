@@ -20,8 +20,6 @@ export function ViewDoctors() {
     id: "",
   });
   const { id } = useParams();
-  console.log("hello");
-  console.log(id);
   const options = [
     { label: "Cardiology", value: "Cardiology" },
     { label: "Dermatology", value: "Dermatology" },
@@ -43,7 +41,6 @@ export function ViewDoctors() {
       initialRender.current = false;
     } else {
       const url = API_PATHS.viewFilteredDoctors;
-      console.log("Sending filter params:", filterParams);
       axios
         .get(url, { params: filterParams })
         .then((response) => {
@@ -112,7 +109,6 @@ export function ViewDoctors() {
   };
 
   const handleClrButtonClick = () => {
-    console.log("hell");
     setDayFilterValue([]);
     setHourFilterValue([]);
     setFilterParams({

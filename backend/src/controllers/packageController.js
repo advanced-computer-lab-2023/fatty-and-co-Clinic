@@ -54,8 +54,29 @@ const updatePackage = async (req, res) => {
       Medicine_Discount,
       Family_Discount,
     } = req.body;
+
+    if (
+      Price < 0 ||
+      Session_Discount < 0 ||
+      Medicine_Discount < 0 ||
+      Family_Discount < 0
+    )
+      return res
+        .status(404)
+        .send({ message: "Discounts and Price must be positive" });
+
+    if (
+      Price > 100 ||
+      Session_Discount > 100 ||
+      Medicine_Discount > 100 ||
+      Family_Discount > 100
+    )
+      return res
+        .status(404)
+        .send({ message: "Discounts and Price must be less than 100" });
+
     if (!mongoose.Types.ObjectId.isValid(id))
-      return res.status(404).send(`No Package with id: ${id}`);
+      return res.status(404).send({ message: `No Package with id: ${id}` });
 
     const updatedPackage = {
       Name,
