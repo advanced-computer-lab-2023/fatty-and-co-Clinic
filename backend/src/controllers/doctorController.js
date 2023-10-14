@@ -214,8 +214,14 @@ const filterDoctor = async (req, res) => {
       if (req.query.date && req.query.hour) {
         const date = new Date(req.query.date);
         const day = date.getDay();
+        const hours = date.getHours();
+        const mins = date.getMinutes();
+        const hour = hours + mins / 100;
 
-        const hour = req.query.hour;
+        //const hour = req.query.hour;
+        // console.log('here');
+        // console.log(day);
+        // console.log(hour);
 
         //  TODO: CHANGED THE RANGE TO ACCOMODATE FOR DURATION
         const dateDocs = await doctorModel.find({
