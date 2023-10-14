@@ -228,9 +228,9 @@ const selectPatient = async (req, res) => {
 // using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
   const query = req.query;
-  console.log(query);
+  // console.log(query);
   const patientUsername = query.PatientUsername; // Extract patientUsername
-  console.log(req.params.patientUsername);
+  // console.log(req.params.patientUsername);
 
   try {
     const baseQuery = { PatientUsername: patientUsername };
@@ -241,7 +241,14 @@ const getPrescriptions = async (req, res) => {
     }
     if (query.Date) {
       const date = new Date(query.Date);
-      regexQuery.Date = date;
+      const nextDay = date.addDays(1);
+      regexQuery.Date = {
+        $gte: date,
+        $lt: nextDay,
+      };
+      console.log(date);
+      console.log(nextDay);
+      console.log(regexQuery.Date);
     }
     if (query.Status) {
       regexQuery.Status = query.Status;
@@ -267,6 +274,12 @@ const selectPrescription = async (req, res) => {
   } catch (err) {
     res.status(400).send({ message: err.message });
   }
+};
+
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
 };
 
 module.exports = {
