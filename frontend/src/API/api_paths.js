@@ -6,37 +6,40 @@ const ADMIN_BASE = "http://localhost:8000/admin/";
 const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 
+// Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
-  signup: PATIENT_BASE + "addPatient/",
+  // Guest
   docSignUp: GUEST_BASE + "addRequest/",
-  // Add comments that indicate if the path needs a param and what that param is
-  viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
+  updateEmailDoc: GUEST_BASE + "updateEmail/",
+
+  // Admin
+  getRequests: ADMIN_BASE + "requests/",
+  getRequest: ADMIN_BASE + "getRequest/",
+  deleteUser: ADMIN_BASE + "deleteUser/",
+  createAdmin: ADMIN_BASE + "addAdmin/",
+  getRequests: ADMIN_BASE + "",
+
+  // Doctor
+  getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
+  updateHourly: DOCTOR_BASE + "updateDoctor/",
+  updateAffil: DOCTOR_BASE + "updateDoctor/",
+  viewFilteredDoctors: DOCTOR_BASE + "filter/",
+
+  // Patient
+  signup: PATIENT_BASE + "addPatient/",
+  viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/", // add patient username as a param
+  getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
+  createFamilyMember: PATIENT_BASE + "createFamilymember/",
+  viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
+
+  // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
   deletePackage: PACKAGE_BASE + "deletePackage/",
   updatePackage: PACKAGE_BASE + "updatePackage/",
-  getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
-  viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-  getRequests: ADMIN_BASE + "",
-  updateHourly: DOCTOR_BASE + "updateDoctor/",
 
-  viewPrescriptions: PATIENT_BASE + "getPrescriptions/",
-
-  getRequests: ADMIN_BASE + "requests/",
-  getRequest: ADMIN_BASE + "getRequest/",
-
-  deleteUser: ADMIN_BASE + "deleteUser/",
-  createAdmin: ADMIN_BASE + "addAdmin/",
-
-  updateEmailDoc: GUEST_BASE + "updateEmail/",
-  createfamilymember: PATIENT_BASE + "createFamilymember/",
-  viewFilteredDoctors: DOCTOR_BASE + "filter/",
-  viewfamilymembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
-  updateAffil: DOCTOR_BASE + "updateDoctor/",
+  // Appointment
+  viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
-
-  createfamilymember: PATIENT_BASE + "createFamilymember/",
-  viewFilteredDoctors: DOCTOR_BASE + "filter/",
-  viewfamilymembers: PATIENT_BASE + "getFamilymember/",
-  updateAffil: DOCTOR_BASE + "updateDoctor/",
 };

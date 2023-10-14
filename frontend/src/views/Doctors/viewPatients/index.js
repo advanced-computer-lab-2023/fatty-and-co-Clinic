@@ -116,6 +116,7 @@ function PatientTable() {
                         >
                             search
                         </Button>
+                        
                     </Form>
                 )}
             </Formik>
@@ -144,7 +145,7 @@ function PatientTable() {
                 <Modal isOpen={isModalOpen} onClose={closeModal}>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader>Prescription Details</ModalHeader>
+                        <ModalHeader>Patient Details</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             <p>patient name: {selectedPatient.Name}</p>
@@ -152,7 +153,8 @@ function PatientTable() {
                             <p>Date of birth: {selectedPatient.DateOfBirth}</p>
                             <p>Gender:{selectedPatient.Gender}</p>
                             <p>Package Name:{selectedPatient.PackageName}</p>
-
+                            <p>Emergency Contact Name:{selectedPatient.EmergencyContact.FullName}</p>
+                            <p>Emergency Contact phone number:{selectedPatient.EmergencyContact.PhoneNumber}</p>
                         </ModalBody>
                     </ModalContent>
                 </Modal>
