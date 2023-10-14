@@ -334,6 +334,7 @@ const viewPatientInfoAndHealthRecords = async (req, res) => {
     });
     const prescriptions = await prescriptionsModel.find({
       PatientUsername: patientUsername,
+      DoctorUsername: doctorUsername,
     });
     res.status(200).json({ appointments, prescriptions });
   } catch (error) {

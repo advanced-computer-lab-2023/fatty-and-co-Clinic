@@ -73,7 +73,7 @@ function PatientTable() {
 
     const openInfoModal = async (patientUsername) => {
         try {
-            const response = await axios.get(`http://localhost:8000/doctor/viewPatientInfoAndHealthRecords?PatientUsername=${patientUsername}&DoctorUsername=${doctorUsername}`);
+            const response = await axios.get(API_PATHS.viewInfoAndHealthRecords + `?PatientUsername=${patientUsername}&DoctorUsername=${doctorUsername}`);
             setSelectedPatientViewInfo(response.data);
             setInfoModalOpen(true);
         } catch (error) {
@@ -102,14 +102,14 @@ function PatientTable() {
                         <Field name="patientName">
                             {({ field }) => (
                                 <FormControl>
-                                    <Input {...field} type="text" placeholder="enter Patient name" />
+                                    <Input {...field} type="text" placeholder="Enter Patient name" />
                                 </FormControl>
                             )}
                         </Field>
                         <Field name="upcoming">
                             {({ field }) => (
                                 <FormControl>
-                                    <Input {...field} type="text" placeholder="filter for upcoming appointments?" />
+                                    <Input {...field} type="text" placeholder="Filter for upcoming appointments?" />
                                 </FormControl>
                             )}
                         </Field>
@@ -173,6 +173,9 @@ function PatientTable() {
                         <ModalHeader>Patient Information and Health records</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
+                            <Heading as="h5" size="sm">Health Records:</Heading>
+                            <p>MyHistory.pdf</p>
+                            <hr />
                             <Heading as="h5" size="sm">Appointments:</Heading>
                             <ul style={{ listStyleType: 'decimal' }}>
                                 {selectedPatientViewInfo.appointments.map((appointment, index) => (
