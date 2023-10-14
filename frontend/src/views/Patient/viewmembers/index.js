@@ -15,7 +15,6 @@ function Viewmembers() {
   const { PatientUserName } = useParams();
 
   useEffect(() => {
-
     const URL1 = API_PATHS.viewFamilyMembers + PatientUserName;
     console.log("Sending search params:", searchParams);
     console.log("here");

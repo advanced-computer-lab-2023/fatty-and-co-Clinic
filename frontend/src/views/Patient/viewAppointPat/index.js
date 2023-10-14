@@ -12,8 +12,8 @@ function ViewPatientAppointments() {
     Status: "",
     Date: "",
   });
-  const {PatientUsername} = useParams();
-    useEffect(() => {
+  const { PatientUsername } = useParams();
+  useEffect(() => {
     const url = API_PATHS.viewAppointPat + PatientUsername;
     axios
       .get(url, { params: searchParams })
@@ -38,7 +38,6 @@ function ViewPatientAppointments() {
   console.log(data);
 
   const handleStatusSearchValueChange = (value) => {
-
     setStatusSearchValue(value);
   };
 
@@ -71,7 +70,7 @@ function ViewPatientAppointments() {
         </Flex>
         <PatientAppTable
           title={"Available Appointments"}
-          captions={["Patient Name","Doctor Name", "Status", "Date"]}
+          captions={["Patient Name", "Doctor Name", "Status", "Date"]}
           data={data}
         />
       </Flex>

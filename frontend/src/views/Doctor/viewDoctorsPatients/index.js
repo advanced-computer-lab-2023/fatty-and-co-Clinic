@@ -10,13 +10,13 @@ function ViewDoctorsPatients() {
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Name: "",
-    DoctorUsername:  "",
+    DoctorUsername: "",
   });
-  
+
   setSearchParams({
     ...searchParams,
     Name: "",
-    DoctorUsername:"",
+    DoctorUsername: "",
   });
   useEffect(() => {
     const url = API_PATHS.viewPatientsDoctor;
@@ -29,23 +29,18 @@ function ViewDoctorsPatients() {
       .catch((err) => console.log(err));
   }, [searchParams]);
 
-  
-  
-
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
     setSearchParams({
       ...searchParams,
       Name: "",
-      DoctorUsername:"",
+      DoctorUsername: "",
     });
   };
 
   const handleNameSearchValueChange = (value) => {
     setNameSearchValue(value);
   };
-
-
 
   return (
     <Box pt="80px">

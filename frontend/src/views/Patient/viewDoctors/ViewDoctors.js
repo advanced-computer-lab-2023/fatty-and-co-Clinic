@@ -41,7 +41,6 @@ export function ViewDoctors() {
       initialRender.current = false;
     } else {
       const url = API_PATHS.viewFilteredDoctors;
-      console.log("Sending filter params:", filterParams);
       axios
         .get(url, { params: filterParams })
         .then((response) => {
@@ -106,6 +105,17 @@ export function ViewDoctors() {
       ...searchParams,
       Name: nameSearchValue,
       Speciality: specialitySearchValue,
+    });
+  };
+
+  const handleClrButtonClick = () => {
+    setDayFilterValue([]);
+    setHourFilterValue([]);
+    setFilterParams({
+      speciality: "",
+      date: [],
+      hour: [],
+      id: id,
     });
   };
 
@@ -183,7 +193,7 @@ export function ViewDoctors() {
             filter
           </Button>
 
-          <Button onClick={handleSearchButtonClick} marginLeft={4}>
+          <Button onClick={handleClrButtonClick} marginLeft={4}>
             Clear
           </Button>
         </Flex>

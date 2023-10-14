@@ -1,5 +1,9 @@
 const express = require("express");
-const { createRequest, updateRequest,updateEmail } = require("../controllers/guestController");
+const {
+  createRequest,
+  updateRequest,
+  updateEmail,
+} = require("../controllers/guestController");
 
 const router = express.Router();
 
@@ -12,6 +16,6 @@ router.post("/addRequest", createRequest);
 
 router.put("/updateRequest/:id", updateRequest);
 
-router.patch("/updateEmail/:Username",updateEmail)
+router.patch("/updateEmail/:Username", updateEmail);
 
 module.exports = router;
