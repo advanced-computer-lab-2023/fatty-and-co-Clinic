@@ -117,7 +117,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewDoctors",
+    path: "/viewDoctors/:id",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,

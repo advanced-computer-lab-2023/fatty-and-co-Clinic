@@ -20,6 +20,8 @@ export function ViewDoctors() {
     id: "",
   });
   const { id } = useParams();
+  console.log("hello");
+  console.log(id);
   const options = [
     { label: "Cardiology", value: "Cardiology" },
     { label: "Dermatology", value: "Dermatology" },
@@ -109,6 +111,19 @@ export function ViewDoctors() {
     });
   };
 
+  const handleClrButtonClick = () => {
+    
+    console.log('hell');
+    setDayFilterValue([]);
+    setHourFilterValue([]);
+    setFilterParams({
+      speciality: "",
+      date: [],
+      hour: [],
+      id: id,
+    })
+  }
+
   const handleNameSearchValueChange = (value) => {
     setNameSearchValue(value);
   };
@@ -183,7 +198,7 @@ export function ViewDoctors() {
             filter
           </Button>
 
-          <Button onClick={handleSearchButtonClick} marginLeft={4}>
+          <Button onClick={handleClrButtonClick} marginLeft={4}>
             Clear
           </Button>
         </Flex>
