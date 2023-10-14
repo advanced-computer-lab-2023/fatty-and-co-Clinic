@@ -115,6 +115,7 @@ const updatePatient = async (req, res) => {
   }
 };
 
+// view all doctors with speciality and session price
 const session_index = async (req, res) => {
   const { id } = req.params;
   const { Name, Speciality } = req.query;

@@ -4,6 +4,7 @@ const prescriptionsModel = require("../models/prescriptions");
 const patientModel = require("../models/patients");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
+const packageModel = require("../models/packages");
 
 // create a doctor
 // const createDoctor = async (req, res) => {
@@ -94,6 +95,8 @@ const updateDoctor = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 }
+  }
+};
 
 // get a doctor by ID
 const getDoctorByID = async (req, res) => {
@@ -191,28 +194,11 @@ const filterDoctor = async (req, res) => {
     var myFilteredDoctors = new Array();
 
     const id = req.query.id;
-    // const { id } = req.params;
+    //const { id } = req.params;
+    console.log(id);
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "Invalid ID" });
       return;
-    } else {
-      //getting package dis of patient
-      patientModel.findById(id).then((result) => {
-        // Extract the 'PackageName' property from the patient document
-        const packageName = result.PackageName;
-        // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
-        if (!packageName == null) {
-          packageModel
-            .find({ Name: packageName })
-            .then((result) => {
-              // Extract the 'SessionDiscount' property from the package document and set the 'packageDis' variable to its value
-              packageDis = result.SessionDiscount;
-            })
-            .catch((err) => {
-              res.status(500).json({ error: error.message });
-            });
-        }
-      });
     }
 
     //TODO: I BELIEVE THIS BIG LOOP (.HAS(DATE) IS REDUNDANT IF REQ.QUERY.DATE SHAGHALA)
@@ -221,16 +207,16 @@ const filterDoctor = async (req, res) => {
       if (req.query.date && req.query.hour) {
         const date = new Date(req.query.date);
         const day = date.getDay();
-        console.log(day);
+
         const hour = req.query.hour;
-        console.log(hour);
+
         //  TODO: CHANGED THE RANGE TO ACCOMODATE FOR DURATION
         const dateDocs = await doctorModel.find({
           WorkingDays: { $in: [day] },
           StartTime: { $lte: hour },
           EndTime: { $gte: hour + 1 },
         });
-        // console.log(dateDocs);
+        console.log(dateDocs);
         if (req.query.speciality) {
           dateDocs.forEach((element) => {
             if (element.Speciality == req.query.speciality) {
@@ -240,45 +226,52 @@ const filterDoctor = async (req, res) => {
         } else {
           myDoctors = dateDocs;
         }
-        //console.log(dateDocs);
 
         //TODO: NEEDS TESTING BA2A
         //TODO:added this part in this scope because only if date and hour existed
-        myDoctors.forEach(async (doctor) => {
+        for (const doctor of myDoctors) {
           appointments = await appointmentModel.find({
             DoctorUsername: doctor.Username,
           });
-          if (appointments.length != 0)
-            appointments.forEach((appointment) => {
-              console.log("hello app3");
-      
+          if (appointments.length != 0) {
+            for (let appointment of appointments) {
               const appDay = appointment.Date.getDay();
-              const appHour = appointment.Date.getHours();
+              const appHour = appointment.Date.getUTCHours();
               const appMin = appointment.Date.getMinutes();
-              const appHourFilter = appHour + (appMin/100);
-              
-              console.log(appointment.DoctorName);
-              console.log(appointment.PatientName);
-              console.log(appointment.Date);
+              const appHourFilter = appHour + appMin / 100;
 
+              const dateWithoutTime = date.toISOString().split("T")[0];
+              const appDateWithoutTime =
+                appointment.Date.toISOString().split("T")[0];
 
+              // console.log(appointment.DoctorName);
+              // console.log(appointment.PatientName);
+              // console.log(appointment.Date);
 
-              console.log (day);
-              console.log(appDay);
-              console.log(appHourFilter);
-              console.log(Math.abs(appHourFilter - hour));
+              // console.log (dateWithoutTime);
+              // console.log(appDateWithoutTime);
+
+              // console.log (day);
+              // console.log(appDay);
+              // console.log(appHour);
+              // console.log(appHourFilter);
+              // console.log(hour)
+              // console.log(Math.abs(appHourFilter - hour));
+
               //TODO: send help,put in mind check utchourthing first
               //USE ABSOLUTE DIFFERENCE BETTER THAN (hour < appHour + 1 || hour < appHour + 1)
-              if (appDay == day && (Math.abs(appHourFilter - hour) < 1)) {
+              if (
+                Math.abs(appHourFilter - hour) < 1 &&
+                appDateWithoutTime == dateWithoutTime &&
+                appointment.Status == "Upcoming"
+              ) {
                 //splice takes 2 attributes; index of element to be deleted, how many elements to delete,
-                console.log("helpplease");
-                console.log(appointment);
-                console.log(doctor);
+                // console.log("helpplease");
                 myDoctors.splice(myDoctors.indexOf(doctor), 1);
-
               }
-            });
-        });
+            }
+          }
+        }
       }
     } else {
       if (req.query.speciality) {
@@ -290,8 +283,24 @@ const filterDoctor = async (req, res) => {
       }
     }
 
-    //adding session price to filtered doctors
-    myDoctors.forEach((element) => {
+    //getting package dis of patient
+    patientModel.findById(id).then(async (result) => {
+      // Extract the 'PackageName' property from the patient document
+      const packageName = result.PackageName;
+      // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
+      if (packageName) {
+        await packageModel
+          .find({ Name: packageName })
+          .then((result) => {
+            // Extract the 'SessionDiscount' property from the package document and set the 'packageDis' variable to its value
+            packageDis = result.Session_Discount;
+          })
+          .catch((err) => {
+            res.status(500).json({ error: error.message });
+          });
+      }
+      //adding session price to filtered doctors
+      for (const element of myDoctors) {
         const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
         // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
         myFilteredDoctors.push({
@@ -300,9 +309,11 @@ const filterDoctor = async (req, res) => {
           Speciality: element.Speciality,
           Cost: calcCost,
         });
-      
+        
+      }res.status(200).json(myFilteredDoctors);
     });
-    res.status(200).json(myFilteredDoctors);
+
+    
   } catch (err) {
     console.log(err);
   }
