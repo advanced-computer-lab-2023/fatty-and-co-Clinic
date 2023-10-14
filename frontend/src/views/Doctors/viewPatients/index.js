@@ -106,7 +106,6 @@ function PatientTable() {
         initialValues={filters}
         onSubmit={(values, actions) => {
           setFilters(values); // Update filters state
-          fetchPatient();
           actions.setSubmitting(false);
         }}
       >
