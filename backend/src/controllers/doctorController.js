@@ -33,7 +33,7 @@ const packageModel = require("../models/packages");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const {} = req.body;
+  const { } = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -326,9 +326,11 @@ const filterDoctor = async (req, res) => {
 // View information and health records of a doctor's patient
 const viewPatientInfoAndHealthRecords = async (req, res) => {
   const patientUsername = req.query.PatientUsername;
+  const doctorUsername = req.query.DoctorUsername;
   try {
     const appointments = await appointmentModel.find({
       PatientUsername: patientUsername,
+      DoctorUsername: doctorUsername,
     });
     const prescriptions = await prescriptionsModel.find({
       PatientUsername: patientUsername,
