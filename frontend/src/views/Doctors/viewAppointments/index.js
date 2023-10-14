@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import AppointmentsTable from "./components/AppointmentsTable";
-import { Flex, Button, Box ,Input,Text} from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Text } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -115,8 +115,8 @@ export default function ViewAppointments() {
     setStatusSearchValue(value);
   };
 
-  const handleDateSearchValueChange = (value) => {
-    setDateSearchValue(value);
+  const handleDateSearchValueChange = (event) => {
+    setDateSearchValue(event.target.value);
   };
 
   return (
@@ -132,11 +132,17 @@ export default function ViewAppointments() {
             placeholder="Status..."
             onChange={handleStatusSearchValueChange}
           />
-          <SearchBar
+          <Input
+            bg="white"
+            type="date"
+            placeholder="Filter by Date"
+            onChange={handleDateSearchValueChange}
+          />
+          {/* <SearchBar
             placeholder="yyyy-mm-dd"
             onChange={handleDateSearchValueChange}
             marginLeft={4} // Add margin to the left
-          />
+          /> */}
           <Button onClick={handleSearchButtonClick} marginLeft={4}>
             Search
           </Button>
@@ -171,15 +177,15 @@ export default function ViewAppointments() {
         </Flex>
         {(DoctorUsername && DoctorUsername !== ":DoctorUsername" && (
           <AppointmentsTable
-          title={"Available Appointments"}
-          captions={["Doctor Name", "Patient Name", "Status", "Date"]}
-          data={data}
-        />
+            title={"Available Appointments"}
+            captions={["Doctor Name", "Patient Name", "Status", "Date"]}
+            data={data}
+          />
         )) || (
-          <Text fontSize="3xl" fontWeight="bold">
-            Username not found
-          </Text>
-        )}
+            <Text fontSize="3xl" fontWeight="bold">
+              Username not found
+            </Text>
+          )}
       </Flex>
     </Box>
   );
