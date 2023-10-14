@@ -23,6 +23,7 @@ export const API_PATHS = {
   updateHourly: DOCTOR_BASE + "updateDoctor/",
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
+  viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
 
   // Patient
   signup: PATIENT_BASE + "addPatient/",
