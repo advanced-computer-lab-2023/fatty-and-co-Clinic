@@ -242,10 +242,10 @@ function PackageRow(props) {
                   setSession_Discount(props.Session_Discount);
                   setMedicine_Discount(props.Medicine_Discount);
                   setFamily_Discount(props.Family_Discount);
-
+                  onClose();
                   return toast({
-                    title: "failed Package Update.",
-                    description: "Something went wrong try again.",
+                    title: "failed Package Update. try again.",
+                    description: "Error: " + data.message,
                     status: "error",
                     duration: 9000,
                     isClosable: true,
