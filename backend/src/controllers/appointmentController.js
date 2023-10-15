@@ -285,7 +285,7 @@ const getAppointmentsDoc = async (req, res) => {
   // Extract the 'id' parameter from the request object
   const { Username2 } = req.params;
   const query = req.query;
-  const Status = query.Status.value;
+  const Status = query.Status;
   const dateValue = new Date(query.Date);
   const newDate = dateValue.addDays(1);
 
