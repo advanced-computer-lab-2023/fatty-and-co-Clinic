@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import AppointmentsTable from "./components/AppointmentsTable";
-import { Flex, Button, Box } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Text, Select } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import AppointmentsTable from "./components/AppointmentsTable";
 
-function ViewAppointments() {
+export default function ViewAppointments() {
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
     Date: "",
   });
+  const [statusSearchValue, setStatusSearchValue] = useState("");
+  const [dateSearchValue, setDateSearchValue] = useState("");
+
   const { DoctorUsername } = useParams();
+  const options = [
+    { label: "Cancelled", value: "Cancelled" },
+    { label: "Upcoming", value: "Upcoming" },
+    { label: "Completed", value: "Completed" },
+    { label: "Rescheduled", value: "Rescheduled" }
+  ];
 
   useEffect(() => {
-    const Username = "Mariom";
     const url = API_PATHS.viewAppointments + DoctorUsername;
     axios
       .get(url, { params: searchParams })
@@ -25,27 +33,29 @@ function ViewAppointments() {
       .catch((err) => console.log(err));
   }, [searchParams]);
 
-  const [statusSearchValue, setStatusSearchValue] = useState("");
-  const [dateSearchValue, setDateSearchValue] = useState("");
-
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
     setSearchParams({
-      ...searchParams,
       Status: statusSearchValue,
       Date: dateSearchValue,
     });
+    console.log(statusSearchValue);
   };
 
-  console.log(data);
-
-  const handleStatusSearchValueChange = (value) => {
-    setStatusSearchValue(value);
+  const handleClrButtonClick = () => {
+    setSearchParams({
+      Status: "",
+      Date: "",
+    });
   };
 
-  const handleDateSearchValueChange = (value) => {
-    console.log(value);
-    setDateSearchValue(value);
+  const handleStatusSearchValueChange = (event) => {
+    setStatusSearchValue(event.target.value);
+    console.log(statusSearchValue);
+  };
+
+  const handleDateSearchValueChange = (event) => {
+    setDateSearchValue(event.target.value);
   };
 
   return (
@@ -57,27 +67,41 @@ function ViewAppointments() {
         justifyContent="flex-start"
       >
         <Flex direction="row" alignItems="flex-start">
-          <SearchBar
-            placeholder="Status"
-            onChange={handleStatusSearchValueChange}
-          />
-          <SearchBar
-            placeholder="YYYY-MM-DD"
+          <Select bg="white" onChange={(e) => { handleStatusSearchValueChange(e) }}>
+            <option value="">All</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+          <Input
+            bg="white"
+            type="date"
+            placeholder="Filter by Date"
             onChange={handleDateSearchValueChange}
-            marginLeft={4} // Add margin to the left
           />
           <Button onClick={handleSearchButtonClick} marginLeft={4}>
-            Search
+            Filter
+          </Button>
+
+          <Button onClick={handleClrButtonClick} marginLeft={4}>
+            Clear
           </Button>
         </Flex>
-        <AppointmentsTable
-          title={"Available Appointments"}
-          captions={["Doctor Name", "Patient Name", "Status", "Date"]}
-          data={data}
-        />
+
+        {(DoctorUsername && DoctorUsername !== ":DoctorUsername" && (
+          <AppointmentsTable
+            title={"Available Appointments"}
+            captions={["Doctor Name", "Patient Name", "Status", "Date"]}
+            data={data}
+          />
+        )) || (
+            <Text fontSize="3xl" fontWeight="bold">
+              Username not found
+            </Text>
+          )}
       </Flex>
     </Box>
   );
 }
-
-export default ViewAppointments;

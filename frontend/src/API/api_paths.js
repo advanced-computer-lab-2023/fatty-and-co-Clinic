@@ -23,6 +23,7 @@ export const API_PATHS = {
   updateHourly: DOCTOR_BASE + "updateDoctor/",
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
+  viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
 
   // Patient
   signup: PATIENT_BASE + "addPatient/",
@@ -31,6 +32,7 @@ export const API_PATHS = {
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
+  getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
 
   // Package
   packages: PACKAGE_BASE + "packages/",

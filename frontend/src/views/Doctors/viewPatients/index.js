@@ -21,6 +21,8 @@ import {
   Button,
   Input,
   Select,
+  Checkbox,
+  filter,
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 
@@ -34,8 +36,7 @@ function PatientTable() {
 
   const [filters, setFilters] = useState({
     patientName: "",
-    upcoming: "",
-    doctorUsername: "",
+    upcoming: false,
   });
 
   useEffect(() => {
@@ -44,20 +45,15 @@ function PatientTable() {
 
   const fetchPatient = () => {
     // Construct the URL based on filters and user ID
-    let url =
-      API_PATHS.viewDoctorPatients + `?DoctorUsername=${doctorUsername}`;
-    if (filters.doctorUsername)
-      url =
-        API_PATHS.viewDoctorPatients +
-        `?DoctorUsername=${filters.doctorUsername}`;
-    if (filters.patientName) url += `&PatientName=${filters.patientName}`;
-    if (filters.upcoming)
-      url =
-        API_PATHS.viewUpcomingAppointments +
-        `?DoctorUsername=${filters.doctorUsername}`;
+    let url = filters.upcoming
+      ? API_PATHS.viewUpcomingAppointments
+      : API_PATHS.viewDoctorPatients;
+
+    const params = { DoctorUsername: doctorUsername };
+    if (filters.patientName) params.PatientName = filters.patientName;
 
     axios
-      .get(url)
+      .get(url, { params })
       .then((response) => {
         setPatients(response.data);
       })
@@ -68,9 +64,9 @@ function PatientTable() {
 
   const openModal = async (id) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/patient/selectPatient/?id=${id}`
-      );
+      const response = await axios.get(API_PATHS.getPatient, {
+        params: { id },
+      });
       setSelectedPatient(response.data);
       setModalOpen(true);
     } catch (error) {
@@ -85,9 +81,12 @@ function PatientTable() {
 
   const openInfoModal = async (patientUsername) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/doctor/viewPatientInfoAndHealthRecords?PatientUsername=${patientUsername}`
-      );
+      const response = await axios.get(API_PATHS.viewInfoAndHealthRecords, {
+        params: {
+          PatientUsername: patientUsername,
+          DoctorUsername: doctorUsername,
+        },
+      });
       setSelectedPatientViewInfo(response.data);
       setInfoModalOpen(true);
     } catch (error) {
@@ -98,6 +97,7 @@ function PatientTable() {
   const closeInfoModal = () => {
     setSelectedPatientViewInfo(null);
     setInfoModalOpen(false);
+    setModalOpen(false);
   };
 
   return (
@@ -106,42 +106,33 @@ function PatientTable() {
         initialValues={filters}
         onSubmit={(values, actions) => {
           setFilters(values); // Update filters state
-          fetchPatient();
           actions.setSubmitting(false);
         }}
       >
         {(props) => (
           <Form>
-            <Field name="doctorUsername">
-              {({ field }) => (
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="text"
-                    placeholder="enter docotr username"
-                  />
-                </FormControl>
-              )}
-            </Field>
             <Field name="patientName">
               {({ field }) => (
                 <FormControl>
                   <Input
                     {...field}
                     type="text"
-                    placeholder="enter Patient name"
+                    placeholder="Enter Patient name"
                   />
                 </FormControl>
               )}
             </Field>
-            <Field name="upcoming">
+            <Field name="upcoming" type="checkbox">
               {({ field }) => (
                 <FormControl>
-                  <Input
+                  <Checkbox
                     {...field}
-                    type="text"
-                    placeholder="filter for upcoming appointments?"
-                  />
+                    onChange={(e) => {
+                      setFilters({ ...filters, upcoming: e.target.checked });
+                    }}
+                  >
+                    Filter for upcoming appointments?
+                  </Checkbox>
                 </FormControl>
               )}
             </Field>
@@ -219,6 +210,11 @@ function PatientTable() {
             <ModalHeader>Patient Information and Health records</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
+              <Heading as="h5" size="sm">
+                Health Records:
+              </Heading>
+              <p>MyHistory.pdf</p>
+              <hr />
               <Heading as="h5" size="sm">
                 Appointments:
               </Heading>
