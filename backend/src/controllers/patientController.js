@@ -199,11 +199,9 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientUserName } = req.params;
+    const { PatientID } = req.params;  //changed this
     console.log(req.params);
-    const fam = await familyMemberModel.find({
-      PatientUserName: PatientUserName,
-    });
+    const fam = await familyMemberModel.find({PatientID:{_id:PatientID}});
     //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {

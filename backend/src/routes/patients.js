@@ -106,7 +106,7 @@ router.post("/createFamilymember/:Createparameter", createFamilymember);
  * @access Public
  * @prop {string} Username - The username of the patient to get family members for
  */
-router.get("/getFamilymember/:PatientUserName", GetFamilymembers);
+router.get("/getFamilymember/:PatientID", GetFamilymembers);  //Changed name of params
 
 /**
  * @route GET /patients/getPrescriptions
