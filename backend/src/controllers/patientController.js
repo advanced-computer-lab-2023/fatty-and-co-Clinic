@@ -159,9 +159,8 @@ const session_index = async (req, res) => {
 };
 
 const createFamilymember = async (req, res) => {
-  const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const { Createpatameter } = req.params;
-  console.log(Createpatameter);
+  const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
+  const { Createparameter } = req.params;
 
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
@@ -175,19 +174,26 @@ const createFamilymember = async (req, res) => {
     res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
+  console.log(Createparameter);
   try {
+    const findPatient= await patientModel.findOne({Username:FamilyMemberUsername});
     const newFamilymember = await familyMemberModel.create({
-      PatientUserName: Createpatameter,
+      PatientID: Createparameter,
+      FamilyMemID:findPatient._id,
+      FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
       Gender: Gender,
       Relation: Relation,
     });
-    res.status(200).json(newFamilymember);
+
+    res.json(newFamilymember);
+     
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+  
 };
 
 const GetFamilymembers = async (req, res) => {
