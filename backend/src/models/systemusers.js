@@ -16,7 +16,10 @@ const systemUsersSchema = new Schema(
     Password: {
       type: String,
       required: true,
-      validate: [validatePassword, "Please fill a valid password"],
+      validate: [
+        validatePassword,
+        "Password needs to have at least 1 uppercase character, 1 lowercase character, 1 number, and 1 special character.",
+      ],
     },
     Email: {
       type: String,
