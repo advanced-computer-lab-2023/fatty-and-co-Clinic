@@ -7,7 +7,7 @@ const familyMemberSchema = new Schema({
     ref: "Patient",
     required: true,
   },
-  FamilyMemID: {     //ID of family member in table patient (in case he was a logged in user as well)
+  FamilyMem: {     //ID of family member in table patient (in case he was a logged in user as well)
     type:  mongoose.Schema.Types.ObjectId, //Changed this to id ref
     ref: "Patient",
     required: false,

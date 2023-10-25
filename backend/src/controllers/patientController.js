@@ -176,10 +176,11 @@ const createFamilymember = async (req, res) => {
   }
   console.log(Createparameter);
   try {
-    const findPatient= await patientModel.findOne({Username:FamilyMemberUsername});
+    const findPatientRel= await patientModel.findOne({Username:FamilyMemberUsername});
+    const findPatientMain= await patientModel.findById(Createparameter);
     const newFamilymember = await familyMemberModel.create({
-      PatientID: Createparameter,
-      FamilyMemID:findPatient._id,
+      PatientID: findPatientMain,
+      FamilyMem:findPatientRel,
       FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,
       NationalId: NationalId,
@@ -188,8 +189,8 @@ const createFamilymember = async (req, res) => {
       Relation: Relation,
     });
 
-    res.json(newFamilymember);
-     
+    res.status(200).json(newFamilymember);
+   
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
