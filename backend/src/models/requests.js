@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
+
+const {
+  validateEmail,
+  validatePassword,
+} = require("../common/utils/validators");
 
 const requestSchema = new Schema(
   {
@@ -16,6 +22,10 @@ const requestSchema = new Schema(
     Email: {
       type: String,
       required: true,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      validate: [validateEmail, "Please fill a valid email address"],
     },
     Name: {
       type: String,
@@ -26,15 +36,15 @@ const requestSchema = new Schema(
       required: true,
     },
     HourlyRate: {
-      type: Number, //NOT SURE OF TYPE
+      type: Number,
       required: true,
     },
     Affiliation: {
       type: String,
-      required: true, //ASSUMING ONE HOSPITAL LAW LA DO A SUBSCHEMA BADAL STRING ZAY FAM RELATIVES
+      required: true,
     },
     EducationalBackground: {
-      type: String, //Assuming just medicine degree aw 7aga
+      type: String,
       required: true,
     },
     Speciality: {
@@ -49,6 +59,36 @@ const requestSchema = new Schema(
   },
   { timestamps: true }
 );
+
+requestSchema.statics.addEntry = async function (
+  username,
+  password,
+  email,
+  name,
+  dateOfBirth,
+  hourlyRate,
+  affiliation,
+  educationalBackground,
+  speciality
+) {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+
+  const request = await this.create({
+    Username: username,
+    Password: hash,
+    Email: email,
+    Name: name,
+    DateOfBirth: dateOfBirth,
+    HourlyRate: hourlyRate,
+    Affiliation: affiliation,
+    EducationalBackground: educationalBackground,
+    Speciality: speciality,
+    Status: "Pending",
+  });
+
+  return request;
+};
 
 const Request = mongoose.model("Request", requestSchema);
 module.exports = Request;

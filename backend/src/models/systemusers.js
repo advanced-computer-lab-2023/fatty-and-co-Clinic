@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 const {
   validateEmail,
@@ -16,10 +17,6 @@ const systemUsersSchema = new Schema(
     Password: {
       type: String,
       required: true,
-      validate: [
-        validatePassword,
-        "Password needs to have at least 1 uppercase character, 1 lowercase character, 1 number, and 1 special character.",
-      ],
     },
     Email: {
       type: String,
@@ -34,12 +31,49 @@ const systemUsersSchema = new Schema(
       enum: ["Admin", "Patient", "Doctor"],
       required: true,
     },
-    JwtToken: {
-      type: String,
-    },
   },
   { timestamps: true }
 );
+
+systemUsersSchema.statics.addEntry = async function (
+  username,
+  password,
+  email,
+  type
+) {
+  const salt = await bcrypt.genSalt(10);
+
+  const hash = await bcrypt.hash(password, salt);
+
+  const user = await this.create({
+    Username: username,
+    Password: hash,
+    Email: email,
+    Type: type,
+  });
+
+  return user;
+};
+
+systemUsersSchema.statics.login = async function (username, password) {
+  if (!username || !password) {
+    throw Error("Please fill in all fields!");
+  }
+
+  const user = await this.findOne({ Username: username });
+
+  if (!user) {
+    throw Error("Username does not exist");
+  }
+
+  const passwordMatch = await bcrypt.compare(password, user.Password);
+
+  if (!passwordMatch) {
+    throw Error("Incorrect Password");
+  }
+
+  return user;
+};
 
 const User = mongoose.model("User", systemUsersSchema);
 module.exports = User;

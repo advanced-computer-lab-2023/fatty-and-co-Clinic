@@ -4,21 +4,32 @@ const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 
 const { generateToken } = require("../common/commonFunc");
+const User = require("../models/systemusers");
 
 const createRequest = async (req, res) => {
   try {
-    const request = await requestModel.create({
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Name: req.body.Name,
-      DateOfBirth: req.body.DateOfBirth,
-      HourlyRate: req.body.HourlyRate,
-      Affiliation: req.body.Affiliation,
-      EducationalBackground: req.body.EducationalBackground,
-      Speciality: req.body.Speciality,
-      Status: "Pending",
-    });
+    const {
+      Username,
+      Password,
+      Email,
+      Name,
+      DateOfBirth,
+      HourlyRate,
+      Affiliation,
+      EducationalBackground,
+      Speciality,
+    } = req.body;
+    const request = await requestModel.addEntry(
+      Username,
+      Password,
+      Email,
+      Name,
+      DateOfBirth,
+      HourlyRate,
+      Affiliation,
+      EducationalBackground,
+      Speciality
+    );
     res.status(200).send({ request });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -68,22 +79,10 @@ const updateEmail = async (req, res) => {
 const login = async (req, res) => {
   const { Username, Password } = req.body;
   try {
-    if (!Username || !Password) {
-      res.json({ error: "Please fill in all fields!" });
-    }
-    const isUser = await systemUserModel.find({ Username: Username });
-    if (!isUser) {
-      res.json({ error: "User not registered!" });
-    } else if (isUser[0].Password != Password) {
-      res.json({ error: "Incorrect password!" });
-    } else {
-      const token = generateToken(isUser[0]);
-      const doc = await systemUserModel.findOneAndUpdate(
-        { Username: Username },
-        { JwtToken: token }
-      );
-      res.status(200).send({ doc });
-    }
+    const user = await systemUserModel.login(Username, Password);
+    const token = generateToken(user);
+    // TODO: maybe send the user type too?
+    res.status(200).send({ Username, token });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
