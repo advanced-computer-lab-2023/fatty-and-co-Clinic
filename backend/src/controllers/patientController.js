@@ -201,7 +201,7 @@ const GetFamilymembers = async (req, res) => {
   try {
     const { PatientID } = req.params;  //changed this
     console.log(req.params);
-    const fam = await familyMemberModel.find({PatientID:{_id:PatientID}});
+    const fam = await familyMemberModel.find({PatientID:PatientID}).populate("PatientID").populate("FamilyMem");
     //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
