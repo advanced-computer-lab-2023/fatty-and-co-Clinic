@@ -200,7 +200,7 @@ function generateAppointmentStatus() {
   return status[Math.floor(Math.random() * status.length)];
 }
 
-function generateAppointmentDate() {
+function generateAppointmentDate(workingDays, startTime, endTime) {
   const today = new Date();
   const next30Days = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
   const randomTimestamp = Math.floor(
@@ -208,10 +208,22 @@ function generateAppointmentDate() {
   );
   const randomDate = new Date(today.getTime() + randomTimestamp);
 
+  while (!workingDays.includes(randomDate.getDay())) {
+    randomDate.setDate(randomDate.getDate() + 1);
+  }
+
   // Generate random hours, minutes and seconds
-  const randomHours = Math.floor(Math.random() * 24);
-  const randomMinutes = Math.floor(Math.random() * 60);
-  const randomSeconds = Math.floor(Math.random() * 60);
+  let randomHours = Math.floor(Math.random() * 24);
+  let randomMinutes = Math.floor(Math.random() * 60);
+  let randomSeconds = Math.floor(Math.random() * 60);
+
+  let randomTime = randomHours * 60 * 60 + randomMinutes * 60 + randomSeconds;
+  while (randomTime < startTime * 60 * 60 || randomTime > endTime * 60 * 60) {
+    randomHours = Math.floor(Math.random() * 24);
+    randomMinutes = Math.floor(Math.random() * 60);
+    randomSeconds = Math.floor(Math.random() * 60);
+    randomTime = randomHours * 60 * 60 + randomMinutes * 60 + randomSeconds;
+  }
 
   // Set the random hours, minutes and seconds
   randomDate.setHours(randomHours);
