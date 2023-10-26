@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  viewHealthPackage,
   createPatient,
   getAllPatients,
   deletePatient,
@@ -138,4 +139,6 @@ router.get("/selectPrescription", selectPrescription);
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
 
+
+router.get("/viewMyPackage/:PatientID",viewHealthPackage)
 module.exports = router;

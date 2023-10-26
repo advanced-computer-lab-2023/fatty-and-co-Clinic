@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
+
 const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
@@ -165,6 +166,20 @@ const session_index = async (req, res) => {
   }
 };
 
+
+const viewHealthPackage= async (req, res) => {
+  try {
+    const { PatientID } = req.params;  //changed this
+    const healthPackage= await patientModel.findById(PatientID).PackageName;
+    const package = await packageModel.find({Name:healthPackage})
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+
+
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
   const { Createparameter } = req.params;
@@ -295,6 +310,7 @@ Date.prototype.addDays = function (days) {
 };
 
 module.exports = {
+  viewHealthPackage,
   session_index,
   createFamilymember,
   GetFamilymembers,
