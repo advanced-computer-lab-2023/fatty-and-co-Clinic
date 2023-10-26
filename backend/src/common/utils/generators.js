@@ -165,14 +165,32 @@ function generateEmail() {
 }
 
 function generatePassword() {
-  const characters = "abcdefghijklmnopqrstuvwxyz";
+  const lowercase = "abcdefghijklmnopqrstuvwxyz";
+  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*";
   let password = "";
   for (let i = 0; i < 10; i++) {
-    password += characters.charAt(
-      Math.floor(Math.random() * characters.length)
-    );
+    const randomCharType = Math.floor(Math.random() * 4);
+    switch (randomCharType) {
+      case 0:
+        password += lowercase.charAt(
+          Math.floor(Math.random() * lowercase.length)
+        );
+        break;
+      case 1:
+        password += uppercase.charAt(
+          Math.floor(Math.random() * uppercase.length)
+        );
+        break;
+      case 2:
+        password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        break;
+      case 3:
+        password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+        break;
+    }
   }
-  password += Math.floor(Math.random() * 1000);
   return password;
 }
 
@@ -200,7 +218,7 @@ function generateAppointmentStatus() {
   return status[Math.floor(Math.random() * status.length)];
 }
 
-function generateAppointmentDate() {
+function generateAppointmentDate(workingDays, startTime, endTime) {
   const today = new Date();
   const next30Days = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
   const randomTimestamp = Math.floor(
@@ -208,10 +226,22 @@ function generateAppointmentDate() {
   );
   const randomDate = new Date(today.getTime() + randomTimestamp);
 
+  while (!workingDays.includes(randomDate.getDay())) {
+    randomDate.setDate(randomDate.getDate() + 1);
+  }
+
   // Generate random hours, minutes and seconds
-  const randomHours = Math.floor(Math.random() * 24);
-  const randomMinutes = Math.floor(Math.random() * 60);
-  const randomSeconds = Math.floor(Math.random() * 60);
+  let randomHours = Math.floor(Math.random() * 24);
+  let randomMinutes = Math.floor(Math.random() * 60);
+  let randomSeconds = Math.floor(Math.random() * 60);
+
+  let randomTime = randomHours * 60 * 60 + randomMinutes * 60 + randomSeconds;
+  while (randomTime < startTime * 60 * 60 || randomTime > endTime * 60 * 60) {
+    randomHours = Math.floor(Math.random() * 24);
+    randomMinutes = Math.floor(Math.random() * 60);
+    randomSeconds = Math.floor(Math.random() * 60);
+    randomTime = randomHours * 60 * 60 + randomMinutes * 60 + randomSeconds;
+  }
 
   // Set the random hours, minutes and seconds
   randomDate.setHours(randomHours);

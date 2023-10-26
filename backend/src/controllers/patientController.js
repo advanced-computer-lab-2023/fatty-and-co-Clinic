@@ -1,33 +1,40 @@
+const { default: mongoose } = require("mongoose");
+
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
 const familyMemberModel = require("../models/familymembers");
-const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
 const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
+const User = require("../models/systemusers");
 
 const createPatient = async (req, res) => {
-  const { EmergencyContactNumber, EmergencyContactName } = req.body;
+  const {
+    Username,
+    Name,
+    Password,
+    Email,
+    MobileNum,
+    DateOfBirth,
+    Gender,
+    EmergencyContactNumber,
+    EmergencyContactName,
+  } = req.body;
   try {
+    const user = await userModel.addEntry(Username, Password, Email, "Patient");
     const patient = await patientModel.create({
-      Username: req.body.Username,
-      Name: req.body.Name,
-      MobileNum: req.body.MobileNum,
-      DateOfBirth: req.body.DateOfBirth,
-      Gender: req.body.Gender,
+      Username: Username,
+      Name: Name,
+      MobileNum: MobileNum,
+      DateOfBirth: DateOfBirth,
+      Gender: Gender,
       EmergencyContact: {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
       },
-    });
-    const user = await userModel.create({
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Type: "Patient",
     });
     res.status(200).send({ patient, user });
   } catch (error) {
