@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  viewHealthPackageFam,
+  viewHealthFam,
   viewHealthPackage,
   subscribehealthpackage,
   subscribepackagefamilymem,
@@ -35,7 +35,7 @@ const router = express.Router();
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
 router.post("/addPatient", createPatient);
-
+router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
 /**
  * @route GET /patients/getAllPatients
  * @desc Returns a list of all patients
@@ -141,10 +141,9 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.get("/viewMyPackage/:PatientID",viewHealthPackage)
 router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
 router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
-router.get("viewMyPackage/:PatientID",viewHealthPackage)
+router.get("/viewMyPackage/:PatientID",viewHealthPackage)
 
-router.get("viewFamPackage/:PatientID",viewHealthPackageFam)
+
 module.exports = router;

@@ -166,15 +166,15 @@ const session_index = async (req, res) => {
   }
 };
 
-const viewHealthPackageFam= async(req,res)=>{
+const viewHealthFam= async(req,res)=>{
   try {
     const { PatientID } = req.params;  //changed this
     const Patient= await patientModel.findById(PatientID);
-    const famMems= await familyMemberModel.find({PatientID:Patient});
-    const package = famMems.map((famMember)=>famMember.famMems); 
+    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$ne:null}}).populate("FamilyMem");
+    const package = famMems.map((famMember)=>famMember.FamilyMem); 
     res.status(200).json(package);
   } catch (error) {
-    res.status(400).send({ message: error.message });
+    res.status(400).send("Cannot find it");
   }
 }
 
@@ -349,7 +349,7 @@ Date.prototype.addDays = function (days) {
 };
 
 module.exports = {
-  viewHealthPackageFam,
+  viewHealthFam,
   viewHealthPackage,
   subscribehealthpackage,
   session_index,
