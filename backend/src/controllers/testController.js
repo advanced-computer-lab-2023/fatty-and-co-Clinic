@@ -42,14 +42,13 @@ const createSystemUser = async (req, res) => {
   const password = Password || generatePassword();
   const email = Email || generateEmail();
   const type = Type || generateUserType();
-  console.log(username, password, email, type);
   try {
-    const newUser = await systemUserModel.create({
-      Username: username,
-      Password: password,
-      Email: email,
-      Type: type,
-    });
+    const newUser = await systemUserModel.addEntry(
+      username,
+      password,
+      email,
+      type
+    );
     res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -127,12 +126,7 @@ const createDoctor = async (req, res) => {
       Speciality: speciality,
       Status: "Accepted",
     }); // create a request for the doctor
-    await systemUserModel.create({
-      Username: username,
-      Password: password,
-      Email: email,
-      Type: "Doctor",
-    });
+    await systemUserModel.addEntry(username, password, email, "Doctor");
     const newDoctor = await doctorModel.create({
       Username: username,
       Name: name,
@@ -175,12 +169,12 @@ const createPatient = async (req, res) => {
   const gender = Gender || generateGender();
 
   try {
-    await systemUserModel.create({
-      Username: username,
-      Password: generatePassword(),
-      Email: generateEmail(),
-      Type: "Patient",
-    });
+    await systemUserModel.addEntry(
+      username,
+      generatePassword(),
+      generateEmail(),
+      "Patient"
+    );
     const newPatient = await patientModel.create({
       Username: username,
       Name: name,
@@ -313,16 +307,6 @@ const createPrescription = async (req, res) => {
   const diagnosis = Diagnosis || generateDiagnosis();
   const status = Status || generatePrescriptionStatus();
   const medicine = Medicine || generateMedicine();
-
-  console.log(
-    appointmentId,
-    doctorUsername,
-    doctorName,
-    patientUsername,
-    date,
-    diagnosis,
-    medicine
-  );
 
   try {
     const newPrescription = await prescriptionModel.create({

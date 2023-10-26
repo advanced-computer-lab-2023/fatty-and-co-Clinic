@@ -165,14 +165,32 @@ function generateEmail() {
 }
 
 function generatePassword() {
-  const characters = "abcdefghijklmnopqrstuvwxyz";
+  const lowercase = "abcdefghijklmnopqrstuvwxyz";
+  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*";
   let password = "";
   for (let i = 0; i < 10; i++) {
-    password += characters.charAt(
-      Math.floor(Math.random() * characters.length)
-    );
+    const randomCharType = Math.floor(Math.random() * 4);
+    switch (randomCharType) {
+      case 0:
+        password += lowercase.charAt(
+          Math.floor(Math.random() * lowercase.length)
+        );
+        break;
+      case 1:
+        password += uppercase.charAt(
+          Math.floor(Math.random() * uppercase.length)
+        );
+        break;
+      case 2:
+        password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        break;
+      case 3:
+        password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+        break;
+    }
   }
-  password += Math.floor(Math.random() * 1000);
   return password;
 }
 

@@ -41,6 +41,15 @@ systemUsersSchema.statics.addEntry = async function (
   email,
   type
 ) {
+  console.log("username: " + username);
+  console.log("password: " + password);
+
+  // validation done here instead of in db because password will be hashed by the time it reaches the db
+  if (!validatePassword(password)) {
+    throw Error(
+      "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+    );
+  }
   const salt = await bcrypt.genSalt(10);
 
   const hash = await bcrypt.hash(password, salt);
