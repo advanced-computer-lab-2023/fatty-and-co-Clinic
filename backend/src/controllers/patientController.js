@@ -166,6 +166,18 @@ const session_index = async (req, res) => {
   }
 };
 
+const viewHealthPackageFam= async(req,res)=>{
+  try {
+    const { PatientID } = req.params;  //changed this
+    const Patient= await patientModel.findById(PatientID);
+    const famMems= await familyMemberModel.find({PatientID:Patient});
+    const package = famMems.map((famMember)=>famMember.famMems); 
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
 
 const viewHealthPackage= async (req, res) => {
   try {
@@ -302,6 +314,33 @@ const selectPrescription = async (req, res) => {
     res.status(400).send({ message: err.message });
   }
 };
+
+const subscribepackagefamilymem=async(req,res) =>{
+ 
+  try {
+    const {FamilyMemberUsername,PackageName}=req.body;
+  
+    const patient = await patientModel.findOneAndUpdate({
+      Username:FamilyMemberUsername},{PackageName:PackageName });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
+
+const subscribehealthpackage=async(req,res) =>{
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
 
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
