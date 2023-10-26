@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  viewHealthPackageFam,
   viewHealthPackage,
   subscribehealthpackage,
   subscribepackagefamilymem,
@@ -140,10 +141,10 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-
-
 router.get("/viewMyPackage/:PatientID",viewHealthPackage)
 router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
 router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
+router.get("viewMyPackage/:PatientID",viewHealthPackage)
 
+router.get("viewFamPackage/:PatientID",viewHealthPackageFam)
 module.exports = router;

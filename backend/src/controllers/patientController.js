@@ -22,7 +22,7 @@ const createPatient = async (req, res) => {
     DateOfBirth,
     Gender,
     EmergencyContactNumber,
-    EmergencyContactName,
+    EmergencyContactName
   } = req.body;
   try {
     const user = await userModel.addEntry(Username, Password, Email, "Patient");
@@ -170,40 +170,15 @@ const session_index = async (req, res) => {
 const viewHealthPackage= async (req, res) => {
   try {
     const { PatientID } = req.params;  //changed this
-    const healthPackage= await patientModel.findById(PatientID).PackageName;
-    const package = await packageModel.find({Name:healthPackage})
+    const healthPackage= await patientModel.findById(PatientID);
+    const package = await packageModel.find({Name:healthPackage.PackageName})
     res.status(200).json(package);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
 };
-const subscribehealthpackage=async(req,res) =>{
-  try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
-    res.status(200).send({ patient });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-  
-}
-const subscribepackagefamilymem=async(req,res) =>{
- 
-  try {
-    const {FamilyMemberUsername,PackageName}=req.body;
-  
-    const patient = await patientModel.findOneAndUpdate({
-      Username:FamilyMemberUsername},{PackageName:PackageName });
-    res.status(200).send({ patient });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-  
-}
 
-
+//hi khalkhoola
 
 
 
@@ -249,9 +224,7 @@ const createFamilymember = async (req, res) => {
 const GetFamilymembers = async (req, res) => {
   try {
     const { PatientID } = req.params;  //changed this
-    console.log(req.params);
     const fam = await familyMemberModel.find({PatientID:PatientID}).populate("PatientID").populate("FamilyMem");
-    //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -337,6 +310,7 @@ Date.prototype.addDays = function (days) {
 };
 
 module.exports = {
+  viewHealthPackageFam,
   viewHealthPackage,
   subscribehealthpackage,
   session_index,
