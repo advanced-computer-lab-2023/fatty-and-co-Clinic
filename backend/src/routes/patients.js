@@ -1,6 +1,8 @@
 const express = require("express");
 const {
   viewHealthPackage,
+  subscribehealthpackage,
+  subscribepackagefamilymem,
   createPatient,
   getAllPatients,
   deletePatient,
@@ -141,4 +143,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 
 
 router.get("/viewMyPackage/:PatientID",viewHealthPackage)
+router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
+router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
+
 module.exports = router;

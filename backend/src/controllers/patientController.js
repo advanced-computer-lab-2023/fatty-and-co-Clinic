@@ -177,8 +177,33 @@ const viewHealthPackage= async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const subscribehealthpackage=async(req,res) =>{
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
+const subscribepackagefamilymem=async(req,res) =>{
+ 
+  try {
+    const {FamilyMemberUsername,PackageName}=req.body;
+  
+    const patient = await patientModel.findOneAndUpdate({
+      Username:FamilyMemberUsername},{PackageName:PackageName });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
 
-//hi khalkhoola
+
 
 
 
@@ -313,6 +338,7 @@ Date.prototype.addDays = function (days) {
 
 module.exports = {
   viewHealthPackage,
+  subscribehealthpackage,
   session_index,
   createFamilymember,
   GetFamilymembers,
@@ -326,4 +352,5 @@ module.exports = {
   updatePatient,
   selectPrescription,
   getEmergencyContact,
+  subscribepackagefamilymem
 };

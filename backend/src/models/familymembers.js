@@ -16,6 +16,7 @@ const familyMemberSchema = new Schema({
     type:String,
     required:false,
   },
+ 
   Name: {
     type: String,
     required: true,
