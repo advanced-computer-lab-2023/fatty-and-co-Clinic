@@ -11,6 +11,7 @@ export const API_PATHS = {
   // Guest
   docSignUp: GUEST_BASE + "addRequest/",
   updateEmailDoc: GUEST_BASE + "updateEmail/",
+  login: GUEST_BASE + "login/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
