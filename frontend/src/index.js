@@ -55,6 +55,7 @@ const MainApp = () => {
           render={() => (user ? <AdminLayout /> : <Redirect to={"/auth"} />)}
         />
         <Route path={`/rtl`} component={RTLLayout} />
+        <Redirect from={`/`} to={"/auth"} />
       </Switch>
     </BrowserRouter>
   );
