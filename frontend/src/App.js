@@ -8,7 +8,10 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import { Box, Spinner } from "@chakra-ui/react";
+
 import { useAuthContext } from "hooks/useAuthContext";
+import { useState, useEffect } from "react";
 
 //IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
 import AuthLayout from "layouts/Auth.js";
@@ -19,6 +22,24 @@ import RTLLayout from "layouts/RTL.js";
 // TODO: add patient and doctor layouts
 function App() {
   const { user } = useAuthContext();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // this part is to make sure that the user is loaded before rendering the app
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Spinner size="xl" />
+      </Box>
+    ); // loading screen
 
   if (!user)
     return (
