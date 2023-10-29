@@ -81,10 +81,7 @@ const deletePatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const patient = await patientModel.findByIdAndUpdate(req.user.id, req.body);
     res.status(200).send({ patient });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -93,7 +90,7 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const { id } = req.params;
+  const id = req.user.id;
   const { Name, Speciality } = req.query;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -136,7 +133,7 @@ const session_index = async (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const { Createpatameter } = req.params;
+  const Createpatameter = req.user.Username;
   console.log(Createpatameter);
 
   // Check if the national ID is not 16.
@@ -168,7 +165,7 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientUserName } = req.params;
+    const PatientUserName = req.user.Username;
     console.log(req.params);
     const fam = await familyMemberModel.find({
       PatientUserName: PatientUserName,

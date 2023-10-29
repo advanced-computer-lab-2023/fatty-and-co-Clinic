@@ -33,7 +33,7 @@ const packageModel = require("../models/packages");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -71,7 +71,7 @@ const deleteDoctor = async (req, res) => {
 // update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
-    const { Username } = req.params;
+    const Username = req.user.Username;
     const { HourlyRate, Affiliation } = req.body;
     if (
       Affiliation === undefined &&
@@ -201,7 +201,7 @@ const filterDoctor = async (req, res) => {
     var appointments = new Array();
     var myFilteredDoctors = new Array();
 
-    const id = req.query.id;
+    const id = req.user.id;
     //const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(404).json({ error: "Invalid ID" });
