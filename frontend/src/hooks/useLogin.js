@@ -17,10 +17,10 @@ export const useLogin = () => {
         Username: username,
         Password: password,
       });
-      localStorage.setItem("token", res.data.token);
+      const json = JSON.stringify(res.data);
+      localStorage.setItem("user", json);
       dispatch({ type: "LOGIN", payload: res.data });
       setLoading(false);
-      window.location.href = "/";
       return res;
     } catch (err) {
       setLoading(false);

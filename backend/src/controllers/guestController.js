@@ -84,7 +84,7 @@ const login = async (req, res) => {
   try {
     const user = await systemUserModel.login(Username, Password);
     const token = generateToken(user);
-    res.status(200).send({ token });
+    res.status(200).send({ token, userType: user.Type });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
