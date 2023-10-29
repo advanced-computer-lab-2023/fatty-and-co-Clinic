@@ -9,10 +9,6 @@ const familyMemberModel = require("../models/familymembers");
 const prescriptionModel = require("../models/prescriptions");
 
 const createAdmin = async (req, res) => {
-  if (req.user.Type !== "Admin")
-    return res
-      .status(401)
-      .send({ error: "You have to be an admin to perform this request" });
   const { Username, Password, Email } = req.body;
   try {
     const admin = await userModel.addEntry(Username, Password, Email, "Admin");
@@ -57,11 +53,13 @@ const acceptRequest = async (req, res) => {
       EducationalBackground: request.EducationalBackground,
       Speciality: request.Speciality,
     });
-    const user = await userModel.create({
-      Username: Username,
-      Password: request.Password,
-      Email: request.Email,
-    });
+    const user = await systemUserModel.addEntry(
+      Username,
+      request.Password,
+      request.Email,
+      "Doctor"
+    );
+
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -85,6 +83,9 @@ const deleteUser = async (req, res) => {
   const { Username } = req.body;
   try {
     const user = await userModel.findOneAndDelete({ Username: Username });
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    }
     if (user && user.Type === "Patient") {
       const patient = await patientModel.findOneAndDelete({
         Username: Username,

@@ -165,7 +165,7 @@ const { isNull } = require("util");
 
 // Get all the patients of a certain doctor.
 const findDoctorPatients = async (req, res) => {
-  const doctorUsername = req.query.DoctorUsername;
+  const doctorUsername = req.user.Username;
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
@@ -200,7 +200,7 @@ const findDoctorPatients = async (req, res) => {
 
 // Get all the upcoming appointments of a certain doctor.
 const upcomingAppforDoc = async (req, res) => {
-  const doctorUsername = req.query.DoctorUsername;
+  const doctorUsername = req.user.Username;
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
@@ -231,8 +231,8 @@ const upcomingAppforDoc = async (req, res) => {
 };
 
 const searchPatient = async (req, res) => {
-  const doctorUsername = req.query.DoctorUsername;
-  const patientName = req.query.PatientName;
+  const doctorUsername = req.user.Username; // username of the doctor searching
+  const patientName = req.query.PatientName; // name of the patient to search for
 
   // Get all the appointments of the doctor.
   const appointments = await appointmentModel.find({
@@ -278,12 +278,10 @@ const searchPatient = async (req, res) => {
   }
 };
 
-// Export the router.
-
 const getAppointmentsDoc = async (req, res) => {
   // Package discount starts with 0
   // Extract the 'id' parameter from the request object
-  const { Username2 } = req.params;
+  const Username2 = req.user.Username;
   const query = req.query;
   const Status = query.Status;
   const dateValue = new Date(query.Date);
@@ -302,50 +300,50 @@ const getAppointmentsDoc = async (req, res) => {
 
   const appointments =
     Status != "Rescheduled" &&
-      Status != "Completed" &&
-      Status != "Cancelled" &&
-      Status != "Upcoming" &&
-      hasDate == "n"
+    Status != "Completed" &&
+    Status != "Cancelled" &&
+    Status != "Upcoming" &&
+    hasDate == "n"
       ? await appointmentModel.find({ DoctorUsername: Username2 })
       : (Status == "Rescheduled" ||
-        Status == "Completed" ||
-        Status == "Cancelled" ||
-        Status == "Upcoming") &&
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
         hasDate == "y" &&
         dateValue.getUTCHours() === 0
-        ? await appointmentModel.find({
+      ? await appointmentModel.find({
           DoctorUsername: Username2,
           Status: Status,
           Date: { $lt: newDate, $gte: dateValue },
         })
-        : (Status == "Rescheduled" ||
+      : (Status == "Rescheduled" ||
           Status == "Completed" ||
           Status == "Cancelled" ||
           Status == "Upcoming") &&
-          hasDate == "n"
-          ? await appointmentModel.find({
-            DoctorUsername: Username2,
-            Status: Status,
-          })
-          : Status == "Rescheduled" ||
-            Status == "Completed" ||
-            Status == "Cancelled" ||
-            Status == "Upcoming"
-            ? await appointmentModel.find({
-              DoctorUsername: Username2,
-              Status: Status,
-            })
-            : hasDate == "y" && dateValue.getUTCHours() == 0
-              ? await appointmentModel.find({
-                DoctorUsername: Username2,
-                Date: { $lt: newDate, $gte: dateValue },
-              })
-              : hasDate == "y"
-                ? await appointmentModel.find({
-                  DoctorUsername: Username2,
-                  Date: dateValue,
-                })
-                : "Bad request";
+        hasDate == "n"
+      ? await appointmentModel.find({
+          DoctorUsername: Username2,
+          Status: Status,
+        })
+      : Status == "Rescheduled" ||
+        Status == "Completed" ||
+        Status == "Cancelled" ||
+        Status == "Upcoming"
+      ? await appointmentModel.find({
+          DoctorUsername: Username2,
+          Status: Status,
+        })
+      : hasDate == "y" && dateValue.getUTCHours() == 0
+      ? await appointmentModel.find({
+          DoctorUsername: Username2,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : hasDate == "y"
+      ? await appointmentModel.find({
+          DoctorUsername: Username2,
+          Date: dateValue,
+        })
+      : "Bad request";
 
   // Return a 200 success response with a JSON object that contains the 'mySessions' array
   if (appointments == "bad requests") {
@@ -356,7 +354,7 @@ const getAppointmentsDoc = async (req, res) => {
 };
 
 const getAppointmentsPat = async (req, res) => {
-  const { PatientUser } = req.params;
+  const PatientUser = req.user.Username;
   const query = req.query;
   const Status = query.Status;
   const dateValue = new Date(query.Date);
@@ -376,50 +374,50 @@ const getAppointmentsPat = async (req, res) => {
 
   const appointments =
     Status != "Rescheduled" &&
-      Status != "Completed" &&
-      Status != "Cancelled" &&
-      Status != "Upcoming" &&
-      hasDate == "n"
+    Status != "Completed" &&
+    Status != "Cancelled" &&
+    Status != "Upcoming" &&
+    hasDate == "n"
       ? await appointmentModel.find({ PatientUsername: PatientUser })
       : (Status == "Rescheduled" ||
-        Status == "Completed" ||
-        Status == "Cancelled" ||
-        Status == "Upcoming") &&
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
         hasDate == "y" &&
         dateValue.getUTCHours() === 0
-        ? await appointmentModel.find({
+      ? await appointmentModel.find({
           PatientUsername: PatientUser,
           Status: Status,
           Date: { $lt: newDate, $gte: dateValue },
         })
-        : (Status == "Rescheduled" ||
+      : (Status == "Rescheduled" ||
           Status == "Completed" ||
           Status == "Cancelled" ||
           Status == "Upcoming") &&
-          hasDate == "n"
-          ? await appointmentModel.find({
-            PatientUsername: PatientUser,
-            Status: Status,
-          })
-          : Status == "Rescheduled" ||
-            Status == "Completed" ||
-            Status == "Cancelled" ||
-            Status == "Upcoming"
-            ? await appointmentModel.find({
-              PatientUsername: PatientUser,
-              Status: Status,
-            })
-            : hasDate == "y" && dateValue.getUTCHours() == 0
-              ? await appointmentModel.find({
-                PatientUsername: PatientUser,
-                Date: { $lt: newDate, $gte: dateValue },
-              })
-              : hasDate == "y"
-                ? await appointmentModel.find({
-                  PatientUsername: PatientUser,
-                  Date: dateValue,
-                })
-                : "Bad request";
+        hasDate == "n"
+      ? await appointmentModel.find({
+          PatientUsername: PatientUser,
+          Status: Status,
+        })
+      : Status == "Rescheduled" ||
+        Status == "Completed" ||
+        Status == "Cancelled" ||
+        Status == "Upcoming"
+      ? await appointmentModel.find({
+          PatientUsername: PatientUser,
+          Status: Status,
+        })
+      : hasDate == "y" && dateValue.getUTCHours() == 0
+      ? await appointmentModel.find({
+          PatientUsername: PatientUser,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : hasDate == "y"
+      ? await appointmentModel.find({
+          PatientUsername: PatientUser,
+          Date: dateValue,
+        })
+      : "Bad request";
 
   // Return a 200 success response with a JSON object that contains the 'mySessions' array
   if (appointments == "bad requests") {
