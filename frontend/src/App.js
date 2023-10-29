@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
 import PatientLayout from "layouts/Patient.js";
+import DoctorLayout from "layouts/Doctor.js";
 import RTLLayout from "layouts/RTL.js";
 
 // TODO: add patient and doctor layouts
@@ -64,7 +65,7 @@ function App() {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path={`/doctor`} component={AdminLayout} />
+          <Route path={`/doctor`} component={DoctorLayout} />
           <Route render={() => <Redirect to="/doctor" />} />
         </Switch>
       </BrowserRouter>
