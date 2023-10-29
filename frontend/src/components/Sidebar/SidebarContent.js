@@ -39,7 +39,11 @@ const SidebarContent = ({ logoText, routes }) => {
     const inactiveColor = useColorModeValue("gray.400", "gray.400");
 
     return routes
-      .filter((route) => route.layout === `/${user.userType.toLowerCase()}`)
+      .filter(
+        (route) =>
+          route.layout === `/${user.userType.toLowerCase()}` &&
+          route.show !== false
+      )
       .map((prop, key) => {
         if (prop.redirect) {
           return null;

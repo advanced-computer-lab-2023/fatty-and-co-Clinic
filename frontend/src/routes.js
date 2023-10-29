@@ -36,6 +36,7 @@ import {
 //icon ben7ot fe el component name
 //component de 7aga fe views
 
+// TODO: organize routes by type of user
 var dashRoutes = [
   {
     path: "/package",
@@ -50,7 +51,7 @@ var dashRoutes = [
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
-    layout: "/admin",
+    layout: "/doctor",
   },
 
   {
@@ -60,7 +61,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
     component: UpdateEmail,
-    layout: "/admin",
+    layout: "/doctor",
   },
   {
     path: "/updateHourly/:DoctorUsername",
@@ -69,7 +70,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
     component: UpdateHourly,
-    layout: "/admin",
+    layout: "/doctor",
   },
   {
     path: "/updateAffil/:Username",
@@ -78,7 +79,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
     component: UpdateAffil,
-    layout: "/admin",
+    layout: "/doctor",
   },
 
   {
@@ -86,7 +87,7 @@ var dashRoutes = [
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
-    layout: "/admin",
+    layout: "/doctor",
   },
 
   {
@@ -110,7 +111,7 @@ var dashRoutes = [
     name: "Add Family Member",
     icon: <HomeIcon color="inherit" />,
     component: createFamilymember,
-    layout: "/admin",
+    layout: "/patient",
   },
 
   {
@@ -127,6 +128,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -141,21 +143,21 @@ var dashRoutes = [
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
-    layout: "/admin",
+    layout: "/patient",
   },
   {
     path: "/prescriptions/:patientUsername",
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
-    layout: "/admin",
+    layout: "/patient",
   },
   {
     path: "/doctorPatients/:doctorUsername",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,
-    layout: "/admin",
+    layout: "/doctor",
   },
   {
     path: "/dashboard",
@@ -203,7 +205,7 @@ var dashRoutes = [
         icon: <PersonIcon color="inherit" />,
         secondaryNavbar: true,
         component: Profile,
-        layout: "/admin",
+        layout: "/admin", // TODO: figure out what to do with this to make it work for all user types
       },
       {
         path: "/signin",
