@@ -11,37 +11,6 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
 
-const createPatient = async (req, res) => {
-  const {
-    Username,
-    Name,
-    Password,
-    Email,
-    MobileNum,
-    DateOfBirth,
-    Gender,
-    EmergencyContactNumber,
-    EmergencyContactName,
-  } = req.body;
-  try {
-    const user = await userModel.addEntry(Username, Password, Email, "Patient");
-    const patient = await patientModel.create({
-      Username: Username,
-      Name: Name,
-      MobileNum: MobileNum,
-      DateOfBirth: DateOfBirth,
-      Gender: Gender,
-      EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
-      },
-    });
-    res.status(200).send({ patient, user });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
-
 const getAllPatients = async (req, res) => {
   try {
     const patients = await patientModel.find();
@@ -296,7 +265,6 @@ module.exports = {
   selectPatient,
   getPrescriptions,
   getPatientUsername,
-  createPatient,
   getAllPatients,
   deletePatient,
   getPatient,

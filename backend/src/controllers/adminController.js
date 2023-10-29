@@ -9,6 +9,10 @@ const familyMemberModel = require("../models/familymembers");
 const prescriptionModel = require("../models/prescriptions");
 
 const createAdmin = async (req, res) => {
+  if (req.user.Type !== "Admin")
+    return res
+      .status(401)
+      .send({ error: "You have to be an admin to perform this request" });
   const { Username, Password, Email } = req.body;
   try {
     const admin = await userModel.addEntry(Username, Password, Email, "Admin");

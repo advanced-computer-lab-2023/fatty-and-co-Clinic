@@ -1,6 +1,5 @@
 const express = require("express");
 const {
-  createPatient,
   getAllPatients,
   deletePatient,
   getPatient,
@@ -17,20 +16,6 @@ const {
 const { constants } = require("buffer");
 
 const router = express.Router();
-
-/**
- * @route POST /patients/addPatient
- * @desc Creates a new patient
- * @access Public
- * @prop {string} Name - The name of the patient
- * @prop {string} Username - The username of the patient
- * @prop {string} Password - The password of the patient
- * @prop {string} Email - The email of the patient
- * @prop {string} NationalID - The national ID of the patient
- * @prop {number} Age - The age of the patient
- * @prop {string} Gender - The gender of the patient ["M", "F"]
- */
-router.post("/addPatient", createPatient);
 
 /**
  * @route GET /patients/getAllPatients

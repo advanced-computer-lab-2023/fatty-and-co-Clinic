@@ -12,6 +12,7 @@ export const API_PATHS = {
   docSignUp: GUEST_BASE + "addRequest/",
   updateEmailDoc: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
+  signup: GUEST_BASE + "addPatient/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
@@ -27,7 +28,6 @@ export const API_PATHS = {
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
 
   // Patient
-  signup: PATIENT_BASE + "addPatient/",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
   viewPrescriptions: PATIENT_BASE + "getPrescriptions/", // add patient username as a param
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param

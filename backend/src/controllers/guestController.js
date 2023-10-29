@@ -2,8 +2,10 @@ const { default: mongoose } = require("mongoose");
 
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
+const patientModel = require("../models/patients");
 
-const { generateToken } = require("../common/commonFunc");
+const generateToken = require("../common/jwt/generateToken");
+
 const User = require("../models/systemusers");
 
 const createRequest = async (req, res) => {
@@ -81,8 +83,43 @@ const login = async (req, res) => {
   try {
     const user = await systemUserModel.login(Username, Password);
     const token = generateToken(user);
-    // TODO: maybe send the user type too?
-    res.status(200).send({ Username, token });
+    res.status(200).send({ token });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const createPatient = async (req, res) => {
+  const {
+    Username,
+    Name,
+    Password,
+    Email,
+    MobileNum,
+    DateOfBirth,
+    Gender,
+    EmergencyContactNumber,
+    EmergencyContactName,
+  } = req.body;
+  try {
+    const user = await systemUserModel.addEntry(
+      Username,
+      Password,
+      Email,
+      "Patient"
+    );
+    const patient = await patientModel.create({
+      Username: Username,
+      Name: Name,
+      MobileNum: MobileNum,
+      DateOfBirth: DateOfBirth,
+      Gender: Gender,
+      EmergencyContact: {
+        FullName: EmergencyContactName,
+        PhoneNumber: EmergencyContactNumber,
+      },
+    });
+    res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -93,4 +130,5 @@ module.exports = {
   updateRequest,
   updateEmail,
   login,
+  createPatient,
 };
