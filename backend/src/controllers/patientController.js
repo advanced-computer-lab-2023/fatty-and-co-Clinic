@@ -90,15 +90,15 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const id = req.user.id;
+  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Invalid ID" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   return res.status(404).json({ error: "Invalid ID" });
+  // }
 
   try {
-    const patient = await patientModel.findById(id);
+    const patient = await patientModel.findOne({ Username: username });
     let packageDis = 0;
 
     if (patient.PackageName) {

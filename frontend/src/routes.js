@@ -126,15 +126,15 @@ var dashRoutes = [
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
-    layout: "/admin",
+    layout: "/patient",
   },
 
   {
-    path: "/viewDoctors/:id",
+    path: "/viewDoctors",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
-    layout: "/admin",
+    layout: "/patient",
   },
   {
     path: "/viewmembers/:PatientUserName",

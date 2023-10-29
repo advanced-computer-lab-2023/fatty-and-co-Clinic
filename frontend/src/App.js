@@ -13,6 +13,7 @@ import { useAuthContext } from "hooks/useAuthContext";
 //IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
+import PatientLayout from "layouts/Patient.js";
 import RTLLayout from "layouts/RTL.js";
 
 // TODO: add patient and doctor layouts
@@ -52,7 +53,7 @@ function App() {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path={`/patient`} component={AdminLayout} />
+          <Route path={`/patient`} component={PatientLayout} />
           <Route render={() => <Redirect to="/patient" />} />
         </Switch>
       </BrowserRouter>
