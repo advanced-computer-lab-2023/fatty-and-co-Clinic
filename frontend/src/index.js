@@ -27,6 +27,8 @@ import {
 
 import { AuthContextProvider } from "context/AuthContext";
 
+import { useAuthContext } from "hooks/useAuthContext";
+
 //IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
@@ -38,16 +40,28 @@ import RTLLayout from "layouts/RTL.js";
 
 // TODO: change admin and rtl to patient, admin and doctor and add their layouts
 // auth can be used for login and registration since layout is already good
-ReactDOM.render(
-  <AuthContextProvider>
+const MainApp = () => {
+  const { user } = useAuthContext();
+
+  return (
     <BrowserRouter>
       <Switch>
-        <Route path={`/auth`} component={AuthLayout} />
-        <Route path={`/admin`} component={AdminLayout} />
+        <Route
+          path={`/auth`}
+          render={() => (!user ? <AuthLayout /> : <Redirect to={"/admin"} />)}
+        />
+        <Route
+          path={`/admin`}
+          render={() => (user ? <AdminLayout /> : <Redirect to={"/auth"} />)}
+        />
         <Route path={`/rtl`} component={RTLLayout} />
-        <Redirect from={`/`} to="/admin" />
       </Switch>
     </BrowserRouter>
+  );
+};
+ReactDOM.render(
+  <AuthContextProvider>
+    <MainApp />
   </AuthContextProvider>,
   document.getElementById("root")
 );

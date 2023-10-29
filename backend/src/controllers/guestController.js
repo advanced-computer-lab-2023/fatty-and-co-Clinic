@@ -79,6 +79,7 @@ const updateEmail = async (req, res) => {
 //turn the data from the request into a doctor object using the doctor controller function createDoctor
 
 const login = async (req, res) => {
+  console.log(req.body);
   const { Username, Password } = req.body;
   try {
     const user = await systemUserModel.login(Username, Password);
