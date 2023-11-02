@@ -17,37 +17,14 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  HashRouter,
-  BrowserRouter,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
-
 import { AuthContextProvider } from "context/AuthContext";
+import App from "./App";
 
-//IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
-import AuthLayout from "layouts/Auth.js";
-import AdminLayout from "layouts/Admin.js";
-import RTLLayout from "layouts/RTL.js";
-
-//NOTE: Route path hena bet represent el LAYOUT from routes.js
-//NOTE: Component hena bet represent el imported layout
-//NOTE: To test updatedocmail, redirect from '/' to 'updateEmail'
-
-// TODO: change admin and rtl to patient, admin and doctor and add their layouts
-// auth can be used for login and registration since layout is already good
 ReactDOM.render(
-  <AuthContextProvider>
-    <BrowserRouter>
-      <Switch>
-        <Route path={`/auth`} component={AuthLayout} />
-        <Route path={`/admin`} component={AdminLayout} />
-        <Route path={`/rtl`} component={RTLLayout} />
-        <Redirect from={`/`} to="/admin" />
-      </Switch>
-    </BrowserRouter>
-  </AuthContextProvider>,
+  <React.StrictMode>
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
+  </React.StrictMode>,
   document.getElementById("root")
 );

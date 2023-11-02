@@ -33,7 +33,7 @@ const packageModel = require("../models/packages");
 //   }
 // };
 const createDoctor = async (req, res) => {
-  const { } = req.body;
+  const {} = req.body;
   try {
     const doctor = await doctorModel.create({
       Username: req.body.Username,
@@ -71,7 +71,7 @@ const deleteDoctor = async (req, res) => {
 // update a doctor (hourly rate and affiliation)
 const updateDoctor = async (req, res) => {
   try {
-    const { Username } = req.params;
+    const Username = req.user.Username;
     const { HourlyRate, Affiliation } = req.body;
     if (
       Affiliation === undefined &&
@@ -201,12 +201,13 @@ const filterDoctor = async (req, res) => {
     var appointments = new Array();
     var myFilteredDoctors = new Array();
 
-    const id = req.query.id;
-    //const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({ error: "Invalid ID" });
-      return;
-    }
+    const username = req.user.Username;
+    // const id = req.user.id;
+    // //const { id } = req.params;
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //   res.status(404).json({ error: "Invalid ID" });
+    //   return;
+    // }
 
     //TODO: I BELIEVE THIS BIG LOOP (.HAS(DATE) IS REDUNDANT IF REQ.QUERY.DATE SHAGHALA)
     if (urlParams.has("date") && urlParams.has("hour")) {
@@ -289,7 +290,7 @@ const filterDoctor = async (req, res) => {
     }
 
     //getting package dis of patient
-    patientModel.findById(id).then(async (result) => {
+    patientModel.findOne({ Username: username }).then(async (result) => {
       // Extract the 'PackageName' property from the patient document
       const packageName = result.PackageName;
       // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'

@@ -11,37 +11,6 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
 
-const createPatient = async (req, res) => {
-  const {
-    Username,
-    Name,
-    Password,
-    Email,
-    MobileNum,
-    DateOfBirth,
-    Gender,
-    EmergencyContactNumber,
-    EmergencyContactName,
-  } = req.body;
-  try {
-    const user = await userModel.addEntry(Username, Password, Email, "Patient");
-    const patient = await patientModel.create({
-      Username: Username,
-      Name: Name,
-      MobileNum: MobileNum,
-      DateOfBirth: DateOfBirth,
-      Gender: Gender,
-      EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
-      },
-    });
-    res.status(200).send({ patient, user });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
-
 const getAllPatients = async (req, res) => {
   try {
     const patients = await patientModel.find();
@@ -112,10 +81,7 @@ const deletePatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const patient = await patientModel.findByIdAndUpdate(req.user.id, req.body);
     res.status(200).send({ patient });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -124,15 +90,15 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const { id } = req.params;
+  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Invalid ID" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   return res.status(404).json({ error: "Invalid ID" });
+  // }
 
   try {
-    const patient = await patientModel.findById(id);
+    const patient = await patientModel.findOne({ Username: username });
     let packageDis = 0;
 
     if (patient.PackageName) {
@@ -167,7 +133,7 @@ const session_index = async (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const { Createpatameter } = req.params;
+  const Createpatameter = req.user.Username;
   console.log(Createpatameter);
 
   // Check if the national ID is not 16.
@@ -199,7 +165,7 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientUserName } = req.params;
+    const PatientUserName = req.user.Username;
     console.log(req.params);
     const fam = await familyMemberModel.find({
       PatientUserName: PatientUserName,
@@ -296,7 +262,6 @@ module.exports = {
   selectPatient,
   getPrescriptions,
   getPatientUsername,
-  createPatient,
   getAllPatients,
   deletePatient,
   getPatient,

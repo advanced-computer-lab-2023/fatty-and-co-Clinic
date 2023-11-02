@@ -1,10 +1,3 @@
-/**
- * Defines routes for doctor related operations
- * @module routes/doctors
- * @requires express
- * @requires ../controllers/doctorController
- */
-
 const express = require("express");
 const {
   createDoctor,
@@ -17,6 +10,12 @@ const {
   updateDoctor,
   viewPatientInfoAndHealthRecords,
 } = require("../controllers/doctorController");
+
+const {
+  checkDoctor,
+  checkPatient,
+  checkAdmin,
+} = require("../common/middleware/checkType");
 
 const router = express.Router();
 
@@ -32,7 +31,7 @@ router.get("/", (req, res) => {
 /**
  * @route POST /doctors/createDoctor
  * @desc Creates a new doctor
- * @access Public
+ * @access Admin
  * @prop {string} Username - The username of the doctor
  * @prop {string} Name - The name of the doctor
  * @prop {date} DateOfBirth - The date of birth of the doctor
@@ -45,12 +44,11 @@ router.post("/createDoctor", createDoctor);
 /**
  * @route PATCH /doctors/updateDoctor
  * @desc Updates an existing doctor
- * @access Public
- * @prop {string} Username - The username of the doctor to update
+ * @access Doctor
  * @prop {number} HourlyRate - The new hourly rate of the doctor
  * @prop {string} Affiliation - The new affiliation of the doctor
  */
-router.patch("/updateDoctor/:Username", updateDoctor);
+router.patch("/updateDoctor", checkDoctor, updateDoctor);
 
 /**
  * @route GET /doctors/id/:id
@@ -80,12 +78,12 @@ router.get("/search", getDoctorByNameAndSpeciality);
 /**
  * @route GET /doctors/filter
  * @desc Returns a list of doctors filtered by various parameters
- * @access Public
+ * @access Patient
  * @param {string} Speciality - The speciality of the doctor
  * @param {date} date - The date you're looking for an appointment on
  * @param {number} hour - The hour you're looking for an appointment on
  */
-router.get("/filter", filterDoctor);
+router.get("/filter", checkPatient, filterDoctor);
 
 /**
  * @route POST /doctors/addDoctor
@@ -113,7 +111,7 @@ router.get("/getAllDoctors", getAllDoctors);
  * @access Public
  * @param {string} id - The ID of the doctor to delete
  */
-router.delete("/deleteDoctor/:id", deleteDoctor);
+router.delete("/deleteDoctor/:id", deleteDoctor); // TODO: check if the one deleting is an admin or the currently logged in doctor
 
 /**
  * @route GET /doctors/getDoctor/:id
@@ -129,6 +127,10 @@ router.get("/getDoctor/:id", getDoctorByID);
  * @access Public
  * @prop {string} PatientUsername - The username of the patient
  */
-router.get("/viewPatientInfoAndHealthRecords", viewPatientInfoAndHealthRecords);
+router.get(
+  "/viewPatientInfoAndHealthRecords",
+  checkDoctor,
+  viewPatientInfoAndHealthRecords
+);
 
 module.exports = router;

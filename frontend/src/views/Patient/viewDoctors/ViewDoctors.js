@@ -4,6 +4,7 @@ import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import DoctorsTable from "./components/DoctorsTable";
 import { Flex, Button, Box, Text, Input } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
+import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
 
 export function ViewDoctors() {
@@ -20,6 +21,9 @@ export function ViewDoctors() {
     id: "",
   });
   const { id } = useParams();
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  // TODO: change this to grab the specialities from the backend
   const options = [
     { label: "Cardiology", value: "Cardiology" },
     { label: "Dermatology", value: "Dermatology" },
@@ -42,7 +46,7 @@ export function ViewDoctors() {
     } else {
       const url = API_PATHS.viewFilteredDoctors;
       axios
-        .get(url, { params: filterParams })
+        .get(url, { params: filterParams, headers: { Authorization } })
         .then((response) => {
           setData(response.data);
         })
@@ -87,9 +91,9 @@ export function ViewDoctors() {
   };
 
   useEffect(() => {
-    const url = API_PATHS.viewDoctors + id;
+    const url = API_PATHS.viewDoctors;
     axios
-      .get(url, { params: searchParams })
+      .get(url, { params: searchParams, headers: { Authorization } })
       .then((response) => {
         setData(response.data);
       })
@@ -197,17 +201,11 @@ export function ViewDoctors() {
             Clear
           </Button>
         </Flex>
-        {(id && id !== ":id" && (
-          <DoctorsTable
-            title={"Available Doctors"}
-            captions={["Name", "Speciality", "Cost"]}
-            data={data}
-          />
-        )) || (
-          <Text fontSize="3xl" fontWeight="bold">
-            ID not found
-          </Text>
-        )}
+        <DoctorsTable
+          title={"Available Doctors"}
+          captions={["Name", "Speciality", "Cost"]}
+          data={data}
+        />
       </Flex>
     </Box>
   );
