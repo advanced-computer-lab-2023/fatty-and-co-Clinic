@@ -2,6 +2,11 @@ import { createContext } from "react";
 
 export const DoctorsContext = createContext();
 
+// on why we use ...state instead of just {doctors: action.payload}
+// The authReducer function is used to manage the state of the user in the application.
+// It uses the spread operator (...state) to create a new state object instead of mutating the existing one.
+// This is important because React's re-rendering of components is based on changes in state.
+// If we mutate the state directly, React may not recognize that a change has occurred, and therefore may not re-render the component.
 export const doctorsReducer = (state, action) => {
   switch (action.type) {
     case "GET_DOCTORS":

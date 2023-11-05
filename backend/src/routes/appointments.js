@@ -8,6 +8,8 @@ const {
   testAppointRef,
 } = require("../controllers/appointmentController");
 
+const { checkDoctor, checkPatient } = require("../common/middleware/checkType");
+
 const router = express.Router();
 
 /**
@@ -22,45 +24,39 @@ router.get("/", (req, res) => {
 /**
  * @route GET /appointments/findPatients
  * @desc Find patients for a doctor
- * @access Public
- * @prop {string} DoctorUsername - The username of the doctor to find patients for
+ * @access Doctor
  */
-router.get("/findPatients", findDoctorPatients);
+router.get("/findPatients", checkDoctor, findDoctorPatients); // checkDoctor middleware to make sure user is a doctor
 
 /**
  * @route GET /appointments/upcoming
  * @desc Get upcoming appointments for a doctor
- * @access Public
- * @prop {string} DoctorUsername - The username of the doctor to get upcoming appointments for
- *
+ * @access Doctor
  */
-router.get("/upcoming", upcomingAppforDoc);
+router.get("/upcoming", checkDoctor, upcomingAppforDoc);
 
 /**
  * @route GET /appointments/searchpatient
  * @desc Search for a patient by name
- * @access Public
- * @prop {string} DoctorUsername - The username of the doctor searching for the patient
+ * @access Doctor
  * @prop {string} PatientUsername - The username of the patient to search for
  */
-router.get("/searchpatient", searchPatient);
+router.get("/searchpatient", checkDoctor, searchPatient);
 
 /**
- * @route GET /appointments/getAppointments
- * @desc Get all appointments
- * @access Public
- * @prop {string} Username - The username of the doctor/patient to get appointments for
- * @prop {string} Status - The status of the appointment ["Upcoming", "Completed", "Rescheduled", "Cancelled"]
- * @prop {date} Date - The date of the appointment
- *
- * @route GET /doctors/getDoctor/:id
- * @desc Returns a doctor by ID
- * @access Public
- * @param {string} Username2 - The ID of the doctor
+ * @route GET /getAppointmentsDoc
+ * @desc Retrieve all appointments for a specific doctor
+ * @access Doctor
  */
-// router.get("/getAppointments/:Username2", getAppointments);
-router.get("/getAppointmentsDoc/:Username2", getAppointmentsDoc);
-router.get("/getAppointmentsPat/:PatientUser", getAppointmentsPat);
+router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
+
+/**
+ * @route GET /getAppointmentsPat
+ * @desc Retrieve all appointments for a specific patient
+ * @access Patient
+ */
+router.get("/getAppointmentsPat", checkPatient, getAppointmentsPat);
+
 
 router.get("/testAppRef", testAppointRef);
   

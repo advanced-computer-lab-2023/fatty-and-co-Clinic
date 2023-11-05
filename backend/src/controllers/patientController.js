@@ -1,39 +1,15 @@
+const { default: mongoose } = require("mongoose");
+
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
 const familyMemberModel = require("../models/familymembers");
-const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
 const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
-
-const createPatient = async (req, res) => {
-  const { EmergencyContactNumber, EmergencyContactName } = req.body;
-  try {
-    const patient = await patientModel.create({
-      Username: req.body.Username,
-      Name: req.body.Name,
-      MobileNum: req.body.MobileNum,
-      DateOfBirth: req.body.DateOfBirth,
-      Gender: req.body.Gender,
-      EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
-      },
-    });
-    const user = await userModel.create({
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Type: "Patient",
-    });
-    res.status(200).send({ patient, user });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
+const User = require("../models/systemusers");
 
 const getAllPatients = async (req, res) => {
   try {
@@ -105,10 +81,7 @@ const deletePatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const patient = await patientModel.findByIdAndUpdate(req.user.id, req.body);
     res.status(200).send({ patient });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -117,15 +90,15 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const { id } = req.params;
+  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Invalid ID" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   return res.status(404).json({ error: "Invalid ID" });
+  // }
 
   try {
-    const patient = await patientModel.findById(id);
+    const patient = await patientModel.findOne({ Username: username });
     let packageDis = 0;
 
     if (patient.PackageName) {
@@ -160,7 +133,7 @@ const session_index = async (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const { Createpatameter } = req.params;
+  const Createpatameter = req.user.Username;
   console.log(Createpatameter);
 
   // Check if the national ID is not 16.
@@ -192,7 +165,7 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientUserName } = req.params;
+    const PatientUserName = req.user.Username;
     console.log(req.params);
     const fam = await familyMemberModel.find({
       PatientUserName: PatientUserName,
@@ -289,7 +262,6 @@ module.exports = {
   selectPatient,
   getPrescriptions,
   getPatientUsername,
-  createPatient,
   getAllPatients,
   deletePatient,
   getPatient,
