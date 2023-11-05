@@ -5,6 +5,8 @@ const familyMemberModel = require("../models/familymembers");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const prescriptionModel = require("../models/prescriptions");
+const docSlotsModel = require("../models/docSlots");
+
 const { default: mongoose } = require("mongoose");
 const {
   generateUsername,
@@ -27,6 +29,8 @@ const {
   generateDiagnosis,
   generatePrescriptionStatus,
   generateGender,
+  generateOneWorkingDay,
+  generateStartTime,
 } = require("../common/utils/generators");
 const {
   getPatient,
@@ -91,9 +95,9 @@ const createDoctor = async (req, res) => {
     Affiliation,
     EducationalBackground,
     Speciality,
-    WorkingDays,
-    StartTime,
-    EndTime,
+    // WorkingDays,
+    // StartTime,
+    // EndTime,
   } = req.body;
 
   const username = Username || generateUsername();
@@ -128,6 +132,32 @@ const createDoctor = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+//create a new doctor slot
+const createDocSlot = async(req, res) => {
+  const {
+    DoctorId,
+    WorkingDay,
+    StartTime,
+  } = req.body;
+
+  const doctorId = DoctorId;
+  const workingDay =WorkingDay;
+  const startTime = StartTime;
+
+  try{
+    const newDocSlot = await docSlotsModel.create({
+      WorkingDay: workingDay,
+      StartTime: startTime,
+      DoctorId: doctorId,
+    });
+    res.status(201).json(newDocSlot);
+  }catch(error){
+    res.status(500).json({ error: error.message });
+  }
+
+}
 
 // create a new patient
 const createPatient = async (req, res) => {
@@ -310,6 +340,8 @@ const createPrescription = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -323,4 +355,5 @@ module.exports = {
   createAppointment,
   createRandomAppointment,
   createPrescription,
+  createDocSlot,
 };

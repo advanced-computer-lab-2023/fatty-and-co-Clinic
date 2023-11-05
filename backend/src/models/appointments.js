@@ -1,11 +1,12 @@
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const appointmentSchema = new Schema(
   {
+  
     DoctorUsername: {
       type: String,
-      ref: "Doctor",
       required: true,
     },
     DoctorName: {
@@ -33,6 +34,7 @@ const appointmentSchema = new Schema(
   },
   { timestamps: true }
 );
+
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 module.exports = Appointment;

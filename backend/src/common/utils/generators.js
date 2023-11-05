@@ -195,6 +195,18 @@ function generateStartTimeAndEndTime() {
   return { startTime, endTime };
 }
 
+function generateStartTime() {
+  const startTime = Math.floor(Math.random() * 10);
+  return { startTime };
+}
+
+
+function generateOneWorkingDay() {
+  const workingDay = Math.floor(Math.random() * 7);
+  return { workingDay };
+}
+
+
 function generateAppointmentStatus() {
   const status = ["Upcoming", "Completed", "Rescheduled", "Cancelled"];
   return status[Math.floor(Math.random() * status.length)];
@@ -306,4 +318,6 @@ module.exports = {
   generateMedicine,
   generateDiagnosis,
   generatePrescriptionStatus,
+  generateStartTime,
+  generateOneWorkingDay,
 };

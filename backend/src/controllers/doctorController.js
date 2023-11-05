@@ -5,6 +5,8 @@ const patientModel = require("../models/patients");
 const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
+const docSlotsModel = require("../models/docSlots");
+
 
 // create a doctor
 // const createDoctor = async (req, res) => {
@@ -192,6 +194,28 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 };
 
 // filter doctors by speciality or/and (date and time)
+
+
+// TODO: Make sure health record consists of appointments and prescriptions.
+// View information and health records of a doctor's patient
+const viewPatientInfoAndHealthRecords = async (req, res) => {
+  const patientUsername = req.query.PatientUsername;
+  const doctorUsername = req.query.DoctorUsername;
+  try {
+    const appointments = await appointmentModel.find({
+      PatientUsername: patientUsername,
+      DoctorUsername: doctorUsername,
+    });
+    const prescriptions = await prescriptionsModel.find({
+      PatientUsername: patientUsername,
+      DoctorUsername: doctorUsername,
+    });
+    res.status(200).json({ appointments, prescriptions });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const filterDoctor = async (req, res) => {
   try {
     const urlParams = new URLSearchParams(req.query);
@@ -322,24 +346,36 @@ const filterDoctor = async (req, res) => {
   }
 };
 
-// TODO: Make sure health record consists of appointments and prescriptions.
-// View information and health records of a doctor's patient
-const viewPatientInfoAndHealthRecords = async (req, res) => {
-  const patientUsername = req.query.PatientUsername;
-  const doctorUsername = req.query.DoctorUsername;
-  try {
-    const appointments = await appointmentModel.find({
-      PatientUsername: patientUsername,
-      DoctorUsername: doctorUsername,
-    });
-    const prescriptions = await prescriptionsModel.find({
-      PatientUsername: patientUsername,
-      DoctorUsername: doctorUsername,
-    });
-    res.status(200).json({ appointments, prescriptions });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+const filterDoctorSlotEdition = async (req, res) => {
+
+  //this should be date1 and date2 and time1 and time2
+  if (req.query.startDate && req.query.endDate, req.query.startHour && req.query.endHour) {
+    const startDate = new Date(req.query.startDate);
+    const endDate = new Date(req.query.endDate);
+    const startDay =
+
+    const startHour = req.query.startHour;
+    const endHour = req.query.endHour;
+    // const day = date.getDay();
+    // const hours = date.getHours();
+    // const mins = date.getMinutes();
+    // const hour = hours + mins / 100;
+
+    await docSlotsModel 
+    .aggregate([
+      {
+        //check slots according to date & time query params
+        $match: {
+  
+        }
+      },
+      {
+  
+      }
+  ])
   }
+
+ 
 };
 
 module.exports = {
@@ -352,4 +388,5 @@ module.exports = {
   getAllDoctors,
   deleteDoctor,
   viewPatientInfoAndHealthRecords,
+  filterDoctorSlotEdition,
 };

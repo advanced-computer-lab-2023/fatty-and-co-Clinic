@@ -5,6 +5,7 @@ const {
   findDoctorPatients,
   upcomingAppforDoc,
   searchPatient,
+  testAppointRef,
 } = require("../controllers/appointmentController");
 
 const router = express.Router();
@@ -60,4 +61,7 @@ router.get("/searchpatient", searchPatient);
 // router.get("/getAppointments/:Username2", getAppointments);
 router.get("/getAppointmentsDoc/:Username2", getAppointmentsDoc);
 router.get("/getAppointmentsPat/:PatientUser", getAppointmentsPat);
+
+router.get("/testAppRef", testAppointRef);
+  
 module.exports = router;
