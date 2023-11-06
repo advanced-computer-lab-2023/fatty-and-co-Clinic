@@ -200,9 +200,9 @@ const selectPatient = async (req, res) => {
 // Get prescriptions of a given patient. Can also be filtered
 // using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
-  const query = req.query;
+  // const query = req.query;
   // console.log(query);
-  const patientUsername = query.PatientUsername; // Extract patientUsername
+  const patientUsername = req.user.Username; // Extract patientUsername
   // console.log(req.params.patientUsername);
 
   try {
