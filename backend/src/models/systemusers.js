@@ -77,9 +77,9 @@ systemUsersSchema.statics.login = async function (username, password) {
 
   if (
     !user ||
-    user.type !== "Patient" ||
-    user.type !== "Doctor" ||
-    user.type !== "Admin"
+    user.Type !== "Patient" ||
+    user.Type !== "Doctor" ||
+    user.Type !== "Admin"
   ) {
     throw Error("Username does not exist");
   }
