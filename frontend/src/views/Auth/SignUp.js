@@ -28,7 +28,7 @@ function SignUp() {
   const textColor = useColorModeValue("gray.700", "white");
   const bgColor = useColorModeValue("white", "gray.700");
   const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
-  const [Gender, setGender] = React.useState("");
+  const [Gender, setGender] = React.useState("M");
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };

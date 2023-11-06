@@ -70,6 +70,8 @@ const getPatientUsername = async (req, res) => {
   }
 };
 
+// I think this is useless?
+// if not useless it needs to delete from user model, apppointments, etc just like in admin controller
 const deletePatient = async (req, res) => {
   try {
     const patient = await patientModel.findByIdAndDelete(req.params.id);
