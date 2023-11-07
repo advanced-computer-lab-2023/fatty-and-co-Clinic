@@ -35,7 +35,7 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
+router.get("/viewFamilyPackage",viewHealthFam)
 /**
 =======
 >>>>>>> main
@@ -104,7 +104,6 @@ router.get("/view/doctors/", checkPatient, session_index);
  * @prop {string} Gender - The gender of the family member ["M", "F"]
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
-router.post("/createFamilymember/:Createparameter", createFamilymember);
 router.post("/createFamilymember", checkPatient, createFamilymember);
 
 /**

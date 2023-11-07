@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
-
+const subscriptionModel=require("../models/subscriptions");
 const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
@@ -171,12 +171,20 @@ const viewHealthFam= async(req,res)=>{
     const username=req.user.Username;
     const Patient= await patientModel.findOne({Username:username});
     const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$ne:null}}).populate("FamilyMem");
-    const package = famMems.map((famMember)=>famMember.FamilyMem); 
-    res.status(200).json(package);
-  } catch (error) {
-    res.status(400).send("Cannot find it");
-  }
+    const package = await Promise.all(famMems.map(async (famMember) => {
+    const subscription = await subscriptionModel.findOne({ Username: famMember.FamilyMem.Username });
+
+      if (subscription && subscription.Status === 'subscribed') {
+        return famMember.FamilyMem; // Add the family member to the result if subscribed
+      }
+      return null; // Or you can handle differently for non-subscribed members
+    }));
+    const subscribedFamilyMembers = package.filter(member => member !== null);
+    res.status(200).json(subscribedFamilyMembers);
 }
+catch{
+     res.json()
+}}
 
 const viewOptionPackages= async(req,res)=>{
   try { 
@@ -205,10 +213,7 @@ const viewHealthPackage= async (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
-  const { Createparameter } = req.params;
-  const Createpatameter = req.user.Username;
-  console.log(Createpatameter);
-
+  const Createparameter = req.user.Username;
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
     // Return an error message.
@@ -221,12 +226,11 @@ const createFamilymember = async (req, res) => {
     res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
-  console.log(Createparameter);
   try {
     const findPatientRel= await patientModel.findOne({Username:FamilyMemberUsername});
-    const findPatientMain= await patientModel.findById(Createparameter);
+    const findPatientMain= await patientModel.findOne({Username:Createparameter});
     const newFamilymember = await familyMemberModel.create({
-      PatientID: findPatientMain,
+      PatientID:findPatientMain,
       FamilyMem:findPatientRel,
       FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,

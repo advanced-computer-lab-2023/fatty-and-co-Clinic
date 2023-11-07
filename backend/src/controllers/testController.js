@@ -171,7 +171,7 @@ const createPatient = async (req, res) => {
   try {
     await systemUserModel.addEntry(
       username,
-      generatePassword(),
+      generatePassword() ,
       generateEmail(),
       "Patient"
     );
