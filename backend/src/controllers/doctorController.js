@@ -7,7 +7,6 @@ const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 
-
 // create a doctor
 // const createDoctor = async (req, res) => {
 //   const {
@@ -195,7 +194,6 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 
 // filter doctors by speciality or/and (date and time)
 
-
 // TODO: Make sure health record consists of appointments and prescriptions.
 // View information and health records of a doctor's patient
 const viewPatientInfoAndHealthRecords = async (req, res) => {
@@ -226,16 +224,8 @@ const filterDoctor = async (req, res) => {
     var myFilteredDoctors = new Array();
 
     const username = req.user.Username;
-    // const id = req.user.id;
-    // //const { id } = req.params;
-    // if (!mongoose.Types.ObjectId.isValid(id)) {
-    //   res.status(404).json({ error: "Invalid ID" });
-    //   return;
-    // }
 
-    //TODO: I BELIEVE THIS BIG LOOP (.HAS(DATE) IS REDUNDANT IF REQ.QUERY.DATE SHAGHALA)
     if (urlParams.has("date") && urlParams.has("hour")) {
-      //TODO: TEST THIS WITH NEW SYNTAX
       if (req.query.date && req.query.hour) {
         const date = new Date(req.query.date);
         const day = date.getDay();
@@ -243,12 +233,6 @@ const filterDoctor = async (req, res) => {
         const mins = date.getMinutes();
         const hour = hours + mins / 100;
 
-        //const hour = req.query.hour;
-        // console.log('here');
-        // console.log(day);
-        // console.log(hour);
-
-        //  TODO: CHANGED THE RANGE TO ACCOMODATE FOR DURATION
         const dateDocs = await doctorModel.find({
           WorkingDays: { $in: [day] },
           StartTime: { $lte: hour },
@@ -271,7 +255,6 @@ const filterDoctor = async (req, res) => {
             DoctorUsername: doctor.Username,
           });
           if (appointments.length != 0) {
-            console.log("inIf");
             for (let appointment of appointments) {
               const appDay = appointment.Date.getDay();
               const appHour = appointment.Date.getUTCHours();
@@ -347,37 +330,110 @@ const filterDoctor = async (req, res) => {
   }
 };
 
+
+function findDayRangeFromDate(startDate, endDate) {
+  const dayDiff = parseInt((endDate - startDate) / (1000 * 60 * 60 * 24), 10);
+  var dayRange = [];
+  if (dayDiff >= 7) dayRange = [0, 1, 2, 3, 4, 5, 6];
+  else
+    for (
+      var dateCount = startDate;
+      dateCount <= endDate;
+      dateCount.setDate(dateCount.getDate() + 1)
+    ) {
+      dayRange.push(dateCount.getDay());
+    }
+  return dayRange;
+}
+
+
 const filterDoctorSlotEdition = async (req, res) => {
+  //TODO: Check if both end time and end Date required
+  try {
+    if ((req.body.startDate && req.body.endDate,
+      req.body.startHour && req.body.endHour)){
 
-  //this should be date1 and date2 and time1 and time2
-  if (req.query.startDate && req.query.endDate, req.query.startHour && req.query.endHour) {
-    const startDate = new Date(req.query.startDate);
-    const endDate = new Date(req.query.endDate);
-    const startDay =
+      const startDate = new Date(req.body.startDate);
+      const endDate = new Date(req.body.endDate);
+      dayRange = findDayRangeFromDate(startDate, endDate);
 
-    const startHour = req.query.startHour;
-    const endHour = req.query.endHour;
-    // const day = date.getDay();
-    // const hours = date.getHours();
-    // const mins = date.getMinutes();
-    // const hour = hours + mins / 100;
+      const startHour = parseInt(req.body.startHour);
+      const endHour = parseInt(req.body.endHour);
 
-    await docSlotsModel 
-    .aggregate([
-      {
-        //check slots according to date & time query params
-        $match: {
-  
-        }
-      },
-      {
-  
-      }
-  ])
+      const statusCheck = ["Cancelled", "Rescheduled"];
+
+      var docSlotCross = await doctorModel.aggregate([
+        {
+          $lookup: {
+            from: docSlotsModel.collection.name,
+            localField: "_id",
+            foreignField: "DoctorId",
+            as: "DocSlotCross",
+          },
+        },
+        {
+          $unwind: "$DocSlotCross",
+        },
+        {
+          $match: {
+            $and: [
+              { "DocSlotCross.StartTime": { $gte: startHour, $lte: endHour } },
+              { "DocSlotCross.WorkingDay": { $in: dayRange } },
+            ],
+          },
+        },
+        {
+          $lookup: {
+            from: appointmentModel.collection.name,
+            localField: "Username",
+            foreignField: "DoctorUsername",
+            as: "DocAppCross",
+          }
+        },
+        {
+          $unwind: {
+            path:"$DocAppCross",
+            preserveNullAndEmptyArrays: true },
+        },
+        {
+          $project: {
+            _id: 1,
+            Username: 1,
+            Name: 1,
+            Speciality: 1,
+            HourlyRate: 1,
+            DocSlotCross: 1,
+            DocAppCross: {DoctorUsername: 1, Status: 1, Date:1 } ,
+          }
+        },
+        {
+          $addFields: {
+            "DocAppCross.day": {$dayOfWeek: "$DocAppCross.Date"},
+            "DocAppCross.hour": {$hour: "$DocAppCross.Date"}
+          }
+        },
+        {
+          $match: {
+          $or:[
+            {"DocAppCross.day": null},
+            {$and:[      
+              {$expr: {$eq: [ "$DocAppCross.day", "$DocSlotCross.WorkingDay" ]}},
+              {$expr: {$eq: [ "$DocAppCross.hour", "$DocSlotCross.StartTime" ]}},
+              {"DocAppCross.Status": {$in: statusCheck}}
+             ]
+            }
+           ]
+          }
+        }  
+      ]);
+      res.status(200).json(docSlotCross);
+    }
+  } catch (error) {
+    console.log(error);
   }
-
- 
 };
+
+
 
 module.exports = {
   getDoctorByID,
@@ -390,4 +446,5 @@ module.exports = {
   deleteDoctor,
   viewPatientInfoAndHealthRecords,
   filterDoctorSlotEdition,
+  findDayRangeFromDate,
 };

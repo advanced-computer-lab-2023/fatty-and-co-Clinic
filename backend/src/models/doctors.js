@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const doctorSchema = new Schema(
   {
+    
     Username: {
       type: String,
       required: true,
@@ -51,7 +52,6 @@ const doctorSchema = new Schema(
     //   type: Number,
     //   required: false,
     // },
-
   },
   { timestamps: true }
 );

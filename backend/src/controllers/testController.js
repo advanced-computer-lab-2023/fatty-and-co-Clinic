@@ -111,11 +111,11 @@ const createDoctor = async (req, res) => {
   const educationalBackground =
     EducationalBackground || generateEducationalBackground();
   const speciality = Speciality || generateSpeciality();
-  const workingDays = WorkingDays || generateWorkingDays();
-  const { startTime, endTime } =
-    StartTime && EndTime
-      ? { startTime: StartTime, endTime: EndTime }
-      : generateStartTimeAndEndTime();
+  // const workingDays = WorkingDays || generateWorkingDays();
+  // const { startTime, endTime } =
+  //   StartTime && EndTime
+  //     ? { startTime: StartTime, endTime: EndTime }
+  //     : generateStartTimeAndEndTime();
 
   try {
     await requestModel.create({
@@ -139,9 +139,9 @@ const createDoctor = async (req, res) => {
       Affiliation: affiliation,
       EducationalBackground: educationalBackground,
       Speciality: speciality,
-      WorkingDays: workingDays,
-      StartTime: startTime,
-      EndTime: endTime,
+      //WorkingDays: workingDays,
+      //StartTime: startTime,
+      //EndTime: endTime,
     });
     res.status(201).json(newDoctor);
   } catch (error) {
@@ -151,29 +151,7 @@ const createDoctor = async (req, res) => {
 
 
 //create a new doctor slot
-const createDocSlot = async(req, res) => {
-  const {
-    DoctorId,
-    WorkingDay,
-    StartTime,
-  } = req.body;
 
-  const doctorId = DoctorId;
-  const workingDay =WorkingDay;
-  const startTime = StartTime;
-
-  try{
-    const newDocSlot = await docSlotsModel.create({
-      WorkingDay: workingDay,
-      StartTime: startTime,
-      DoctorId: doctorId,
-    });
-    res.status(201).json(newDocSlot);
-  }catch(error){
-    res.status(500).json({ error: error.message });
-  }
-
-}
 
 // create a new patient
 const createPatient = async (req, res) => {
@@ -233,14 +211,15 @@ const createRandomAppointment = async (req, res) => {
   const doctor = await getDoctor();
   const doctorUsername = DoctorUsername || doctor.Username;
   const doctorName = DoctorName || doctor.Name;
-  const workingDays = doctor.WorkingDays;
-  const startTime = doctor.StartTime;
-  const endTime = doctor.EndTime;
+  // const workingDays = doctor.WorkingDays;
+  // const startTime = doctor.StartTime;
+  // const endTime = doctor.EndTime;
   const patient = await getPatient();
   const patientUsername = PatientUsername || patient.Username;
   const patientName = PatientName || patient.Name;
   const status = Status || generateAppointmentStatus();
-  const date = Date || generateAppointmentDate(workingDays, startTime, endTime);
+  const date = Date; 
+  //|| generateAppointmentDate(workingDays, startTime, endTime);
 
   try {
     const newApp = await appointmentModel.create({
@@ -355,7 +334,29 @@ const createPrescription = async (req, res) => {
   }
 };
 
+const createDocSlot = async(req, res) => {
+  const {
+    DoctorId,
+    WorkingDay,
+    StartTime,
+  } = req.body;
 
+  const doctorId = DoctorId;
+  const workingDay =WorkingDay;
+  const startTime = StartTime;
+
+  try{
+    const newDocSlot = await docSlotsModel.create({
+      WorkingDay: workingDay,
+      StartTime: startTime,
+      DoctorId: doctorId,
+    });
+    res.status(201).json(newDocSlot);
+  }catch(error){
+    res.status(500).json({ error: error.message });
+  }
+
+}
 
 module.exports = {
   createSystemUser,

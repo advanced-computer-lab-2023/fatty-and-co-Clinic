@@ -15,6 +15,7 @@ const {
   createDocSlot,
 } = require("../controllers/testController");
  
+const {testAppointRef} = require ("../controllers/appointmentController")
 const {
   testDocSlotRef,
 } = require ("../controllers/docSlotController");
@@ -150,6 +151,9 @@ router.get("/filterDoctorSlotEdition", (req, res) => {
   filterDoctorSlotEdition(req, res);
 });
 
+router.get("/testAppointRef", (req, res) => {
+  testAppointRef(req, res);
+});
 
 
 module.exports = router;

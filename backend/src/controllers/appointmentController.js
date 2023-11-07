@@ -435,17 +435,26 @@ const testAppointRef = async (req, res) => {
  
   await appointmentModel
     .aggregate([
+      //testing join by username instead of id -- works
+      // {
+      //   $lookup: {
+      //     from: DoctorModel.collection.name,
+      //     localField: "DoctorUsername",
+      //     foreignField: "Username",
+      //     as: "DoctorDetails",
+      //   },
+      // },
+      // {
+      //   $unwind: "$DoctorDetails",
+      // },
+
+      //testing adding fields to Appointments --works
       {
-        $lookup: {
-          from: DoctorModel.collection.name,
-          localField: "DoctorUsername",
-          foreignField: "Username",
-          as: "DoctorDetails",
-        },
-      },
-      {
-        $unwind: "$DoctorDetails",
-      },
+        $addFields: {
+          day: {$dayOfWeek: "$Date"},
+          hour: {$hour: "$Date"}
+        }
+      }
       
     ])
     .then((value) => {
