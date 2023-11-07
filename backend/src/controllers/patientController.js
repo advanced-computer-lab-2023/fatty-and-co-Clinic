@@ -12,6 +12,7 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
 const { getPackages } = require("./packageController");
+const subscriptionModel =require ("../models/subscriptions");
 
 
 // const createPatient = async (req, res) => {
@@ -213,7 +214,10 @@ const viewHealthPackage= async (req, res) => {
 
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
-  const Createparameter = req.user.Username;
+  const { Createparameter } = req.params;
+  const Createpatameter = req.user.Username;
+  console.log(Createpatameter);
+
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
     // Return an error message.
@@ -226,11 +230,12 @@ const createFamilymember = async (req, res) => {
     res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
+  console.log(Createparameter);
   try {
     const findPatientRel= await patientModel.findOne({Username:FamilyMemberUsername});
-    const findPatientMain= await patientModel.findOne({Username:Createparameter});
+    const findPatientMain= await patientModel.findById(Createparameter);
     const newFamilymember = await familyMemberModel.create({
-      PatientID:findPatientMain,
+      PatientID: findPatientMain,
       FamilyMem:findPatientRel,
       FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,
@@ -250,10 +255,11 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientID } = req.params;  //changed this
-    const fam = await familyMemberModel.find({PatientID:PatientID}).populate("PatientID").populate("FamilyMem");
-    const PatientUserName = req.user.Username;
-    console.log(req.params);
+    const {PatientUserName}=req.user.username;
+    const { Patient } = await patientModel.find(PatientUserName);  //changed this
+    const fam = await familyMemberModel.find({PatientID:Patient.id}).populate("PatientID").populate("FamilyMem");
+   // const PatientUserName = req.user.Username;
+    //console.log(PatientID);
     //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
@@ -334,13 +340,20 @@ const selectPrescription = async (req, res) => {
 };
 
 const subscribepackagefamilymem=async(req,res) =>{
- 
   try {
+    const { PatientUsername } = req.user.username;  //changed this
+    const { Patient} = patientModel.findOne(PatientUsername);
+  const fam = await familyMemberModel.find({PatientID:Patient.id}).populate("PatientID").populate("FamilyMem");
     const {FamilyMemberUsername,PackageName}=req.body;
-  
+  if (FamilyMemberUsername!=fam.username){
+    res.status(400).send( "Error" );
+  }
+  else {
     const patient = await patientModel.findOneAndUpdate({
       Username:FamilyMemberUsername},{PackageName:PackageName });
+   // const status =await subscriptionModel.findOneAndUpdate()
     res.status(200).send({ patient });
+  }
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -349,9 +362,13 @@ const subscribepackagefamilymem=async(req,res) =>{
 
 const subscribehealthpackage=async(req,res) =>{
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
+    
+    const patient = await patientModel.findOneAndUpdate(
+      req.user.username,
       req.body
+    );
+    const subscription = await subscriptionModel.findOneAndUpdate(
+      req.user.username,{Status:"Subscribed"}
     );
     res.status(200).send({ patient });
   } catch (error) {

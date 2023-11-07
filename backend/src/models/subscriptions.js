@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const subscriptionschema = new Schema(
   {
-    Patient: {
-    type:  mongoose.Schema.Types.ObjectId,
-    ref:"Patient",
+    PatientUsername: {
+    type: "string",
+   // ref:"Patient",
       required: true,
     },
     Status: {

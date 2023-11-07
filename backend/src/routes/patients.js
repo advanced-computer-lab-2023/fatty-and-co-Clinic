@@ -142,7 +142,7 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
+router.patch("/subscribehealthpackage/",subscribehealthpackage)
 router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
 router.get("/viewMyPackage/",viewHealthPackage)
 
