@@ -4,19 +4,19 @@ const Schema = mongoose.Schema;
 const subscriptionschema = new Schema(
   {
     Patient: {
-    type: mongoose.Schema.Types.ObjectId ,
-    ref:"Patient",
-    required: true,
+      type: mongoose.Schema.Types.ObjectId ,
+      ref:"Patient",
+      required: true,
     },
-    Package: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Package",
+      PackageName: {
+        type: String ,
+      //  ref: "Package",
         required: false,
       },
     Status: {
         type: String,
         enum: ["Subscribed", "Unsubscribed","Cancelled"],
-        default:"Unsubscribed",
+        default:"Subscribed",
         required:false,
     },
     Startdate: {
