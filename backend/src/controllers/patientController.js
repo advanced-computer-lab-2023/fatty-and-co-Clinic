@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
+
 const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
@@ -10,6 +11,39 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+
+
+// const createPatient = async (req, res) => {
+//   const {
+//     Username,
+//     Name,
+//     Password,
+//     Email,
+//     MobileNum,
+//     DateOfBirth,
+//     Gender,
+//     EmergencyContactNumber,
+//     EmergencyContactName
+//   } = req.body;
+//   try {
+//     const user = await userModel.addEntry(Username, Password, Email, "Patient");
+//     const patient = await patientModel.create({
+//       Username: Username,
+//       Name: Name,
+//       MobileNum: MobileNum,
+//       DateOfBirth: DateOfBirth,
+//       Gender: Gender,
+//       EmergencyContact: {
+//         FullName: EmergencyContactName,
+//         PhoneNumber: EmergencyContactNumber,
+//       },
+//     });
+//     res.status(200).send({ patient, user });
+//   } catch (error) {
+//     res.status(400).send({ message: error.message });
+//   }
+// };
+
 
 const getAllPatients = async (req, res) => {
   try {
@@ -136,8 +170,37 @@ const session_index = async (req, res) => {
   }
 };
 
+const viewHealthFam= async(req,res)=>{
+  try {
+    const { PatientID } = req.params;  //changed this
+    const Patient= await patientModel.findById(PatientID);
+    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$ne:null}}).populate("FamilyMem");
+    const package = famMems.map((famMember)=>famMember.FamilyMem); 
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send("Cannot find it");
+  }
+}
+
+
+const viewHealthPackage= async (req, res) => {
+  try {
+    const { PatientID } = req.params;  //changed this
+    const healthPackage= await patientModel.findById(PatientID);
+    const package = await packageModel.find({Name:healthPackage.PackageName})
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//hi khalkhoola
+
+
+
 const createFamilymember = async (req, res) => {
-  const { Name, NationalId, Age, Gender, Relation } = req.body;
+  const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
+  const { Createparameter } = req.params;
   const Createpatameter = req.user.Username;
   console.log(Createpatameter);
 
@@ -153,28 +216,35 @@ const createFamilymember = async (req, res) => {
     res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
+  console.log(Createparameter);
   try {
+    const findPatientRel= await patientModel.findOne({Username:FamilyMemberUsername});
+    const findPatientMain= await patientModel.findById(Createparameter);
     const newFamilymember = await familyMemberModel.create({
-      PatientUserName: Createpatameter,
+      PatientID: findPatientMain,
+      FamilyMem:findPatientRel,
+      FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
       Gender: Gender,
       Relation: Relation,
     });
+
     res.status(200).json(newFamilymember);
+   
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+  
 };
 
 const GetFamilymembers = async (req, res) => {
   try {
+    const { PatientID } = req.params;  //changed this
+    const fam = await familyMemberModel.find({PatientID:PatientID}).populate("PatientID").populate("FamilyMem");
     const PatientUserName = req.user.Username;
     console.log(req.params);
-    const fam = await familyMemberModel.find({
-      PatientUserName: PatientUserName,
-    });
     //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
@@ -254,6 +324,33 @@ const selectPrescription = async (req, res) => {
   }
 };
 
+const subscribepackagefamilymem=async(req,res) =>{
+ 
+  try {
+    const {FamilyMemberUsername,PackageName}=req.body;
+  
+    const patient = await patientModel.findOneAndUpdate({
+      Username:FamilyMemberUsername},{PackageName:PackageName });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
+
+const subscribehealthpackage=async(req,res) =>{
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
+
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
@@ -261,6 +358,9 @@ Date.prototype.addDays = function (days) {
 };
 
 module.exports = {
+  viewHealthFam,
+  viewHealthPackage,
+  subscribehealthpackage,
   session_index,
   createFamilymember,
   GetFamilymembers,
@@ -273,4 +373,5 @@ module.exports = {
   updatePatient,
   selectPrescription,
   getEmergencyContact,
+  subscribepackagefamilymem
 };
