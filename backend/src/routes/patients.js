@@ -19,10 +19,11 @@ const {
   getEmergencyContact,
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
+const { checkPatient } = require("../common/middleware/checkType");
 
 const router = express.Router();
 
-/**
+/** 
  * @route POST /patients/addPatient
  * @desc Creates a new patient
  * @access Public
@@ -37,6 +38,8 @@ const router = express.Router();
 router.post("/addPatient", createPatient);
 router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
 /**
+=======
+>>>>>>> main
  * @route GET /patients/getAllPatients
  * @desc Returns a list of all patients
  * @access Public
@@ -49,7 +52,7 @@ router.get("/getAllPatients", getAllPatients);
  * @access Public
  * @param {string} id - The ID of the patient to delete
  */
-router.delete("/deletePatient/:id", deletePatient);
+router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one deleting is an admin or the currently logged in patient
 
 /**
  * @route GET /patients/getPatient/:id
@@ -62,8 +65,7 @@ router.get("/getPatient/:id", getPatient);
 /**
  * @route PATCH /patients/updatePatient/:id
  * @desc Updates a patient by ID
- * @access Public
- * @param {string} id - The ID of the patient to update
+ * @access Patient
  * @prop {string} Name - The name of the patient
  * @prop {string} Username - The username of the patient
  * @prop {string} Password - The password of the patient
@@ -72,7 +74,9 @@ router.get("/getPatient/:id", getPatient);
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.patch("/updatePatient/:id", updatePatient);
+// TODO: does it have to be a patient? or can it be an admin?
+// TODO: check if the one updating is an admin or the currently logged in patient
+router.patch("/updatePatient", checkPatient, updatePatient);
 
 /**
  * @route GET /patients/getPatientUsername/:Username
@@ -86,16 +90,15 @@ router.get("/getPatientUsername/:Username", getPatientUsername);
  * @route GET /patients/view/doctors/:id
  * @desc Returns a list of all doctors with speciality and session price for a patient
  * @access Public
- * @param {string} id - The ID of the patient to view doctors for
  * @prop {string} Name - The name of the doctor to search for
  * @prop {string} Speciality - The speciality of the doctor to search for
  */
-router.get("/view/doctors/:id", session_index);
+router.get("/view/doctors/", checkPatient, session_index);
 
 /**
  * @route POST /patients/createFamilymember
  * @desc Creates a new family member for a patient
- * @access Public
+ * @access Patient
  * @prop {string} Name - The name of the family member
  * @prop {string} NationalID - The national ID of the family member
  * @prop {number} Age - The age of the family member
@@ -103,15 +106,15 @@ router.get("/view/doctors/:id", session_index);
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
 router.post("/createFamilymember/:Createparameter", createFamilymember);
+router.post("/createFamilymember", checkPatient, createFamilymember);
 
 /**
  * @route GET /patients/getFamilymember
  * @desc Returns a list of all family members for a patient
- * @access Public
- * @prop {string} Username - The username of the patient to get family members for
+ * @access Patient
  */
 router.get("/getFamilymember/:PatientID", GetFamilymembers);  //Changed name of params
-
+router.get("/getFamilymember", checkPatient, GetFamilymembers);
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions

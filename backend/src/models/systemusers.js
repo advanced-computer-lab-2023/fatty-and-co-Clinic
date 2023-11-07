@@ -44,6 +44,10 @@ systemUsersSchema.statics.addEntry = async function (
   console.log("username: " + username);
   console.log("password: " + password);
 
+  if (!username || !password || !email || !type) {
+    throw Error("Please fill in all fields!");
+  }
+
   // validation done here instead of in db because password will be hashed by the time it reaches the db
   if (!validatePassword(password)) {
     throw Error(
