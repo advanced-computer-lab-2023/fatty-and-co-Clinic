@@ -3,11 +3,16 @@ const Schema = mongoose.Schema;
 
 const subscriptionschema = new Schema(
   {
-    PatientUsername: {
-    type: "string",
-   // ref:"Patient",
-      required: true,
+    Patient: {
+    type: mongoose.Schema.Types.ObjectId ,
+    ref:"Patient",
+    required: true,
     },
+    Package: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Package",
+        required: false,
+      },
     Status: {
         type: String,
         enum: ["Subscribed", "Unsubscribed","Cancelled"],
