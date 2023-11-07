@@ -56,7 +56,7 @@ router.get("/getPatient/:id", getPatient);
  */
 // TODO: does it have to be a patient? or can it be an admin?
 // TODO: check if the one updating is an admin or the currently logged in patient
-router.patch("/updatePatient", checkPatient, updatePatient);
+router.patch("/updatePatient/:id", checkPatient, updatePatient);
 
 /**
  * @route GET /patients/getPatientUsername/:Username
