@@ -13,36 +13,36 @@ const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
 
 
-const createPatient = async (req, res) => {
-  const {
-    Username,
-    Name,
-    Password,
-    Email,
-    MobileNum,
-    DateOfBirth,
-    Gender,
-    EmergencyContactNumber,
-    EmergencyContactName
-  } = req.body;
-  try {
-    const user = await userModel.addEntry(Username, Password, Email, "Patient");
-    const patient = await patientModel.create({
-      Username: Username,
-      Name: Name,
-      MobileNum: MobileNum,
-      DateOfBirth: DateOfBirth,
-      Gender: Gender,
-      EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
-      },
-    });
-    res.status(200).send({ patient, user });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
+// const createPatient = async (req, res) => {
+//   const {
+//     Username,
+//     Name,
+//     Password,
+//     Email,
+//     MobileNum,
+//     DateOfBirth,
+//     Gender,
+//     EmergencyContactNumber,
+//     EmergencyContactName
+//   } = req.body;
+//   try {
+//     const user = await userModel.addEntry(Username, Password, Email, "Patient");
+//     const patient = await patientModel.create({
+//       Username: Username,
+//       Name: Name,
+//       MobileNum: MobileNum,
+//       DateOfBirth: DateOfBirth,
+//       Gender: Gender,
+//       EmergencyContact: {
+//         FullName: EmergencyContactName,
+//         PhoneNumber: EmergencyContactNumber,
+//       },
+//     });
+//     res.status(200).send({ patient, user });
+//   } catch (error) {
+//     res.status(400).send({ message: error.message });
+//   }
+// };
 
 
 const getAllPatients = async (req, res) => {
@@ -196,7 +196,6 @@ const viewHealthPackage= async (req, res) => {
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
   const { Createparameter } = req.params;
-  const { Name, NationalId, Age, Gender, Relation } = req.body;
   const Createpatameter = req.user.Username;
   console.log(Createpatameter);
 
@@ -241,9 +240,6 @@ const GetFamilymembers = async (req, res) => {
     const fam = await familyMemberModel.find({PatientID:PatientID}).populate("PatientID").populate("FamilyMem");
     const PatientUserName = req.user.Username;
     console.log(req.params);
-    const fam = await familyMemberModel.find({
-      PatientUserName: PatientUserName,
-    });
     //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
