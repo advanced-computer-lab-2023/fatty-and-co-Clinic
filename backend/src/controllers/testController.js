@@ -149,9 +149,7 @@ const createDoctor = async (req, res) => {
   }
 };
 
-
 //create a new doctor slot
-
 
 // create a new patient
 const createPatient = async (req, res) => {
@@ -218,7 +216,7 @@ const createRandomAppointment = async (req, res) => {
   const patientUsername = PatientUsername || patient.Username;
   const patientName = PatientName || patient.Name;
   const status = Status || generateAppointmentStatus();
-  const date = Date; 
+  const date = Date;
   //|| generateAppointmentDate(workingDays, startTime, endTime);
 
   try {
@@ -334,29 +332,33 @@ const createPrescription = async (req, res) => {
   }
 };
 
-const createDocSlot = async(req, res) => {
-  const {
-    DoctorId,
-    WorkingDay,
-    StartTime,
-  } = req.body;
+const createDocSlot = async (req, res) => {
+  const { DoctorId, WorkingDay, StartTime } = req.body;
 
   const doctorId = DoctorId;
-  const workingDay =WorkingDay;
+  const workingDay = WorkingDay;
   const startTime = StartTime;
 
-  try{
+  try {
     const newDocSlot = await docSlotsModel.create({
       WorkingDay: workingDay,
       StartTime: startTime,
       DoctorId: doctorId,
     });
     res.status(201).json(newDocSlot);
-  }catch(error){
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
 
-}
+const getDocSlot = async (req, res) => {
+  try {
+    const docSlots = await docSlotsModel.find().populate("DoctorId");
+    res.status(201).json(docSlots);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   createSystemUser,
@@ -372,4 +374,5 @@ module.exports = {
   createRandomAppointment,
   createPrescription,
   createDocSlot,
+  getDocSlot,
 };

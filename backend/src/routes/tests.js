@@ -13,16 +13,13 @@ const {
   createRandomAppointment,
   createPrescription,
   createDocSlot,
+  getDocSlot,
 } = require("../controllers/testController");
- 
-const {testAppointRef} = require ("../controllers/appointmentController")
-const {
-  testDocSlotRef,
-} = require ("../controllers/docSlotController");
 
-const {
-  filterDoctorSlotEdition,
-} = require ("../controllers/doctorController");
+const { testAppointRef } = require("../controllers/appointmentController");
+const { testDocSlotRef } = require("../controllers/docSlotController");
+
+const { filterDoctorSlotEdition } = require("../controllers/doctorController");
 
 const router = express.Router();
 
@@ -140,6 +137,10 @@ router.post("/createDocSlot", (req, res) => {
   createDocSlot(req, res);
 });
 
+router.get("/getDocSlot", (req, res) => {
+  getDocSlot(req, res);
+});
+
 router.get("/testDocSlotRef", (req, res) => {
   testDocSlotRef(req, res);
 });
@@ -154,6 +155,5 @@ router.get("/filterDoctorSlotEdition", (req, res) => {
 router.get("/testAppointRef", (req, res) => {
   testAppointRef(req, res);
 });
-
 
 module.exports = router;
