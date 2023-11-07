@@ -4,7 +4,6 @@ const {
   viewHealthPackage,
   subscribehealthpackage,
   subscribepackagefamilymem,
-  createPatient,
   getAllPatients,
   deletePatient,
   getPatient,
@@ -35,7 +34,6 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.post("/addPatient", createPatient);
 router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
 /**
 =======
