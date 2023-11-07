@@ -145,7 +145,7 @@ router.get("/selectPrescription", selectPrescription);
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
 router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
-router.get("/viewMyPackage/:PatientID",viewHealthPackage)
+router.get("/viewMyPackage/",viewHealthPackage)
 
 
 module.exports = router;

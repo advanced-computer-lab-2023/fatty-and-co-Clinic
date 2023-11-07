@@ -180,8 +180,8 @@ const viewHealthFam= async(req,res)=>{
 
 const viewOptionPackages= async(req,res)=>{
   try { 
-    const packages= await packageModel.find();
-    res.status(200).json(getPackages);
+    const packages=await packageModel.find({})
+    res.status(200).json(packages);
   } catch (error) {
     res.status(400).send("Cannot find it");
   }
@@ -190,8 +190,8 @@ const viewOptionPackages= async(req,res)=>{
 
 const viewHealthPackage= async (req, res) => {
   try {
-    const { PatientID } = req.params;  //changed this
-    const healthPackage= await patientModel.findById(PatientID);
+    const current_user = req.user.Username;  //changed this
+    const healthPackage= await patientModel.findOne({Username:current_user});
     const package = await packageModel.find({Name:healthPackage.PackageName})
     res.status(200).json(package);
   } catch (error) {
