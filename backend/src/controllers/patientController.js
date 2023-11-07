@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-
+const systemUserModel = require("../models/systemusers");
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
 
@@ -11,6 +11,7 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+const { getPackages } = require("./packageController");
 
 
 // const createPatient = async (req, res) => {
@@ -166,12 +167,21 @@ const session_index = async (req, res) => {
 };
 
 const viewHealthFam= async(req,res)=>{
-  try {
-    const { PatientID } = req.params;  //changed this
-    const Patient= await patientModel.findById(PatientID);
+  try {//changed this
+    const username=req.user.Username;
+    const Patient= await patientModel.findOne({Username:username});
     const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$ne:null}}).populate("FamilyMem");
     const package = famMems.map((famMember)=>famMember.FamilyMem); 
     res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send("Cannot find it");
+  }
+}
+
+const viewOptionPackages= async(req,res)=>{
+  try { 
+    const packages= await packageModel.find();
+    res.status(200).json(getPackages);
   } catch (error) {
     res.status(400).send("Cannot find it");
   }
@@ -354,6 +364,7 @@ Date.prototype.addDays = function (days) {
 
 module.exports = {
   viewHealthFam,
+  viewOptionPackages,
   viewHealthPackage,
   subscribehealthpackage,
   session_index,

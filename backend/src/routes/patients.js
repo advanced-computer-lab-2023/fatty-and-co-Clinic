@@ -9,6 +9,7 @@ const {
   getPatient,
   updatePatient,
   getPatientUsername,
+  viewOptionPackages,
   session_index,
   createFamilymember,
   GetFamilymembers,
@@ -59,7 +60,7 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
-
+router.get("/getOptionPackages", viewOptionPackages);
 /**
  * @route PATCH /patients/updatePatient/:id
  * @desc Updates a patient by ID
