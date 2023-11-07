@@ -8,6 +8,8 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
   Link,
   Switch,
   Text,
@@ -15,6 +17,7 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Assets
 import signInImage from "assets/img/signInImage.png";
@@ -25,11 +28,15 @@ function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login, error, loading } = useLogin();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(username, password);
   };
+
+  const handleShowClick = () => setShowPassword(!showPassword);
+
   // Chakra color mode
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.400", "white");
@@ -85,15 +92,24 @@ function SignIn() {
               <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                 Password
               </FormLabel>
-              <Input
-                borderRadius="15px"
-                mb="36px"
-                fontSize="sm"
-                type="password"
-                placeholder="Your password"
-                size="lg"
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <InputGroup>
+                <Input
+                  borderRadius="15px"
+                  mb="36px"
+                  fontSize="sm"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Your password"
+                  size="lg"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement>
+                  {showPassword ? (
+                    <FaEyeSlash onClick={handleShowClick} />
+                  ) : (
+                    <FaEye onClick={handleShowClick} />
+                  )}
+                </InputRightElement>
+              </InputGroup>
               <FormControl display="flex" alignItems="center">
                 <Switch id="remember-login" colorScheme="teal" me="10px" />
                 <FormLabel
