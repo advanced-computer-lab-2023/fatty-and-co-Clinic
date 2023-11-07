@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+
 const userModel = require("../models/systemusers.js");
 const requestModel = require("../models/requests");
 const doctorModel = require("../models/doctors");
@@ -5,17 +7,11 @@ const patientModel = require("../models/patients");
 const appointmentModel = require("../models/appointments");
 const familyMemberModel = require("../models/familymembers");
 const prescriptionModel = require("../models/prescriptions");
-const { default: mongoose } = require("mongoose");
 
 const createAdmin = async (req, res) => {
   const { Username, Password, Email } = req.body;
   try {
-    const admin = await userModel.create({
-      Username: Username,
-      Password: Password,
-      Email: Email,
-      Type: "Admin",
-    });
+    const admin = await userModel.addEntry(Username, Password, Email, "Admin");
     res.status(200).json(admin);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -57,11 +53,13 @@ const acceptRequest = async (req, res) => {
       EducationalBackground: request.EducationalBackground,
       Speciality: request.Speciality,
     });
-    const user = await userModel.create({
-      Username: Username,
-      Password: request.Password,
-      Email: request.Email,
-    });
+    const user = await systemUserModel.addEntry(
+      Username,
+      request.Password,
+      request.Email,
+      "Doctor"
+    );
+
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -84,24 +82,34 @@ const rejectRequest = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { Username } = req.body;
   try {
-
     const user = await userModel.findOneAndDelete({ Username: Username });
-      if (user && user.Type === "Patient") {
-        const patient = await patientModel.findOneAndDelete({ Username: Username });
-        const appointments = await appointmentModel.find({ PatientUsername: Username });
-        if (appointments.length > 0) {
-          await appointmentModel.deleteMany({ PatientUsername: Username });
-        }
-        const prescriptions = await prescriptionModel.find({ PatientUsername: Username });
-        if (prescriptions.length > 0) {
-          await prescriptionModel.deleteMany({ PatientUsername: Username });
-        }
-        const familymembers = await familyMemberModel.find({ PatientUserName: Username });
-        if (familymembers.length > 0) {
-          await familyMemberModel.deleteMany({ PatientUserName: Username });
-        }
-        res.status(200).json({ user, patient });
-      } else if (user && user.Type == "Doctor") {
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    }
+    if (user && user.Type === "Patient") {
+      const patient = await patientModel.findOneAndDelete({
+        Username: Username,
+      });
+      const appointments = await appointmentModel.find({
+        PatientUsername: Username,
+      });
+      if (appointments.length > 0) {
+        await appointmentModel.deleteMany({ PatientUsername: Username });
+      }
+      const prescriptions = await prescriptionModel.find({
+        PatientUsername: Username,
+      });
+      if (prescriptions.length > 0) {
+        await prescriptionModel.deleteMany({ PatientUsername: Username });
+      }
+      const familymembers = await familyMemberModel.find({
+        PatientUserName: Username,
+      });
+      if (familymembers.length > 0) {
+        await familyMemberModel.deleteMany({ PatientUserName: Username });
+      }
+      res.status(200).json({ user, patient });
+    } else if (user && user.Type == "Doctor") {
       const doctor = await doctorModel.findOneAndDelete({ Username: Username });
       const appointments = await appointmentModel.find({
         DoctorUsername: Username,
@@ -115,9 +123,8 @@ const deleteUser = async (req, res) => {
       if (prescriptions.length > 0) {
         await prescriptionModel.deleteMany({ DoctorUsername: Username });
       }
-      res.status(200).json({user, doctor});
+      res.status(200).json({ user, doctor });
     }
-
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

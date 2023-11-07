@@ -17,34 +17,14 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  HashRouter,
-  BrowserRouter,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { AuthContextProvider } from "context/AuthContext";
+import App from "./App";
 
-
-//IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
-import AuthLayout from "layouts/Auth.js";
-import AdminLayout from "layouts/Admin.js";
-import RTLLayout from "layouts/RTL.js";
-
-import createfamilymem from "layouts/Createfamilymem";
-//NOTE: Route path hena bet represent el LAYOUT from routes.js 
-//NOTE: Component hena bet represent el imported layout  
-//NOTE: To test updatedocmail, redirect from '/' to 'updateEmail'
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path={`/auth`} component={AuthLayout} />
-      <Route path={`/admin`} component={AdminLayout} />
-      <Route path={`/rtl`} component={RTLLayout} />
-      <Redirect from={`/`} to="/admin" />
-      {/* <Route path={`/updateEmail`} component={UpdateDocMail}/> 
-      <Route path={`/Createfamilymem`} component={createfamilymem}/>  */}
-    </Switch>
-  </BrowserRouter>,
+  <React.StrictMode>
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
+  </React.StrictMode>,
   document.getElementById("root")
 );

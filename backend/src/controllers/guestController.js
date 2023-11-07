@@ -1,20 +1,37 @@
+const { default: mongoose } = require("mongoose");
+
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
+const patientModel = require("../models/patients");
+
+const generateToken = require("../common/jwt/generateToken");
+
+const User = require("../models/systemusers");
 
 const createRequest = async (req, res) => {
   try {
-    const request = await requestModel.create({
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Name: req.body.Name,
-      DateOfBirth: req.body.DateOfBirth,
-      HourlyRate: req.body.HourlyRate,
-      Affiliation: req.body.Affiliation,
-      EducationalBackground: req.body.EducationalBackground,
-      Speciality: req.body.Speciality,
-      Status: "Pending",
-    });
+    const {
+      Username,
+      Password,
+      Email,
+      Name,
+      DateOfBirth,
+      HourlyRate,
+      Affiliation,
+      EducationalBackground,
+      Speciality,
+    } = req.body;
+    const request = await requestModel.addEntry(
+      Username,
+      Password,
+      Email,
+      Name,
+      DateOfBirth,
+      HourlyRate,
+      Affiliation,
+      EducationalBackground,
+      Speciality
+    );
     res.status(200).send({ request });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -61,8 +78,58 @@ const updateEmail = async (req, res) => {
 };
 //turn the data from the request into a doctor object using the doctor controller function createDoctor
 
+const login = async (req, res) => {
+  console.log(req.body);
+  const { Username, Password } = req.body;
+  try {
+    const user = await systemUserModel.login(Username, Password);
+    const token = generateToken(user);
+    res.status(200).send({ token, userType: user.Type });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const createPatient = async (req, res) => {
+  const {
+    Username,
+    Name,
+    Password,
+    Email,
+    MobileNum,
+    DateOfBirth,
+    Gender,
+    EmergencyContactNumber,
+    EmergencyContactName,
+  } = req.body;
+  try {
+    const user = await systemUserModel.addEntry(
+      Username,
+      Password,
+      Email,
+      "Patient"
+    );
+    const patient = await patientModel.create({
+      Username: Username,
+      Name: Name,
+      MobileNum: MobileNum,
+      DateOfBirth: DateOfBirth,
+      Gender: Gender,
+      EmergencyContact: {
+        FullName: EmergencyContactName,
+        PhoneNumber: EmergencyContactNumber,
+      },
+    });
+    res.status(200).send({ patient, user });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
 module.exports = {
   createRequest,
   updateRequest,
   updateEmail,
+  login,
+  createPatient,
 };
