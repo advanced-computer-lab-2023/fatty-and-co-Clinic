@@ -18,6 +18,8 @@ const {
   selectPatient,
   selectPrescription,
   getEmergencyContact,
+  cancelSubscriptionfamilymember,
+  payForSubscription
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -64,6 +66,9 @@ router.get("/getPatient/:id", getPatient);
 router.get("/getOptionPackages", viewOptionPackages);
 
 router.patch("/cancelSubscription",cancelSubscription)
+router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember)
+router.patch("/payForSubscription",payForSubscription)
+//router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id
  * @desc Updates a patient by ID
@@ -148,6 +153,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.post("/subscribehealthpackage",subscribehealthpackage)
 router.post("/subscribepackagefamilymem",subscribepackagefamilymem)
 router.get("/viewMyPackage/",viewHealthPackage)
+
 
 
 module.exports = router;

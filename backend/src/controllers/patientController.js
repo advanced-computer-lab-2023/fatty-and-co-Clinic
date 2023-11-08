@@ -237,17 +237,16 @@ const payForSubscription= async(req,res)=>{
       }
       else{
         const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled"})
-        res.status(404).json(updateRenewal, {"Not enough money"})
+        res.status(404).json(updateRenewal)
       }
       
     }
     
   }
-    
 
-  }
+  
   catch{
-
+    res.status(400).send({ message: "Failed to pay" });
   }
 }
 
@@ -428,10 +427,10 @@ const subscribepackagefamilymem=async(req,res) =>{
   console.log(Package) 
 
   if (famrelated==null){
-    res.status(400).send( {"Wrong national id "} );
+    res.status(400).send( {error :"Wrong national id "} );
   }
   else if (fam.FamilyMem !=null){
-    res.status(400).send( {"This family member is a already a user " });
+    res.status(400).send( {error:"This family member is a already a user " });
   }
   else {
    const subscribtion=await subscriptionModel.create({
@@ -491,7 +490,7 @@ console.log("Entered");
     res.status(200).send(patient12);
     }
  else {
-  res.status(400).send({"Sorry already subscribed"});
+  res.status(400).send({error:"Sorry already subscribed"});
  }
   } catch (error) {
     res.status(400).send({ Error:"Error occurred while  subscribing" });
@@ -619,5 +618,6 @@ module.exports = {
   selectPrescription,
   getEmergencyContact,
   subscribepackagefamilymem,
-  cancelSubscriptionfamilymember
+  cancelSubscriptionfamilymember,
+  payForSubscription
 };
