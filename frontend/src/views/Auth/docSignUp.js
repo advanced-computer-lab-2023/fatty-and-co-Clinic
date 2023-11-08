@@ -61,15 +61,6 @@ function docSignUp() {
   const textColor = useColorModeValue("gray.700", "white");
   const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
   const bgColor = useColorModeValue("white", "gray.700");
-  // const [Username, setUsername] = useState("");
-  // const [Password, setPassword] = useState("");
-  // const [Email, setEmail] = useState("");
-  // const [Name, setName] = useState("");
-  // const [DateOfBirth, setDateOfBirth] = useState("");
-  // const [HourlyRate, setHourlyRate] = useState("");
-  // const [Affiliation, setAffiliation] = useState("");
-  // const [EducationalBackground, setEducationalBackground] = useState("");
-  // const [Speciality, setSpeciality] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -344,7 +335,7 @@ function docSignUp() {
                         onChange={(val) => form.setFieldValue(field.name, val)}
                         value={formatHourlyRate(field.value)}
                         min={1}
-                        precision={2}
+                        // precision={2}
                         // max={50}
                       >
                         <NumberInputField fontSize="sm" />
