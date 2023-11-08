@@ -12,6 +12,7 @@
     "asynckit": "^0.4.0",
     "axios": "^1.5.1",
     "balanced-match": "^1.0.2",
+    "bcrypt": "^5.1.1",
     "binary-extensions": "^2.2.0",
     "body-parser": "^1.20.1",
     "brace-expansion": "^1.1.11",
@@ -63,6 +64,7 @@
     "is-glob": "^4.0.3",
     "is-number": "^7.0.0",
     "js-tokens": "^4.0.0",
+    "jsonwebtoken": "^9.0.2",
     "kareem": "^2.5.1",
     "loose-envify": "^1.4.0",
     "lru-cache": "^6.0.0",
@@ -128,7 +130,8 @@
     "yallist": "^4.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",

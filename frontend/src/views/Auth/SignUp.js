@@ -369,9 +369,8 @@ function SignUp() {
               Already have an account?
               <Link
                 color={titleColor}
-                as="span"
                 ms="5px"
-                href="/auth/signin "
+                href="./signin "
                 fontWeight="bold"
               >
                 Sign In
@@ -391,7 +390,6 @@ function SignUp() {
               Register as a doctor
               <Link
                 color={titleColor}
-                as="span"
                 ms="5px"
                 href="./docSignUp"
                 fontWeight="bold"

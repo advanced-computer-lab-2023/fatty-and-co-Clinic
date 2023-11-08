@@ -1,39 +1,49 @@
+const { default: mongoose } = require("mongoose");
+
 const patientModel = require("../models/patients");
 const userModel = require("../models/systemusers");
+
 const familyMemberModel = require("../models/familymembers");
-const { default: mongoose } = require("mongoose");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
 const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
+const User = require("../models/systemusers");
 
-const createPatient = async (req, res) => {
-  const { EmergencyContactNumber, EmergencyContactName } = req.body;
-  try {
-    const patient = await patientModel.create({
-      Username: req.body.Username,
-      Name: req.body.Name,
-      MobileNum: req.body.MobileNum,
-      DateOfBirth: req.body.DateOfBirth,
-      Gender: req.body.Gender,
-      EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
-      },
-    });
-    const user = await userModel.create({
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Type: "Patient",
-    });
-    res.status(200).send({ patient, user });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
+
+// const createPatient = async (req, res) => {
+//   const {
+//     Username,
+//     Name,
+//     Password,
+//     Email,
+//     MobileNum,
+//     DateOfBirth,
+//     Gender,
+//     EmergencyContactNumber,
+//     EmergencyContactName
+//   } = req.body;
+//   try {
+//     const user = await userModel.addEntry(Username, Password, Email, "Patient");
+//     const patient = await patientModel.create({
+//       Username: Username,
+//       Name: Name,
+//       MobileNum: MobileNum,
+//       DateOfBirth: DateOfBirth,
+//       Gender: Gender,
+//       EmergencyContact: {
+//         FullName: EmergencyContactName,
+//         PhoneNumber: EmergencyContactNumber,
+//       },
+//     });
+//     res.status(200).send({ patient, user });
+//   } catch (error) {
+//     res.status(400).send({ message: error.message });
+//   }
+// };
+
 
 const getAllPatients = async (req, res) => {
   try {
@@ -105,10 +115,7 @@ const deletePatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const patient = await patientModel.findByIdAndUpdate(req.user.id, req.body);
     res.status(200).send({ patient });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -117,15 +124,15 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const { id } = req.params;
+  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Invalid ID" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   return res.status(404).json({ error: "Invalid ID" });
+  // }
 
   try {
-    const patient = await patientModel.findById(id);
+    const patient = await patientModel.findOne({ Username: username });
     let packageDis = 0;
 
     if (patient.PackageName) {
@@ -158,9 +165,38 @@ const session_index = async (req, res) => {
   }
 };
 
+const viewHealthFam= async(req,res)=>{
+  try {
+    const { PatientID } = req.params;  //changed this
+    const Patient= await patientModel.findById(PatientID);
+    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$ne:null}}).populate("FamilyMem");
+    const package = famMems.map((famMember)=>famMember.FamilyMem); 
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send("Cannot find it");
+  }
+}
+
+
+const viewHealthPackage= async (req, res) => {
+  try {
+    const { PatientID } = req.params;  //changed this
+    const healthPackage= await patientModel.findById(PatientID);
+    const package = await packageModel.find({Name:healthPackage.PackageName})
+    res.status(200).json(package);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//hi khalkhoola
+
+
+
 const createFamilymember = async (req, res) => {
-  const { Name, NationalId, Age, Gender, Relation } = req.body;
-  const { Createpatameter } = req.params;
+  const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
+  const { Createparameter } = req.params;
+  const Createpatameter = req.user.Username;
   console.log(Createpatameter);
 
   // Check if the national ID is not 16.
@@ -175,28 +211,35 @@ const createFamilymember = async (req, res) => {
     res.status(400).json({ error: "The age must be 1 or 2 digits" });
     return;
   }
+  console.log(Createparameter);
   try {
+    const findPatientRel= await patientModel.findOne({Username:FamilyMemberUsername});
+    const findPatientMain= await patientModel.findById(Createparameter);
     const newFamilymember = await familyMemberModel.create({
-      PatientUserName: Createpatameter,
+      PatientID: findPatientMain,
+      FamilyMem:findPatientRel,
+      FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
       Gender: Gender,
       Relation: Relation,
     });
+
     res.status(200).json(newFamilymember);
+   
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+  
 };
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const { PatientUserName } = req.params;
+    const { PatientID } = req.params;  //changed this
+    const fam = await familyMemberModel.find({PatientID:PatientID}).populate("PatientID").populate("FamilyMem");
+    const PatientUserName = req.user.Username;
     console.log(req.params);
-    const fam = await familyMemberModel.find({
-      PatientUserName: PatientUserName,
-    });
     //  console.log(fam)
     res.status(200).json(fam);
   } catch (error) {
@@ -276,6 +319,33 @@ const selectPrescription = async (req, res) => {
   }
 };
 
+const subscribepackagefamilymem=async(req,res) =>{
+ 
+  try {
+    const {FamilyMemberUsername,PackageName}=req.body;
+  
+    const patient = await patientModel.findOneAndUpdate({
+      Username:FamilyMemberUsername},{PackageName:PackageName });
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
+
+const subscribehealthpackage=async(req,res) =>{
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+  
+}
+
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
@@ -283,17 +353,20 @@ Date.prototype.addDays = function (days) {
 };
 
 module.exports = {
+  viewHealthFam,
+  viewHealthPackage,
+  subscribehealthpackage,
   session_index,
   createFamilymember,
   GetFamilymembers,
   selectPatient,
   getPrescriptions,
   getPatientUsername,
-  createPatient,
   getAllPatients,
   deletePatient,
   getPatient,
   updatePatient,
   selectPrescription,
   getEmergencyContact,
+  subscribepackagefamilymem
 };

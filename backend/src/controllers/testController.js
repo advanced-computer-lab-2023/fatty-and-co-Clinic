@@ -42,14 +42,13 @@ const createSystemUser = async (req, res) => {
   const password = Password || generatePassword();
   const email = Email || generateEmail();
   const type = Type || generateUserType();
-  console.log(username, password, email, type);
   try {
-    const newUser = await systemUserModel.create({
-      Username: username,
-      Password: password,
-      Email: email,
-      Type: type,
-    });
+    const newUser = await systemUserModel.addEntry(
+      username,
+      password,
+      email,
+      type
+    );
     res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -85,6 +84,8 @@ const createAppointment = async (req, res) => {
 const createDoctor = async (req, res) => {
   const {
     Username,
+    Password,
+    Email,
     Name,
     DateOfBirth,
     HourlyRate,
@@ -97,6 +98,8 @@ const createDoctor = async (req, res) => {
   } = req.body;
 
   const username = Username || generateUsername();
+  const password = Password || generatePassword();
+  const email = Email || generateEmail();
   const name = Name || generateName();
   const dateOfBirth = DateOfBirth || generateDateOfBirth();
   const hourlyRate = HourlyRate || generateHourlyRate();
@@ -111,6 +114,19 @@ const createDoctor = async (req, res) => {
       : generateStartTimeAndEndTime();
 
   try {
+    await requestModel.create({
+      Username: username,
+      Password: password,
+      Email: email,
+      Name: name,
+      DateOfBirth: dateOfBirth,
+      HourlyRate: hourlyRate,
+      Affiliation: affiliation,
+      EducationalBackground: educationalBackground,
+      Speciality: speciality,
+      Status: "Accepted",
+    }); // create a request for the doctor
+    await systemUserModel.addEntry(username, password, email, "Doctor");
     const newDoctor = await doctorModel.create({
       Username: username,
       Name: name,
@@ -147,12 +163,18 @@ const createPatient = async (req, res) => {
   const dateOfBirth = DateOfBirth || generateDateOfBirth();
   const packageName = PackageName || generatePackage();
   const emergencyContact = EmergencyContact || {
-    generateName,
-    generateMobileNum,
+    FullName: generateName(),
+    PhoneNumber: generateMobileNum(),
   };
   const gender = Gender || generateGender();
 
   try {
+    await systemUserModel.addEntry(
+      username,
+      generatePassword(),
+      generateEmail(),
+      "Patient"
+    );
     const newPatient = await patientModel.create({
       Username: username,
       Name: name,
@@ -181,11 +203,14 @@ const createRandomAppointment = async (req, res) => {
   const doctor = await getDoctor();
   const doctorUsername = DoctorUsername || doctor.Username;
   const doctorName = DoctorName || doctor.Name;
+  const workingDays = doctor.WorkingDays;
+  const startTime = doctor.StartTime;
+  const endTime = doctor.EndTime;
   const patient = await getPatient();
   const patientUsername = PatientUsername || patient.Username;
   const patientName = PatientName || patient.Name;
   const status = Status || generateAppointmentStatus();
-  const date = Date || generateAppointmentDate();
+  const date = Date || generateAppointmentDate(workingDays, startTime, endTime);
 
   try {
     const newApp = await appointmentModel.create({
@@ -282,16 +307,6 @@ const createPrescription = async (req, res) => {
   const diagnosis = Diagnosis || generateDiagnosis();
   const status = Status || generatePrescriptionStatus();
   const medicine = Medicine || generateMedicine();
-
-  console.log(
-    appointmentId,
-    doctorUsername,
-    doctorName,
-    patientUsername,
-    date,
-    diagnosis,
-    medicine
-  );
 
   try {
     const newPrescription = await prescriptionModel.create({

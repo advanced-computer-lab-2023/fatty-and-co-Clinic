@@ -12,11 +12,24 @@ import {
   Switch,
   Text,
   useColorModeValue,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
+
 // Assets
 import signInImage from "assets/img/signInImage.png";
+import { useLogin } from "hooks/useLogin";
+import { useState } from "react";
 
 function SignIn() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { login, error, loading } = useLogin();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login(username, password);
+  };
   // Chakra color mode
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.400", "white");
@@ -54,19 +67,20 @@ function SignIn() {
               fontWeight="bold"
               fontSize="14px"
             >
-              Enter your email and password to sign in
+              Enter your username and password to sign in
             </Text>
             <FormControl>
               <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                Email
+                Username
               </FormLabel>
               <Input
                 borderRadius="15px"
                 mb="24px"
                 fontSize="sm"
                 type="text"
-                placeholder="Your email adress"
+                placeholder="Your username"
                 size="lg"
+                onChange={(e) => setUsername(e.target.value)}
               />
               <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                 Password
@@ -78,6 +92,7 @@ function SignIn() {
                 type="password"
                 placeholder="Your password"
                 size="lg"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <FormControl display="flex" alignItems="center">
                 <Switch id="remember-login" colorScheme="teal" me="10px" />
@@ -88,6 +103,7 @@ function SignIn() {
                   fontWeight="normal"
                 >
                   Remember me
+                  {/* TODO: Handle remember me later */}
                 </FormLabel>
               </FormControl>
               <Button
@@ -105,10 +121,18 @@ function SignIn() {
                 _active={{
                   bg: "teal.400",
                 }}
+                onClick={handleSubmit}
+                disabled={loading}
               >
                 SIGN IN
               </Button>
             </FormControl>
+            {error && (
+              <Alert status="error" mt={2} mb={4}>
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
             <Flex
               flexDirection="column"
               justifyContent="center"
@@ -118,7 +142,12 @@ function SignIn() {
             >
               <Text color={textColor} fontWeight="medium">
                 Don't have an account?
-                <Link color={titleColor} as="span" ms="5px" fontWeight="bold">
+                <Link
+                  color={titleColor}
+                  ms="5px"
+                  fontWeight="bold"
+                  href="./signup"
+                >
                   Sign Up
                 </Link>
               </Text>

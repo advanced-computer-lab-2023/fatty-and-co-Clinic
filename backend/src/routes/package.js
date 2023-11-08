@@ -6,6 +6,7 @@ const {
   updatePackage,
   deletePackage,
 } = require("../controllers/packageController");
+const { checkAdmin } = require("../common/middleware/checkType");
 
 // Create the router
 const router = express.Router();
@@ -28,29 +29,29 @@ router.get("/:Name", getPackage);
 /**
  * @route POST /addPackage
  * @desc Create a new package
- * @access Public
+ * @access Admin
  * @prop {string} Name - The name of the package
  * @prop {number} Price - The price of the package
  * @prop {number} Session_Discount - The session discount of the package
  * @prop {number} Medicine_Discount - The medicine discount of the package
  * @prop {number} Family_Discount - The family discount of the package
  */
-router.post("/addPackage", createPackage);
+router.post("/addPackage", checkAdmin, createPackage);
 
 /**
  * @route DELETE /deletePackage/:id
  * @desc Delete a package
- * @access Public
+ * @access Admin
  * @param {string} id - The id of the package
  */
-router.delete("/deletePackage/:id", deletePackage);
+router.delete("/deletePackage/:id", checkAdmin, deletePackage);
 
 /**
  * @route PATCH /updatePackage/:id
  * @desc Update a package by id
- * @access Public
+ * @access Admin
  * @param {string} id - The id of the package
  */
-router.patch("/updatePackage/:id", updatePackage);
+router.patch("/updatePackage/:id", checkAdmin, updatePackage);
 
 module.exports = router;
