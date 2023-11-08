@@ -120,6 +120,7 @@ function SignUp() {
     } catch (error) {
       setError(error);
       console.log(error);
+      setSubmitting(false);
     } finally {
       setSubmitting(false);
     }
@@ -202,7 +203,7 @@ function SignUp() {
                 <Field name="Username">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={errors.Username && touched.Username}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -215,7 +216,7 @@ function SignUp() {
                         borderRadius="15px"
                         type="text"
                         placeholder="Enter your Username"
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
                         // required
                         // onChange={(e) => setUsername(e.target.value)}
@@ -227,7 +228,7 @@ function SignUp() {
                 <Field name="Name">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={errors.Name && touched.Name}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -240,7 +241,7 @@ function SignUp() {
                         borderRadius="15px"
                         type="text"
                         placeholder="Your full Name"
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
                         // required
                         // onChange={(e) => setName(e.target.value)}
@@ -252,7 +253,7 @@ function SignUp() {
                 <Field name="Email">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={errors.Email && touched.Email}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -265,7 +266,7 @@ function SignUp() {
                         borderRadius="15px"
                         type="Email"
                         placeholder="Your Email address"
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
                         // required
                         // onChange={(e) => setEmail(e.target.value)}
@@ -277,7 +278,7 @@ function SignUp() {
                 <Field name="Password">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="36px"
                       isInvalid={errors.Password && touched.Password}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -287,7 +288,7 @@ function SignUp() {
                         <Input
                           {...field}
                           borderRadius="15px"
-                          mb="36px"
+                          // mb="36px"
                           fontSize="sm"
                           type={showPassword ? "text" : "Password"}
                           placeholder="Your Password"
@@ -314,7 +315,7 @@ function SignUp() {
                 <Field name="DateOfBirth">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={errors.DateOfBirth && touched.DateOfBirth}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -327,7 +328,7 @@ function SignUp() {
                         borderRadius="15px"
                         type="date"
                         placeholder="..."
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
                         // required
                         // onChange={(e) => setDateOfBirth(e.target.value)}
@@ -339,7 +340,7 @@ function SignUp() {
                 <Field name="MobileNum">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={errors.MobileNum && touched.MobileNum}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -352,12 +353,11 @@ function SignUp() {
                         borderRadius="15px"
                         type="number"
                         placeholder="Enter a valid number"
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
-                        onKeyPress={(event) => {
-                          const pattern = /[0-9]/;
-                          const inputChar = String.fromCharCode(event.charCode);
-                          if (!pattern.test(inputChar)) {
+                        onChange={(event) => {
+                          const pattern = /^[0-9\b]+$/;
+                          if (!pattern.test(event.target.value)) {
                             event.preventDefault();
                           }
                         }}
@@ -391,13 +391,16 @@ function SignUp() {
                     const { onChange, ...rest } = field;
                     return (
                       <FormControl
-                        mb="32px"
+                        mb="24px"
                         isInvalid={errors.Gender && touched.Gender}
                       >
                         <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                           Gender
                         </FormLabel>
-                        <RadioGroup {...rest} mb="24px">
+                        <RadioGroup
+                          {...rest}
+                          // mb="24px"
+                        >
                           {genders.map((Gender) => (
                             <Flex key={Gender} align="center" ms="10px">
                               <Radio
@@ -418,7 +421,7 @@ function SignUp() {
                 <Field name="EmergencyContactName">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={
                         errors.EmergencyContactName &&
                         touched.EmergencyContactName
@@ -439,7 +442,7 @@ function SignUp() {
                         borderRadius="15px"
                         type="text"
                         placeholder="Please Enter Full Name"
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
                         // required
                         // onChange={(e) => setEmergencyContactName(e.target.value)}
@@ -454,7 +457,7 @@ function SignUp() {
                 <Field name="EmergencyContactNumber">
                   {({ field }) => (
                     <FormControl
-                      mb="32px"
+                      mb="24px"
                       isInvalid={
                         errors.EmergencyContactNumber &&
                         touched.EmergencyContactNumber
@@ -470,7 +473,7 @@ function SignUp() {
                         borderRadius="15px"
                         type="number"
                         placeholder="Enter a valid phone number"
-                        mb="24px"
+                        // mb="24px"
                         size="lg"
                         onKeyPress={(event) => {
                           const pattern = /[0-9]/;
