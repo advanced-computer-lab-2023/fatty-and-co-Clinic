@@ -9,6 +9,7 @@ const {
   filterDoctor,
   updateDoctor,
   viewPatientInfoAndHealthRecords,
+  followupAppointment,
 } = require("../controllers/doctorController");
 
 const {
@@ -131,6 +132,11 @@ router.get(
   "/viewPatientInfoAndHealthRecords",
   checkDoctor,
   viewPatientInfoAndHealthRecords
+);
+router.get(
+  "/followupAppointment",
+  checkDoctor,
+  followupAppointment
 );
 
 module.exports = router;

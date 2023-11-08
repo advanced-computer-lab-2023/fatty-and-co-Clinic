@@ -342,6 +342,28 @@ const viewPatientInfoAndHealthRecords = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const followupAppointment = async (req, res) => {
+
+  const patientUsername = req.query.PatientUsername;
+  const doctorUsername = req.user.Username;
+  const patient = await patientModel.find({
+    Username: patientUsername
+  })
+  const doctor = await patientModel.find({
+    Username: patientUsername
+  })
+  const doctorName = doctor.Name
+  const patientName = patient.Name
+  const { Date } = req.body;
+
+  try {
+    const appointment = await appointmentModel.addEntry(doctorUsername,doctorName,patientUsername,patientName,"Follow up",Date);
+    res.status(200).json(appointment);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 
 module.exports = {
   getDoctorByID,
@@ -353,4 +375,5 @@ module.exports = {
   getAllDoctors,
   deleteDoctor,
   viewPatientInfoAndHealthRecords,
+  followupAppointment,
 };
