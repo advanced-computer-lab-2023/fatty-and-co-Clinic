@@ -31,11 +31,10 @@ const patientSchema = new Schema(
       type: { FullName: String, PhoneNumber: Number },
       required: true,
     },
-    PackageName: {
-      type: String,
-      ref: "Package",
-      required: false,
-    },
+    Wallet:{
+      type:Number,
+      required:false
+    }
   },
   { timestamps: true }
 );

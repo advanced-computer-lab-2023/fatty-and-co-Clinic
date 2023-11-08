@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
   subscribehealthpackage,
@@ -61,6 +62,8 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  */
 router.get("/getPatient/:id", getPatient);
 router.get("/getOptionPackages", viewOptionPackages);
+
+router.patch("/cancelSubscription",cancelSubscription)
 /**
  * @route PATCH /patients/updatePatient/:id
  * @desc Updates a patient by ID
