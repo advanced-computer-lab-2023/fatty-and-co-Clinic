@@ -374,9 +374,11 @@ const subscribepackagefamilymem=async(req,res) =>{
   console.log(Package) 
 
   if (famrelated==null){
-    res.status(400).send( "Error" );
+    res.status(400).send( "Wrong national id " );
   }
-
+  else if (fam.FamilyMem !=null){
+    res.status(400).send( "This family member is a already a user " );
+  }
   else {
    const subscribtion=await subscriptionModel.create({
     Patient:Patient.id,
