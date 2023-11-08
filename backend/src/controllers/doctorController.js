@@ -343,6 +343,19 @@ function findDayRangeFromDate(startDate, endDate) {
   return dayRange;
 }
 
+function getDayNumberFromName(day) {
+  const weekDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return weekDays.indexOf(day);
+}
+
 const filterDoctorSlotEdition = async (req, res) => {
   //TODO: Check if both end time and end Date required
 
@@ -412,10 +425,8 @@ async function availableDocXSlots(req) {
   }
 }
 
-//this function checks if A doctor in A slot is available according to 2 conditions:
-// ---> doc has no appointment in this slot
-// ---> doc has a (rescheduled/cancelled) appointment in this slot
-//returns true OR false accordingly
+//this function checks if A doctor in A slot is available
+//by checking if he has no appointment in this slot or apt is cancelled, ..
 async function isDocAvailable(docSlot) {
   try {
     const statusCheck = ["Upcoming", "Followup"];
@@ -455,33 +466,78 @@ async function isDocAvailable(docSlot) {
   }
 }
 
-async function checkFilterSpeciality(){
-}
+async function checkFilterSpeciality() {}
 
-const addMySlotsDoc = async (req,res) => {
-try{
-  
 
-}catch(error){
-  res.status(500).json(error);
-}
-}
 
-const deleteMySlotsDoc = async (req,res) => {
-  try{
+const addMySlotsDoc = async (req, res) => {
+  const { dayToAdd, startTimeToAdd } = req.body;
+  const username = req.user.Username;
+  const dayNumber = getDayNumberFromName(dayToAdd);
+  try {
+    await doctorModel.findOne({ Username: username }).then(async (value) => {
+      //find the slots of this doctor that are in the same day using docId
+      docSlotsModel
+        .find({ DoctorId: value._id }, { WorkingDay: dayNumber })
+        .then(async (elements) => {
+          //check that no conflict between existing slots
+          for (let element of elements) {
+            //idk if this is error (status 500) or not.
+            if (Math.abs(element.StartTime - startTime) <= 1);
+            res.status(500).json(error);
+          }
+        });
 
-  }catch(error){
+      const newSlot = await docSlotsModel.create({
+        WorkingDay: dayNumber,
+        StartTime: startTimeToAdd,
+        DoctorId: value._id,
+      });
+      res.status(200).json(newSlot);
+    });
+  } catch (error) {
     res.status(500).json(error);
   }
-}
+};
 
-const updateMySlotsDoc = async (req,res) => {
-  try{
+//update will basically update the time on;y, if you want to update the day this
+//means you delete it from the old day and insert a new one in the new day.
+const updateMySlotsDoc = async (req, res) => {
+  const { startTimeToUpdate, _idToUpdate } = req.body;
 
-  }catch(error){
+  try {
+    const mySlot = docSlotsModel.findById(_idToUpdate);
+    await docSlotsModel
+      .find({ DoctorId: mySlot.DoctorId }, { WorkingDay: mySlot.WorkingDay })
+      .then(async (elements) => {
+        for (let element of elements) {
+          if (
+            Math.abs(element.StartTime - startTimeToUpdate) <= 1 &&
+            element._id != _idToUpdate
+          ) {
+            res.status(500).json("can not update, conflict");
+            return;
+          }
+        }
+      });
+    const newSlot = await docSlotsModel.findByIdAndUpdate(_idToUpdate, {
+      $set: { StartTime: startTimeToUpdate },
+    });
+    res.status(200).json(newSlot);
+  } catch (error) {
     res.status(500).json(error);
   }
-}
+};
+
+const deleteMySlotsDoc = async (req, res) => {
+  const { _idToDelete } = req.body;
+  try {
+    const docSlot = await docSlotsModel.findByIdAndDelete(_idToDelete);
+    if (!docSlot) res.status(404).json("slot does not exist");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 module.exports = {
   getDoctorByID,
