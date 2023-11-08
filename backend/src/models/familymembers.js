@@ -43,5 +43,17 @@ const familyMemberSchema = new Schema({
   },
 });
 
+
+
+
+familyMemberSchema.statics.addEntry = async function (
+  familyMem
+  
+) {
+  const unSubscribed = await this.create({
+    FamilyMember: familyMem,
+    Status: "Unsubscribed"
+  });
+  return unSubscribed;};
 const FamilyMember = mongoose.model("FamilyMember", familyMemberSchema);
 module.exports = FamilyMember;

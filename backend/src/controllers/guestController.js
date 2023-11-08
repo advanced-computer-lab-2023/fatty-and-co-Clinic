@@ -1,9 +1,8 @@
 const { default: mongoose } = require("mongoose");
-
+const subscriptionModel=require("../models/subscriptions");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
-
 const generateToken = require("../common/jwt/generateToken");
 
 const User = require("../models/systemusers");
@@ -120,6 +119,10 @@ const createPatient = async (req, res) => {
         PhoneNumber: EmergencyContactNumber,
       },
     });
+     await subscriptionModel.addEntry(
+      patient,
+      "Unsubscribed"
+    );
     res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });

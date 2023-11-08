@@ -172,9 +172,9 @@ const viewHealthFam= async(req,res)=>{
   try {//changed this
     const username=req.user.Username;
     const Patient= await patientModel.findOne({Username:username});
-    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$ne:null}}).populate("FamilyMem");
+    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$e:null}}); //check eno family mem mesh user
     const package = await Promise.all(famMems.map(async (famMember) => {
-    const subscription = await subscriptionModel.findOne({ Patient: famMember.FamilyMem}).populate('Patient');
+    const subscription = await subscriptionModel.findOne({ FamilyMem: famMember}).populate('FamilyMem');
 
       if (subscription && subscription.Status === 'Subscribed') {
         return subscription; // Add the family member to the result if subscribed
@@ -245,7 +245,8 @@ const createFamilymember = async (req, res) => {
       Gender: Gender,
       Relation: Relation,
     });
-
+ 
+    await subscriptionModel.addEntry1(newFamilymember);
     res.status(200).json(newFamilymember);
    
   } catch (error) {
