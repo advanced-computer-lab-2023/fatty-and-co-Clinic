@@ -174,7 +174,7 @@ const viewHealthFam= async(req,res)=>{
     const Patient= await patientModel.findOne({Username:username});
     const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$e:null}}); //check eno family mem mesh user
     const package = await Promise.all(famMems.map(async (famMember) => {
-    const subscription = await subscriptionModel.findOne({ FamilyMem: famMember}).populate('FamilyMem');
+    const subscription = await subscriptionModel.findOne({ FamilyMem: famMember}).populate('FamilyMem').populate('PackageName');
 
       if (subscription && subscription.Status === 'Subscribed') {
         return subscription; // Add the family member to the result if subscribed
@@ -200,9 +200,9 @@ const viewHealthPackage= async (req, res) => {
   try {
     const current_user = req.user.Username;  //changed this
     const patient= await patientModel.findOne({Username:current_user});
-    const subscription = await subscriptionModel.findOne({Patient:patient, Status:"Subscribed"})
+    const subscription = await subscriptionModel.findOne({Patient:patient, Status:"Subscribed"}).populate('PackageName')
     if(subscription){
-    const myPackage= await packageModel.findOne({Name:subscription.PackageName})
+    const myPackage= subscription.PackageName
     res.status(200).send(myPackage);}
     else {
       res.status(404).send({Error:"Cannot find any current subscriptions!"})
