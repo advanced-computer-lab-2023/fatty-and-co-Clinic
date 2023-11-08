@@ -6,11 +6,16 @@ const subscriptionschema = new Schema(
     Patient: {
       type: mongoose.Schema.Types.ObjectId ,
       ref:"Patient",
-      required: true,
+      required: false,
+    },
+    FamilyMem:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"FamilyMember",
+      required:false
     },
       PackageName: {
-        type: String ,
-      //  ref: "Package",
+        type: mongoose.Schema.Types.ObjectId ,
+        ref: "Package",
         required: false,
       },
     Status: {
