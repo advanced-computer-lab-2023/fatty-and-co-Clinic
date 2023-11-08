@@ -146,7 +146,7 @@ router.get("/selectPrescription", selectPrescription);
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.post("/subscribehealthpackage",subscribehealthpackage)
-router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
+router.patch("/subscribepackagefamilymem/",subscribepackagefamilymem)
 router.get("/viewMyPackage/",viewHealthPackage)
 
 
