@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   Alert,
   AlertIcon,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
@@ -44,11 +45,24 @@ function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    e.preventDefault();
-    setSubmitting(true);
-    const { Username, Password } = values;
-    await login(Username, Password);
-    setSubmitting(false);
+    console.log(values);
+    try {
+      const { Username, Password } = values;
+      await login(Username, Password);
+      setSubmitting(false);
+    } catch (error) {
+      toast({
+        title: "An error occurred.",
+        description: error,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      setSubmitting(false);
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -106,7 +120,7 @@ function SignIn() {
                   <Field name="Username">
                     {({ field, form }) => (
                       <FormControl
-                        mb="32px"
+                        mb="24px"
                         isInvalid={errors.Username && touched.Username}
                       >
                         <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -115,20 +129,21 @@ function SignIn() {
                         <Input
                           {...field}
                           borderRadius="15px"
-                          mb="24px"
+                          // mb="24px"
                           fontSize="sm"
                           type="text"
                           placeholder="Your username"
                           size="lg"
                           // onChange={(e) => setUsername(e.target.value)}
                         />
+                        <FormErrorMessage>{errors.Username}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
                   <Field name="Password">
                     {({ field, form }) => (
                       <FormControl
-                        mb="32px"
+                        mb="36px"
                         isInvalid={errors.Password && touched.Password}
                       >
                         <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -136,8 +151,9 @@ function SignIn() {
                         </FormLabel>
                         <InputGroup>
                           <Input
+                            {...field}
                             borderRadius="15px"
-                            mb="36px"
+                            // mb="36px"
                             fontSize="sm"
                             type={showPassword ? "text" : "password"}
                             placeholder="Your password"
@@ -152,6 +168,7 @@ function SignIn() {
                             )}
                           </InputRightElement>
                         </InputGroup>
+                        <FormErrorMessage>{errors.Password}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
