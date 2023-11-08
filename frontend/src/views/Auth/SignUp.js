@@ -82,9 +82,9 @@ function SignUp() {
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
+  // const handleGenderChange = (event) => {
+  //   setGender(event.target.value);
+  // };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -278,7 +278,7 @@ function SignUp() {
                 <Field name="Password">
                   {({ field }) => (
                     <FormControl
-                      mb="36px"
+                      mb="24px"
                       isInvalid={errors.Password && touched.Password}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -355,9 +355,10 @@ function SignUp() {
                         placeholder="Enter a valid number"
                         // mb="24px"
                         size="lg"
-                        onChange={(event) => {
-                          const pattern = /^[0-9\b]+$/;
-                          if (!pattern.test(event.target.value)) {
+                        onKeyPress={(event) => {
+                          const pattern = /[0-9]/;
+                          const inputChar = String.fromCharCode(event.charCode);
+                          if (!pattern.test(inputChar)) {
                             event.preventDefault();
                           }
                         }}
@@ -512,7 +513,7 @@ function SignUp() {
                   SIGN UP
                 </Button>
                 {error && (
-                  <Alert status="error" mt={2} mb={4}>
+                  <Alert status="error" mt={2} mb={24}>
                     <AlertIcon />
                     {error}
                   </Alert>
