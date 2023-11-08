@@ -451,7 +451,7 @@ function docSignUp() {
                   SUBMIT REQUEST
                 </Button>
                 {error && (
-                  <Alert status="error" mt={2} mb={24}>
+                  <Alert status="error" mt={2} mb={4}>
                     <AlertIcon />
                     {error}
                   </Alert>
