@@ -207,7 +207,7 @@ function SignUp() {
                       isInvalid={errors.Username && touched.Username}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Username
+                        Username <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -232,7 +232,7 @@ function SignUp() {
                       isInvalid={errors.Name && touched.Name}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Name
+                        Name <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -257,7 +257,7 @@ function SignUp() {
                       isInvalid={errors.Email && touched.Email}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Email
+                        Email <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -282,7 +282,7 @@ function SignUp() {
                       isInvalid={errors.Password && touched.Password}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Password
+                        Password <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <InputGroup>
                         <Input
@@ -319,7 +319,7 @@ function SignUp() {
                       isInvalid={errors.DateOfBirth && touched.DateOfBirth}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Date of Birth
+                        Date of Birth <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -344,7 +344,7 @@ function SignUp() {
                       isInvalid={errors.MobileNum && touched.MobileNum}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Mobile Number
+                        Mobile Number <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -396,7 +396,7 @@ function SignUp() {
                         isInvalid={errors.Gender && touched.Gender}
                       >
                         <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                          Gender
+                          Gender <span style={{ color: "red" }}>*</span>
                         </FormLabel>
                         <RadioGroup
                           {...rest}
@@ -434,7 +434,8 @@ function SignUp() {
                         fontSize="sm"
                         fontWeight="normal"
                       >
-                        Emergency Contact Name
+                        Emergency Contact Name{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -465,7 +466,8 @@ function SignUp() {
                       }
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Emergency Contact Number
+                        Emergency Contact Number{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
