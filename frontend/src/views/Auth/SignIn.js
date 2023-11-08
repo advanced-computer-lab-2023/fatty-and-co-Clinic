@@ -204,7 +204,7 @@ function SignIn() {
                     SIGN IN
                   </Button>
                   {error && (
-                    <Alert status="error" mt={2} mb={4}>
+                    <Alert status="error" mt={2} mb={24}>
                       <AlertIcon />
                       {error}
                     </Alert>
