@@ -196,6 +196,60 @@ const viewOptionPackages= async(req,res)=>{
 }
 
 
+const payForSubscription= async(req,res)=>{
+  try{
+    const curr_user= req.user.Username
+    const patient= await patientModel.findOne({Username:curr_user})
+    const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('Patient').populate('PackageName')
+    const patientRelatives= await familyMemberModel.find({FamilyMem:patient}).populate('PatientID').populate('FamilyMem')//check eno family mem mesh user
+    var max=0
+    const result = await Promise.all(patientRelatives.map(async (patientRelative) => {
+    const subscription = await subscriptionModel.findOne({ Patient: patientRelative.PatientID}).populate('Patient').populate('PackageName');
+      if (subscription && subscription.Status === 'Subscribed' ) {
+          if(subscription.PackageName.Family_Discount>max){
+                 max=subscription.PackageName.Family_Discount;
+                return subscription
+      } }
+    }));
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    const enddate = new Date();
+    const year1 = (enddate.getFullYear())+1;
+    const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day1 = String(enddate.getDate()).padStart(2, '0');
+    
+    const formattedDate1 = `${year}-${month}-${day}`;
+    const renewaldate = new Date();
+    const year2 = (renewaldate.getFullYear())+1;
+    const month2 = String(renewaldate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day2 = String(renewaldate.getDate()+1).padStart(2, '0');
+    const formattedDate2 = `${year}-${month}-${day}`;
+    const amount=patSubscription.PackageName.Price -patSubscription.PackageName.Price*max/100;
+    if(patSubscription.Status==="Subscribed" && patSubscription.Renewaldate===currentDate){
+      if(patient.Wallet>amount ){
+      const updatePat= patientModel.findOneAndUpdate({Username:curr_user,Wallet:patient.Wallet-amount})
+      const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Startdate:currentDate,Renewaldate:renewaldate,Enddate:enddate})
+      res.status(200).json(updatePat,updateRenewal)
+      }
+      else{
+        const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled"})
+        res.status(404).json(updateRenewal, {"Not enough money"})
+      }
+      
+    }
+    
+  }
+    
+
+  }
+  catch{
+
+  }
+}
+
 const viewHealthPackage= async (req, res) => {
   try {
     const current_user = req.user.Username;  //changed this
