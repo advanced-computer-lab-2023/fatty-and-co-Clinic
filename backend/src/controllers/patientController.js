@@ -12,6 +12,7 @@ const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
 const { getPackages } = require("./packageController");
+const { Console } = require("console");
 
 
 // const createPatient = async (req, res) => {
@@ -396,7 +397,9 @@ const selectPrescription = async (req, res) => {
 };
 
 const subscribepackagefamilymem=async(req,res) =>{
+     console.log("entered");
   try {
+    console.log("entered try");
     const Startdate = new Date();
 
     const year = Startdate.getFullYear();
@@ -411,21 +414,30 @@ const subscribepackagefamilymem=async(req,res) =>{
     const day1 = String(enddate.getDate()).padStart(2, '0');
     
     const formattedDate1 = `${year}-${month}-${day}`;
-    const PatientUsername  = req.user.username;  //changed this
-    const Patient = await patientModel.findOne(PatientUsername);
+    const PatientUsername  = req.user.Username;  //changed this
+    const Patient = await patientModel.findOne({Username:PatientUsername});
+   // console.log(Patient) //changed this
     const {NationalId,PackageName}=req.body;
-    const Package = await  packageModel.findOne(PackageName);
-  const fam = await familyMemberModel.findOne(NationalId);
-  const famrelated=await familyMemberModel.findOne({PatientID:Patient.id,Fam:{$e:null}});
-  
-  if (famrelated==null){
-    res.status(400).send( "Error" );
-  }
+    const Package = await  packageModel.findOne({Name:PackageName});
+  const fam = await familyMemberModel.findOne({NationalId:NationalId});
+  const famrelated=await familyMemberModel.find({PatientID:Patient.id,NationalId:NationalId});
+    
+  console.log("Familymem") 
+  console.log(fam) 
+  console.log("Package") 
+  console.log(Package) 
 
+  if (famrelated==null){
+    res.status(400).send( "Wrong national id " );
+  }
+  else if (fam.FamilyMem !=null){
+    res.status(400).send( "This family member is a already a user " );
+  }
   else {
    const subscribtion=await subscriptionModel.create({
-    FamilyMem:fam,
-    PackageName:Package,
+    Patient:Patient.id,
+    FamilyMem:fam.id,
+    PackageName:Package.id,
     status:"Subscribed",
     Startdate:formattedDate,
     enddate:formattedDate1
@@ -434,6 +446,7 @@ const subscribepackagefamilymem=async(req,res) =>{
     res.status(200).send({ subscribtion });
   }
   } catch (error) {
+   // console.log("HII");
     res.status(400).send({ message: error.message });
   }
   
@@ -457,7 +470,7 @@ console.log("Entered");
     
     const formattedDate1 = `${year}-${month}-${day}`;
     const { PackageName,Status} = req.body;
-    const Package = await  packageModel.findOne(PackageName);
+    const Package = await  packageModel.findOne({Name:PackageName});
     const PatientUserName=req.user.Username;
     const Patient  = await patientModel.findOne({Username:PatientUserName}); 
    // console.log(PatientUserName);
