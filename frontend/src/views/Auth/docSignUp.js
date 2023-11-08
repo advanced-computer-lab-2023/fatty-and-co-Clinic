@@ -1,11 +1,18 @@
 // Chakra imports
 import {
   Box,
+  Radio,
   Button,
   Flex,
   FormControl,
   FormLabel,
+  HStack,
+  Icon,
   Input,
+  InputGroup,
+  InputRightElement,
+  Link,
+  Switch,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -16,6 +23,9 @@ import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
 
 function docSignUp() {
+  const titleColor = useColorModeValue("teal.300", "teal.200");
+  const textColor = useColorModeValue("gray.700", "white");
+  const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
   const bgColor = useColorModeValue("white", "gray.700");
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
@@ -260,6 +270,46 @@ function docSignUp() {
               </Button>
             </FormControl>
           </form>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            maxW="100%"
+            mt="0px"
+          >
+            <Text color={textColor} fontWeight="medium">
+              Already have an account?
+              <Link
+                color={titleColor}
+                ms="5px"
+                href="./signin "
+                fontWeight="bold"
+              >
+                Sign In
+              </Link>
+            </Text>
+            <Text
+              color={textColor}
+              fontWeight="medium"
+              align="center"
+              mb="5px"
+              mt="5px"
+              textColor="grey"
+            >
+              OR
+            </Text>
+            <Text color={textColor} fontWeight="medium">
+              Register as a patient
+              <Link
+                color={titleColor}
+                ms="5px"
+                href="./SignUp"
+                fontWeight="bold"
+              >
+                here
+              </Link>
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
