@@ -16,12 +16,13 @@ const {
 } = require("../controllers/testController");
  
 const {testAppointRef} = require ("../controllers/appointmentController")
-const {
-  testDocSlotRef,
-} = require ("../controllers/docSlotController");
+const {testDocSlotRef} = require ("../controllers/docSlotController");
 
 const {
   filterDoctorSlotEdition,
+  addMySlotsDoc,
+  deleteMySlotsDoc,
+  updateMySlotsDoc,
 } = require ("../controllers/doctorController");
 
 const router = express.Router();
@@ -136,6 +137,7 @@ router.post("/createPrescription", (req, res) => {
   createPrescription(req, res);
 });
 
+
 router.post("/createDocSlot", (req, res) => {
   createDocSlot(req, res);
 });
@@ -147,13 +149,25 @@ router.get("/testDocSlotRef", (req, res) => {
 router.get("/testDocSlotRef", (req, res) => {
   testDocSlotRef(req, res);
 });
-router.get("/filterDoctorSlotEdition", (req, res) => {
-  filterDoctorSlotEdition(req, res);
-});
 
 router.get("/testAppointRef", (req, res) => {
   testAppointRef(req, res);
 });
 
+router.get("/filterDoctorSlotEdition", (req, res) => {
+  filterDoctorSlotEdition(req, res);
+});
+
+router.post("/addMySlotsDoc", (req, res) => {
+  addMySlotsDoc(req, res);
+});
+
+router.post("/updateMySlotsDoc", (req, res) => {
+  updateMySlotsDoc(req, res);
+});
+
+router.post("/deleteMySlotsDoc", (req, res) => {
+  deleteMySlotsDoc(req, res);
+});
 
 module.exports = router;
