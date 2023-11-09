@@ -307,9 +307,13 @@ const subscription= await subscriptionModel.findOne({FamilyMem:relative}).popula
   const formattedDate4 = `${year4}-${month4}-${day4}`;
   const max= subDiscount.PackageName!=null && subDiscount.Status==="Subscribed"?subDiscount.PackageName.Family_Discount:0
   const amount=subscription.PackageName.Price-(max);
+    
+  //console.log(max);
   console.log("Amount");
-console.log(subscription.PackageName.Price);
-  if(subscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
+  console.log(formattedDate);
+  console.log(patSubscription.Status);
+console.log(patSubscription.Status=="Subscribed");
+  if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
     console.log("entered this if ")
     if(patient.Wallet>amount ){
       console.log("entered this if ")
@@ -318,16 +322,14 @@ console.log(subscription.PackageName.Price);
     }
     else{
       const updateRenewal= await subscriptionModel.findOneAndUpdate({FamilyMem:relative},{Status:"Cancelled", Enddate:formattedDate})
-      res.status(404).json(updateRenewal)
+      res.status(200).json(updateRenewal)
     }
   }
 else {
   res.status(400).send({ message: "Error" });
 }}}
-
-  
   catch{
-    res.status(400).send({ message: "Error" });
+    res.status(400).send({ message: "Error catch" });
   }
 }
 
