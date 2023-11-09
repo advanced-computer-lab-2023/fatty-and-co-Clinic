@@ -310,29 +310,23 @@ const viewHealthFamwithstatus= async(req,res)=>{
   try {//changed this
     const username=req.user.Username;
     const Patient= await patientModel.findOne({Username:username});
-    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$e:null}}); //check eno family mem mesh user
-   
+    const famMems= await familyMemberModel.find({$or:[{"PatientID":Patient},{"FamilyMem":Patient}],function(err, docs){
+      if(!err) res.send(docs);
+   }}).populate("PatientID").populate("FamilyMem"); 
+    //check eno family mem mesh user
     const package = await Promise.all(famMems.map(async (famMember) => {
-      const subscription = await subscriptionModel.findOne({ FamilyMem: famMember})
-      .select('Status Startdate Renewaldate Enddate') // Include the fields you want from the 'subscriptionModel'
-      .populate({
-      path: "FamilyMem",
-        select: "Name" // Include the fields you want from the 'Patient' model
-      })
-      .populate({
-       path: "PackageName",
-        select: "Name" // Include the fields you want from the 'PackageName' model
-      });
-  
-        if (subscription ) {
-          return subscription; // Add the family member to the result if subscribed
-        } // Or you can handle differently for non-subscribed members
-      }));
-      res.status(200).json(package);
+    const value= await patientModel.findOne({Username:famMember.PatientID.Username})  
+    const subscription = await subscriptionModel.findOne({ Patient: famMember.FamilyMem.Username===username?value:famMember.FamilyMem}).populate('FamilyMem').populate('PackageName');
+      if (subscription ) {
+        return subscription; // Add the family member to the result if subscribed
+      } // Or you can handle differently for non-subscribed members
+    }));
+    res.status(200).json(package);
 }
 catch{
-     res.json(404).json({err:"No family members are subscribed"})
-}}
+     res.json(404).json({error:"No family members are subscribed"})
+}
+}
 //hi khalkhoola
 
 
