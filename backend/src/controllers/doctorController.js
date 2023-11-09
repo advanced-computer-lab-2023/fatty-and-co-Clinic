@@ -469,69 +469,81 @@ async function isDocAvailable(docSlot) {
 async function checkFilterSpeciality() {}
 
 const addMySlotsDoc = async (req, res) => {
-  const { dayToAdd, startTimeToAdd } = req.body;
+  const { DayToAdd, StartTimeToAdd } = req.body;
   const username = req.user.Username;
-  const dayNumber = getDayNumberFromName(dayToAdd);
+  const dayNumber = getDayNumberFromName(DayToAdd);
   try {
-    await doctorModel.findOne({ Username: username }).then(async (value) => {
-      //find the slots of this doctor that are in the same day using docId
-      docSlotsModel
-        .find({ DoctorId: value._id }, { WorkingDay: dayNumber })
-        .then(async (elements) => {
-          //check that no conflict between existing slots
-          for (let element of elements) {
-            //idk if this is error (status 500) or not.
-            if (Math.abs(element.StartTime - startTime) <= 1);
-            res.status(500).json(error);
-          }
-        });
-
-      const newSlot = await docSlotsModel.create({
-        WorkingDay: dayNumber,
-        StartTime: startTimeToAdd,
-        DoctorId: value._id,
-      });
-      res.status(200).json(newSlot);
+    const doctor = await doctorModel.findOne({ Username: username });
+    //find the slots of this doctor that are in the same day using docId
+    const slots = await docSlotsModel.find({
+      DoctorId: doctor._id,
+      WorkingDay: dayNumber,
     });
+
+    //check that no conflict between existing slots
+    for (let element of slots) {
+      //idk if this is error (status 500) or not.
+      if (Math.abs(element.StartTime - StartTimeToAdd) < 1) {
+        res.status(500).send({ message: "can not add, conflict" });
+        return;
+      }
+    }
+
+    const newSlot = await docSlotsModel.create({
+      WorkingDay: dayNumber,
+      StartTime: StartTimeToAdd,
+      DoctorId: doctor._id,
+    });
+    res.status(200).send({ newSlot });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({ message: error.message });
   }
 };
 
 //update will basically update the time on;y, if you want to update the day this
 //means you delete it from the old day and insert a new one in the new day.
 const updateMySlotsDoc = async (req, res) => {
-  const { startTimeToUpdate, _idToUpdate } = req.body;
+  const { StartTimeToUpdate } = req.body;
+  const { id } = req.params;
 
   try {
-    const mySlot = docSlotsModel.findById(_idToUpdate);
-    await docSlotsModel
-      .find({ DoctorId: mySlot.DoctorId }, { WorkingDay: mySlot.WorkingDay })
-      .then(async (elements) => {
-        for (let element of elements) {
-          if (
-            Math.abs(element.StartTime - startTimeToUpdate) <= 1 &&
-            element._id != _idToUpdate
-          ) {
-            res.status(500).json("can not update, conflict");
-            return;
-          }
-        }
-      });
-    const newSlot = await docSlotsModel.findByIdAndUpdate(_idToUpdate, {
-      $set: { StartTime: startTimeToUpdate },
+    const mySlot = await docSlotsModel.findById(id);
+    const slots = await docSlotsModel.find({
+      DoctorId: mySlot.DoctorId,
+      WorkingDay: mySlot.WorkingDay,
     });
-    res.status(200).json(newSlot);
+
+    for (let element of slots) {
+      if (
+        Math.abs(element.StartTime - StartTimeToUpdate) < 1 &&
+        element._id != id
+      ) {
+        res.status(500).json("can not update, conflict");
+        return;
+      }
+    }
+    const newSlot = await docSlotsModel.findByIdAndUpdate(
+      id,
+      {
+        StartTime: StartTimeToUpdate,
+      },
+      { new: true }
+    );
+    res.status(200).send({ newSlot });
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
 const deleteMySlotsDoc = async (req, res) => {
-  const { _idToDelete } = req.body;
+  const { id } = req.params;
   try {
-    const docSlot = await docSlotsModel.findByIdAndDelete(_idToDelete);
-    if (!docSlot) res.status(404).json("slot does not exist");
+    const docSlot = await docSlotsModel.findByIdAndDelete(id);
+    if (!docSlot) {
+      res.status(404).json("slot does not exist");
+      return;
+    }
+    res.status(200).json(docSlot);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -569,10 +581,10 @@ const viewPastAppoitmentsDoc = async (req, res) => {
 
 //the username of the doctor will be passed and added to the viewDoctorDetails page
 const viewAllAvailableSlots = async (req, res) => {
-  const { username } = req.params;
+  const { id } = req.params;
   try {
-    const doctor = await doctorModel.find({ Username: username });
-    const allDocSlots = await docSlotsModel.find({ DoctorId: doctor._id });
+    // const doctor = await doctorModel.findById(id);
+    const allDocSlots = await docSlotsModel.find({ DoctorId: id });
     res.status(200).json(allDocSlots);
   } catch (error) {
     res.status(500).json(error);

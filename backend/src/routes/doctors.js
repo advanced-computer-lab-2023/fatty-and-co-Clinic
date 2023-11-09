@@ -148,7 +148,7 @@ router.post("/addMySlotsDoc", checkDoctor, (req, res) => {
   addMySlotsDoc(req, res);
 });
 
-router.put("/updateMySlotsDoc/:id", checkDoctor, (req, res) => {
+router.patch("/updateMySlotsDoc/:id", checkDoctor, (req, res) => {
   updateMySlotsDoc(req, res);
 });
 
@@ -164,7 +164,7 @@ router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
   viewPastAppoitmentsDoc(req, res);
 });
 
-router.get("/viewAllAvailableSlots", checkPatient, (req, res) => {
+router.get("/viewAllAvailableSlots/:id", checkPatient, (req, res) => {
   viewAllAvailableSlots(req, res);
 });
 
