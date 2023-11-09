@@ -193,6 +193,15 @@ var dashRoutes = [
     layout: "/rtl",
   },
   {
+    path: "/payment",
+    name: "Payment",
+    rtlName: "لوحة القيادة",
+    icon: <RocketIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: MakePayment,
+    layout: "/patient",
+  },
+  {
     name: "ACCOUNT PAGES",
     category: "account",
     rtlName: "صفحات",
@@ -233,15 +242,6 @@ var dashRoutes = [
         component: docSignUp,
         layout: "/auth",
       },
-      {
-        path: "/payment",
-        name: "Payment",
-        rtlName: "لوحة القيادة",
-        icon: <RocketIcon color="inherit" />,
-        secondaryNavbar: true,
-        component: MakePayment,
-        layout: "/patient",
-      }
     ],
   },
 ];

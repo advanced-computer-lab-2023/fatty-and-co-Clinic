@@ -9,11 +9,10 @@ const CARD_OPTIONS = {
       iconColor: "#c4f0ff",
       color: "#fff",
       fontWeight: 500,
-      fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
       fontSize: "16px",
       fontSmoothing: "antialiased",
       ":-webkit-autofill": { color: "#fce883" },
-      "::placeholder": { color: "#87bbfd" },
+      "::placeholder": { color: "#fff" },
     },
     invalid: {
       iconColor: "#ffc7ee",
@@ -22,7 +21,7 @@ const CARD_OPTIONS = {
   },
 };
 
-export default function PaymentForm() {
+const PaymentForm = () => {
   const [success, setSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
@@ -37,13 +36,10 @@ export default function PaymentForm() {
     if (!error) {
       try {
         const { id } = paymentMethod;
-        const response = await axios.post(
-          "http://localhost:8000/payment/checkout",
-          {
-            id,
-            amount: 1000,
-          }
-        );
+        const response = await axios.post("http://localhost:8000/payments/cardPayment", {
+          id,
+          amount: 1000,
+        });
         if (response.data.success) {
           console.log("Successful payment");
           setSuccess(true);
@@ -56,20 +52,65 @@ export default function PaymentForm() {
     }
   };
 
+  const formContainerStyle = {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "60%",
+    minHeight: "60vh",
+    margin: "auto",
+    marginTop: "20vh",
+    padding: "20px",
+    border: "1px solid #ddd",
+    backgroundColor: "#4fd1c5",
+    backgroundImage: "url('your-texture-image-url.jpg')",
+    backgroundSize: "cover",
+  };
+
+  const cardElementStyle = {
+    width: "100%",
+    height: "40px",
+    padding: "15px",
+    marginBottom: "10px",
+    backgroundColor: "#f9f9f9", // Set the background color for the data boxes
+  };
+
+  const buttonStyle = {
+    width: "80%",
+    marginTop: "auto",
+    position: "absolute",
+    bottom: "10%",
+    left: "50%",
+    transform: "translateX(-50%)",
+    color: "#000",
+    backgroundColor: "#fff",
+    border: "none",
+    padding: "10px",
+    cursor: "pointer",
+  };
+
   return (
-    <>
-      (!success ?
-      <form onSubmit={handleSubmit}>
-        <fieldset className="FormGroup">
-          <div className="FormRow">
-            <CardElement options={CARD_OPTIONS} />
-          </div>
-        </fieldset>
-        <button>Pay</button>
-      </form>
-      <div>
-        <h2>Successful Payment</h2>
-      </div>
-    </>
+    <div style={formContainerStyle}>
+      {!success ? (
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <fieldset className="FormGroup">
+            <div className="FormRow">
+              <CardElement options={CARD_OPTIONS} style={cardElementStyle} />
+            </div>
+          </fieldset>
+          <button type="submit" style={buttonStyle}>
+            Pay
+          </button>
+        </form>
+      ) : (
+        <div>
+          <h2 style={{ color: "#fff" }}>Successful Payment</h2>
+        </div>
+      )}
+    </div>
   );
-}
+};
+
+export default PaymentForm;

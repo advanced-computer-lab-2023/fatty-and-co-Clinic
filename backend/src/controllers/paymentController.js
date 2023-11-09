@@ -2,30 +2,26 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 
 const payWithCard = async (req, res) => {
-    const { priceId } = req.body; // Assuming you send the Price ID in the request body
-    console.log(priceId);
+    console.log(req.body);
+    const { amount, id } = req.body;
     try {
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "payment",
-            line_items: [
-                {
-                    price: priceId,
-                },
-            ],
-            success_url: `http://localhost:3000/success`, // Adjust success and cancel URLs
-            cancel_url: `http://localhost:3000/cancel`,
+        const payment = await stripe.paymentIntents.create({
+            amount,
+            currency: "USD",
+            description: "Doctor's Appointment",
+            payment_method: id,
+            confirm: true
         });
-        
-        console.log(session);
+        console.log("Payment", payment);
         res.json({
-            url: session.url,
-            // success: true
+            message: "Payment successful",
+            success: true
         });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({
-            message: "Something went wrong",
+    } catch (error) {
+        console.log("Error", error);
+        res.json({
+            message: "Payment failed",
+            success: false
         });
     }
 };
