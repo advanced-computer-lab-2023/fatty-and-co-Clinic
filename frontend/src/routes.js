@@ -22,7 +22,8 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-import viewMyPackage from "views/Patient/viewMyPackage"
+import ViewMyPackage from "views/Patient/viewMyPackage"
+import ViewFamPackages from "views/Patient/viewFamPackages";
 import {
   HomeIcon,
   StatsIcon,
@@ -50,7 +51,14 @@ var dashRoutes = [
     path: "/viewMyPackage",
     name: "My Package",
     icon: <HomeIcon color="inherit" />,
-    component: viewMyPackage,
+    component: ViewMyPackage,
+    layout: "/patient",
+  },
+  {
+    path: "/viewFamPackage",
+    name: "Family Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackages,
     layout: "/patient",
   },
   {
