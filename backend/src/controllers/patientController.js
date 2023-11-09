@@ -767,6 +767,7 @@ module.exports = {
   getEmergencyContact,
   subscribepackagefamilymem,
   payForFamSubscription,
+  cancelSubscription,
   cancelSubscriptionfamilymember,
   payForSubscription,
   viewHealthPackagewithstatus,
