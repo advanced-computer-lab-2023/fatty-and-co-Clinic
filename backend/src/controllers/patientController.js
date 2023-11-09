@@ -197,23 +197,26 @@ const viewOptionPackages= async(req,res)=>{
   }
 }
 
-
 const payForSubscription= async(req,res)=>{
   try{
     const curr_user= req.user.Username
-    console.log(curr_user)
     const patient= await patientModel.findOne({Username:curr_user})
     const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName')
-    const patientRelatives= await familyMemberModel.find({FamilyMem:patient}).populate('PatientID').populate('FamilyMem')//check eno family mem mesh user
+    const patientRelatives = await familyMemberModel.find({
+      $or: [
+          { "PatientID": patient, "FamilyMem": { $ne: null } },
+          { "FamilyMem": patient }
+      ]
+  }).populate("PatientID").populate("FamilyMem");   
     var max=0
     for (let i=0;i<patientRelatives.length;i++) {
-      const subscription = await subscriptionModel.findOne({ Patient: patientRelatives[i].PatientID }).populate("PackageName")
-      console.log(subscription)
-      if (subscription && subscription.Status === 'Subscribed' && subscription.PackageName.Family_Discount > max) {
-        max = subscription.PackageName.Family_Discount;
+      const value= patientRelatives[i].PatientID.Username===curr_user? await subscriptionModel.findOne({Patient:patientRelatives[i].FamilyMem}).populate('PackageName').populate("Patient"):await subscriptionModel.findOne({Patient:patientRelatives[i].PatientID}).populate('PackageName').populate("Patient")
+      if (value && value.Status === 'Subscribed' && value.PackageName.Family_Discount > max) {
+        max = value.PackageName.Family_Discount;
         
       }
     }
+    console.log(max)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -258,7 +261,6 @@ const payForSubscription= async(req,res)=>{
     res.status(400).send({ message: "Failed to pay" });
   }
 }
-
 
 const payForFamSubscription= async(req,res)=>{
   console.log("Entered");
