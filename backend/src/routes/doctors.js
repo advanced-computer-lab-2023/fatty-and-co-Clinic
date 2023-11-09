@@ -24,6 +24,7 @@ const {
   checkAdmin,
 } = require("../common/middleware/checkType");
 
+router = express.Router();
 
 /**
  * @route GET /doctors
@@ -139,33 +140,31 @@ router.get(
   viewPatientInfoAndHealthRecords
 );
 
-
-
-router.get("/filterDoctorSlotEdition",checkPatient, (req, res) => {
+router.get("/filterDoctorSlotEdition", checkPatient, (req, res) => {
   filterDoctorSlotEdition(req, res);
 });
 
-router.post("/addMySlotsDoc",checkDoctor, (req, res) => {
+router.post("/addMySlotsDoc", checkDoctor, (req, res) => {
   addMySlotsDoc(req, res);
 });
 
-router.put("/updateMySlotsDoc/:id",checkDoctor, (req, res) => {
+router.put("/updateMySlotsDoc/:id", checkDoctor, (req, res) => {
   updateMySlotsDoc(req, res);
 });
 
-router.delete("/deleteMySlotsDoc/:id",checkDoctor, (req, res) => {
+router.delete("/deleteMySlotsDoc/:id", checkDoctor, (req, res) => {
   deleteMySlotsDoc(req, res);
 });
 
-router.get("/viewUpcomingAppointmentsDoc",checkDoctor, (req, res) => {
+router.get("/viewUpcomingAppointmentsDoc", checkDoctor, (req, res) => {
   viewUpcomingAppointmentsDoc(req, res);
 });
 
-router.get("/viewPastAppoitmentsDoc",checkDoctor, (req, res) => {
+router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
   viewPastAppoitmentsDoc(req, res);
 });
 
-router.get("/viewAllAvailableSlots",checkPatient, (req, res) => {
+router.get("/viewAllAvailableSlots", checkPatient, (req, res) => {
   viewAllAvailableSlots(req, res);
 });
 
