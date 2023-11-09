@@ -9,6 +9,13 @@ const {
   filterDoctor,
   updateDoctor,
   viewPatientInfoAndHealthRecords,
+  filterDoctorSlotEdition,
+  addMySlotsDoc,
+  deleteMySlotsDoc,
+  updateMySlotsDoc,
+  viewUpcomingAppointmentsDoc,
+  viewPastAppoitmentsDoc,
+  viewAllAvailableSlots,
 } = require("../controllers/doctorController");
 
 const {
@@ -17,7 +24,6 @@ const {
   checkAdmin,
 } = require("../common/middleware/checkType");
 
-const router = express.Router();
 
 /**
  * @route GET /doctors
@@ -83,7 +89,7 @@ router.get("/search", getDoctorByNameAndSpeciality);
  * @param {date} date - The date you're looking for an appointment on
  * @param {number} hour - The hour you're looking for an appointment on
  */
-router.get("/filter", checkPatient, filterDoctor);
+router.get("/filter2", checkPatient, filterDoctor);
 
 /**
  * @route POST /doctors/addDoctor
@@ -132,5 +138,35 @@ router.get(
   checkDoctor,
   viewPatientInfoAndHealthRecords
 );
+
+
+
+router.get("/filterDoctorSlotEdition",checkPatient, (req, res) => {
+  filterDoctorSlotEdition(req, res);
+});
+
+router.post("/addMySlotsDoc",checkDoctor, (req, res) => {
+  addMySlotsDoc(req, res);
+});
+
+router.put("/updateMySlotsDoc/:id",checkDoctor, (req, res) => {
+  updateMySlotsDoc(req, res);
+});
+
+router.delete("/deleteMySlotsDoc/:id",checkDoctor, (req, res) => {
+  deleteMySlotsDoc(req, res);
+});
+
+router.get("/viewUpcomingAppointmentsDoc",checkDoctor, (req, res) => {
+  viewUpcomingAppointmentsDoc(req, res);
+});
+
+router.get("/viewPastAppoitmentsDoc",checkDoctor, (req, res) => {
+  viewPastAppoitmentsDoc(req, res);
+});
+
+router.get("/viewAllAvailableSlots",checkPatient, (req, res) => {
+  viewAllAvailableSlots(req, res);
+});
 
 module.exports = router;

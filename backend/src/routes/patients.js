@@ -16,6 +16,8 @@ const {
   selectPatient,
   selectPrescription,
   getEmergencyContact,
+  viewUpcomingAppointmentsPat, 
+  viewPastAppoitmentsPat,
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -145,6 +147,15 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
 router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
 router.get("/viewMyPackage/:PatientID",viewHealthPackage)
+
+
+router.get("/viewUpcomingAppointmentsPat",checkPatient, (req, res) => {
+  viewUpcomingAppointmentsPat(req, res);
+});
+
+router.get("/viewPastAppoitmentsPat",checkPatient, (req, res) => {
+  viewPastAppoitmentsPat(req, res);
+});
 
 
 module.exports = router;
