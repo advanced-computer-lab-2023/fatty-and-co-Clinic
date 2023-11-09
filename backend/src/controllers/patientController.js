@@ -199,7 +199,7 @@ const viewOptionPackages= async(req,res)=>{
 
 const payForSubscription= async(req,res)=>{
   try{
-
+//update
 
     const curr_user= req.user.Username
     console.log(curr_user)
