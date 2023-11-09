@@ -55,7 +55,6 @@ const requestSchema = new Schema(
       type: String,
       enum: ["Pending", "Accepted", "Rejected"],
       required: true,
-      default: "Pending",
     },
   },
   { timestamps: true }

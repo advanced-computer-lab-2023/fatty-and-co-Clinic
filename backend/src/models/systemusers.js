@@ -75,14 +75,7 @@ systemUsersSchema.statics.login = async function (username, password) {
 
   const user = await this.findOne({ Username: username });
 
-  if (
-    !user ||
-    !(
-      user.Type === "Patient" ||
-      user.Type === "Doctor" ||
-      user.Type === "Admin"
-    )
-  ) {
+  if (!user) {
     throw Error("Username does not exist");
   }
 

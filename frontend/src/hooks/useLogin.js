@@ -18,7 +18,7 @@ export const useLogin = () => {
         Password: password,
       });
       const json = JSON.stringify(res.data);
-      localStorage.setItem("fattyandcoClinicUser", json); // TODO: make it session storage instead of local storage if remember me not ticked
+      localStorage.setItem("user", json);
       dispatch({ type: "LOGIN", payload: res.data });
       setLoading(false);
       return res;

@@ -106,8 +106,6 @@ const getPatientUsername = async (req, res) => {
   }
 };
 
-// I think this is useless?
-// if not useless it needs to delete from user model, apppointments, etc just like in admin controller
 const deletePatient = async (req, res) => {
   try {
     const patient = await patientModel.findByIdAndDelete(req.params.id);
@@ -119,10 +117,7 @@ const deletePatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const patient = await patientModel.findByIdAndUpdate(req.user.id, req.body);
     res.status(200).send({ patient });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -478,9 +473,9 @@ const selectPatient = async (req, res) => {
 // Get prescriptions of a given patient. Can also be filtered
 // using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
-  // const query = req.query;
+  const query = req.query;
   // console.log(query);
-  const patientUsername = req.user.Username; // Extract patientUsername
+  const patientUsername = query.PatientUsername; // Extract patientUsername
   // console.log(req.params.patientUsername);
 
   try {
