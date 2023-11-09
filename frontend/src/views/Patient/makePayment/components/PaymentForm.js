@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { useAuthContext } from "hooks/useAuthContext";
+import { API_PATHS } from "API/api_paths";
+import { Input } from "@chakra-ui/react";
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -21,7 +24,9 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = () => {
+const PaymentForm = ({amount}) => {
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
@@ -36,10 +41,15 @@ const PaymentForm = () => {
     if (!error) {
       try {
         const { id } = paymentMethod;
-        const response = await axios.post("http://localhost:8000/payments/cardPayment", {
-          id,
-          amount: 1000,
-        });
+
+        const response = await axios.post(
+          API_PATHS.cardPayment,
+          {
+            id,
+            amount: amount * 100,
+          },
+          { headers: { Authorization } }
+        );
         if (response.data.success) {
           console.log("Successful payment");
           setSuccess(true);
@@ -65,7 +75,7 @@ const PaymentForm = () => {
     padding: "20px",
     border: "1px solid #ddd",
     backgroundColor: "#4fd1c5",
-    backgroundImage: "url('your-texture-image-url.jpg')",
+    backgroundImage: "url('../../../assets/img/people-image.png')",
     backgroundSize: "cover",
   };
 
@@ -109,6 +119,7 @@ const PaymentForm = () => {
           <h2 style={{ color: "#fff" }}>Successful Payment</h2>
         </div>
       )}
+      {/* <Input type="number" onChange={(e) => setAmount(e.target.value)}></Input> */}
     </div>
   );
 };

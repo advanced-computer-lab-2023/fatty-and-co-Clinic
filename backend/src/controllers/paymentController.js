@@ -10,7 +10,8 @@ const payWithCard = async (req, res) => {
             currency: "USD",
             description: "Doctor's Appointment",
             payment_method: id,
-            confirm: true
+            confirm: true,
+            return_url: 'http://localhost:3000/'
         });
         console.log("Payment", payment);
         res.json({
