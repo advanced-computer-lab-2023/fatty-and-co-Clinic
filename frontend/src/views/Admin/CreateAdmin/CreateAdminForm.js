@@ -15,6 +15,8 @@ import { API_PATHS } from "API/api_paths";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
+import { useAuthContext } from "hooks/useAuthContext";
+import axios from "axios";
 
 function CreateAdminForm() {
   const [Username, setUsername] = useState("");
@@ -24,20 +26,20 @@ function CreateAdminForm() {
 
   const textColor = useColorModeValue("gray.700", "white");
 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Send the username to the backend for deletion
-    try {
-      const response = await fetch(API_PATHS.createAdmin, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Username, Email, Password }),
-      });
-
-      if (response.ok) {
+    axios
+      .post(
+        API_PATHS.createAdmin,
+        { Username, Email, Password },
+        { headers: { Authorization } }
+      )
+      .then((response) => {
         // Handle success or provide feedback to the user
         toast({
           title: "Admin created successfully",
@@ -46,19 +48,17 @@ function CreateAdminForm() {
           isClosable: true,
         });
         setUsername(""); // Clear the input field
-      } else {
-        // Handle errors or provide feedback to the user
+      })
+      .catch((error) => {
         toast({
           title: "Failed to create admin",
-          description: "An error occurred while creating the admin.",
+          description: error.response.data.error,
           status: "error",
           duration: 9000,
           isClosable: true,
         });
-      }
-    } catch (error) {
-      console.error("An error occurred", error);
-    }
+        console.error("An error occurred", error);
+      });
   };
 
   return (

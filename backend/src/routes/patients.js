@@ -57,6 +57,7 @@ router.get("/getAllPatients", getAllPatients);
  * @access Public
  * @param {string} id - The ID of the patient to delete
  */
+// TODO: add type check as middleware if needed
 router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one deleting is an admin or the currently logged in patient
 
 /**
@@ -88,7 +89,7 @@ router.get("/viewHealthFamwithstatus",viewHealthFamwithstatus);
  */
 // TODO: does it have to be a patient? or can it be an admin?
 // TODO: check if the one updating is an admin or the currently logged in patient
-router.patch("/updatePatient", checkPatient, updatePatient);
+router.patch("/updatePatient/:id", checkPatient, updatePatient);
 
 /**
  * @route GET /patients/getPatientUsername/:Username
@@ -131,6 +132,7 @@ router.get("/getFamilymember", checkPatient, GetFamilymembers);
  * @desc Returns a list of all prescriptions
  * @access Public
  */
+// TODO: add type check as middleware if needed
 router.get("/getPrescriptions", getPrescriptions);
 
 /**
@@ -138,6 +140,7 @@ router.get("/getPrescriptions", getPrescriptions);
  * @desc Returns a list of all patients
  * @access Public
  */
+// TODO: add type check as middleware if needed
 router.get("/selectPatient", selectPatient);
 
 /**
@@ -146,6 +149,7 @@ router.get("/selectPatient", selectPatient);
  * @access Public
  * @param {string} id - The ID of the prescription to get
  */
+// TODO: add type check as middleware if needed
 router.get("/selectPrescription", selectPrescription);
 
 /**
@@ -154,6 +158,7 @@ router.get("/selectPrescription", selectPrescription);
  * @access Public
  * @param {string} username - The username of the patient
  */
+// TODO: add type check as middleware if needed
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.post("/subscribehealthpackage",subscribehealthpackage)
 router.post("/subscribepackagefamilymem",subscribepackagefamilymem)

@@ -17,6 +17,7 @@ const patientSchema = new Schema(
     MobileNum: {
       type: Number,
       required: true,
+      unique: true,
     },
     DateOfBirth: {
       type: Date,
