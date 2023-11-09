@@ -32,7 +32,6 @@ const doctorSchema = new Schema(
     },
     Speciality: {
       type: String,
-      lowercase: true,
       required: false,
     },
     //Adding working days and working hours to doctor

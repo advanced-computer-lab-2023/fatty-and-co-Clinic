@@ -5,7 +5,7 @@ export const useLogout = () => {
   const { dispatch } = useAuthContext();
 
   const logout = () => {
-    localStorage.removeItem("fattyandcoClinicUser"); // TODO: remove from session storage too
+    localStorage.removeItem("user");
     dispatch({ type: "LOGOUT" });
   };
   return logout;
