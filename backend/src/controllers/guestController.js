@@ -100,6 +100,7 @@ const createPatient = async (req, res) => {
     Gender,
     EmergencyContactNumber,
     EmergencyContactName,
+    Wallet
   } = req.body;
   try {
     const user = await systemUserModel.addEntry(
@@ -118,6 +119,7 @@ const createPatient = async (req, res) => {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
       },
+      Wallet:Wallet
     });
      await subscriptionModel.addEntry(
       patient,
