@@ -265,6 +265,31 @@ const viewHealthPackage= async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const viewHealthPackagewithstatus = async (req, res) => {
+  try {
+    const current_user = req.user.Username;
+    const patient = await patientModel.findOne({ Username: current_user });
+
+    if (!patient) {
+      return res.status(404).send({ Error: "Patient not found!" });
+    }
+
+    const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate({
+      path: 'PackageName',
+      select: 'Status Startdate Renewaldate Enddate' // Include the fields you want from the 'PackageName' model
+    });
+
+    if (subscription.length > 0) {
+      res.status(200).send(subscription);
+    } else {
+      res.status(404).send({ Error: "Cannot find any current subscriptions!" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 
 //hi khalkhoola
 
@@ -497,8 +522,8 @@ console.log("Entered");
    else if (subscribtion.Status!="Subscribed"){
     console.log("Entered the if");
     
-    const patient12 = await subscriptionModel.findOneAndUpdate(
-      { Patient:Patient,
+    const patient12 = await subscriptionModel.findOneAndUpdate({Patient:Patient},
+      { 
         PackageName:Package,
         Status:"Subscribed",
         Startdate:formattedDate,
@@ -517,6 +542,7 @@ console.log("Entered");
   }
   
 }
+
 
 
 
@@ -639,5 +665,6 @@ module.exports = {
   getEmergencyContact,
   subscribepackagefamilymem,
   cancelSubscriptionfamilymember,
-  payForSubscription
+  payForSubscription,
+  viewHealthPackagewithstatus
 };

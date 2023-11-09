@@ -19,7 +19,8 @@ const {
   selectPrescription,
   getEmergencyContact,
   cancelSubscriptionfamilymember,
-  payForSubscription
+  payForSubscription,
+  viewHealthPackagewithstatus
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -68,6 +69,7 @@ router.get("/getOptionPackages", viewOptionPackages);
 router.patch("/cancelSubscription",cancelSubscription)
 router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember)
 router.patch("/payForSubscription",payForSubscription)
+router.get("/viewHealthPackagewithstatus",viewHealthPackagewithstatus)
 //router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id
