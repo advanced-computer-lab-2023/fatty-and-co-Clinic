@@ -20,7 +20,8 @@ const {
   getEmergencyContact,
   cancelSubscriptionfamilymember,
   payForSubscription,
-  viewHealthPackagewithstatus
+  viewHealthPackagewithstatus,
+  viewHealthFamwithstatus
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -66,10 +67,11 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
 router.get("/getPatient/:id", getPatient);
 router.get("/getOptionPackages", viewOptionPackages);
 
-router.patch("/cancelSubscription",cancelSubscription)
-router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember)
-router.patch("/payForSubscription",payForSubscription)
-router.get("/viewHealthPackagewithstatus",viewHealthPackagewithstatus)
+router.patch("/cancelSubscription",cancelSubscription);
+router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember);
+router.patch("/payForSubscription",payForSubscription);
+router.get("/viewHealthPackagewithstatus",viewHealthPackagewithstatus);
+router.get("/viewHealthFamwithstatus",viewHealthFamwithstatus);
 //router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id

@@ -199,23 +199,19 @@ const viewOptionPackages= async(req,res)=>{
 
 const payForSubscription= async(req,res)=>{
   try{
-//update
-
     const curr_user= req.user.Username
-    console.log(curr_user)
     const patient= await patientModel.findOne({Username:curr_user})
-    const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName')
+    const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('Patient').populate('PackageName')
     const patientRelatives= await familyMemberModel.find({FamilyMem:patient}).populate('PatientID').populate('FamilyMem')//check eno family mem mesh user
     var max=0
-    for (let i=0;i<patientRelatives.length;i++) {
-      const subscription = await subscriptionModel.findOne({ Patient: patientRelatives[i].PatientID }).populate("PackageName")
-      console.log(subscription)
-      if (subscription && subscription.Status === 'Subscribed' && subscription.PackageName.Family_Discount > max) {
-        max = subscription.PackageName.Family_Discount;
-        
-      }
-    }
-
+    const result = await Promise.all(patientRelatives.map(async (patientRelative) => {
+    const subscription = await subscriptionModel.findOne({ Patient: patientRelative.PatientID}).populate('Patient').populate('PackageName');
+      if (subscription && subscription.Status === 'Subscribed' ) {
+          if(subscription.PackageName.Family_Discount>max){
+                 max=subscription.PackageName.Family_Discount;
+                return subscription
+      } }
+    }));
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -226,49 +222,25 @@ const payForSubscription= async(req,res)=>{
     const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const day1 = String(enddate.getDate()).padStart(2, '0');
     
-    const formattedDate1 = `${year1}-${month1}-${day1}`;
+    const formattedDate1 = `${year}-${month}-${day}`;
     const renewaldate = new Date();
     const year2 = (renewaldate.getFullYear())+1;
     const month2 = String(renewaldate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const day2 = String(renewaldate.getDate()+1).padStart(2, '0');
-    const formattedDate2 = `${year2}-${month2}-${day2}`;
-// formatting subscription start date to compare
-    const startCheck = new Date(patSubscription.Startdate)   
-    const year3 = (startCheck.getFullYear());
-    const month3 = String(startCheck.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day3 = String(startCheck.getDate()).padStart(2, '0');
-    const formattedDate3 = `${year3}-${month3}-${day3}`; 
-    const renewCheck = new Date(patSubscription.Renewaldate)   
-    const year4 = (renewCheck.getFullYear());
-    const month4 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
-    const day4 = String(renewCheck.getDate()).padStart(2, '0');
-    const formattedDate4 = `${year4}-${month4}-${day4}`;
-    const amount=patSubscription.PackageName.Price -max;
-  
-    if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
-      console.log(patient.Wallet)
+    const formattedDate2 = `${year}-${month}-${day}`;
+    const amount=patSubscription.PackageName.Price -patSubscription.PackageName.Price*max/100;
+    if(patSubscription.Status==="Subscribed" && patSubscription.Renewaldate===currentDate){
       if(patient.Wallet>amount ){
-      const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
-      res.status(200).json(updatePat)
+      const updatePat= patientModel.findOneAndUpdate({Username:curr_user,Wallet:patient.Wallet-amount})
+      const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Startdate:currentDate,Renewaldate:renewaldate,Enddate:enddate})
+      res.status(200).json(updatePat,updateRenewal)
       }
       else{
-        const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Enddate:formattedDate})
+        const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled"})
         res.status(404).json(updateRenewal)
       }
       
     }
-    else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 ){
-      if(patient.Wallet>amount ){
-        const updatePat= patientModel.findOneAndUpdate({Username:curr_user,Wallet:patient.Wallet-amount})
-        const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Startdate:formattedDate,Renewaldate:formattedDate2,Enddate:formattedDate1})
-        res.status(200).json(updatePat)
-        }
-        else{
-          const updateRenewal= subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Enddate:formattedDate})
-          res.status(404).json(updateRenewal)
-        }
-    }
-    
     
   }
 
@@ -282,11 +254,9 @@ const viewHealthPackage= async (req, res) => {
   try {
     const current_user = req.user.Username;  //changed this
     const patient= await patientModel.findOne({Username:current_user});
-    const subscription = await subscriptionModel.findOne({Patient:patient, Status:"Subscribed"}).populate("Patient").populate("PackageName")
-    console.log(subscription)
+    const subscription = await subscriptionModel.findOne({Patient:patient, Status:"Subscribed"}).populate('PackageName')
     if(subscription){
     const myPackage= subscription.PackageName
-    console.log(subscription.PackageName)
     res.status(200).send(myPackage);}
     else {
       res.status(404).send({Error:"Cannot find any current subscriptions!"})
@@ -305,22 +275,54 @@ const viewHealthPackagewithstatus = async (req, res) => {
     }
 
     const subscription = await subscriptionModel
-    .findOne({ Patient: patient._id })
-    .populate({
-      path: 'PackageName',
-      select: 'Status Startdate Renewaldate Enddate' // Include the fields you want from the 'PackageName' model
-    });
+      .findOne({ Patient:patient })
+      .select('Status Startdate Renewaldate Enddate') // Include the fields you want from the 'subscriptionModel'
+      .populate({
+      path: "Patient",
+        select: "Username" // Include the fields you want from the 'Patient' model
+      })
+      .populate({
+       path: "PackageName",
+        select: "Name" // Include the fields you want from the 'PackageName' model
+      });
+     // console.log(subscription.Patient.Username);
 
-    if (subscription.length > 0) {
+    if (subscription) {
       res.status(200).send(subscription);
     } else {
-      res.status(404).send({ Error: "Cannot find any current subscriptions!" });
+      res.status(404).send({ Error: "Cannot find any current subscribed subscription!" });
     }
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
 };
-
+const viewHealthFamwithstatus= async(req,res)=>{
+  try {//changed this
+    const username=req.user.Username;
+    const Patient= await patientModel.findOne({Username:username});
+    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$e:null}}); //check eno family mem mesh user
+   
+    const package = await Promise.all(famMems.map(async (famMember) => {
+      const subscription = await subscriptionModel.findOne({ FamilyMem: famMember})
+      .select('Status Startdate Renewaldate Enddate') // Include the fields you want from the 'subscriptionModel'
+      .populate({
+      path: "FamilyMem",
+        select: "Name" // Include the fields you want from the 'Patient' model
+      })
+      .populate({
+       path: "PackageName",
+        select: "Name" // Include the fields you want from the 'PackageName' model
+      });
+  
+        if (subscription ) {
+          return subscription; // Add the family member to the result if subscribed
+        } // Or you can handle differently for non-subscribed members
+      }));
+      res.status(200).json(package);
+}
+catch{
+     res.json(404).json({err:"No family members are subscribed"})
+}}
 //hi khalkhoola
 
 
@@ -328,7 +330,7 @@ const viewHealthPackagewithstatus = async (req, res) => {
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
   const Createparameter = req.user.Username;
-  console.log(Createparameter)
+
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
     // Return an error message.
@@ -344,7 +346,6 @@ const createFamilymember = async (req, res) => {
   try {
     const findPatientRel= await patientModel.findOne({Username:FamilyMemberUsername});
     const findPatientMain= await patientModel.findOne({Username:Createparameter});
-   
     const newFamilymember = await familyMemberModel.create({
       PatientID: findPatientMain,
       FamilyMem:findPatientRel,
@@ -355,12 +356,8 @@ const createFamilymember = async (req, res) => {
       Gender: Gender,
       Relation: Relation,
     });
-
-
-    //test de tany
-    if(newFamilymember.FamilyMem!==null){
-    await subscriptionModel.addEntry1(newFamilymember);}
-
+ 
+    await subscriptionModel.addEntry1(newFamilymember);
     res.status(200).json(newFamilymember);
    
   } catch (error) {
@@ -701,5 +698,6 @@ module.exports = {
   subscribepackagefamilymem,
   cancelSubscriptionfamilymember,
   payForSubscription,
-  viewHealthPackagewithstatus
+  viewHealthPackagewithstatus,
+  viewHealthFamwithstatus
 };
