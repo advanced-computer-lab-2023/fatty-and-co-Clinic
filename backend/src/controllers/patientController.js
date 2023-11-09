@@ -175,10 +175,9 @@ const viewHealthFam= async(req,res)=>{
     const Patient= await patientModel.findOne({Username:username});
     const famMems= await familyMemberModel.find({$or:[{"PatientID":Patient},{"FamilyMem":Patient}]}).populate("PatientID").populate("FamilyMem"); 
     //check eno family mem mesh user
-    const package = await Promise.all(famMems.map(async (famMember) => {
-    const value= await patientModel.findOne({Username:famMember.PatientID.Username})  
-
-    const subscription = await subscriptionModel.findOne({ Patient: famMember.FamilyMem.Username===username?value:famMember.FamilyMem}).populate('FamilyMem').populate('PackageName');
+    const package = await Promise.all(famMems.map( async(famMember) => {
+    const value= await patientModel.findOne({Username:famMember.PatientID.Username})
+    const subscription =famMember.FamilyMem!=null? await subscriptionModel.findOne({ Patient: famMember.FamilyMem.Username===username?value:famMember.FamilyMem}).populate('FamilyMem').populate('PackageName'):await subscriptionModel.findOne({ FamilyMem: famMember}).populate('FamilyMem').populate('PackageName')
       if (subscription && subscription.Status === 'Subscribed') {
         return subscription; // Add the family member to the result if subscribed
       } // Or you can handle differently for non-subscribed members
