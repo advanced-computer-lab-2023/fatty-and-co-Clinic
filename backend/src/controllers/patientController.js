@@ -106,8 +106,6 @@ const getPatientUsername = async (req, res) => {
   }
 };
 
-// I think this is useless?
-// if not useless it needs to delete from user model, apppointments, etc just like in admin controller
 const deletePatient = async (req, res) => {
   try {
     const patient = await patientModel.findByIdAndDelete(req.params.id);
@@ -119,10 +117,7 @@ const deletePatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const patient = await patientModel.findByIdAndUpdate(req.user.id, req.body);
     res.status(200).send({ patient });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -273,7 +268,8 @@ const payForFamSubscription= async(req,res)=>{
     const subDiscount= await subscriptionModel.findOne({Patient:patient}).populate("Patient").populate("PackageName")
     const relative= await familyMemberModel.findOne({PatientID:patient,NationalId:NationalId}).populate("PatientID").populate("FamilyMem")
     const subscription= await subscriptionModel.findOne({FamilyMem:relative}).populate("PackageName").populate("FamilyMem")
-    
+    console.log(curr_user)
+    console.log(subscription)
   
     if(relative.FamilyMem!=null){
       res.status(400).send({message:"Cannot subscribe for another system user!"})
@@ -306,7 +302,7 @@ const payForFamSubscription= async(req,res)=>{
     const month4 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
     const day4 = String(renewCheck.getDate()).padStart(2, '0');
     const formattedDate4 = `${year4}-${month4}-${day4}`;
-    const max= subDiscount.PackageName!=null && subDiscount.Status==="Subscribed"?subDiscount.PackageName.Family_Discount:0
+    const max= subDiscount.PackageName!=null && subDiscount.Status==="Subscribed"?subDiscount.PackageName.Family_Discount:0 
     const amount=subscription.PackageName.price-max
   
     if(subscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
@@ -478,9 +474,9 @@ const selectPatient = async (req, res) => {
 // Get prescriptions of a given patient. Can also be filtered
 // using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
-  // const query = req.query;
+  const query = req.query;
   // console.log(query);
-  const patientUsername = req.user.Username; // Extract patientUsername
+  const patientUsername = query.PatientUsername; // Extract patientUsername
   // console.log(req.params.patientUsername);
 
   try {
