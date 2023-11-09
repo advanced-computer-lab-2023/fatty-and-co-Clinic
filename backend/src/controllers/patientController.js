@@ -554,6 +554,8 @@ const subscribepackagefamilymem=async(req,res) =>{
     const day1 = String(enddate.getDate()).padStart(2, '0');
     
     const formattedDate1 = `${year1}-${month1}-${day1}`;
+    const day3 = String(enddate.getDate()+1).padStart(2, '0');
+    const formattedDate3 = `${year1}-${month1}-${day3}`;
     const PatientUsername  = req.user.Username;  //changed this
     const Patient = await patientModel.findOne({Username:PatientUsername});
    // console.log(Patient) //changed this
@@ -588,6 +590,7 @@ console.log(subscribedcheck.Status=="Subscribed");
     PackageName:Package,
     Status:"Subscribed",
     Startdate:formattedDate,
+    Renewaldate:formattedDate3,
     Enddate:formattedDate1
    },
    { new: true }
@@ -618,6 +621,8 @@ console.log("Entered");
     const day1 = String(enddate.getDate()).padStart(2, '0');
     
     const formattedDate1 = `${year1}-${month1}-${day1}`;
+    const day3 = String(enddate.getDate()+1).padStart(2, '0');
+    const formattedDate3 = `${year1}-${month1}-${day3}`;
     const { PackageName,Status} = req.body;
     const Package = await  packageModel.findOne({Name:PackageName});
     const PatientUserName=req.user.Username;
@@ -642,6 +647,7 @@ console.log("Entered");
         PackageName:Package,
         Status:"Subscribed",
         Startdate:formattedDate,
+        Renewaldate:formattedDate3,
         Enddate:formattedDate1
       }
 
