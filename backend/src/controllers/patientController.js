@@ -422,24 +422,35 @@ const subscribepackagefamilymem=async(req,res) =>{
   const fam = await familyMemberModel.findOne({NationalId:NationalId});
   const famrelated=await familyMemberModel.find({PatientID:Patient.id,NationalId:NationalId});
   console.log("Familymem") 
-  console.log(fam) 
+ // console.log(fam) 
   console.log("Package") 
-  console.log(Package) 
+  //console.log(Package) 
+  const subscribedcheck= await subscriptionModel.findOne({FamilyMem:fam});
+console.log(subscribedcheck.Status);
+console.log(subscribedcheck.Status=="Subscribed");
 
-  if (famrelated==null){
+  if (famrelated==null || fam==null){
     res.status(400).send( {error :"Wrong national id "} );
   }
   else if (fam.FamilyMem !=null){
-    res.status(400).send( {error:"This family member is a already a user " });
+    res.send( {error:"This family member is a already a user " });
   }
-  else {
-   const subscribtion=await subscriptionModel.create({
-    FamilyMem:fam,
-    PackageName:Package,
-    status:"Subscribed",
-    Startdate:formattedDate,
-    enddate:formattedDate1
+  if (subscribedcheck==null){
+    res.send({error:"Error"});
    }
+   // why it doesn't ente here
+   else if (subscribedcheck.Status=="Subscribed"){
+    console.log("Entered here if subs");
+    res.send({error:"You are already subscribed"});
+   }
+  else {
+   const subscribtion=await subscriptionModel.findOneAndUpdate({FamilyMem:fam},{
+    PackageName:Package,
+    Status:"Subscribed",
+    Startdate:formattedDate,
+    Enddate:formattedDate1
+   },
+   { new: true }
    )
     res.status(200).send({ subscribtion });
   }
@@ -473,8 +484,17 @@ console.log("Entered");
     const Patient  = await patientModel.findOne({Username:PatientUserName}); 
    // console.log(PatientUserName);
    // console.log(Patient) //changed this
-   const subscribtion = await subscriptionModel.findOne({Patient:Patient.id});
-   if (subscribtion.status!="Subscribed"){
+   const subscribtion = await subscriptionModel.findOne({Patient:Patient});
+   console.log(subscribtion);
+
+   if (subscribtion==null){
+    res.send({error:"Error"});
+   }
+   else if (subscribtion.Status=="Subscribed"){
+    res.status(400).send({error:"You are already subscribed"});
+   }
+
+   else if (subscribtion.Status!="Subscribed"){
     console.log("Entered the if");
     
     const patient12 = await subscriptionModel.findOneAndUpdate(
