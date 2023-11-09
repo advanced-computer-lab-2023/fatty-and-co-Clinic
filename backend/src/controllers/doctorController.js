@@ -7,6 +7,7 @@ const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 
+// I think this is useless?
 // create a doctor
 // const createDoctor = async (req, res) => {
 //   const {
@@ -60,6 +61,7 @@ const getAllDoctors = async (req, res) => {
   }
 };
 
+// I think this is useless?
 const deleteDoctor = async (req, res) => {
   try {
     const doctor = await doctorModel.findByIdAndDelete(req.params.id);
