@@ -21,6 +21,7 @@ import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { usePackageContext } from "../hooks/usePackageContext";
 import { API_PATHS } from "API/api_paths";
+import { useAuthContext } from "hooks/useAuthContext";
 
 function PackageRow(props) {
   const { dispatch } = usePackageContext();
@@ -37,11 +38,14 @@ function PackageRow(props) {
   );
   const [Family_Discount, setFamily_Discount] = useState(props.Family_Discount);
   const [message, setMessage] = useState("");
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
 
   // handle delete
   const handleDelete = async () => {
     const response = await fetch(API_PATHS.deletePackage + props._id, {
       method: "DELETE",
+      headers: { Authorization },
     });
     const data = await response.json();
     if (response.ok) {
@@ -214,6 +218,7 @@ function PackageRow(props) {
                     method: "PATCH",
                     headers: {
                       "Content-Type": "application/json",
+                      Authorization
                     },
                     body: JSON.stringify({
                       Name,

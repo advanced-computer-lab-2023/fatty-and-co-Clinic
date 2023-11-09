@@ -230,6 +230,81 @@ const upcomingAppforDoc = async (req, res) => {
   res.status(200).send(patients);
 };
 
+const filterAppointmentsByStatusDoc = async (req, res) => {
+
+  const username = req.user.Username;
+  const status = req.query.status
+
+  const doctor = await patientModel.find({
+    Username: username
+  })
+
+    const appointments = await appointmentModel.find({
+      DoctorUsername: username,
+      Status: status,
+    });
+  try {
+  
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+const filterAppointmentsByStatusPat = async (req, res) => {
+
+  const username = req.user.Username;
+  const status = req.query.status
+
+    const appointments = await appointmentModel.find({
+      PatientName: username,
+      Status: status,
+    });
+
+  try {
+  
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+const filterAppointmentsByDateDoc = async (req, res) => {
+
+  const username = req.user.Username;
+  const date = req.query.date
+
+  const doctor = await patientModel.find({
+    Username: username
+  })
+
+    const appointments = await appointmentModel.find({
+      DoctorUsername: username,
+      Status: date,
+    });
+  try {
+  
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+const filterAppointmentsByDatePat = async (req, res) => {
+
+  const username = req.user.Username;
+  const date = req.query.date
+
+    const appointments = await appointmentModel.find({
+      PatientName: username,
+      Status: date,
+    });
+
+  try {
+  
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
 const searchPatient = async (req, res) => {
   const doctorUsername = req.user.Username; // username of the doctor searching
   const patientName = req.query.PatientName; // name of the patient to search for
@@ -428,6 +503,10 @@ const getAppointmentsPat = async (req, res) => {
 };
 
 module.exports = {
+  filterAppointmentsByStatusDoc,
+  filterAppointmentsByStatusPat,
+  filterAppointmentsByDateDoc,
+  filterAppointmentsByDatePat,
   getAppointmentsDoc,
   findDoctorPatients,
   upcomingAppforDoc,
