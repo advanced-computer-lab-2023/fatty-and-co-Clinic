@@ -22,7 +22,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-
+import viewMyPackage from "views/Patient/viewMyPackage"
 import {
   HomeIcon,
   StatsIcon,
@@ -45,6 +45,13 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: Package,
     layout: "/admin",
+  },
+  {
+    path: "/viewMyPackage",
+    name: "My Package",
+    icon: <HomeIcon color="inherit" />,
+    component: viewMyPackage,
+    layout: "/patient",
   },
   {
     path: "/package",
