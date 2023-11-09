@@ -468,8 +468,6 @@ async function isDocAvailable(docSlot) {
 
 async function checkFilterSpeciality() {}
 
-
-
 const addMySlotsDoc = async (req, res) => {
   const { dayToAdd, startTimeToAdd } = req.body;
   const username = req.user.Username;
@@ -539,6 +537,113 @@ const deleteMySlotsDoc = async (req, res) => {
   }
 };
 
+const viewUpcomingAppointmentsDoc = async (req, res) => {
+  const username = req.user.Username;
+  //put in mind the string thing if the (Status) condition in the find query does not work
+  try {
+    const pastAppointments = await appointmentModel.find(
+      { DoctorUsername: username },
+      { Status: { $eq: "Upcoming" } }
+    );
+    //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+    res.status(200).json(pastAppointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//make sure from the ta that past appointments is completed bas
+const viewPastAppoitmentsDoc = async (req, res) => {
+  const username = req.user.Username;
+  try {
+    const pastAppointments = await appointmentModel.find(
+      { DoctorUsername: username },
+      { Status: { $eq: "Completed" } }
+    );
+    //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+    res.status(200).json(pastAppointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//the username of the doctor will be passed and added to the viewDoctorDetails page
+const viewAllAvailableSlots = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const doctor = await doctorModel.find({ Username: username });
+    const allDocSlots = await docSlotsModel.find({ DoctorId: doctor._id });
+    res.status(200).json(allDocSlots);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//you need to pass the username as well if it is in a different page
+//make the calendar thing validation greater than today
+//TODO: THE ROUTE OF THIS METHOD WILL HAVE THE DOCTOR USERNAME IN THE URL;
+const checkAptDateForBooking = async (req, res) => {
+  //doctor Username ---> from URL
+  const { username } = req.params;
+
+  //patient Username --> from session
+  const { patUsername } = req.user.Username;
+
+  //TODO: check the local zone time thing
+  //you need to pass all docSlot fields in  case it is a new page
+
+  //the given date from the calendar
+  const date = req.body;
+
+  //slot fields from docSlot
+  const { WorkingDay, startTime } = req.body;
+  const curDate = new Date();
+
+  try {
+    if (date < curDate || date.getDay != WorkingDay)
+      res.status(500).json("invalid date");
+    else {
+      const docApts = await appointmentModel.aggregate([
+        {
+          $addFields: {
+            aptDay: { $dayOfWeek: "$Date" },
+            aptHour: { $hour: "$Date" },
+          },
+        },
+        {
+          $match: {
+            $and: [
+              { DoctorUsername: { $eq: username } },
+              { aptDay: WorkingDay },
+              { aptHour: startTime },
+              { Status: { $in: ["Upcoming", "FollowUp"] } },
+            ],
+          },
+        },
+      ]);
+
+      if (docApts.length != 0) {
+        res.status(500).json("Can not book this appointment");
+      } else {
+        //TODO: make sure you have a create method that given a
+        // patient username or doctor username it adds the right patientName & docName
+        //and not the random generator
+        const newApt = await appointmentModel.create({
+          DoctorUsername: username,
+          Date: date.setHours(startTime),
+          PatientUsername: patUsername,
+          Status: "Upcoming",
+        });
+        res.status(201).json(newApt);
+      }
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
+
 module.exports = {
   getDoctorByID,
   getDoctorByUsername,
@@ -553,4 +658,8 @@ module.exports = {
   addMySlotsDoc,
   deleteMySlotsDoc,
   updateMySlotsDoc,
+  viewUpcomingAppointmentsDoc,
+  viewPastAppoitmentsDoc,
+  viewAllAvailableSlots,
+  checkAptDateForBooking,
 };

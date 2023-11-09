@@ -352,6 +352,30 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
+
+//
+const viewUpcomingAppointmentsPat = async (req,res) => {
+  const username = req.user.Username;
+  //put in mind the string thing if the (Status) condition in the find query does not work
+  try{
+  const pastAppointments = await appointmentModel.find({PatientUsername: username},{Status: "Upcoming"});
+  //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+  res.status(200).json(pastAppointments);}
+  catch(error){
+    res.status(500).json(error);}
+}
+
+//make sure from the ta that past appointments is completed bas
+const viewPastAppoitmentsPat = async(req,res) => {
+  const username = req.user.Username;
+  try{
+  const pastAppointments = await appointmentModel.find({PatientUsername: username},{Status: "Completed"});
+  //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+  res.status(200).json(pastAppointments);}
+  catch(error){
+    res.status(500).json(error);}
+  }
+
 module.exports = {
   viewHealthFam,
   viewHealthPackage,
@@ -368,5 +392,8 @@ module.exports = {
   updatePatient,
   selectPrescription,
   getEmergencyContact,
-  subscribepackagefamilymem
+  subscribepackagefamilymem,
+  viewUpcomingAppointmentsPat,
+  viewPastAppoitmentsPat,
+
 };
