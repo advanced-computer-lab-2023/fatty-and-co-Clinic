@@ -327,7 +327,7 @@ const filterDoctor = async (req, res) => {
 // View information and health records of a doctor's patient
 const viewPatientInfoAndHealthRecords = async (req, res) => {
   const patientUsername = req.query.PatientUsername;
-  const doctorUsername = req.query.DoctorUsername;
+  const doctorUsername = req.user.Username;
   try {
     const appointments = await appointmentModel.find({
       PatientUsername: patientUsername,
