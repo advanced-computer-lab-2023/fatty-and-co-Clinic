@@ -21,7 +21,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-
+import MakePayment from "views/Patient/makePayment";
 import {
   HomeIcon,
   StatsIcon,
@@ -233,6 +233,15 @@ var dashRoutes = [
         component: docSignUp,
         layout: "/auth",
       },
+      {
+        path: "/payment",
+        name: "Payment",
+        rtlName: "لوحة القيادة",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: MakePayment,
+        layout: "/patient",
+      }
     ],
   },
 ];
