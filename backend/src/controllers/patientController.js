@@ -271,6 +271,7 @@ const payForFamSubscription= async(req,res)=>{
     console.log(curr_user)
     console.log(subscription)
   
+
     if(relative.FamilyMem!=null){
       res.status(400).send({message:"Cannot subscribe for another system user!"})
     }
@@ -304,8 +305,8 @@ const payForFamSubscription= async(req,res)=>{
     const formattedDate4 = `${year4}-${month4}-${day4}`;
     const max= subDiscount.PackageName!=null && subDiscount.Status==="Subscribed"?subDiscount.PackageName.Family_Discount:0 
     const amount=subscription.PackageName.price-max
-  
     if(subscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
+      console.log(patient.Wallet)
       if(patient.Wallet>amount ){
       const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
       res.status(200).json(updatePat)
