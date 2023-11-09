@@ -370,10 +370,13 @@ const createFamilymember = async (req, res) => {
 
 
     //test de tany
-    if(newFamilymember.FamilyMem!==null){
-    await subscriptionModel.addEntry1(newFamilymember);}
+    if(findPatientRel==null){
+    await subscriptionModel.addEntry1(newFamilymember);
+    res.status(200).json(newFamilymember);}
+    else{
+      res.status(200).json(newFamilymember);
+    }
 
-    res.status(200).json(newFamilymember);
    
      } catch (error) {
     res.status(500).json({ error: error.message });
