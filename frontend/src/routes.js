@@ -8,6 +8,7 @@ import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
 import Package from "views/Admin/Package/package";
+import Package2 from "views/Patient/viewPackagesFam/package2"
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import createFamilymember from "views/Patient/createFamilyMember";
@@ -44,6 +45,13 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: Package,
     layout: "/admin",
+  },
+  {
+    path: "/package",
+    name: "Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: Package2,
+    layout: "/patient",
   },
 
   {
@@ -224,6 +232,7 @@ var dashRoutes = [
         component: SignUp,
         layout: "/auth",
       },
+     
       {
         path: "/docsignup",
         name: "Doctor Sign Up",
@@ -233,6 +242,7 @@ var dashRoutes = [
         component: docSignUp,
         layout: "/auth",
       },
+      
     ],
   },
 ];

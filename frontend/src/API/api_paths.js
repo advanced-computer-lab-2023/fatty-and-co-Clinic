@@ -13,7 +13,7 @@ export const API_PATHS = {
   updateEmailDoc: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
-
+  viewOptionPackages: PATIENT_BASE+"getOptionPackages/",
   // Admin
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
