@@ -348,18 +348,25 @@ const followupAppointment = async (req, res) => {
 
   const patientUsername = req.query.PatientUsername;
   const doctorUsername = req.user.Username;
-  const patient = await patientModel.find({
-    Username: patientUsername
-  })
-  const doctor = await patientModel.find({
-    Username: patientUsername
-  })
-  const doctorName = doctor.Name
-  const patientName = patient.Name
-  const { Date } = req.body;
+  const  date  = new Date(req.query.Date);
+
 
   try {
-    const appointment = await appointmentModel.addEntry(doctorUsername,doctorName,patientUsername,patientName,"Follow up",Date);
+    const patient = await patientModel.findOne({
+      Username: patientUsername
+    })
+    const doctor = await doctorModel.findOne({
+      Username: doctorUsername
+    })
+  
+    
+    const appointment = await appointmentModel.create({DoctorUsername: doctorUsername,
+      DoctorName: doctor.Name,
+      PatientUsername: patientUsername,
+      PatientName: patient.Name,
+      Status: "Upcoming",
+      FollowUp: true,
+      Date: date});
     res.status(200).json(appointment);
   } catch (error) {
     res.status(400).json({ error: error.message });

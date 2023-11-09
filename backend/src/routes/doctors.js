@@ -136,7 +136,7 @@ router.get(
   checkDoctor,
   viewPatientInfoAndHealthRecords
 );
-router.get(
+router.post(
   "/followupAppointment",
   checkDoctor,
   followupAppointment
