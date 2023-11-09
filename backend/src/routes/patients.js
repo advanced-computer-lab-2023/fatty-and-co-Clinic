@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  payForFamSubscription,
   cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
@@ -157,6 +158,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.post("/subscribehealthpackage",subscribehealthpackage)
 router.post("/subscribepackagefamilymem",subscribepackagefamilymem)
 router.get("/viewMyPackage/",viewHealthPackage)
+router.patch("/payFamilySubscription/",payForFamSubscription)
 
 
 
