@@ -429,7 +429,7 @@ async function availableDocXSlots(req) {
 //by checking if he has no appointment in this slot or apt is cancelled, ..
 async function isDocAvailable(docSlot) {
   try {
-    const statusCheck = ["Upcoming", "Followup"];
+    const statusCheck = ["Upcoming"];
     const tmpSlotDay = docSlot.DocSlotCross.WorkingDay;
     const tmpSlotHour = docSlot.DocSlotCross.StartTime;
     console.log(docSlot);
@@ -466,7 +466,9 @@ async function isDocAvailable(docSlot) {
   }
 }
 
-async function checkFilterSpeciality() {}
+async function checkFilterSpeciality() {
+  
+}
 
 const addMySlotsDoc = async (req, res) => {
   const { DayToAdd, StartTimeToAdd } = req.body;
@@ -608,7 +610,7 @@ const checkAptDateForBooking = async (req, res) => {
   const date = req.body;
 
   //slot fields from docSlot
-  const { WorkingDay, startTime } = req.body;
+  const { WorkingDay, StartTime } = req.body;
   const curDate = new Date();
 
   try {
@@ -627,7 +629,7 @@ const checkAptDateForBooking = async (req, res) => {
             $and: [
               { DoctorUsername: { $eq: username } },
               { aptDay: WorkingDay },
-              { aptHour: startTime },
+              { aptHour: StartTime },
               { Status: { $in: ["Upcoming", "FollowUp"] } },
             ],
           },
@@ -642,7 +644,7 @@ const checkAptDateForBooking = async (req, res) => {
         //and not the random generator
         const newApt = await appointmentModel.create({
           DoctorUsername: username,
-          Date: date.setHours(startTime),
+          Date: date.setHours(StartTime),
           PatientUsername: patUsername,
           Status: "Upcoming",
         });
