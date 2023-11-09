@@ -173,10 +173,13 @@ const viewHealthFam= async(req,res)=>{
   try {//changed this
     const username=req.user.Username;
     const Patient= await patientModel.findOne({Username:username});
-    const famMems= await familyMemberModel.find({PatientID:Patient,FamilyMem:{$e:null}}); //check eno family mem mesh user
+    const famMems= await familyMemberModel.find({$or:[{"PatientID":Patient},{"FamilyMem":Patient}],function(err, docs){
+      if(!err) res.send(docs);
+   }}).populate("PatientID").populate("FamilyMem"); 
+    //check eno family mem mesh user
     const package = await Promise.all(famMems.map(async (famMember) => {
-    const subscription = await subscriptionModel.findOne({ FamilyMem: famMember}).populate('FamilyMem').populate('PackageName');
-
+    const value= await patientModel.findOne({Username:famMember.PatientID.Username})  
+    const subscription = await subscriptionModel.findOne({ Patient: famMember.FamilyMem.Username===username?value:famMember.FamilyMem}).populate('FamilyMem').populate('PackageName');
       if (subscription && subscription.Status === 'Subscribed') {
         return subscription; // Add the family member to the result if subscribed
       } // Or you can handle differently for non-subscribed members
@@ -184,7 +187,7 @@ const viewHealthFam= async(req,res)=>{
     res.status(200).json(package);
 }
 catch{
-     res.json(404).json({err:"No family members are subscribed"})
+     res.json(404).json({error:"No family members are subscribed"})
 }}
 
 const viewOptionPackages= async(req,res)=>{
@@ -202,13 +205,12 @@ const payForSubscription= async(req,res)=>{
 //update
 
     const curr_user= req.user.Username
-    console.log(curr_user)
     const patient= await patientModel.findOne({Username:curr_user})
-    const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName')
+    const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate("Patient").populate('PackageName')
     const patientRelatives= await familyMemberModel.find({FamilyMem:patient}).populate('PatientID').populate('FamilyMem')//check eno family mem mesh user
     var max=0
     for (let i=0;i<patientRelatives.length;i++) {
-      const subscription = await subscriptionModel.findOne({ Patient: patientRelatives[i].PatientID }).populate("PackageName")
+      const subscription = await subscriptionModel.findOne({ Patient: patientRelatives[i].PatientID }).populate("Patient").populate("PackageName")
       console.log(subscription)
       if (subscription && subscription.Status === 'Subscribed' && subscription.PackageName.Family_Discount > max) {
         max = subscription.PackageName.Family_Discount;
@@ -328,7 +330,6 @@ const viewHealthPackagewithstatus = async (req, res) => {
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername,Name, NationalId, Age, Gender, Relation } = req.body;
   const Createparameter = req.user.Username;
-  console.log(Createparameter)
   // Check if the national ID is not 16.
   if (NationalId.length !== 16) {
     // Return an error message.
@@ -358,12 +359,14 @@ const createFamilymember = async (req, res) => {
 
 
     //test de tany
-    if(newFamilymember.FamilyMem!==null){
-    await subscriptionModel.addEntry1(newFamilymember);}
-
-    res.status(200).json(newFamilymember);
+    if(findPatientRel==null){
+      await subscriptionModel.addEntry1(newFamilymember);
+      res.status(200).json(newFamilymember);}
+    else{
+      res.status(200).json(newFamilymember);}
+    }
    
-  } catch (error) {
+   catch (error) {
     res.status(500).json({ error: error.message });
   }
   
