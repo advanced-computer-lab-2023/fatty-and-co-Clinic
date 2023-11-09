@@ -216,7 +216,6 @@ const payForSubscription= async(req,res)=>{
         
       }
     }
-    console.log(max)
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -244,15 +243,18 @@ const payForSubscription= async(req,res)=>{
     const month4 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
     const day4 = String(renewCheck.getDate()).padStart(2, '0');
     const formattedDate4 = `${year4}-${month4}-${day4}`;
+    const year5 = (renewCheck.getFullYear()+1);
+    const month5 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
+    const day5 = String(renewCheck.getDate()).padStart(2, '0');
+    const formattedDate5 = `${year5}-${month5}-${day5}`;
     const amount=patSubscription.PackageName.Price -max;
-    if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
-      console.log(patient.Wallet)
+    if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3){
       if(patient.Wallet>amount ){
       const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
       res.status(200).json(updatePat)
       }
-      else{
-        const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Enddate:formattedDate})
+      else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4){
+        const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Renewaldate:formattedDate5,Enddate:formattedDate1})
         res.status(404).json(updateRenewal)
       }
     }}
@@ -271,8 +273,8 @@ const payForFamSubscription= async(req,res)=>{
   // const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName');
  const patient= await patientModel.findOne({Username:curr_user});
  const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName');
-const subDiscount= await subscriptionModel.findOne({Patient:patient}).populate("Patient").populate("PackageName")
-const relative= await familyMemberModel.findOne({PatientID:patient,NationalId:NationalId}).populate("PatientID").populate("FamilyMem")
+ const subDiscount= await subscriptionModel.findOne({Patient:patient}).populate("Patient").populate("PackageName")
+ const relative= await familyMemberModel.findOne({PatientID:patient,NationalId:NationalId}).populate("PatientID").populate("FamilyMem")
 const subscription= await subscriptionModel.findOne({FamilyMem:relative}).populate("PackageName").populate("FamilyMem")
   console.log(subscription.PackageName.Price);
   
@@ -314,7 +316,7 @@ const subscription= await subscriptionModel.findOne({FamilyMem:relative}).popula
   console.log("Amount");
   console.log(formattedDate);
   console.log(patSubscription.Status);
-console.log(patSubscription.Status=="Subscribed");
+  console.log(patSubscription.Status=="Subscribed");
   if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
     console.log("entered this if ")
     if(patient.Wallet>amount ){
