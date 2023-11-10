@@ -581,7 +581,7 @@ console.log(subscribedcheck.Status=="Subscribed");
     res.status(400).send( {error :"Wrong national id "} );
   }
   else if (fam.FamilyMem !=null){
-    res.send( {error:"This family member is a already a user " });
+    res.status(400).send( {error:"This family member is a already a user " });
   }
   if (subscribedcheck==null){
     res.send({error:"Error"});
@@ -589,7 +589,7 @@ console.log(subscribedcheck.Status=="Subscribed");
    // why it doesn't ente here
    else if (subscribedcheck.Status=="Subscribed"){
     console.log("Entered here if subs");
-    res.send({error:"You are already subscribed"});
+    res.status(400).send({error:"You are already subscribed"});
    }
   else {
    const subscribtion=await subscriptionModel.findOneAndUpdate({FamilyMem:fam},{
@@ -687,6 +687,7 @@ const cancelSubscription=async(req,res) =>{
     if(subscribed){
       console.log("Here")
     if(subscribed.Status==="Cancelled"){
+      console.log(Error);
       res.status(400).send({Error:"You have already cancelled your prescription"})
     }
     else{

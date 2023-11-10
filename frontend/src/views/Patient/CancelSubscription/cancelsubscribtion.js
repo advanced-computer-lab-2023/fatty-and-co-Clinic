@@ -25,53 +25,53 @@ function CancelSubscription() {
 
    const { user } = useAuthContext();
    const Authorization = `Bearer ${user.token}`;
-  const handleSubscribe = async (e) => {
+   const handleSubscribe = async (e) => {
     e.preventDefault();
-
-    // Send the username to the backend for deletion
+  
     try {
-      const response = await fetch(API_PATHS.subscribepackagefamilymem , {
-        method: "POST",
-        headers: {
-          'Authorization': Authorization
-        },
-        body: JSON.stringify({ PackageName,NationalId }),
-      });
-      if (PackageName == "") {
+      if (PackageName === "") {
         toast({
           title: "Please fill the PackageName field!",
           status: "error",
           duration: 9000,
           isClosable: true,
         });
-      } 
-      else if (NationalId == "") {
+        return; // Don't proceed further
+      } else if (NationalId === "") {
         toast({
           title: "Please fill the NationalId field!",
           status: "error",
           duration: 9000,
           isClosable: true,
         });
-        console.log(response.status);
-      } 
-      else if (response.ok) {
-        // Handle success or provide feedback to the user
+        return; // Don't proceed further
+      }
+  
+      const response = await fetch(API_PATHS.subscribepackagefamilymem, {
+        method: "POST",
+        headers: {
+          Authorization,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ PackageName, NationalId }),
+      });
+  
+      console.log("Response", response.status);
+      const errorData = await response.json();
+      if (response.ok) {
         toast({
           title: "Subscribed successfully",
           status: "success",
           duration: 9000,
           isClosable: true,
         });
-
-        setPackageName;
-        setNationalId;
-        (""); // Clear the input field
+  
+        setPackageName("");
+        setNationalId(""); // Clear the input fields
       } else {
-        // Handle errors or provide feedback to the user
         toast({
-          title: "Failed to Subscribd",
-          description:
-            "Failed to Subscribd!",
+          title: "Failed to Subscribe",
+          description: errorData.error,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -81,6 +81,64 @@ function CancelSubscription() {
       console.error("An error occurred", error);
     }
   };
+  const handleCancellation = async (e) => {
+    e.preventDefault();
+  
+    try {
+      if (PackageName === "") {
+        toast({
+          title: "Please fill the PackageName field!",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        return; // Don't proceed further
+      } else if (NationalId === "") {
+        toast({
+          title: "Please fill the NationalId field!",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        return; // Don't proceed further
+      }
+  
+      const response = await fetch(API_PATHS.CancelFamilysubscribtion, {
+        method: "PATCH",
+        headers: {
+          Authorization,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ PackageName, NationalId }),
+      });
+  
+      //console.log("Response", response.status);
+      const errorData = await response.json();
+  
+      if (response.ok) {
+        toast({
+          title: "Cancelled successfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+  
+        setPackageName("");
+        setNationalId(""); // Clear the input fields
+      } else {
+        toast({
+          title: "Failed to Cancel",
+          description: errorData.error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
+  
 
   return (
     <Card
@@ -125,6 +183,19 @@ function CancelSubscription() {
               >
                 <Icon as={FaUserPlus} mr={2} />
                 subscribe
+              </Button>
+              <Button
+             colorScheme="red"  // Change to red color scheme
+             borderColor="red.300"  // Change to red border color
+             color="red.300"  // Change to red text color
+                fontSize="xs"
+                p="8px 32px"
+                type="submit"
+                textColor="white"
+                onClick={handleCancellation}
+              >
+                <Icon as={FaUserPlus} mr={2} />
+                Cancel subscribtion
               </Button>
             </Stack>
           </form>
