@@ -201,6 +201,8 @@ const payForSubscription= async(req,res)=>{
   try{
     const curr_user= req.user.Username
     const patient= await patientModel.findOne({Username:curr_user})
+    const {PackageName} = req.body;
+    const Package = await  packageModel.findOne({Name:PackageName});
     const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName')
     const patientRelatives = await familyMemberModel.find({
       $or: [
@@ -220,44 +222,120 @@ const payForSubscription= async(req,res)=>{
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
+    const formattedDate = `${year}-${month}-${day}`; // currentDate
     const enddate = new Date();
     const year1 = (enddate.getFullYear())+1;
     const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const day1 = String(enddate.getDate()).padStart(2, '0');
+    const formattedDate1 = `${year1}-${month1}-${day1}`;//EndDate if subscribed
+    const enddate1 = new Date();
+    const year11 = (enddate1.getFullYear())+1;
+    const month11 = String(enddate1.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day11 = String(enddate1.getDate()).padStart(2, '0');
     
-    const formattedDate1 = `${year1}-${month1}-${day1}`;
+    const formattedDate11 = `${year11}-${month11}-${day11}`;// subscribed end date awel mara
+  
     const renewaldate = new Date();
     const year2 = (renewaldate.getFullYear())+1;
     const month2 = String(renewaldate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const day2 = String(renewaldate.getDate()+1).padStart(2, '0');
-    const formattedDate2 = `${year2}-${month2}-${day2}`;
+    const formattedDate2 = `${year2}-${month2}-${day2}`;// Renewal gdedd in genreal
 // formatting subscription start date to compare
     const startCheck = new Date(patSubscription.Startdate)   
     const year3 = (startCheck.getFullYear());
     const month3 = String(startCheck.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const day3 = String(startCheck.getDate()).padStart(2, '0');
-    const formattedDate3 = `${year3}-${month3}-${day3}`; 
+    const formattedDate3 = `${year3}-${month3}-${day3}`; // start subscribition existeing 
     const renewCheck = new Date(patSubscription.Renewaldate)   
     const year4 = (renewCheck.getFullYear());
     const month4 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
     const day4 = String(renewCheck.getDate()).padStart(2, '0');
-    const formattedDate4 = `${year4}-${month4}-${day4}`;
+    const formattedDate4 = `${year4}-${month4}-${day4}`;//Renewal Date if akready subscribed
     const year5 = (renewCheck.getFullYear()+1);
     const month5 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
     const day5 = String(renewCheck.getDate()).padStart(2, '0');
-    const formattedDate5 = `${year5}-${month5}-${day5}`;
-    const amount=patSubscription.PackageName.Price -max;
-    if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3){
+    const formattedDate5 = `${year5}-${month5}-${day5}`;// renewal Date el gdeda
+    const amount=Package.Price -Package.Price*(max/100);
+    console.log(formattedDate)
+    console.log(formattedDate4)
+ //  console.log(patSubscription.Status==="Unsubscribed"||patSubscription.Status==="Cancelled");
+ //  console.log(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.PackageName.Name
+ //  ===Package.Name)
+   console.log(patient.Wallet>amount);
+    if(patSubscription.Status==="Unsubscribed"||patSubscription.Status==="Cancelled"){
       if(patient.Wallet>amount ){
       const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
+      
+    const patient12 = await subscriptionModel.findOneAndUpdate({Patient:patient},
+      { 
+        PackageName:Package,
+        Status:"Subscribed",
+        Startdate:formattedDate,
+        Renewaldate:formattedDate2,
+        Enddate:formattedDate11
+      }
+
+    );
       res.status(200).json(updatePat)
       }
-      else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4){
-        const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Renewaldate:formattedDate5,Enddate:formattedDate1})
-        res.status(404).json(updateRenewal)
+      
+      else{
+        res.status(404).json({error:"Not enough money"})
       }
-    }}
+    }  
+    else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.PackageName.Name
+    ===Package.Name){
+
+      if(patient.Wallet>amount){
+        const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
+        const patient12 = await subscriptionModel.findOneAndUpdate({Patient:patient},
+          { 
+            PackageName:Package,
+            Status:"Subscribed",
+            Startdate:formattedDate,
+            Renewaldate:formattedDate2,
+            Enddate:formattedDate11
+          })
+        res.status(200).json(updatePat)
+        }
+        else{
+          const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Renewaldate:formattedDate5,Enddate:formattedDate1})
+          res.status(404).json({error:"Not enough money"})
+        }
+      
+    
+  }
+ 
+  else if(patSubscription.Status==="Subscribed" && patSubscription.PackageName.Name!==Package.Name){
+
+ 
+    if(patient.Wallet>amount){
+      const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
+      const patient12 = await subscriptionModel.findOneAndUpdate({Patient:patient},
+        { 
+          PackageName:Package,
+          Status:"Subscribed",
+          Startdate:formattedDate,
+          Renewaldate:formattedDate2,
+          Enddate:formattedDate11
+        })
+      res.status(200).json(updatePat)
+      }
+    
+      else{
+      //  const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Renewaldate:formattedDate5,Enddate:formattedDate1})
+        res.status(404).json({error:"Not enough money"})
+      }
+    
+  
+}  else if(patSubscription.Status==="Subscribed" && patSubscription.PackageName.Name==Package.Name){
+  res.status(404).json({error:"Already Paid for subscription "});
+       }
+    
+    else  {
+      res.status(404).json({error:"Failed to subscribing "})
+    }
+  }
   
   catch{
     res.status(400).send({ message: "Failed to pay" });
@@ -268,17 +346,16 @@ const payForFamSubscription= async(req,res)=>{
   console.log("Entered");
   try{
     const curr_user= req.user.Username;
-    //console.log(curr_user);
-    const {NationalId}=req.body;
-  // const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName');
+    const {NationalId,PackageName}=req.body;
+    const Package = await  packageModel.findOne({Name:PackageName});
  const patient= await patientModel.findOne({Username:curr_user});
- const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate('PackageName');
- const subDiscount= await subscriptionModel.findOne({Patient:patient}).populate("Patient").populate("PackageName")
  const relative= await familyMemberModel.findOne({PatientID:patient,NationalId:NationalId}).populate("PatientID").populate("FamilyMem")
-const subscription= await subscriptionModel.findOne({FamilyMem:relative}).populate("PackageName").populate("FamilyMem")
-  console.log(subscription.PackageName.Price);
-  
-   if(relative.FamilyMem!=null){
+ const subscription= await subscriptionModel.findOne({FamilyMem:relative}).populate("PackageName").populate("FamilyMem")
+ const patSubscription= await subscriptionModel.findOne({Patient:patient}).populate("Patient").populate("PackageName");
+  if (relative==null){
+    res.status(400).send({message:"Wrong National Id or not relative"})
+  }
+  else  if(relative.FamilyMem!=null){
     res.status(400).send({message:"Cannot subscribe for another system user!"})
   }
   else{
@@ -287,39 +364,49 @@ const subscription= await subscriptionModel.findOne({FamilyMem:relative}).popula
   const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
   const day = String(currentDate.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
+  // current Date
   const enddate = new Date();
   const year1 = (enddate.getFullYear())+1;
   const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
   const day1 = String(enddate.getDate()).padStart(2, '0');
   
   const formattedDate1 = `${year1}-${month1}-${day1}`;
+  // End date lw m4 subscribed 
   const renewaldate = new Date();
   const year2 = (renewaldate.getFullYear())+1;
   const month2 = String(renewaldate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
   const day2 = String(renewaldate.getDate()+1).padStart(2, '0');
   const formattedDate2 = `${year2}-${month2}-${day2}`;
-// formatting subscription start date to compare
-  const startCheck = new Date(patSubscription.Startdate)   
-  const year3 = (startCheck.getFullYear());
-  const month3 = String(startCheck.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const day3 = String(startCheck.getDate()).padStart(2, '0');
-  const formattedDate3 = `${year3}-${month3}-${day3}`; 
-  const renewCheck = new Date(patSubscription.Renewaldate)   
+// Renewal date m4 subscribes 
+  const renewCheck = new Date(subscription.Renewaldate)   
   const year4 = (renewCheck.getFullYear());
   const month4 = String(renewCheck.getMonth() +1).padStart(2, '0'); // Months are zero-based
   const day4 = String(renewCheck.getDate()).padStart(2, '0');
   const formattedDate4 = `${year4}-${month4}-${day4}`;
-  const max= subDiscount.PackageName!=null && subDiscount.Status==="Subscribed"?subDiscount.PackageName.Family_Discount:0
-  const amount=subscription.PackageName.Price-(max);
-    
-  //console.log(max);
-  console.log("Amount");
-  console.log(formattedDate);
-  console.log(patSubscription.Status);
-  console.log(patSubscription.Status=="Subscribed");
-  if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate3 ){
+  const year5 = (renewCheck.getFullYear()+1);
+  const formattedDate5 = `${year5}-${month4}-${day4}`;
+  // Renewal data subscriubed 
+  const enddate2 = new Date (subscription.Enddate);
+  const year12 = (enddate2.getFullYear())+1;
+  const month12 = String(enddate2.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day12 = String(enddate2.getDate()).padStart(2, '0');
+  
+  const formattedDate12 = `${year12}-${month12}-${day12}`;
+  const max= patSubscription.PackageName!=null && patSubscription.Status==="Subscribed"?Package.Price*((patSubscription.PackageName.Family_Discount)/100):0
+  const amount=Package.Price-(max);
+ 
+  if(subscription.Status==="Subscribed" && formattedDate===formattedDate4 &&subscription.PackageName.Name==Package.Name ){
     console.log("entered this if ")
     if(patient.Wallet>amount ){
+           
+    const patient12 = await subscriptionModel.findOneAndUpdate({FamilyMem:relative},
+      { 
+        PackageName:Package,
+        Status:"Subscribed",
+       // Startdate:formattedDate,
+        Renewaldate:formattedDate5,
+        Enddate:formattedDate12
+      })
       console.log("entered this if ")
     const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
     res.status(200).json(updatePat)
@@ -329,9 +416,57 @@ const subscription= await subscriptionModel.findOne({FamilyMem:relative}).popula
       res.status(200).json(updateRenewal)
     }
   }
-else {
-  res.status(400).send({ message: "Error" });
-}}}
+ else  if(subscription.Status==="Unsubscribed"||subscription.Status==="Cancelled"){
+    if(patient.Wallet>amount ){
+    const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
+    
+  const patient12 = await subscriptionModel.findOneAndUpdate({FamilyMem:relative},
+    { 
+      PackageName:Package,
+      Status:"Subscribed",
+      Startdate:formattedDate,
+      Renewaldate:formattedDate2,
+      Enddate:formattedDate1
+    }
+
+  );
+    res.status(200).json(updatePat)
+    }
+    
+    else{
+      res.status(404).json({error:"Not enough money"})
+    }
+  } 
+  else if(subscription.Status==="Subscribed" && subscription.PackageName.Name!==Package.Name){
+    if(patient.Wallet>amount){
+      const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
+      const patient12 = await subscriptionModel.findOneAndUpdate({FamilyMem:relative},
+        { 
+          PackageName:Package,
+          Status:"Subscribed",
+          Startdate:formattedDate,
+          Renewaldate:formattedDate2,
+          Enddate:formattedDate1
+        })
+      res.status(200).json(updatePat)
+      }
+    
+      else{
+      //  const updateRenewal= await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled", Renewaldate:formattedDate5,Enddate:formattedDate1})
+        res.status(404).json({error:"Not enough money"})
+      }
+    
+  
+}  
+else if(subscription.Status==="Subscribed" && subscription.PackageName.Name==Package.Name){
+  res.status(404).json({error:"Already Paid for subscription "});
+       }
+    
+    else  {
+      res.status(404).json({error:"Failed to subscribing "})
+    }
+
+}}
   catch{
     res.status(400).send({ message: "Error catch" });
   }
@@ -610,63 +745,63 @@ console.log(subscribedcheck.Status=="Subscribed");
   
 }
 
-const subscribehealthpackage=async(req,res) =>{
-console.log("Entered");
-  try {
-    const Startdate = new Date();
+ const subscribehealthpackage=async(req,res) =>{
+// console.log("Entered");
+//   try {
+//     const Startdate = new Date();
 
-    const year = Startdate.getFullYear();
-    const month = String(Startdate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day = String(Startdate.getDate()).padStart(2, '0');
+//     const year = Startdate.getFullYear();
+//     const month = String(Startdate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+//     const day = String(Startdate.getDate()).padStart(2, '0');
     
-    const formattedDate = `${year}-${month}-${day}`;
-    const enddate = new Date();
+//     const formattedDate = `${year}-${month}-${day}`;
+//     const enddate = new Date();
     
-    const year1 = (enddate.getFullYear())+1;
-    const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day1 = String(enddate.getDate()).padStart(2, '0');
+//     const year1 = (enddate.getFullYear())+1;
+//     const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+//     const day1 = String(enddate.getDate()).padStart(2, '0');
     
-    const formattedDate1 = `${year1}-${month1}-${day1}`;
-    const day3 = String(enddate.getDate()+1).padStart(2, '0');
-    const formattedDate3 = `${year1}-${month1}-${day3}`;
-    const { PackageName,Status} = req.body;
-    const Package = await  packageModel.findOne({Name:PackageName});
-    const PatientUserName=req.user.Username;
-    const Patient  = await patientModel.findOne({Username:PatientUserName}); 
-   // console.log(PatientUserName);
-   // console.log(Patient) //changed this
-   const subscribtion = await subscriptionModel.findOne({Patient:Patient});
-   console.log(subscribtion);
+//     const formattedDate1 = `${year1}-${month1}-${day1}`;
+//     const day3 = String(enddate.getDate()+1).padStart(2, '0');
+//     const formattedDate3 = `${year1}-${month1}-${day3}`;
+//     const { PackageName,Status} = req.body;
+//     const Package = await  packageModel.findOne({Name:PackageName});
+//     const PatientUserName=req.user.Username;
+//     const Patient  = await patientModel.findOne({Username:PatientUserName}); 
+//    // console.log(PatientUserName);
+//    // console.log(Patient) //changed this
+//    const subscribtion = await subscriptionModel.findOne({Patient:Patient});
+//    console.log(subscribtion);
 
-   if (subscribtion==null){
-    res.send({error:"Error"});
-   }
-   else if (subscribtion.Status=="Subscribed"){
-    res.status(400).send({error:"You are already subscribed"});
-   }
+//    if (subscribtion==null){
+//     res.send({error:"Error"});
+//    }
+//    else if (subscribtion.Status=="Subscribed"){
+//     res.status(400).send({error:"You are already subscribed"});
+//    }
 
-   else if (subscribtion.Status!="Subscribed"){
-    console.log("Entered the if");
+//    else if (subscribtion.Status!="Subscribed"){
+//     console.log("Entered the if");
     
-    const patient12 = await subscriptionModel.findOneAndUpdate({Patient:Patient},
-      { 
-        PackageName:Package,
-        Status:"Subscribed",
-        Startdate:formattedDate,
-        Renewaldate:formattedDate3,
-        Enddate:formattedDate1
-      }
+//     const patient12 = await subscriptionModel.findOneAndUpdate({Patient:Patient},
+//       { 
+//         PackageName:Package,
+//         Status:"Subscribed",
+//         Startdate:formattedDate,
+//         Renewaldate:formattedDate3,
+//         Enddate:formattedDate1
+//       }
 
-    );
-    console.log(patient12)
-    res.status(200).send(patient12);
-    }
- else {
-  res.status(400).send({error:"Sorry already subscribed"});
- }
-  } catch (error) {
-    res.status(400).send({ Error:"Error occurred while  subscribing" });
-  }
+//     );
+//     console.log(patient12)
+//     res.status(200).send(patient12);
+//     }
+//  else {
+//   res.status(400).send({error:"Sorry already subscribed"});
+//  }
+//   } catch (error) {
+//     res.status(400).send({ Error:"Error occurred while  subscribing" });
+//   }
   
 }
 
@@ -687,7 +822,7 @@ const cancelSubscription=async(req,res) =>{
     if(subscribed){
       console.log("Here")
     if(subscribed.Status==="Cancelled"){
-      console.log(Error);
+      
       res.status(400).send({Error:"You have already cancelled your prescription"})
     }
     else{
