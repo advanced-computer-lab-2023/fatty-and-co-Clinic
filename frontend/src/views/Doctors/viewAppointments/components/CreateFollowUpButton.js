@@ -13,6 +13,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  ModalHeader,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -36,7 +37,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
     const url = API_PATHS.followupAppointment;
     axios
       .post(url, {
-        params: { date, patientUsername },
+        params: { date: date, PatientUsername: patientUsername },
         headers: { Authorization },
       })
       .then((response) => {
@@ -68,7 +69,9 @@ export default function CreateFollowUpButton({ patientUsername }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
+          <ModalHeader>create follow up appointment</ModalHeader>
           <ModalCloseButton />
+
           <ModalBody>
             <Input
               bg="white"

@@ -347,7 +347,8 @@ const viewPatientInfoAndHealthRecords = async (req, res) => {
 const followupAppointment = async (req, res) => {
   const patientUsername = req.query.PatientUsername;
   const doctorUsername = req.user.Username;
-  const date = new Date(req.query.Date);
+  const appointmentID = req.query.appointmentID;
+  const date = new Date(req.query.date);
 
   try {
     const patient = await patientModel.findOne({
