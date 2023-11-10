@@ -77,7 +77,7 @@ var dashRoutes = [
   },
   {
     path: "/viewMyPackageStatus",
-    name: "My Package Status ",
+    name: "My Subscription",
     icon: <HomeIcon color="inherit" />,
     component: ViewMyPackageswithstatus,
     layout: "/patient",

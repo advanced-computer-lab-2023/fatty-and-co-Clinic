@@ -13,7 +13,7 @@ import {
   import Card from "components/Card/Card.js";
   import CardBody from "components/Card/CardBody.js";
   import CardHeader from "components/Card/CardHeader.js";
-  import MyPackageRow from "components/Tables/MyPackageRow";
+  import MyPackageSubRow from "components/Tables/MyPackageSubRow";
   
   import React from "react";
   
@@ -45,7 +45,7 @@ import {
             </Thead>
              <Tbody>
                 
-                   <MyPackageRow
+                   <MyPackageSubRow
                      key={data.Name}
                      Name={data.Name}
                      Price={data.Price}

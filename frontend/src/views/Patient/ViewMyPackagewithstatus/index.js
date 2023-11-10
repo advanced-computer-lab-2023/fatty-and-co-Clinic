@@ -5,7 +5,7 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 //import FamPackageTable from "./components/FamPackageTable";
-import MYPackagestatusTable from "./components/MyPackageTable";
+import MyPackageSubsTable from "./components/MyPackageTable";
 //import FamPackageRow from "components/Tables/FamPackageRow";
 //import statuspackagerow from "components/Tables/statuspackagerow";
  const ViewMyPackageswithstatus= ()=>{
@@ -25,7 +25,6 @@ import MYPackagestatusTable from "./components/MyPackageTable";
           'Authorization': Authorization
         }})
       .then((response) => {
-        console.log("Hiii",response.data);
         setData(response.data);
 
       
@@ -42,11 +41,11 @@ import MYPackagestatusTable from "./components/MyPackageTable";
         pt="50px"
         justifyContent="flex-start"
       >
-         <MYPackagestatusTable
+         <MyPackageSubsTable
             title={"My Package"}
-            captions={["Name", "Status","PackageName","Enddate", "Startdate","Renewaldate"]}
+            captions={["PackageName", "Status","Enddate", "Startdate","Renewaldate"]}
             data={data}
-           ></MYPackagestatusTable>
+           />
             {/* <Text fontSize="3xl" fontWeight="bold">
               No Subscriptions Found
             </Text> 
