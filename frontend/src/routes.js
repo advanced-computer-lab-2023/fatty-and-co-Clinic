@@ -7,8 +7,7 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; 
-//Zawedna de
-import SubscribePackage from "views/Patient/SubscribePackage/subscribePack";
+
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus"
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import Package from "views/Admin/Package/package";
@@ -82,13 +81,7 @@ var dashRoutes = [
     component: ViewFamPackageswithstatus,
     layout: "/patient",
   },
-  {
-    path: "/subscriptionPayment",
-    name: "Subscribe",
-    icon: <HomeIcon color="inherit" />,
-    component: SubscribePackage,
-    layout: "/patient",
-  },
+ 
   {
     path: "/package",
     name: "Packages",

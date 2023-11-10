@@ -16,7 +16,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import Statuspackagerow from "components/Tables/statuspackagerow";
 //console.log(statuspackagerow)
 import React from "react";
-const FamPackagestatusTable = ({ title, captions, data }) => {
+const FamPackageStatusTable = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
   title="Family Member Packages"
   return (
@@ -44,13 +44,14 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
               if(row){
               const id = row.Patient?row.Patient._id: row.FamilyMem._id ;
               const name = row.Patient?row.Patient.Name: row.FamilyMem.Name ;
+              const packageName = row.PackageName?row.PackageName.Name:"";
               
               return (
                 <Statuspackagerow
                   key={id}
                   Name={name}
                   Status={row.Status}
-                  PackageName={row.PackageName.Name}
+                  PackageName={packageName}
                   Enddate={row.Enddate}
                   Startdate={row.Startdate}
                   Renewaldate={row.Renewaldate}
@@ -64,5 +65,5 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
   );
 };
 
-export default FamPackagestatusTable ;
+export default FamPackageStatusTable ;
   

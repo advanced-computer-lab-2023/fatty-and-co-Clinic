@@ -35,10 +35,10 @@ function PackageForm() {
   const textColor = useColorModeValue("gray.700", "white");
   const toast = useToast();
   return (
-    <Card
-      p="0px"
-      my={{ sm: "0px", lg: "0px" }}
-      ms={{ sm: "0px", lg: "0px" }}
+    <Text
+      // p="0px"
+      // my={{ sm: "0px", lg: "0px" }}
+      // ms={{ sm: "0px", lg: "0px" }}
     >
       {/* <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
@@ -153,7 +153,7 @@ function PackageForm() {
           </form> 
        </Flex> 
       </CardBody> */}
-    </Card>
+    </Text>
   );
 }
 
