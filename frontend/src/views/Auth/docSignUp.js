@@ -8,7 +8,18 @@ import {
   Input,
   Text,
   useColorModeValue,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure,
+  ModalCloseButton,
+  CircularProgress,
+  CircularProgressLabel
 } from "@chakra-ui/react";
+import { AttachmentIcon } from "@chakra-ui/icons";
 // Assets
 import BgSignUp from "assets/img/BgSignUp.png";
 import React from "react";
@@ -26,6 +37,11 @@ function docSignUp() {
   const [Affiliation, setAffiliation] = useState("");
   const [EducationalBackground, setEducationalBackground] = useState("");
   const [Speciality, setSpeciality] = useState("");
+  const [IdFile , setIdFile] = useState("");
+  const [MedicalLicense, setMedicalLicense] = useState("");
+  const [MedicalDegree , setMedicalDegree] = useState(""); 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
   return (
     <Flex
       direction="column"
@@ -98,17 +114,34 @@ function docSignUp() {
                 EducationalBackground,
                 Speciality,
               };
+              const formData = new FormData();
+              formData.append("Username", Username);
+              formData.append("Password", Password);
+              formData.append("Email", Email);
+              formData.append("Name", Name);
+              formData.append("DateOfBirth", DateOfBirth);
+              formData.append("HourlyRate", HourlyRate);
+              formData.append("Affiliation", Affiliation);
+              formData.append("EducationalBackground", EducationalBackground);
+              formData.append("Speciality", Speciality);
+              formData.append("IdFile", IdFile);
+              formData.append("MedicalLicense", MedicalLicense);
+              formData.append("MedicalDegree", MedicalDegree);
+              onOpen();
+              //show spinner on modal while waiting for response
+              console.log("IdFile", IdFile);
+              console.log("MedicalLicense", MedicalLicense);
+              console.log("MedicalDegree", MedicalDegree);
               const response = await fetch(API_PATHS.docSignUp, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(Request),
+                body: formData,
               });
-              const data = await response.json();
-              console.log(data);
+              //const data = response.json();
               if (response.ok) {
                 console.log("Doctor request submitted successfully!");
                 window.location.href = "/auth/signin";
               } else {
+                onClose();
                 console.log("Error submitting doctor request!");
               }
             }}
@@ -240,6 +273,92 @@ function docSignUp() {
                 required
                 onChange={(e) => setSpeciality(e.target.value)}
               />
+              {/* //////// Upload files ///////// */}
+              <FormLabel
+                htmlFor="IdFile"
+                ms="4px"
+                fontSize="sm"
+                bg="teal.300"
+                color="white"
+                fontWeight="xsmall"
+                w="60%"
+                h="45"
+                mb="24px"
+                borderRadius="15px"
+                style={{
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingTop: "10px",
+                }}
+              >
+                Upload Id <AttachmentIcon boxSize={3} />
+              </FormLabel>
+              <Input
+                type="file"
+                placeholder="..."
+                id="IdFile"
+                name="IdFile"
+                style={{ display: "none" }}
+                required
+                onChange={(e) => setIdFile(e.target.files[0])}
+              />
+              <FormLabel
+                htmlFor="MedicalLicense"
+                ms="4px"
+                fontSize="sm"
+                bg="teal.300"
+                color="white"
+                fontWeight="xsmall"
+                w="60%"
+                h="45"
+                mb="24px"
+                borderRadius="15px"
+                style={{
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingTop: "10px",
+                }}
+              >
+                Upload Medical License <AttachmentIcon boxSize={3} />
+              </FormLabel>
+              <Input
+                type="file"
+                placeholder="..."
+                id="MedicalLicense"
+                name="MedicalLicense"
+                style={{ display: "none" }}
+                required
+                onChange={(e) => setMedicalLicense(e.target.files[0])}
+              />
+              <FormLabel
+                htmlFor="MedicalDegree"
+                ms="4px"
+                fontSize="sm"
+                bg="teal.300"
+                color="white"
+                fontWeight="xsmall"
+                w="60%"
+                h="45"
+                mb="24px"
+                borderRadius="15px"
+                style={{
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingTop: "10px",
+                }}
+              >
+                Upload Medical Degree <AttachmentIcon boxSize={3} />
+              </FormLabel>
+              <Input
+                type="file"
+                placeholder="..."
+                id="MedicalDegree"
+                name="MedicalDegree"
+                style={{ display: "none" }}
+                required
+                onChange={(e) => setMedicalDegree(e.target.files[0])}
+              />
+              {/* ////////////end of upload files //////////// */}
               <Button
                 type="submit"
                 bg="teal.300"
@@ -260,6 +379,16 @@ function docSignUp() {
               </Button>
             </FormControl>
           </form>
+          {/* //////// Modal ///////// */}
+          <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} h="200">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalBody>
+                This will take a few seconds... <CircularProgress size='20px' isIndeterminate color='green.300' />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+          {/* ////////////end of modal //////////// */}
         </Flex>
       </Flex>
     </Flex>
