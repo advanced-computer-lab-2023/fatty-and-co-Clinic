@@ -56,7 +56,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/updateEmailDoc/:DoctorUsername",
+    path: "/updateEmailDoc",
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -65,7 +65,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/updateHourly/:DoctorUsername",
+    path: "/updateHourly",
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -74,7 +74,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/updateAffil/:Username",
+    path: "/updateAffil",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -161,7 +161,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/doctorPatients/:doctorUsername",
+    path: "/doctorPatients",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,
