@@ -11,7 +11,7 @@ const PackageInformation = ({ title, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Card my={{ lg: "24px" }} me={{ lg: "24px" }}>
-      <Flex direction="column">
+      <Flex direction="column" w="100%">
         <CardHeader py="12px">
           <Text color={textColor} fontSize="lg" fontWeight="bold">
             {title}
