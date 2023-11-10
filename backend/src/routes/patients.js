@@ -41,7 +41,7 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.get("/viewFamilyPackage",viewHealthFam)
+router.get("/viewFamilyPackage",checkPatient,viewHealthFam)
 /**
 =======
 >>>>>>> main
@@ -66,13 +66,13 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
-router.get("/getOptionPackages", viewOptionPackages);
+router.get("/getOptionPackages",checkPatient, viewOptionPackages);
 
-router.patch("/cancelSubscription",cancelSubscription);
-router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember);
-router.patch("/payForSubscription",payForSubscription);
-router.get("/viewHealthPackagewithstatus",viewHealthPackagewithstatus);
-router.get("/viewHealthFamwithstatus",viewHealthFamwithstatus);
+router.patch("/cancelSubscription",checkPatient,cancelSubscription);
+router.patch("/cancelSubscriptionfamilymember",checkPatient,cancelSubscriptionfamilymember);
+router.patch("/payForSubscription",checkPatient,payForSubscription);
+router.get("/viewHealthPackagewithstatus",checkPatient,viewHealthPackagewithstatus);
+router.get("/viewHealthFamwithstatus",checkPatient,viewHealthFamwithstatus);
 //router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id

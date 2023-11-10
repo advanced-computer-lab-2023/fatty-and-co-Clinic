@@ -206,7 +206,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/viewmembers/:PatientUserName",
+    path: "/viewmembers",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,

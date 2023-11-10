@@ -36,11 +36,11 @@ function PackageForm() {
   const toast = useToast();
   return (
     <Card
-      p="22px"
-      my={{ sm: "24px", lg: "0px" }}
-      ms={{ sm: "0px", lg: "24px" }}
+      p="0px"
+      my={{ sm: "0px", lg: "0px" }}
+      ms={{ sm: "0px", lg: "0px" }}
     >
-      <CardHeader>
+      {/* <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
           <Text fontSize="lg" color={textColor} fontWeight="bold">
             Add New Package
@@ -152,7 +152,7 @@ function PackageForm() {
             </Stack>
           </form> 
        </Flex> 
-      </CardBody>
+      </CardBody> */}
     </Card>
   );
 }
