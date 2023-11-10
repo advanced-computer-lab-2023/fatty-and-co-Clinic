@@ -28,6 +28,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
+  console.log(user);
 
   const handleDate = (event) => {
     setDate(event.target.value);
@@ -36,7 +37,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
   const handleSubmit = () => {
     const url = API_PATHS.followupAppointment;
     axios
-      .post(url, {
+      .post(url, null, {
         params: { date: date, PatientUsername: patientUsername },
         headers: { Authorization },
       })
@@ -52,8 +53,9 @@ export default function CreateFollowUpButton({ patientUsername }) {
       })
       .catch((err) =>
         toast({
-          title: "Error",
-          description: "Error while creating your appointment.",
+          title: "Error ",
+          description:
+            "We've encountered an error while creating your follow up appointment .",
           status: "error",
           duration: 9000,
           isClosable: true,

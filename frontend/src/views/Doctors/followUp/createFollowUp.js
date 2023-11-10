@@ -28,7 +28,7 @@ export function createFollowUp({ patientUsername }) {
     const toast = useToast();
     const url = API_PATHS.followupAppointment;
     axios
-      .post(url, {
+      .post(url, null, {
         params: { date, patientUsername },
         headers: { Authorization },
       })
