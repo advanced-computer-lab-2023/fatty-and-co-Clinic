@@ -24,7 +24,7 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = ({amount}) => {
+const PaymentForm = ({ amount }) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
