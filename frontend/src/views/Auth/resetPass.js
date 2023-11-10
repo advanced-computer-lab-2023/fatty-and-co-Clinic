@@ -27,8 +27,8 @@ import { API_PATHS } from "API/api_paths";
 import axios from 'axios';
 
 function resetPass() {
+    const [email, setEmail] = useState('');
     const [isFormSubmitted, setFormSubmitted] = useState(false);
-    var email = "";
   
     const handleSubmit = async (values, { setSubmitting }) => {
       console.log(values);
@@ -36,8 +36,7 @@ function resetPass() {
         const { Email } = values;
         console.log(Email);
 
-        email = Email;
-  
+        setEmail(Email);  
         const response = await axios.post(API_PATHS.sendOTP, { Email });
         console.log(email);
   
@@ -52,15 +51,24 @@ function resetPass() {
     };
   
     const handleOtpSubmit = async (values, { setSubmitting }) => {
-      console.log('OTP submitted:', values.otp);
-      const { otp} = values;
-      console.log(otp);
-      const response = await axios.post(API_PATHS.validateOTP, { Email: email , otp: otp });
-  
-      console.log('Server response:', response.data);
+        try{
+            console.log('OTP submitted:', values.otp);
+                const { otp} = values;
+                //await handleSubmit(values, { setSubmitting });
+                console.log(otp);
+                console.log(email);
+                console.log('Request Payload:', { Email: email, otp: otp });
 
-  
-      setSubmitting(false);
+                const response = await axios.post(API_PATHS.validateOTP, { Email: email , otp: otp });
+            
+                console.log('Server response:', response.data);
+
+            
+                setSubmitting(false);
+                window.location.href = '/auth/signin';
+        } catch (error) {
+            console.error(error);
+          }
     };
 
   // Chakra color mode

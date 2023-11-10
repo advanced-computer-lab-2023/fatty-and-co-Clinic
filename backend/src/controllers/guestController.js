@@ -117,10 +117,14 @@ const sendOTP = async (req,res) => {
     }
 
     const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
-    console.log('Set-Cookie Header:', res.getHeaders()['set-cookie']);
-    res.cookie('otp', otp, { httpOnly: true, maxAge: 600000 , sameSite: 'None', secure: true});
+    const test = await systemUserModel.findOneAndUpdate({ Email: Email },
+    { $set: { otp: otp ,otpDuration: Date.now() + 600000} } , {new:true});
+    // user.otp = otp;
+    // user.otpDuration = Date.now() + 600000;
+    // user.save();
+    //res.cookie('otp', otp, { httpOnly: true, maxAge: 600000 , sameSite: 'None', secure: true});
 
-    console.log('Set-Cookie Header:', res.getHeaders()['set-cookie']);
+    //console.log('Set-Cookie Header:', res.getHeaders()['set-cookie']);
 
     await transporter.sendMail({
       to: Email,
@@ -146,14 +150,12 @@ const validateOTP = async (req,res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
 
-    const otp1 = req.cookies.otp;
-    const maxAge = req.cookies['otp'].maxAge;
-    console.log(maxAge);
-
- 
-    if (otp1 !== otp || Date.now() > maxAge) {
+      console.log(user.otp);
+      console.log(user.otpDuration);
+      console.log(otp);
+      console.log(Date.now());
+    if (user.otp !== otp || Date.now() > user.otpDuration) {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
