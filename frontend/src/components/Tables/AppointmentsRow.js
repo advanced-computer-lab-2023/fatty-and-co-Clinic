@@ -13,9 +13,17 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
 
 function AppointmentsRow(props) {
-  const { DoctorName, PatientName, Status, Type, DateTime } = props;
+  const {
+    DoctorName,
+    PatientName,
+    PatientUsername,
+    Status,
+    Type,
+    DateTime,
+  } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
@@ -84,11 +92,9 @@ function AppointmentsRow(props) {
           {new Date(DateTime).toLocaleTimeString("en-GB")}
         </Text>
       </Td>
-      {PatientName && (
+      {PatientUsername && (
         <Td minWidth={{ sm: "150px" }}>
-          <ChakraLink as={RouterLink} to="/newPage">
-            <Button colorScheme="teal">Book Follow Up</Button>
-          </ChakraLink>
+          <CreateFollowUpButton patientUsername={PatientUsername} />
         </Td>
       )}
     </Tr>

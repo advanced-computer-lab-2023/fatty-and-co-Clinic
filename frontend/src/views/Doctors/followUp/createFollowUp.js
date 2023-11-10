@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
 
-export function createFollowUp() {
+export function createFollowUp({ patientUsername }) {
   const [date, setDate] = useState("");
 
   const { user } = useAuthContext();

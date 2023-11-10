@@ -49,6 +49,7 @@ export const AppointmentsTable = ({ title, captions, data }) => {
                 <AppointmentsRow
                   key={row.PatientUsername}
                   PatientName={row.PatientName}
+                  PatientUsername={row.PatientUsername}
                   Type={row.FollowUp ? "Follow Up" : "First Time"}
                   Status={row.Status}
                   DateTime={row.Date}
