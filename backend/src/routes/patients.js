@@ -16,13 +16,15 @@ const {
   selectPatient,
   selectPrescription,
   getEmergencyContact,
+  uploadFile,
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
+const { upload } = require("../common/middleware/upload");
 
 const router = express.Router();
 
-/** 
+/**
  * @route POST /patients/addPatient
  * @desc Creates a new patient
  * @access Public
@@ -34,7 +36,7 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
+router.get("/viewFamilyPackage/:PatientID", viewHealthFam);
 /**
 =======
 >>>>>>> main
@@ -112,7 +114,7 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember/:PatientID", GetFamilymembers);  //Changed name of params
+router.get("/getFamilymember/:PatientID", GetFamilymembers); //Changed name of params
 router.get("/getFamilymember", checkPatient, GetFamilymembers);
 /**
  * @route GET /patients/getPrescriptions
@@ -121,6 +123,14 @@ router.get("/getFamilymember", checkPatient, GetFamilymembers);
  */
 // TODO: add type check as middleware if needed
 router.get("/getPrescriptions", getPrescriptions);
+
+/**
+ * @route POST /patients/uploadFile
+ * @desc Uploads a file health record
+ * @access Patient
+ * @prop {string} note - The note of the file in the body
+ */
+router.post("/uploadFile", upload.single("file"), uploadFile);
 
 /**
  * @route GET /patients/selectPatient
@@ -147,9 +157,8 @@ router.get("/selectPrescription", selectPrescription);
  */
 // TODO: add type check as middleware if needed
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
-router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
-router.get("/viewMyPackage/:PatientID",viewHealthPackage)
-
+router.patch("/subscribehealthpackage/:id", subscribehealthpackage);
+router.patch("/subscribepackagefamilymem/:id", subscribepackagefamilymem);
+router.get("/viewMyPackage/:PatientID", viewHealthPackage);
 
 module.exports = router;

@@ -355,6 +355,17 @@ const subscribehealthpackage = async (req, res) => {
   }
 };
 
+const uploadFile = async (req, res) => {
+  const user = req.user.Username;
+  const filename = req.file.filename;
+  console.log(filename);
+  await patientModel.findOneAndUpdate(
+    { Username: user },
+    { $push: { MedicalHistory: { filename: filename, note: req.body.note } } }
+  );
+  res.status(200).send({ message: "File uploaded successfully" });
+};
+
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
@@ -378,4 +389,5 @@ module.exports = {
   selectPrescription,
   getEmergencyContact,
   subscribepackagefamilymem,
+  uploadFile,
 };

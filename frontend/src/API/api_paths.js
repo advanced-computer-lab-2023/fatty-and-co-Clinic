@@ -36,6 +36,7 @@ export const API_PATHS = {
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
+  uploadFile: PATIENT_BASE + "uploadFile",
 
   // Package
   packages: PACKAGE_BASE + "packages/",

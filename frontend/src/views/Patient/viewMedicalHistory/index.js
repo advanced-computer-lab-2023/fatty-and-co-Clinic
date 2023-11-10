@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { usePackageContext } from "./hooks/usePackageContext";
 import HealthRecordForm from "./components/HealthRecordForm";
-import DeleteUserForm from "./components/HealthRecordForm";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 
@@ -50,4 +49,3 @@ function MedicalHistoryI() {
 }
 
 export default MedicalHistoryI;
-DeleteUser;

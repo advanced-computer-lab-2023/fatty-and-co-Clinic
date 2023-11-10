@@ -23,13 +23,8 @@ import { useAuthContext } from "hooks/useAuthContext";
 
 function HealthRecordForm() {
   const { dispatch } = usePackageContext();
-  const [Name, setName] = useState("");
-  const [Price, setPrice] = useState("");
-  const [Session_Discount, setSession_Discount] = useState("");
-  const [Medicine_Discount, setMedicine_Discount] = useState("");
-  const [Family_Discount, setFamily_Discount] = useState("");
-  const [message, setMessage] = useState("");
   const { user } = useAuthContext();
+  const [ file, setFile ] = useState(null);
   const Authorization = `Bearer ${user.token}`;
 
   const textColor = useColorModeValue("gray.700", "white");
@@ -51,12 +46,39 @@ function HealthRecordForm() {
         <Flex direction="column" w="100%">
           <form
             id="myForm"
-            action={API_PATHS.uploadFile}
-            method="POST"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData();
+              formData.append("file", file);
+              const response = await fetch(API_PATHS.uploadFile, {
+                method: "POST",
+                headers: {
+                  Authorization: Authorization,
+                },
+                body: formData,
+              });
+              const data = await response.json();
+              if (response.ok) {
+                toast({
+                  title: "File uploaded successfully",
+                  status: "success",
+                  duration: 3000,
+                  isClosable: true,
+                });
+                dispatch({ type: "ADD_PACKAGE", payload: data });
+              } else {
+                toast({
+                  title: "File upload failed",
+                  status: "error",
+                  duration: 3000,
+                  isClosable: true,
+                });
+              }
+            }}
           >
             <Stack spacing={3}>
-            <FormLabel
-                htmlFor="IdFile"
+              <FormLabel
+                htmlFor="file"
                 ms="4px"
                 fontSize="sm"
                 bg="teal.300"
@@ -76,14 +98,13 @@ function HealthRecordForm() {
               </FormLabel>
               <Input
                 type="file"
-                placeholder="..."
-                id="IdFile"
-                name="IdFile"
+                id="file"
+                name="file"
                 style={{ display: "none" }}
                 required
-                onChange={(e) => setIdFile(e.target.files[0])}
+                onChange={(e) => setFile(e.target.files[0])}
               />
-              
+
               <Button
                 colorScheme="teal"
                 borderColor="teal.300"
