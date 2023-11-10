@@ -17,6 +17,12 @@ const patientSchema = new Schema(
     MobileNum: {
       type: Number,
       required: true,
+      unique: true,
+    },
+    NationalId: {
+      type: Number,
+      required: false,
+      unique: true,
     },
     DateOfBirth: {
       type: Date,
@@ -36,6 +42,13 @@ const patientSchema = new Schema(
       ref: "Package",
       required: false,
     },
+    LinkedPatients: {
+      type: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Patient'
+      }],
+      required: true
+    }
   },
   { timestamps: true }
 );

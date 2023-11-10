@@ -97,6 +97,7 @@ const createPatient = async (req, res) => {
     Password,
     Email,
     MobileNum,
+    NationalId,
     DateOfBirth,
     Gender,
     EmergencyContactNumber,
@@ -113,12 +114,14 @@ const createPatient = async (req, res) => {
       Username: Username,
       Name: Name,
       MobileNum: MobileNum,
+      NationalId: NationalId,
       DateOfBirth: DateOfBirth,
       Gender: Gender,
       EmergencyContact: {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
       },
+      LinkedPatients: [],
     });
     res.status(200).send({ patient, user });
   } catch (error) {

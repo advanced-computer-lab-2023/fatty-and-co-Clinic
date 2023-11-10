@@ -16,6 +16,7 @@ const {
   selectPatient,
   selectPrescription,
   getEmergencyContact,
+  linkPatient
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -145,6 +146,6 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
 router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
 router.get("/viewMyPackage/:PatientID",viewHealthPackage)
-
+router.patch("/linkPatient", linkPatient)
 
 module.exports = router;

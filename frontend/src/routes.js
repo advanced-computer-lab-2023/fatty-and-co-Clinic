@@ -21,6 +21,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
+import linkPatient from "views/Patient/linkPatient";
 
 import {
   HomeIcon,
@@ -150,6 +151,13 @@ var dashRoutes = [
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
+    layout: "/patient",
+  },
+  {
+    path: "/linkPatient",
+    name: "Link Patient",
+    icon: <HomeIcon color="inherit" />,
+    component: linkPatient,
     layout: "/patient",
   },
   {

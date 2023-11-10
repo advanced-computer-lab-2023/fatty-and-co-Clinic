@@ -148,6 +148,11 @@ function generateMobileNum() {
   return mobileNum;
 }
 
+function generateNationalId() {
+  const nationalId = Math.floor(Math.random() * 9000000000000000) + 1000000000000000;
+  return nationalId;
+}
+
 function generatePackage() {
   const packages = ["Silver", "Gold", "Platinum"];
   return packages[Math.floor(Math.random() * packages.length)];
@@ -325,6 +330,7 @@ module.exports = {
   generateEducationalBackground,
   generateSpeciality,
   generateMobileNum,
+  generateNationalId,
   generatePackage,
   generateEmail,
   generatePassword,

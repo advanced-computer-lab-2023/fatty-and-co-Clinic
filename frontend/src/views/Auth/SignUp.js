@@ -37,6 +37,7 @@ function SignUp() {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [DateOfBirth, setDateOfBirth] = useState("");
+  const [NationalId, setNationalId] = useState("");
   const [EmergencyContactName, setEmergencyContactName] = useState("");
   const [EmergencyContactNumber, setEmergencyContactNumber] = useState("");
   const [MobileNum, setMobileNumber] = useState("");
@@ -177,7 +178,7 @@ function SignUp() {
           >
             or
           </Text> */}
-          <form
+          <form 
             id="signup"
             onSubmit={async (e) => {
               e.preventDefault();
@@ -188,6 +189,7 @@ function SignUp() {
                 Password,
                 DateOfBirth,
                 MobileNum,
+                NationalId,
                 Gender,
                 EmergencyContactName,
                 EmergencyContactNumber,
@@ -291,6 +293,20 @@ function SignUp() {
                 size="lg"
                 required
                 onChange={(e) => setMobileNumber(e.target.value)}
+              />
+              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                National ID
+              </FormLabel>
+              <Input
+                fontSize="sm"
+                ms="4px"
+                borderRadius="15px"
+                type="number"
+                placeholder="Enter your national ID"
+                mb="24px"
+                size="lg"
+                required
+                onChange={(e) => setNationalId(e.target.value)}
               />
               <FormControl>
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
