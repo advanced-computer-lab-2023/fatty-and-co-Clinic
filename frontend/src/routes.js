@@ -6,8 +6,11 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
-import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
+import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; 
+//Zawedna de
+import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import Package from "views/Admin/Package/package";
+import Packagesubscibe  from "views/Patient/Package/packagesubscribe";
 import Package2 from "views/Patient/viewPackagesFam/package2"
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
@@ -24,7 +27,8 @@ import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import ViewMyPackage from "views/Patient/viewMyPackage"
 import ViewFamPackages from "views/Patient/viewFamPackages";
-import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus"
+import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
+
 import {
   HomeIcon,
   StatsIcon,
@@ -47,6 +51,13 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: Package,
     layout: "/admin",
+  },
+  {
+    path: "/packagetest",
+    name: "Packagetesting",
+    icon: <HomeIcon color="inherit" />,
+    component: Packagesubscibe,
+    layout: "/patient",
   },
   {
     path: "/viewMyPackage",
@@ -85,6 +96,15 @@ var dashRoutes = [
     layout: "/doctor",
   },
 
+  {
+    path: "/Subscribtions/",
+    name: "Subscribtions",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: CancelSubscription,
+    layout: "/patient",
+  },
   {
     path: "/updateEmailDoc/:DoctorUsername",
     name: "Update Email",

@@ -38,6 +38,9 @@ export const API_PATHS = {
   viewFamPackage: PATIENT_BASE +"viewFamilyPackage/",
   //viewHealthFamwithstatus:PATIENT_BASE +"viewHealthFamwithstatus/",
   viewHealthFamwithstatus:PATIENT_BASE+"viewHealthFamwithstatus",
+  CancelFamilysubscribtion:PATIENT_BASE+"cancelSubscriptionfamilymember",
+  subscribepackagefamilymem:PATIENT_BASE+"subscribepackagefamilymem",
+
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",

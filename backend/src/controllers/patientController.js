@@ -457,13 +457,13 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const {PatientUserName}=req.user.username;
-    const { Patient } = await patientModel.find(PatientUserName);  //changed this
+    const PatientUserName=req.user.username;
+    const Patient = await patientModel.find(PatientUserName);  //changed this
     const fam = await familyMemberModel.find({PatientID:Patient.id}).populate("PatientID").populate("FamilyMem");
-   // const PatientUserName = req.user.Username;
+   //const PatientUserName = req.user.Username;
     //console.log(PatientID);
-    //  console.log(fam)
-    res.status(200).json(fam);
+     console.log(fam)
+    res.status(200).send(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -683,22 +683,23 @@ const cancelSubscription=async(req,res) =>{
     const formattedDate = `${year}-${month}-${day}`;
     const patient= await patientModel.findOne({Username:signedIn})
     const subscribed= await subscriptionModel.findOne({Patient:patient})
+  //  console.log()
     if(subscribed){
       console.log("Here")
     if(subscribed.Status==="Cancelled"){
-      res.send({error:"You have already cancelled your prescription"})
+      res.status(400).send({Error:"You have already cancelled your prescription"})
     }
     else{
       const subscribedUpdate=await subscriptionModel.findOneAndUpdate({Patient:patient,},{Status:"Cancelled",Enddate:formattedDate})
-      res.json({subscribedUpdate});
+      res.status(200).json({subscribedUpdate});
     }}
 
     else{
-      res.send({Error:"You're not subscribed!"})
+      res.status(400).send({Error:"You're not subscribed!"})
     }
 }
 catch{
-  res.send({Error:"Error occurred while cancelling subscription"})
+  res.status(400).send({Error:"Error occurred while cancelling subscription"})
 }}
 const cancelSubscriptionfamilymember=async(req,res) =>{
   try {
@@ -713,20 +714,22 @@ const cancelSubscriptionfamilymember=async(req,res) =>{
     const fam = await familyMemberModel.findOne({NationalId:NationalId});
     const subscribed= await subscriptionModel.findOne({FamilyMem:fam, FamilyMem:fam.id})
     const famrelated=await familyMemberModel.find({PatientID:patient.id,NationalId:NationalId});
+    console.log(req.user.Username)
     if (famrelated ==null){
-      res.send({error:"Family member not related to you "})
+      res.status(400).send({error:"Family member not related to you "})
     }
     if (fam.FamilyMem!=null){
-      res.send({error:"He is already a system user"})
+      res.status(400).send({error:"He is already a system user"})
     }
     if(subscribed){
       console.log("Here")
     if(subscribed.Status==="Cancelled"){
-      res.send({error:"You have already cancelled your prescription"})
+      res.status(400).send({error:"You have already cancelled your prescription"})
     }
     else{
       const subscribedUpdate=await subscriptionModel.findOneAndUpdate({FamilyMem:fam},{Status:"Cancelled",Enddate:formattedDate})
-      res.json({subscribedUpdate});
+      console.log(subscribedUpdate);
+      res.status(200).json({subscribedUpdate});
     }}
 
     else{
