@@ -12,6 +12,7 @@ const patientRoutes = require("./routes/patients");
 const adminRoutes = require("./routes/admins");
 const testRoutes = require("./routes/tests");
 const packageRoutes = require("./routes/package");
+const paymentRoutes = require("./routes/payments");
 
 // Middleware Variables
 const requireAuth = require("./common/middleware/requireAuth");
@@ -50,6 +51,7 @@ app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/package", packageRoutes);
+app.use("/payment", paymentRoutes);
 
 // Server
 mongoose
