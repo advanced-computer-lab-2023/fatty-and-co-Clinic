@@ -27,7 +27,8 @@ export const API_PATHS = {
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
-
+  subscribePackageSelf: PATIENT_BASE+"payForSubscription/",
+  subscribePackageFam:PATIENT_BASE+"payFamilySubscription/",
   // Patient
   viewMyPackage:PATIENT_BASE+"viewMyPackage",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
