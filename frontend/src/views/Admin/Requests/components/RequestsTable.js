@@ -38,7 +38,7 @@ const Requests = ({ title, captions, data }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => {
+            {Array.isArray(data) && data.map((row) => {
               return (
                 <RequestsRow
                   key={`${row.Username}-${row.Name}`}

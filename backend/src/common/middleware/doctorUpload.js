@@ -14,6 +14,7 @@ conn.once("open", () => {
   //Init stream
   gfs = new Grid(conn.db, mongoose.mongo);
   gfs.collection("doctor_uploads");
+  
 });
 //create storage engine
 const storage = new GridFsStorage({
@@ -71,7 +72,7 @@ const storage = new GridFsStorage({
     ]);
   }
 });
-const cpUpload = multer({ storage: storage }).fields([
+const cpUpload = multer({storage }).fields([
   { name: "IdFile", maxCount: 1 },
   { name: "MedicalLicense", maxCount: 1 },
   { name: "MedicalDegree", maxCount: 1 }
@@ -91,18 +92,18 @@ const getDoctorFiles = (req, res) => {
 };
 
 const getDoctorFile = (name) => {
-  return new Promise((resolve, reject) => {
+  
     try {
       const file = gfs.files.findOne({ filename: name }); //for all files we use find().toArray
       if (!file || file.length === 0) {
-        reject("No file found");
+        retrun("No file found");
       }
+      console.log("file", file);
       resolve(file);
     } catch (error) {
       reject(error);
     }
-  });
-};
+  };
 
 const getFile = (name) => {
   return new Promise(async (resolve, reject) => {
@@ -112,7 +113,7 @@ const getFile = (name) => {
       //read output to browser
       console.log("file", file.filename);
       let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
-        bucketName: "doctor_uploads",
+        bucketName: "fs",
       });
       var readstream = bucket.openDownloadStreamByName(file.filename);
       console.log("readstream", readstream);
@@ -124,4 +125,23 @@ const getFile = (name) => {
   });
 };
 
-module.exports = { cpUpload, getDoctorFile, getFile };
+
+const allFiles = ()=>{
+  console.log("out")
+ 
+  gfs.files.find().toArray( (err, files) => {
+    console.log("in")
+    //check if files exist
+    if (!files || files.length === 0) {
+      
+      return res.status(404).json({
+        err: "No files exist",
+      });
+    }
+    //files exist
+   
+    return files;
+  });
+}
+
+module.exports = { cpUpload, getDoctorFile, getFile , allFiles};

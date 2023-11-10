@@ -3,6 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+// file upload
+// but seems that express has a better way
+//const bodyParser = require("body-parser");
+//const methodOverride = require("method-override"); // to delete files
 
 // Route Variables
 const guestRoutes = require("./routes/guests");
@@ -26,6 +30,9 @@ const app = express();
 // Middleware (applied on all routes)
 app.use(cors());
 app.use(express.json());
+//app.use(bodyParser.json());
+//app.use(methodOverride("_method"));
+
 app.use((req, res, next) => {
   console.log(req.method, req.path);
   next();
@@ -64,3 +71,4 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
