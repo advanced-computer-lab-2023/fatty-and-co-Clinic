@@ -347,7 +347,9 @@ const viewPatientInfoAndHealthRecords = async (req, res) => {
 const followupAppointment = async (req, res) => {
   const patientUsername = req.query.PatientUsername;
   const doctorUsername = req.user.Username;
-  const date = new Date(req.query.Date);
+  const appointmentID = req.query.appointmentID;
+  const date = new Date(req.query.date);
+  const today = new Date();
 
   try {
     const patient = await patientModel.findOne({
@@ -357,16 +359,21 @@ const followupAppointment = async (req, res) => {
       Username: doctorUsername,
     });
 
-    const appointment = await appointmentModel.create({
-      DoctorUsername: doctorUsername,
-      DoctorName: doctor.Name,
-      PatientUsername: patientUsername,
-      PatientName: patient.Name,
-      Status: "Upcoming",
-      FollowUp: true,
-      Date: date,
-    });
-    res.status(200).json(appointment);
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      const appointment = await appointmentModel.create({
+        DoctorUsername: doctorUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Upcoming",
+        FollowUp: true,
+        Date: date,
+      });
+      res.status(200).json(appointment);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -92,7 +92,7 @@ function AppointmentsRow(props) {
           {new Date(DateTime).toLocaleTimeString("en-GB")}
         </Text>
       </Td>
-      {PatientUsername && (
+      {PatientUsername && Status === "Completed" && (
         <Td minWidth={{ sm: "150px" }}>
           <CreateFollowUpButton patientUsername={PatientUsername} />
         </Td>
