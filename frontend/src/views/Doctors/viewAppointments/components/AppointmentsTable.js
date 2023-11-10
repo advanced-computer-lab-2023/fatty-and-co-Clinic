@@ -47,11 +47,11 @@ export const AppointmentsTable = ({ title, captions, data }) => {
             {data.map((row) => {
               return (
                 <AppointmentsRow
-                  key={row.DoctorUsername}
-                  DoctorName={row.DoctorName}
+                  key={row.PatientUsername}
                   PatientName={row.PatientName}
+                  Type={row.FollowUp ? "Follow Up" : "First Time"}
                   Status={row.Status}
-                  Date={row.Date}
+                  DateTime={row.Date}
                 />
               );
             })}

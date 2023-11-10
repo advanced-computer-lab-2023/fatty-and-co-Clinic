@@ -27,10 +27,6 @@ function RequestButton({ Username }) {
   const Authorization = `Bearer ${user.token}`;
 
   useEffect(() => {
-    // Fetch data from the database when the component mounts
-    // fetch(API_PATHS.getRequest + "?Username=" + Username, {
-    //   method: "GET",
-    // })
     axios
       .get(API_PATHS.getRequest, {
         params: { Username: Username },

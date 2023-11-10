@@ -12,36 +12,40 @@ import {
 import React from "react";
 
 function AppointmentsRow(props) {
-  const { DoctorName, PatientName, Status, Date } = props;
+  const { DoctorName, PatientName, Status, Type, DateTime } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Text
-            fontSize="md"
-            color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
-          >
-            {DoctorName}
-          </Text>
-        </Flex>
-      </Td>
+      {DoctorName && (
+        <Td minWidth={{ sm: "250px" }} pl="0px">
+          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+            <Text
+              fontSize="md"
+              color={textColor}
+              fontWeight="bold"
+              minWidth="100%"
+            >
+              {DoctorName}
+            </Text>
+          </Flex>
+        </Td>
+      )}
 
-      <Td minWidth={{ sm: "250px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Text
-            fontSize="md"
-            color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
-          >
-            {PatientName}
-          </Text>
-        </Flex>
-      </Td>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      {PatientName && (
+        <Td minWidth={{ sm: "250px" }} pl="0px">
+          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+            <Text
+              fontSize="md"
+              color={textColor}
+              fontWeight="bold"
+              minWidth="100%"
+            >
+              {PatientName}
+            </Text>
+          </Flex>
+        </Td>
+      )}
+      <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -54,9 +58,27 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td>
+      <Td minWidth={{ sm: "150px" }} pl="0px">
+        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+          <Text
+            fontSize="md"
+            color={textColor}
+            fontWeight="bold"
+            minWidth="100%"
+          >
+            {Type}
+          </Text>
+        </Flex>
+      </Td>
+
+      <Td minWidth={{ sm: "150px" }}>
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Date}
+          {new Date(DateTime).toLocaleDateString("en-GB")}
+        </Text>
+      </Td>
+      <Td minWidth={{ sm: "150px" }}>
+        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
+          {new Date(DateTime).toLocaleTimeString("en-GB")}
         </Text>
       </Td>
     </Tr>
