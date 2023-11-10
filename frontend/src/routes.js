@@ -24,6 +24,7 @@ import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import ViewMyPackage from "views/Patient/viewMyPackage"
 import ViewFamPackages from "views/Patient/viewFamPackages";
+import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus"
 import {
   HomeIcon,
   StatsIcon,
@@ -59,6 +60,13 @@ var dashRoutes = [
     name: "Family Packages",
     icon: <HomeIcon color="inherit" />,
     component: ViewFamPackages,
+    layout: "/patient",
+  },
+  {
+    path: "/ViewFamPackageswithstatus",
+    name: "Family Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackageswithstatus,
     layout: "/patient",
   },
   {
