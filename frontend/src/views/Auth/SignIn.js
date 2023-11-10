@@ -169,6 +169,17 @@ function SignIn() {
                           </InputRightElement>
                         </InputGroup>
                         <FormErrorMessage>{errors.Password}</FormErrorMessage>
+                        <Flex justify="flex-end">
+                          <Box>
+                            <Button
+                              type="button"
+                              size="xs"
+                              mt="2"
+                            >
+                              Forgot Password?
+                            </Button>
+                          </Box>
+                        </Flex>
                       </FormControl>
                     )}
                   </Field>
