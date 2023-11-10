@@ -21,7 +21,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-
+import MakePayment from "views/Patient/makePayment";
 import {
   HomeIcon,
   StatsIcon,
@@ -47,11 +47,11 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointPat/:PatientUsername",
+    path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
-    layout: "/doctor",
+    layout: "/patient",
   },
 
   {
@@ -83,7 +83,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointments/:DoctorUsername",
+    path: "/viewAppointments",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -191,6 +191,15 @@ var dashRoutes = [
     icon: <SupportIcon color="inherit" />,
     component: RTLPage,
     layout: "/rtl",
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    rtlName: "لوحة القيادة",
+    icon: <RocketIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: MakePayment,
+    layout: "/patient",
   },
   {
     name: "ACCOUNT PAGES",

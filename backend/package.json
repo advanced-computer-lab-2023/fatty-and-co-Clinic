@@ -116,6 +116,7 @@
     "socks": "^2.7.1",
     "sparse-bitfield": "^3.0.3",
     "statuses": "^2.0.1",
+    "stripe": "^14.3.0",
     "supports-color": "^5.5.0",
     "to-regex-range": "^5.0.1",
     "toidentifier": "^1.0.1",
