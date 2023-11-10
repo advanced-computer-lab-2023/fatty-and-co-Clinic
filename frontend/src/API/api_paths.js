@@ -27,6 +27,7 @@ export const API_PATHS = {
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
+  followupAppointment: DOCTOR_BASE + "followupAppointment/",
 
   // Patient
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
