@@ -24,7 +24,7 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = ({amount}) => {
+const PaymentForm = ({ amount }) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
@@ -33,14 +33,13 @@ const PaymentForm = ({amount}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({//
       type: "card",
       card: elements.getElement(CardElement),
     });
-
     if (!error) {
       try {
-        const { id } = paymentMethod;
+        const { id } = paymentMethod;//
 
         const response = await axios.post(
           API_PATHS.cardPayment,

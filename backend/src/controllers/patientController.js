@@ -354,7 +354,7 @@ const subscribehealthpackage = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
-
+// 653e1ab01d04c1a4177e0ea2
 const linkPatient = async (req, res) => {
   const { Id, Relation } = req.body;
   var familyMember = null;

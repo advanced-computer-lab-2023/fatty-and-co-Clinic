@@ -7,59 +7,41 @@ import {
   useColorModeValue,
   Input,
   Stack,
-  useToast,
   Select,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { FaUserPlus } from "react-icons/fa";
+import axios from "axios";
 import { API_PATHS } from "API/api_paths";
+import { FaUserPlus } from "react-icons/fa";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
+import { useAuthContext } from "hooks/useAuthContext";
 
 export function linkPatient() {
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
   const [Id, setId] = useState("");
   const [Relation, setRelation] = useState("");
   const textColor = useColorModeValue("gray.700", "white");
-  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(API_PATHS.linkPatient, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.patch(
+        API_PATHS.linkPatient,
+        {
+          Id,
+          Relation
         },
-        body: JSON.stringify({ Id, Relation }),
-      });
-      if (Id == "" || Relation == "") {
-        toast({
-          title: "Please fill all the inputs",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }
-      if (response.ok) {
-        toast({
-          title: "Patinet linked successfully",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        setId(""), setRelation("");
-      } else {
-        toast({
-          title: "Failed link patient",
-          description: "An error occurred while linking patient.",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
+        { headers: { Authorization } }
+      );
+      if (response.data.success) {
+        console.log("Patinet linked successfully");
+        setSuccess(true);
       }
     } catch (error) {
-      console.error("An error occurred", error);
+      console.log(error.message);
     }
   };
 
