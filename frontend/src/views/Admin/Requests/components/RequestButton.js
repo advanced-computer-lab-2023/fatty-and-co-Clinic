@@ -36,9 +36,8 @@ function RequestButton({ Username }) {
         params: { Username: Username },
         headers: { Authorization },
       })
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
+      .then((response) => {
+        setData(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
