@@ -18,7 +18,7 @@ import {
   import React from "react";
   const FamPackageTable = ({ title, captions, data }) => {
     const textColor = useColorModeValue("gray.700", "white");
-  
+    title="Family Member Packages"
     return (
       <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
         <CardHeader p="6px 0px 22px 0px">
