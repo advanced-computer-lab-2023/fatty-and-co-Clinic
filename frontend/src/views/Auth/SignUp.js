@@ -375,7 +375,31 @@ function SignUp() {
                     </FormControl>
                   )}
                 </Field>
-
+                <Field name="NationalId">
+                  {({ field }) => (
+                    <FormControl
+                      mb="24px"
+                      isInvalid={errors.NationalId && touched.NationalId}
+                    >
+                      <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                        National ID <span style={{ color: "red" }}>*</span>
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        fontSize="sm"
+                        ms="4px"
+                        borderRadius="15px"
+                        type="number"
+                        placeholder="..."
+                        // mb="24px"
+                        size="lg"
+                        // required
+                        // onChange={(e) => setDateOfBirth(e.target.value)}
+                      />
+                      <FormErrorMessage>{errors.NationalId}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
                 {/* <FormControl>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Gender

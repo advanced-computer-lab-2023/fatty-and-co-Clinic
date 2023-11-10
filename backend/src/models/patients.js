@@ -43,12 +43,14 @@ const patientSchema = new Schema(
       required: false,
     },
     LinkedPatients: {
-      type: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Patient'
-      }],
-      required: true
-    }
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "Patient",
+        },
+      ],
+      required: true,
+    },
   },
   { timestamps: true }
 );
