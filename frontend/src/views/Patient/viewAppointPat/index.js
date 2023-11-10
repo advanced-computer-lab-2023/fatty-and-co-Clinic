@@ -6,6 +6,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useRef } from "react";
 import PatientAppTable from "./components/PatientAppTable";
+import { useAuthContext } from "hooks/useAuthContext";
 
 export default function ViewPatientAppointments() {
   const [data, setData] = useState([{}]);
@@ -16,18 +17,21 @@ export default function ViewPatientAppointments() {
   const [statusSearchValue, setStatusSearchValue] = useState("");
   const [dateSearchValue, setDateSearchValue] = useState("");
 
-  const { PatientUsername } = useParams();
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
+  // const { PatientUsername } = useParams();
   const options = [
     { label: "Cancelled", value: "Cancelled" },
     { label: "Upcoming", value: "Upcoming" },
     { label: "Completed", value: "Completed" },
-    { label: "Rescheduled", value: "Rescheduled" }
+    { label: "Rescheduled", value: "Rescheduled" },
   ];
 
   useEffect(() => {
-    const url = API_PATHS.viewAppointPat + PatientUsername;
+    const url = API_PATHS.viewAppointPat;
     axios
-      .get(url, { params: searchParams })
+      .get(url, { params: searchParams, headers: { Authorization } })
       .then((response) => {
         setData(response.data);
       })
@@ -68,7 +72,12 @@ export default function ViewPatientAppointments() {
         justifyContent="flex-start"
       >
         <Flex direction="row" alignItems="flex-start">
-          <Select bg="white" onChange={(e) => { handleStatusSearchValueChange(e) }}>
+          <Select
+            bg="white"
+            onChange={(e) => {
+              handleStatusSearchValueChange(e);
+            }}
+          >
             <option value="">All</option>
             {options.map((option) => (
               <option key={option.value} value={option.value}>
@@ -91,17 +100,17 @@ export default function ViewPatientAppointments() {
           </Button>
         </Flex>
 
-        {(PatientUsername && PatientUsername !== ":PatientUsername" && (
-          <PatientAppTable
-            title={"Available Appointments"}
-            captions={["Patient Name", "Doctor Name", "Status", "Date"]}
-            data={data}
-          />
-        )) || (
+        {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
+        <PatientAppTable
+          title={"Available Appointments"}
+          captions={["Patient Name", "Doctor Name", "Status", "Date"]}
+          data={data}
+        />
+        {/* )) || (
             <Text fontSize="3xl" fontWeight="bold">
               Username not found
             </Text>
-          )}
+          )} */}
       </Flex>
     </Box>
   );
