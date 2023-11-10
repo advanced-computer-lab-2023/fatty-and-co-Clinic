@@ -5,7 +5,6 @@ import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
-import { useAuthContext } from "hooks/useAuthContext";
 
 function ViewRequests() {
   const [data, setData] = useState([{}]);
