@@ -20,8 +20,10 @@ import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
+import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 
 export default function CreateFollowUpButton({ patientUsername }) {
+  const { appointments, dispatch } = useDoctorAppointmentsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
 
@@ -48,6 +50,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
           duration: 9000,
           isClosable: true,
         });
+        dispatch({ type: "ADD_APPOINTMENT", payload: response.data });
       })
       .catch((err) =>
         toast({
