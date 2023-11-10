@@ -103,7 +103,7 @@ export default function ViewPatientAppointments() {
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <PatientAppTable
           title={"Available Appointments"}
-          captions={["Patient Name", "Doctor Name", "Status", "Date"]}
+          captions={["Doctor Name", "Status", "Type", "Date", "Time"]}
           data={data}
         />
         {/* )) || (
