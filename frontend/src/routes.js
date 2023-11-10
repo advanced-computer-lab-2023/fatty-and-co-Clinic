@@ -28,7 +28,7 @@ import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import ViewMyPackage from "views/Patient/viewMyPackage"
 import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
-
+import MakePayment from "views/Patient/makePayment";
 import {
   HomeIcon,
   StatsIcon,
@@ -242,6 +242,15 @@ var dashRoutes = [
     icon: <SupportIcon color="inherit" />,
     component: RTLPage,
     layout: "/rtl",
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    rtlName: "لوحة القيادة",
+    icon: <RocketIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: MakePayment,
+    layout: "/patient",
   },
   {
     name: "ACCOUNT PAGES",
