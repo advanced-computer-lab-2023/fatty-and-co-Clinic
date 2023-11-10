@@ -10,7 +10,7 @@ export const doctorAppointmentsReducer = (state, action) => {
       };
     case "ADD_APPOINTMENT":
       return {
-        appointments: [action.payload, ...state.appointments],
+        appointments: [...state.appointments, action.payload],
       };
     case "UPDATE_APPOINTMENT":
       return {
