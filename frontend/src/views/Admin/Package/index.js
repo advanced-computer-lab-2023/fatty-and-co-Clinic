@@ -9,6 +9,7 @@ import { usePackageContext } from "./hooks/usePackageContext";
 import PackageForm from "./components/PackageForm";
 import DeleteUserForm from "./components/PackageForm";
 import { API_PATHS } from "API/api_paths";
+import { useAuthContext } from "hooks/useAuthContext";
 
 function DeleteUser() {
   return (
@@ -23,11 +24,16 @@ function DeleteUser() {
 
 function PackageI() {
   const { packages, dispatch } = usePackageContext();
-
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
   // const [packages, setPackages] = useState(null);
   useEffect(() => {
     const fetchPackages = async () => {
-      const response = await fetch(API_PATHS.packages);
+      const response = await fetch(API_PATHS.packages ,{
+        headers:{
+          'Authorization': Authorization
+        }
+      });
       const data = await response.json();
       if (response.ok) {
         // setPackages(data);

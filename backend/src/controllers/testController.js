@@ -150,6 +150,7 @@ const createDoctor = async (req, res) => {
 const createPatient = async (req, res) => {
   const {
     Username,
+    Password,
     Name,
     MobileNum,
     NationalId,
@@ -160,6 +161,7 @@ const createPatient = async (req, res) => {
   } = req.body;
 
   const username = Username || generateUsername();
+  const password = Password || generatePassword();
   const name = Name || generateName();
   const mobileNum = MobileNum || generateMobileNum();
   const nationalId = NationalId || generateNationalId();
@@ -174,7 +176,7 @@ const createPatient = async (req, res) => {
   try {
     await systemUserModel.addEntry(
       username,
-      generatePassword(),
+      password,
       generateEmail(),
       "Patient"
     );
