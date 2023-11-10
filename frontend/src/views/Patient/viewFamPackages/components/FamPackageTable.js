@@ -40,10 +40,11 @@ import {
               </Tr>
             </Thead>
             <Tbody>
-              {data.map((row, index) => {
-                const id = row?.Patient?._id || row?.FamilyMem?._id || index;
-                const name = row?.Patient?.Name || row?.FamilyMem?.Name || 'Unknown';
-  
+              {data.map((row) => {
+                if(row){
+                const id = row.Patient?row.Patient._id: row.FamilyMem._id ;
+                const name = row.Patient?row.Patient.Name: row.FamilyMem.Name ;
+                
                 return (
                   <FamPackageRow
                     key={id}
@@ -54,7 +55,7 @@ import {
                     packMedicineDiscount={row.PackageName.Medicine_Discount}
                     packFamilyDiscount={row.PackageName.Family_Discount}
                   />
-                );
+                );}
               })}
             </Tbody>
           </Table>

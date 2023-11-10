@@ -7,7 +7,7 @@ import { useAuthContext } from "hooks/useAuthContext";
 import FamPackageTable from "./components/FamPackageTable";
 
  const ViewFamPackages= ()=>{
-  const [data, setData] = useState([{}]);
+  const [data, setData] = useState([]);
  
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -22,6 +22,7 @@ import FamPackageTable from "./components/FamPackageTable";
         }})
       .then((response) => {
         setData(response.data);
+        console.log(response.data)
       })
       .catch((err) => console.log(err));
   });
@@ -35,12 +36,12 @@ import FamPackageTable from "./components/FamPackageTable";
         pt="50px"
         justifyContent="flex-start"
       >
-          <FamPackageTable
+         <FamPackageTable
             title={"My Package"}
             captions={["Name", "PackageName","Price","Session_Discount", "Medicine_Discount","Family_Discount"]}
             data={data}
-          />
-           
+         
+           ></FamPackageTable>
             {/* <Text fontSize="3xl" fontWeight="bold">
               No Subscriptions Found
             </Text> 
