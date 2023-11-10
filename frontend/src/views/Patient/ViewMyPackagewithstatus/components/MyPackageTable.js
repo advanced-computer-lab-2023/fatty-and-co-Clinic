@@ -14,7 +14,6 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import ViewPackagewithstatus from "components/Tables/viewMyPackagewithstatus";
-//console.log(statuspackagerow)
 import React from "react";
 const   MYPackagestatusTable = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
@@ -40,6 +39,7 @@ const   MYPackagestatusTable = ({ title, captions, data }) => {
             </Tr>
           </Thead>
           <Tbody>
+            
                 <ViewPackagewithstatus
                   key={id}
                   Name={data.Patient.Name}

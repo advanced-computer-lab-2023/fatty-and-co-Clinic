@@ -1,7 +1,7 @@
 import { PackageContextProvider } from "./components/Context";
 import PackageI from "./index";
 
-function Package() {
+function Packagesubscibe() {
   return (
     <PackageContextProvider>
       <PackageI />
@@ -9,4 +9,4 @@ function Package() {
   );
 }
 
-export default Package;
+export default Packagesubscibe;
