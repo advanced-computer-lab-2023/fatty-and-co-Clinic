@@ -11,7 +11,7 @@ const PAYEMENT_BASE = "http://localhost:8000/payment/";
 export const API_PATHS = {
   // Guest
   docSignUp: GUEST_BASE + "addRequest/",
-  updateEmailDoc: GUEST_BASE + "updateEmail/",
+  updateEmail: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
 
