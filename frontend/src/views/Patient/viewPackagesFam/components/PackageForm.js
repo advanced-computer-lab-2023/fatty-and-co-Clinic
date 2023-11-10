@@ -35,10 +35,126 @@ function PackageForm() {
   const textColor = useColorModeValue("gray.700", "white");
   const toast = useToast();
   return (
-     <Text>
-     
+    <Text
+      // p="0px"
+      // my={{ sm: "0px", lg: "0px" }}
+      // ms={{ sm: "0px", lg: "0px" }}
+    >
+      {/* <CardHeader>
+        <Flex justify="space-between" align="center" mb="1rem" w="100%">
+          <Text fontSize="lg" color={textColor} fontWeight="bold">
+            Add New Package
+          </Text>
+        </Flex>
+      </CardHeader>
+      <CardBody>
+        <Flex direction="column" w="100%"> 
+          <form
+            id="myForm"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const Package = {
+                Name,
+                Price,
+                Session_Discount,
+                Medicine_Discount,
+                Family_Discount,
+              };
+
+              
+              const data = await response.json();
+              if (response.status === 200) {
+                dispatch({ type: "ADD_PACKAGE", payload: data });
+                setMessage(null);
+                // setName("");
+                // setPrice(0);
+                // setSession_Discount(0);
+                // setMedicine_Discount(0);
+                // setFamily_Discount(0);
+                toast({
+                  title: "Package Added.",
+                  description: "You Added the package succsefuly.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                });
+                // document.getElementById("myForm").reset();
+              } else {
+                setMessage(data.message);
+                toast({
+                  title: "failed Package Add.",
+                  description: "Error: " + data.message,
+                  status: "error",
+                  duration: 9000,
+                  isClosable: true,
+                });
+              }
+            }}
+          >
+            <Stack spacing={3}>
+              <Input
+                variant="filled"
+                type="text"
+                placeholder="Name"
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+              <Input
+                variant="filled"
+                type="number"
+                step="any"
+                placeholder="Price EGP"
+                min={0}
+                required
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <Input
+                variant="filled"
+                type="number"
+                step="any"
+                placeholder="Session Discount %"
+                max={100}
+                min={0}
+                required
+                onChange={(e) => setSession_Discount(e.target.value)}
+              />
+              <Input
+                variant="filled"
+                type="number"
+                step="any"
+                placeholder="Medicine Discount %"
+                max={100}
+                min={0}
+                required
+                onChange={(e) => setMedicine_Discount(e.target.value)}
+              />
+              <Input
+                variant="filled"
+                type="number"
+                step="any"
+                max={100}
+                min={0}
+                placeholder="Family Discount %"
+                required
+                onChange={(e) => setFamily_Discount(e.target.value)}
+              />
+              <Button
+                colorScheme="teal"
+                borderColor="teal.300"
+                color="teal.300"
+                fontSize="xs"
+                p="8px 32px"
+                type="submit"
+              >
+                add
+              </Button>
+              <input type="submit" value="Submit" /> 
+            </Stack>
+          </form> 
+       </Flex> 
+      </CardBody> */}
     </Text>
-   );
+  );
 }
 
 export default PackageForm;

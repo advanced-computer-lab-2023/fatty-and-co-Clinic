@@ -36,7 +36,7 @@ function PackageI() {
   }, []);
 
   return (
-    <Flex direction="column"  pt={{ base: "120px", md: "75px" }}>
+    <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
         {packages && (
           <PackageInformation title={"Available Packages"} data={packages} />

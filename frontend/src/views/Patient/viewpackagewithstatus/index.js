@@ -5,10 +5,10 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 //import FamPackageTable from "./components/FamPackageTable";
-import FamPackagestatusTable from "./components/FamPackagestatusTable";
+import FamPackageStatusTable from "./components/FamPackagestatusTable";
 //import FamPackageRow from "components/Tables/FamPackageRow";
 //import statuspackagerow from "components/Tables/statuspackagerow";
- const ViewFamPackageswithstatus= ()=>{
+ const ViewFamPackagesWithStatus= ()=>{
   const [data, setData] = useState([]);
  
   const { user } = useAuthContext();
@@ -38,12 +38,12 @@ import FamPackagestatusTable from "./components/FamPackagestatusTable";
         pt="50px"
         justifyContent="flex-start"
       >
-         <FamPackagestatusTable
+         <FamPackageStatusTable
             title={"My Package"}
             captions={["Name", "Status","PackageName","Enddate", "Startdate","Renewaldate"]}
             data={data}
          
-           ></FamPackagestatusTable>
+           />
             {/* <Text fontSize="3xl" fontWeight="bold">
               No Subscriptions Found
             </Text> 
@@ -52,4 +52,4 @@ import FamPackagestatusTable from "./components/FamPackagestatusTable";
     </Box>
   );
 }
-export default ViewFamPackageswithstatus
+export default ViewFamPackagesWithStatus
