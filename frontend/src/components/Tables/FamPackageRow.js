@@ -24,14 +24,14 @@ function FamPackageRow(props) {
             </Text>
           </Flex>
         </Td>
-        <Td minWidth={{ sm: "100px" }} pl="20px">
+        <Td minWidth={{ sm: "100px" }} pl="50px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
               {packName}
             </Text>
           </Flex>
         </Td>
-        <Td minWidth={{ sm: "100px" }} pl="60px">
+        <Td minWidth={{ sm: "100px" }} pl="25px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
               {packPrice}
