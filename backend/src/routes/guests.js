@@ -69,7 +69,7 @@ router.use(requireAuth);
 router.put("/updateRequest/:id", updateRequest);
 
 // TODO: add type check as middleware if needed
-router.patch("/updateEmail/:Username", updateEmail);
+router.patch("/updateEmail", updateEmail);
 
 
 router.patch("/updatePass/", updatePass);
