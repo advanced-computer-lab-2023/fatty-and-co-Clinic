@@ -11,7 +11,7 @@ const stripeTestPromise = loadStripe(PUBLIC_KEY);
 export default function MakePayment({ amount }) {
   return (
     <Elements stripe={stripeTestPromise}>
-      <PaymentForm amount={amount} />
+      <PaymentForm amount={100} />
     </Elements>
   );
 }

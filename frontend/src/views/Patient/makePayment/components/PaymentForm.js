@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
@@ -30,6 +30,16 @@ const PaymentForm = ({ amount }) => {
   const [success, setSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    if (success) {
+      const redirectTimeout = setTimeout(() => {
+        window.location.href = "./ThankYou.js";
+      }, 3000);
+
+      return () => clearTimeout(redirectTimeout);
+    }
+  }, [success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
