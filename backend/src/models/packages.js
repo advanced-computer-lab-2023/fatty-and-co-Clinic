@@ -6,6 +6,8 @@ const packageSchema = new Schema(
     Name: {
       type: String,
       required: true,
+      unique:true,
+      trim:true
     },
     Price: {
       type: Number,

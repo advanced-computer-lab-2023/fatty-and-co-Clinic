@@ -7,9 +7,14 @@ import {
   Text,
   Tr,
   useColorModeValue,
-  Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, ModalCloseButton 
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from "@chakra-ui/react";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
@@ -23,54 +28,20 @@ function RequestButton({ Username, Status }) {
   const Authorization = `Bearer ${user.token}`;
   useEffect(() => {
     // Fetch data from the database when the component mounts
-      axios
-      .get(API_PATHS.getRequest + "?Username=" + Username, {
-        headers: {
-          Authorization,
-        },
-      })
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []); 
-
-  function handleCustomClick1() {
-
-    useEffect(() => {
-    const reqData = {
-      "Username": Username,
-    };
-
+    // fetch(API_PATHS.getRequest + "?Username=" + Username, {
+    //   method: "GET",
+    // })
     axios
-      .post(API_PATHS.acceptRequest, reqData, {
-        headers: {
-          Authorization,
-        },
+      .get(API_PATHS.getRequest, {
+        params: { Username: Username },
+        headers: { Authorization },
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-    }, []); 
-  }
-
-  function handleCustomClick2() {
-    useEffect(() => {
-
-    const reqData = {
-      "Username": Username,
-    };
-
-    axios
-      .put(API_PATHS.rejectRequest, reqData, {
-        headers: {
-          Authorization,
-        },
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
     }, []); 
   }
@@ -80,7 +51,9 @@ function RequestButton({ Username, Status }) {
 
   return (
     <>
-      <Button colorScheme= "teal" onClick={() => setIsModalOpen(true)}>Details</Button>
+      <Button colorScheme="teal" onClick={() => setIsModalOpen(true)}>
+        Details
+      </Button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
@@ -118,6 +91,6 @@ function RequestButton({ Username, Status }) {
       </Modal>
     </>
   );
-}
+
 
 export default RequestButton;

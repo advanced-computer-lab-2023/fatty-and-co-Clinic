@@ -1,5 +1,9 @@
 const express = require("express");
 const {
+  viewHealthFam,
+  viewHealthPackage,
+  subscribehealthpackage,
+  subscribepackagefamilymem,
   getAllPatients,
   deletePatient,
   getPatient,
@@ -18,7 +22,22 @@ const { checkPatient } = require("../common/middleware/checkType");
 
 const router = express.Router();
 
+/** 
+ * @route POST /patients/addPatient
+ * @desc Creates a new patient
+ * @access Public
+ * @prop {string} Name - The name of the patient
+ * @prop {string} Username - The username of the patient
+ * @prop {string} Password - The password of the patient
+ * @prop {string} Email - The email of the patient
+ * @prop {string} NationalID - The national ID of the patient
+ * @prop {number} Age - The age of the patient
+ * @prop {string} Gender - The gender of the patient ["M", "F"]
+ */
+router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
 /**
+=======
+>>>>>>> main
  * @route GET /patients/getAllPatients
  * @desc Returns a list of all patients
  * @access Public
@@ -31,6 +50,7 @@ router.get("/getAllPatients", getAllPatients);
  * @access Public
  * @param {string} id - The ID of the patient to delete
  */
+// TODO: add type check as middleware if needed
 router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one deleting is an admin or the currently logged in patient
 
 /**
@@ -55,7 +75,7 @@ router.get("/getPatient/:id", getPatient);
  */
 // TODO: does it have to be a patient? or can it be an admin?
 // TODO: check if the one updating is an admin or the currently logged in patient
-router.patch("/updatePatient", checkPatient, updatePatient);
+router.patch("/updatePatient/:id", checkPatient, updatePatient);
 
 /**
  * @route GET /patients/getPatientUsername/:Username
@@ -84,6 +104,7 @@ router.get("/view/doctors/", checkPatient, session_index);
  * @prop {string} Gender - The gender of the family member ["M", "F"]
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
+router.post("/createFamilymember/:Createparameter", createFamilymember);
 router.post("/createFamilymember", checkPatient, createFamilymember);
 
 /**
@@ -91,13 +112,14 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
+router.get("/getFamilymember/:PatientID", GetFamilymembers);  //Changed name of params
 router.get("/getFamilymember", checkPatient, GetFamilymembers);
-
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions
  * @access Public
  */
+// TODO: add type check as middleware if needed
 router.get("/getPrescriptions", getPrescriptions);
 
 /**
@@ -105,6 +127,7 @@ router.get("/getPrescriptions", getPrescriptions);
  * @desc Returns a list of all patients
  * @access Public
  */
+// TODO: add type check as middleware if needed
 router.get("/selectPatient", selectPatient);
 
 /**
@@ -113,6 +136,7 @@ router.get("/selectPatient", selectPatient);
  * @access Public
  * @param {string} id - The ID of the prescription to get
  */
+// TODO: add type check as middleware if needed
 router.get("/selectPrescription", selectPrescription);
 
 /**
@@ -121,6 +145,11 @@ router.get("/selectPrescription", selectPrescription);
  * @access Public
  * @param {string} username - The username of the patient
  */
+// TODO: add type check as middleware if needed
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
+router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
+router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
+router.get("/viewMyPackage/:PatientID",viewHealthPackage)
+
 
 module.exports = router;
