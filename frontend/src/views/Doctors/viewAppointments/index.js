@@ -98,18 +98,11 @@ export default function ViewAppointments() {
             Clear
           </Button>
         </Flex>
-
-        {/* {(DoctorUsername && DoctorUsername !== ":DoctorUsername" && ( */}
-          <AppointmentsTable
-            title={"Available Appointments"}
-            captions={["Doctor Name", "Patient Name", "Status", "Date"]}
-            data={data}
-          />
-        {/* )) || (
-          <Text fontSize="3xl" fontWeight="bold">
-            Username not found
-          </Text>
-        )} */}
+        <AppointmentsTable
+          title={"Available Appointments"}
+          captions={["Patient Name", "Status", "Type", "Date", "Time"]}
+          data={data}
+        />
       </Flex>
     </Box>
   );
