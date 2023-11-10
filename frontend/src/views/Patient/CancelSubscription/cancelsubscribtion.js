@@ -7,7 +7,9 @@ import {
   useColorModeValue,
   Input,
   Stack,
+  Select,
   useToast,
+  FormLabel
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
@@ -21,6 +23,7 @@ function CancelSubscription() {
   const [PackageName, setPackageName] = useState("");
   const [PackageName2, setPackageName2] = useState("");
   const [NationalId, setNationalId] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
 
@@ -141,14 +144,32 @@ function CancelSubscription() {
     >
       <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
-          <Text fontSize="lg" color={textColor} fontWeight="bold">
-            Cancel Family memeber subscribtion
-          </Text>
+        
+          <Box>
+          <select
+            value={selectedOption}
+            onChange={(e) => setSelectedOption(e.target.value)}
+            style={{
+              backgroundColor: "teal.300", // Mint blue background color
+              color: '#319795', // Mint blue text color
+              padding: '8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #319795', // Mint blue border color
+            }}
+          >   <option value="">Choose Who to cancel</option>
+            <option value="cancelFamily">Cancel Family Member Subscription</option>
+            <option value="cancelMyself">Cancel My Subscription</option>
+          </select>
+        </Box>
+        
         </Flex>
       </CardHeader>
       <CardBody>
         <Flex direction="column" w="100%">
-          <form >
+      
+        <br></br>
+        {selectedOption === 'cancelFamily' &&<form >
+          <FormLabel> Cancel For family member</FormLabel>
             <Stack spacing={3}>
               <Input
                 variant="filled"
@@ -164,19 +185,7 @@ function CancelSubscription() {
                 value={NationalId}
                 onChange={(e) => setNationalId(e.target.value)}
               />
-              {/* <Button
-                colorScheme="teal"
-                borderColor="teal.300"
-                color="teal.300"
-                fontSize="xs"
-                p="8px 32px"
-                type="submit"
-                textColor="white"
-                onClick={handleSubscribe}
-              >
-                <Icon as={FaUserPlus} mr={2} />
-                subscribe
-              </Button> */}
+            
               <Button
              colorScheme="red"  // Change to red color scheme
              borderColor="red.300"  // Change to red border color
@@ -191,13 +200,10 @@ function CancelSubscription() {
                 Cancel subscribtion for a Family member 
               </Button>
             </Stack>
-          </form>
+          </form>}
           <br></br>
-          <Text fontSize="lg" color={textColor} fontWeight="bold">
-            Cancel My subscribtion
-          </Text>
-          <br></br>
-          <form >
+          {selectedOption === 'cancelMyself' && <form >
+          <FormLabel> Cancel For Myself</FormLabel>
             <Stack spacing={3}>
               <Input
                 variant="filled"
@@ -206,20 +212,7 @@ function CancelSubscription() {
                 value={PackageName2}
                 onChange={(e) => setPackageName2(e.target.value)}
               />
-              
-              {/* <Button
-                colorScheme="teal"
-                borderColor="teal.300"
-                color="teal.300"
-                fontSize="xs"
-                p="8px 32px"
-                type="submit"
-                textColor="white"
-                onClick={handleSubscribe}
-              >
-                <Icon as={FaUserPlus} mr={2} />
-                subscribe
-              </Button> */}
+           
               <Button
              colorScheme="red"  // Change to red color scheme
              borderColor="red.300"  // Change to red border color
@@ -234,7 +227,7 @@ function CancelSubscription() {
                 Cancel My subscribtion 
               </Button>
             </Stack>
-          </form>
+          </form>}
         </Flex>
       </CardBody>
     </Card>
