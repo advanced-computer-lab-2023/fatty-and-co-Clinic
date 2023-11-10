@@ -123,21 +123,12 @@ function docSignUp() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setError(null);
-    // onOpen();
-    // try {
+
     let formData = new FormData();
-    formData.append("Username", values.Username);
-    formData.append("Password", values.Password);
-    formData.append("Email", values.Email);
-    formData.append("Name", values.Name);
-    formData.append("DateOfBirth", values.DateOfBirth);
-    formData.append("HourlyRate", values.HourlyRate);
-    formData.append("Affiliation", values.Affiliation);
-    formData.append("EducationalBackground", values.EducationalBackground);
-    formData.append("Speciality", values.Speciality);
-    formData.append("IdFile", values.IdFile);
-    formData.append("MedicalLicense", values.MedicalLicense);
-    formData.append("MedicalDegree", values.MedicalDegree);
+    for (let key in values) {
+      formData.append(key, values[key]);
+    }
+
     axios
       .post(API_PATHS.docSignUp, formData, {
         onUploadProgress: (progressEvent) => {
@@ -173,43 +164,6 @@ function docSignUp() {
         // setUploadProgress(0);
         setSubmitting(false);
       });
-    // const response = await fetch(API_PATHS.docSignUp, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // });
-    // const data = await response.json();
-    // console.log(data);
-    // if (response.ok) {
-    //   console.log("Doctor request submitted successfully!");
-    //   toast({
-    //     title: "Request Submitted Successfully.",
-    //     description:
-    //       "Your request has been sent for review. You will receive a confirmation when it is approved",
-    //     status: "success",
-    //     duration: 9000,
-    //     isClosable: true,
-    //   });
-    //   // window.location.href = "/auth/signin";
-    //   setSubmitting(false);
-    // } else {
-    //   console.log("Error submitting doctor request!");
-    //   setError(data.message);
-    //   toast({
-    //     title: "An error occurred.",
-    //     description: "Unable to create your account.",
-    //     status: "error",
-    //     duration: 9000,
-    //     isClosable: true,
-    //   });
-    // }
-    // } catch (err) {
-    //   setError(err.response.data.message);
-    //   console.log(error);
-    // } finally {
-    //   // onClose();
-    // setSubmitting(false);
-    // }
   };
 
   return (
@@ -670,7 +624,13 @@ function docSignUp() {
                     </FormControl>
                   )}
                 </Field>
-                {isSubmitting && <Progress value={uploadProgress} />}
+                {uploadProgress > 0 && (
+                  <Progress
+                    colorScheme="teal"
+                    value={uploadProgress}
+                    mb="24px"
+                  />
+                )}
                 {/* ////////////end of upload files //////////// */}
                 <Button
                   type="submit"
