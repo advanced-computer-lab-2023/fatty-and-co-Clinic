@@ -497,16 +497,9 @@ const viewHealthPackagewithstatus = async (req, res) => {
     }
 
     const subscription = await subscriptionModel
-      .findOne({ Patient:patient })
-      .select('Status Startdate Renewaldate Enddate') // Include the fields you want from the 'subscriptionModel'
-      .populate({
-      path: "Patient",
-        select: "Username" // Include the fields you want from the 'Patient' model
-      })
-      .populate({
-       path: "PackageName",
-        select: "Name" // Include the fields you want from the 'PackageName' model
-      });
+      .findOne({ Patient:patient }) // Include the fields you want from the 'subscriptionModel'
+      .populate("Patient")
+      .populate( "FamilyMem" ).populate("PackageName");
      // console.log(subscription.Patient.Username);
 
     if (subscription) {
@@ -592,12 +585,10 @@ const createFamilymember = async (req, res) => {
 
 const GetFamilymembers = async (req, res) => {
   try {
-    const PatientUserName=req.user.username;
-    const Patient = await patientModel.find(PatientUserName);  //changed this
-    const fam = await familyMemberModel.find({PatientID:Patient.id}).populate("PatientID").populate("FamilyMem");
-   //const PatientUserName = req.user.Username;
-    //console.log(PatientID);
-     console.log(fam)
+    const Username=req.user.Username;
+    const patient= await patientModel.findOne({Username:Username}); //changed this
+    const fam = await familyMemberModel.find({PatientID:patient}).populate("PatientID").populate("FamilyMem");
+     console.log(Patient)
     res.status(200).send(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
