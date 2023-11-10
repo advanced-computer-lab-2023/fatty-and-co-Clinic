@@ -64,7 +64,7 @@ var dashRoutes = [
   },
   {
     path: "/ViewFamPackageswithstatus",
-    name: "Family Packages",
+    name: "Family Packages status",
     icon: <HomeIcon color="inherit" />,
     component: ViewFamPackageswithstatus,
     layout: "/patient",

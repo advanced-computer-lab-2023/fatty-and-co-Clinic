@@ -4,9 +4,10 @@ import { Flex, Button, Box, Input, Text, Select } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-import FamPackageTable from "./components/FamPackageTable";
+//import FamPackageTable from "./components/FamPackageTable";
 import FamPackagestatusTable from "./components/FamPackagestatusTable";
-
+//import FamPackageRow from "components/Tables/FamPackageRow";
+//import statuspackagerow from "components/Tables/statuspackagerow";
  const ViewFamPackageswithstatus= ()=>{
   const [data, setData] = useState([]);
  
@@ -15,7 +16,7 @@ import FamPackagestatusTable from "./components/FamPackagestatusTable";
 
 
   useEffect(() => {
-    const url = API_PATHS.viewFamPackage;
+    const url = API_PATHS.viewHealthFamwithstatus;
     axios
       .get(url, {
         headers:{
@@ -39,7 +40,7 @@ import FamPackagestatusTable from "./components/FamPackagestatusTable";
       >
          <FamPackagestatusTable
             title={"My Package"}
-            captions={["Patient", "Status","PackageName","Enddate", "Startdate","Renewaldate"]}
+            captions={["Name", "Status","PackageName","Enddate", "Startdate","Renewaldate"]}
             data={data}
          
            ></FamPackagestatusTable>

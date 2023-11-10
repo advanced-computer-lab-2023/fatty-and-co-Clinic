@@ -392,11 +392,13 @@ const viewHealthFamwithstatus= async(req,res)=>{
     //check eno family mem mesh user
     const package = await Promise.all(famMems.map( async(famMember) => {
       const value= await patientModel.findOne({Username:famMember.PatientID.Username})
-      const subscription =famMember.FamilyMem!=null? await subscriptionModel.findOne({ Patient: famMember.FamilyMem.Username===username?value:famMember.FamilyMem}).populate('FamilyMem').populate('PackageName'):await subscriptionModel.findOne({ FamilyMem: famMember}).populate('FamilyMem').populate('PackageName')
+      const subscription =famMember.FamilyMem!=null? await subscriptionModel.findOne({ Patient: famMember.FamilyMem.Username===username?value:famMember.FamilyMem}).populate("Patient").populate('FamilyMem').populate('PackageName'):await subscriptionModel.findOne({ FamilyMem: famMember}).populate("Patient").populate('FamilyMem').populate('PackageName')
+
       if (subscription ) {
         return subscription; // Add the family member to the result if subscribed
       } // Or you can handle differently for non-subscribed members
     }));
+   // console.log()
     res.status(200).json(package);
 }
 catch{

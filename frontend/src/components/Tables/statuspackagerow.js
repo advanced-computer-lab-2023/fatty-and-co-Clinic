@@ -11,8 +11,8 @@ import {
     useColorModeValue,
   } from "@chakra-ui/react";
   import React from "react";
-function statuspackagerow(props) {
-    const { Patient, Status,  PackageName, Enddate,Startdate,Renewaldate} = props;
+function Statuspackagerow(props) {
+    const { Name, Status,  PackageName, Enddate,Startdate,Renewaldate} = props;
     const textColor = useColorModeValue("gray.700", "white");
   
     return (
@@ -20,7 +20,7 @@ function statuspackagerow(props) {
         <Td minWidth={{ sm: "100px" }} pl="0px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-              {Patient}
+              {Name}
             </Text>
           </Flex>
         </Td>
@@ -63,4 +63,4 @@ function statuspackagerow(props) {
     );
   }
   
-  export default statuspackagerow;
+  export default Statuspackagerow;
