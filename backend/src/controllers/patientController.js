@@ -821,7 +821,7 @@ const cancelSubscription=async(req,res) =>{
   //  console.log()
     if(subscribed){
       console.log("Here")
-    if(subscribed.Status==="Cancelled"){
+   if(subscribed.Status==="Cancelled"){
       
       res.status(400).send({Error:"You have already cancelled your prescription"})
     }
@@ -854,12 +854,12 @@ const cancelSubscriptionfamilymember=async(req,res) =>{
     if (famrelated ==null){
       res.status(400).send({error:"Family member not related to you "})
     }
-    if (fam.FamilyMem!=null){
+   else if (fam.FamilyMem!=null){
       res.status(400).send({error:"He is already a system user"})
     }
-    if(subscribed){
+  else  if(subscribed){
       console.log("Here")
-    if(subscribed.Status==="Cancelled"){
+ if(subscribed.Status==="Cancelled"){
       res.status(400).send({error:"You have already cancelled your prescription"})
     }
     else{

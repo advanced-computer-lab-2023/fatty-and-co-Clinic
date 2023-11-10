@@ -19,17 +19,18 @@ import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
 function CancelSubscription() {
   const [PackageName, setPackageName] = useState("");
+  const [PackageName2, setPackageName2] = useState("");
   const [NationalId, setNationalId] = useState("");
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
 
    const { user } = useAuthContext();
    const Authorization = `Bearer ${user.token}`;
-   const handleSubscribe = async (e) => {
+   const handleCancellationformyself = async (e) => {
     e.preventDefault();
   
     try {
-      if (PackageName === "") {
+      if (PackageName2 === "") {
         toast({
           title: "Please fill the PackageName field!",
           status: "error",
@@ -37,40 +38,32 @@ function CancelSubscription() {
           isClosable: true,
         });
         return; // Don't proceed further
-      } else if (NationalId === "") {
-        toast({
-          title: "Please fill the NationalId field!",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        return; // Don't proceed further
-      }
+      } 
   
-      const response = await fetch(API_PATHS.subscribepackagefamilymem, {
-        method: "POST",
+      const response = await fetch(API_PATHS.cancelSubscription, {
+        method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ PackageName, NationalId }),
+        body: JSON.stringify({PackageName2}),
       });
   
       console.log("Response", response.status);
       const errorData = await response.json();
       if (response.ok) {
         toast({
-          title: "Subscribed successfully",
+          title: "Cancelled successfully",
           status: "success",
           duration: 9000,
           isClosable: true,
         });
   
-        setPackageName("");
-        setNationalId(""); // Clear the input fields
+        setPackageName2("");
+       // setNationalId(""); // Clear the input fields
       } else {
         toast({
-          title: "Failed to Subscribe",
+          title: "Failed to Cancel",
           description: errorData.error,
           status: "error",
           duration: 9000,
@@ -149,7 +142,7 @@ function CancelSubscription() {
       <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
           <Text fontSize="lg" color={textColor} fontWeight="bold">
-            Change your email!
+            Cancel Family memeber subscribtion
           </Text>
         </Flex>
       </CardHeader>
@@ -171,7 +164,7 @@ function CancelSubscription() {
                 value={NationalId}
                 onChange={(e) => setNationalId(e.target.value)}
               />
-              <Button
+              {/* <Button
                 colorScheme="teal"
                 borderColor="teal.300"
                 color="teal.300"
@@ -183,7 +176,7 @@ function CancelSubscription() {
               >
                 <Icon as={FaUserPlus} mr={2} />
                 subscribe
-              </Button>
+              </Button> */}
               <Button
              colorScheme="red"  // Change to red color scheme
              borderColor="red.300"  // Change to red border color
@@ -195,7 +188,50 @@ function CancelSubscription() {
                 onClick={handleCancellation}
               >
                 <Icon as={FaUserPlus} mr={2} />
-                Cancel subscribtion
+                Cancel subscribtion for a Family member 
+              </Button>
+            </Stack>
+          </form>
+          <br></br>
+          <Text fontSize="lg" color={textColor} fontWeight="bold">
+            Cancel My subscribtion
+          </Text>
+          <br></br>
+          <form >
+            <Stack spacing={3}>
+              <Input
+                variant="filled"
+                type="text"
+                placeholder="PackageName"
+                value={PackageName2}
+                onChange={(e) => setPackageName2(e.target.value)}
+              />
+              
+              {/* <Button
+                colorScheme="teal"
+                borderColor="teal.300"
+                color="teal.300"
+                fontSize="xs"
+                p="8px 32px"
+                type="submit"
+                textColor="white"
+                onClick={handleSubscribe}
+              >
+                <Icon as={FaUserPlus} mr={2} />
+                subscribe
+              </Button> */}
+              <Button
+             colorScheme="red"  // Change to red color scheme
+             borderColor="red.300"  // Change to red border color
+             color="red.300"  // Change to red text color
+                fontSize="xs"
+                p="8px 32px"
+                type="submit"
+                textColor="white"
+                onClick={handleCancellationformyself}
+              >
+                <Icon as={FaUserPlus} mr={2} />
+                Cancel My subscribtion 
               </Button>
             </Stack>
           </form>
