@@ -26,6 +26,7 @@ import { Formik, Form, Field } from "formik";
 import signInImage from "assets/img/signInImage.png";
 import { useLogin } from "hooks/useLogin";
 import { useState } from "react";
+import { API_PATHS } from "API/api_paths";
 
 const SignInSchema = Yup.object().shape({
   Username: Yup.string().required("Required"),
@@ -171,6 +172,7 @@ function SignIn() {
                         <FormErrorMessage>{errors.Password}</FormErrorMessage>
                         <Flex justify="flex-end">
                           <Box>
+                          <a href= "http://localhost:3000/auth/resetPass">
                             <Button
                               type="button"
                               size="xs"
@@ -178,6 +180,7 @@ function SignIn() {
                             >
                               Forgot Password?
                             </Button>
+                          </a>
                           </Box>
                         </Flex>
                       </FormControl>

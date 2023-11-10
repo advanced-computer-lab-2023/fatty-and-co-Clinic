@@ -32,13 +32,12 @@ function RequestButton({ Username, Status }) {
     //   method: "GET",
     // })
     axios
-      .get(API_PATHS.getRequest + "?Username=" + Username, {
-        //params: { Username: Username },
+      .get(API_PATHS.getRequest, {
+        params: { Username: Username },
         headers: { Authorization },
       })
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
+      .then((response) => {
+        setData(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -46,13 +45,10 @@ function RequestButton({ Username, Status }) {
     }, []); 
  
   const jsonData = JSON.stringify(data);
-  console.log(data);
-  console.log(jsonData);
 
-  const handleCustomClick1 = async () => {
+  const handleAccept = async () => {
     axios
-      .post(API_PATHS.acceptRequest, {
-        body: { Username: Username },
+      .post(API_PATHS.acceptRequest, { Username: Username }, {
         headers: { Authorization },
       })
       .catch((error) => {
@@ -60,10 +56,9 @@ function RequestButton({ Username, Status }) {
       });
   } 
 
-  const handleCustomClick2 = async () => {
+  const handleReject = async () => {
     axios
-      .put(API_PATHS.rejectRequest, {
-        body: { Username: Username },
+      .put(API_PATHS.rejectRequest, { Username: Username },{
         headers: { Authorization },
       })
       .catch((error) => {
@@ -92,10 +87,10 @@ function RequestButton({ Username, Status }) {
           <ModalFooter> 
           {Status == "Pending" ? (
               <div>
-                <Button colorScheme="green" mr={3} onClick={handleCustomClick1}>
+                <Button colorScheme="green" mr={3} onClick={handleAccept}>
                   Accept
                 </Button>
-                <Button colorScheme="red" mr={3} onClick={handleCustomClick2}>
+                <Button colorScheme="red" mr={3} onClick={handleReject}>
                   Reject
                 </Button>
                 <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>

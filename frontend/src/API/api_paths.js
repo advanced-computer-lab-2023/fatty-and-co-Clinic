@@ -14,6 +14,9 @@ export const API_PATHS = {
   updateEmailDoc: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
+  updatePass: GUEST_BASE + "updatePass/",
+  sendOTP: GUEST_BASE + "sendOTP/",
+  validateOTP: GUEST_BASE + "validateOTP/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",

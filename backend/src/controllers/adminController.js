@@ -40,25 +40,24 @@ const getRequests = async (req, res) => {
 const acceptRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requestModel.findOneAndUpdate({
-      Username: Username,
-      Status: "Accepted",
-    });
-    const doc = await doctorModel.create({
-      Username: Username,
-      Name: request.Name,
-      DateOfBirth: request.DateOfBirth,
-      HourlyRate: request.HourlyRate,
-      Affiliation: request.Affiliation,
-      EducationalBackground: request.EducationalBackground,
-      Speciality: request.Speciality,
-    });
-    const user = await systemUserModel.addEntry(
-      Username,
-      request.Password,
-      request.Email,
-      "Doctor"
-    );
+    const request = await requestModel.findOneAndUpdate({ Username: Username, Status: { $ne: "Accepted" } },
+    { $set: { Status: "Accepted" } },
+    {new:true});
+    // const doc = await doctorModel.create({
+    //   Username: Username,
+    //   Name: request.Name,
+    //   DateOfBirth: request.DateOfBirth,
+    //   HourlyRate: request.HourlyRate,
+    //   Affiliation: request.Affiliation,
+    //   EducationalBackground: request.EducationalBackground,
+    //   Speciality: request.Speciality,
+    // });
+    // const user = await userModel.addEntry(
+    //   Username,
+    //   request.Password,
+    //   request.Email,
+    //   "Doctor"
+    // );
 
     res.status(200).json(request);
   } catch (error) {
@@ -69,10 +68,9 @@ const acceptRequest = async (req, res) => {
 const rejectRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requestModel.findOneAndUpdate({
-      Username: Username,
-      Status: "Rejected",
-    });
+    const request = await requestModel.findOneAndUpdate({ Username: Username, Status: { $ne: "Rejected" } },
+    { $set: { Status: "Rejected" } },
+    {new:true});
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });

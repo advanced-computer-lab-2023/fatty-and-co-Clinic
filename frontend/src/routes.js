@@ -4,6 +4,7 @@ import Billing from "views/Dashboard/Billing";
 import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
+import resetPass from "views/Auth/resetPass";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
@@ -240,6 +241,14 @@ var dashRoutes = [
         icon: <RocketIcon color="inherit" />,
         secondaryNavbar: true,
         component: docSignUp,
+        layout: "/auth",
+      },
+      {
+        path: "/resetPass",
+        name: "Password Reset",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: resetPass,
         layout: "/auth",
       },
     ],

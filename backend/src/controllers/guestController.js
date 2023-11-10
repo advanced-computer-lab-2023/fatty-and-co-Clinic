@@ -120,7 +120,10 @@ const sendOTP = async (req,res) => {
     }
 
     const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
-    res.cookie('otp', otp, { httpOnly: true, maxAge: Date.now() + 600000 });
+    console.log('Set-Cookie Header:', res.getHeaders()['set-cookie']);
+    res.cookie('otp', otp, { httpOnly: true, maxAge: 600000 , sameSite: 'None', secure: true});
+
+    console.log('Set-Cookie Header:', res.getHeaders()['set-cookie']);
 
     await transporter.sendMail({
       to: Email,
@@ -150,6 +153,7 @@ const validateOTP = async (req,res) => {
 
     const otp1 = req.cookies.otp;
     const maxAge = req.cookies['otp'].maxAge;
+    console.log(maxAge);
 
  
     if (otp1 !== otp || Date.now() > maxAge) {
