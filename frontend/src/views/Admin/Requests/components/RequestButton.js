@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
+import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 
 function RequestButton({ Username }) {

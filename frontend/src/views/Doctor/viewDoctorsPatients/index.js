@@ -5,6 +5,7 @@ import PatientTable from "./components/PatientTable";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
+import { useAuthContext } from "hooks/useAuthContext";
 
 function ViewDoctorsPatients() {
   const [data, setData] = useState([{}]);
@@ -13,16 +14,20 @@ function ViewDoctorsPatients() {
     DoctorUsername: "",
   });
 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   setSearchParams({
     ...searchParams,
     Name: "",
     DoctorUsername: "",
   });
+
   useEffect(() => {
     const url = API_PATHS.viewPatientsDoctor;
     console.log("Sending search params:", searchParams);
     axios
-      .get(url, { params: searchParams })
+      .get(url, { params: searchParams, headers: { Authorization } })
       .then((response) => {
         setData(response.data);
       })
