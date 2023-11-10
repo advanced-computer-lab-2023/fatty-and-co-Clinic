@@ -37,6 +37,10 @@ const patientSchema = new Schema(
       ref: "Package",
       required: false,
     },
+    MedicalHistory: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
