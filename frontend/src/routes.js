@@ -12,7 +12,6 @@ import SubscribePackage from "views/Patient/SubscribePackage/subscribePack";
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus"
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import Package from "views/Admin/Package/package";
-import Packagesubscibe  from "views/Patient/Package/packagesubscribe";
 import Package2 from "views/Patient/viewPackagesFam/package2"
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
@@ -54,13 +53,7 @@ var dashRoutes = [
     component: Package,
     layout: "/admin",
   },
-  {
-    path: "/packagetest",
-    name: "Packagetesting",
-    icon: <HomeIcon color="inherit" />,
-    component: Packagesubscibe,
-    layout: "/patient",
-  },
+
   {
     path: "/viewMyPackage",
     name: "My Package",
