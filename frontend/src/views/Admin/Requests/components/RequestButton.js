@@ -32,8 +32,8 @@ function RequestButton({ Username, Status }) {
     //   method: "GET",
     // })
     axios
-      .get(API_PATHS.getRequest, {
-        params: { Username: Username },
+      .get(API_PATHS.getRequest + "?Username=" + Username, {
+        //params: { Username: Username },
         headers: { Authorization },
       })
       .then((response) => response.json())
@@ -44,10 +44,32 @@ function RequestButton({ Username, Status }) {
         console.error("Error fetching data:", error);
       });
     }, []); 
-  }
-
-
+ 
   const jsonData = JSON.stringify(data);
+  console.log(data);
+  console.log(jsonData);
+
+  const handleCustomClick1 = async () => {
+    axios
+      .post(API_PATHS.acceptRequest, {
+        body: { Username: Username },
+        headers: { Authorization },
+      })
+      .catch((error) => {
+        console.error("Error accepting request:", error);
+      });
+  } 
+
+  const handleCustomClick2 = async () => {
+    axios
+      .put(API_PATHS.rejectRequest, {
+        body: { Username: Username },
+        headers: { Authorization },
+      })
+      .catch((error) => {
+        console.error("Error rejecting request:", error);
+      });
+  } 
 
   return (
     <>
@@ -67,13 +89,13 @@ function RequestButton({ Username, Status }) {
               <p>Loading data...</p>
             )}
           </ModalBody>
-          <ModalFooter> {/* add accept + reject buttons here */}
+          <ModalFooter> 
           {Status == "Pending" ? (
               <div>
-                <Button colorScheme="green" mr={3} onClick={() => handleCustomClick1}>
+                <Button colorScheme="green" mr={3} onClick={handleCustomClick1}>
                   Accept
                 </Button>
-                <Button colorScheme="red" mr={3} onClick={() => handleCustomClick2}>
+                <Button colorScheme="red" mr={3} onClick={handleCustomClick2}>
                   Reject
                 </Button>
                 <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
@@ -92,5 +114,5 @@ function RequestButton({ Username, Status }) {
     </>
   );
 
-
+}
 export default RequestButton;
