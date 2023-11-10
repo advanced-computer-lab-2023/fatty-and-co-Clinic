@@ -35,7 +35,8 @@ import {
   useDisclosure,
   ModalCloseButton,
   CircularProgress,
-  CircularProgressLabel
+  CircularProgressLabel,
+  Progress,
 } from "@chakra-ui/react";
 import { AttachmentIcon } from "@chakra-ui/icons";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -45,6 +46,9 @@ import React, { useState } from "react";
 import { API_PATHS } from "API/api_paths";
 
 import BgSignUp from "assets/img/BgSignUp.png";
+import { set } from "date-fns";
+
+import axios from "axios";
 
 // Yup validation schema
 const DocSignUpSchema = Yup.object().shape({
@@ -62,7 +66,41 @@ const DocSignUpSchema = Yup.object().shape({
   HourlyRate: Yup.number().required("Required"),
   Affiliation: Yup.string().required("Required"),
   EducationalBackground: Yup.string().required("Required"),
-  Speciality: Yup.string(),
+  Speciality: Yup.string().required("Required"),
+  // TODO: Add file size validation
+  // this file type validation isn't working
+  IdFile: Yup.mixed()
+    .required("Required")
+    .test("fileType", "Unsupported Format", (value) => {
+      if (value) {
+        const supportedFormats = ["application/pdf", "image/jpeg", "image/png"];
+        const supportedExtensions = ["pdf", "jpeg", "jpg", "png"];
+        const extension = value.name.split(".").pop();
+        return (
+          supportedFormats.includes(value.type) &&
+          supportedExtensions.includes(extension)
+        );
+      }
+      return false;
+    }),
+  MedicalLicense: Yup.mixed()
+    .required("Required")
+    .test("fileType", "Unsupported Format", (value) => {
+      if (value) {
+        const supportedFormats = ["application/pdf", "image/jpeg", "image/png"];
+        return supportedFormats.includes(value.type);
+      }
+      return false;
+    }),
+  MedicalDegree: Yup.mixed()
+    .required("Required")
+    .test("fileType", "Unsupported Format", (value) => {
+      if (value) {
+        const supportedFormats = ["application/pdf", "image/jpeg", "image/png"];
+        return supportedFormats.includes(value.type);
+      }
+      return false;
+    }),
 });
 
 const formatHourlyRate = (val) => `$` + val;
@@ -75,25 +113,41 @@ function docSignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
-  const [IdFile , setIdFile] = useState("");
-  const [MedicalLicense, setMedicalLicense] = useState("");
-  const [MedicalDegree , setMedicalDegree] = useState(""); 
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const toast = useToast();
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    try {
-      const response = await fetch(API_PATHS.docSignUp, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = await response.json();
-      console.log(data);
-      if (response.ok) {
+    setError(null);
+    // onOpen();
+    // try {
+    let formData = new FormData();
+    formData.append("Username", values.Username);
+    formData.append("Password", values.Password);
+    formData.append("Email", values.Email);
+    formData.append("Name", values.Name);
+    formData.append("DateOfBirth", values.DateOfBirth);
+    formData.append("HourlyRate", values.HourlyRate);
+    formData.append("Affiliation", values.Affiliation);
+    formData.append("EducationalBackground", values.EducationalBackground);
+    formData.append("Speciality", values.Speciality);
+    formData.append("IdFile", values.IdFile);
+    formData.append("MedicalLicense", values.MedicalLicense);
+    formData.append("MedicalDegree", values.MedicalDegree);
+    axios
+      .post(API_PATHS.docSignUp, formData, {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadProgress(percentCompleted);
+        },
+      })
+      .then((res) => {
         console.log("Doctor request submitted successfully!");
         toast({
           title: "Request Submitted Successfully.",
@@ -103,27 +157,59 @@ function docSignUp() {
           duration: 9000,
           isClosable: true,
         });
-        // window.location.href = "/auth/signin";
+        // setUploadProgress(0);
         setSubmitting(false);
-      } else {
+      })
+      .catch((err) => {
         console.log("Error submitting doctor request!");
-        setError(data.message);
+        setError(err.response.data.message);
         toast({
           title: "An error occurred.",
-          description: "Unable to create your account.",
+          description: error,
           status: "error",
           duration: 9000,
           isClosable: true,
         });
+        // setUploadProgress(0);
         setSubmitting(false);
-      }
-    } catch {
-      setError(error);
-      console.log(error);
-      setSubmitting(false);
-    } finally {
-      setSubmitting(false);
-    }
+      });
+    // const response = await fetch(API_PATHS.docSignUp, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(formData),
+    // });
+    // const data = await response.json();
+    // console.log(data);
+    // if (response.ok) {
+    //   console.log("Doctor request submitted successfully!");
+    //   toast({
+    //     title: "Request Submitted Successfully.",
+    //     description:
+    //       "Your request has been sent for review. You will receive a confirmation when it is approved",
+    //     status: "success",
+    //     duration: 9000,
+    //     isClosable: true,
+    //   });
+    //   // window.location.href = "/auth/signin";
+    //   setSubmitting(false);
+    // } else {
+    //   console.log("Error submitting doctor request!");
+    //   setError(data.message);
+    //   toast({
+    //     title: "An error occurred.",
+    //     description: "Unable to create your account.",
+    //     status: "error",
+    //     duration: 9000,
+    //     isClosable: true,
+    //   });
+    // }
+    // } catch (err) {
+    //   setError(err.response.data.message);
+    //   console.log(error);
+    // } finally {
+    //   // onClose();
+    // setSubmitting(false);
+    // }
   };
 
   return (
@@ -194,11 +280,14 @@ function docSignUp() {
               Affiliation: "",
               EducationalBackground: "",
               Speciality: "",
+              IdFile: "",
+              MedicalLicense: "",
+              MedicalDegree: "",
             }}
             validationSchema={DocSignUpSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, errors, touched }) => (
+            {({ isSubmitting, errors, touched, setFieldValue }) => (
               <Form id="docSignUp">
                 <Field name="Username">
                   {({ field }) => (
@@ -424,7 +513,7 @@ function docSignUp() {
                       isInvalid={errors.Speciality && touched.Speciality}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Speciality
+                        Speciality <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -442,91 +531,147 @@ function docSignUp() {
                   )}
                 </Field>
                 {/* //////// Upload files ///////// */}
-              <FormLabel
-                htmlFor="IdFile"
-                ms="4px"
-                fontSize="sm"
-                bg="teal.300"
-                color="white"
-                fontWeight="xsmall"
-                w="60%"
-                h="45"
-                mb="24px"
-                borderRadius="15px"
-                style={{
-                  cursor: "pointer",
-                  textAlign: "center",
-                  paddingTop: "10px",
-                }}
-              >
-                Upload Id <AttachmentIcon boxSize={3} />
-              </FormLabel>
-              <Input
-                type="file"
-                placeholder="..."
-                id="IdFile"
-                name="IdFile"
-                style={{ display: "none" }}
-                required
-                onChange={(e) => setIdFile(e.target.files[0])}
-              />
-              <FormLabel
-                htmlFor="MedicalLicense"
-                ms="4px"
-                fontSize="sm"
-                bg="teal.300"
-                color="white"
-                fontWeight="xsmall"
-                w="60%"
-                h="45"
-                mb="24px"
-                borderRadius="15px"
-                style={{
-                  cursor: "pointer",
-                  textAlign: "center",
-                  paddingTop: "10px",
-                }}
-              >
-                Upload Medical License <AttachmentIcon boxSize={3} />
-              </FormLabel>
-              <Input
-                type="file"
-                placeholder="..."
-                id="MedicalLicense"
-                name="MedicalLicense"
-                style={{ display: "none" }}
-                required
-                onChange={(e) => setMedicalLicense(e.target.files[0])}
-              />
-              <FormLabel
-                htmlFor="MedicalDegree"
-                ms="4px"
-                fontSize="sm"
-                bg="teal.300"
-                color="white"
-                fontWeight="xsmall"
-                w="60%"
-                h="45"
-                mb="24px"
-                borderRadius="15px"
-                style={{
-                  cursor: "pointer",
-                  textAlign: "center",
-                  paddingTop: "10px",
-                }}
-              >
-                Upload Medical Degree <AttachmentIcon boxSize={3} />
-              </FormLabel>
-              <Input
-                type="file"
-                placeholder="..."
-                id="MedicalDegree"
-                name="MedicalDegree"
-                style={{ display: "none" }}
-                required
-                onChange={(e) => setMedicalDegree(e.target.files[0])}
-              />
-              {/* ////////////end of upload files //////////// */}
+
+                <Field name="IdFile">
+                  {({ field }) => (
+                    <FormControl
+                      mb="24px"
+                      isInvalid={errors.IdFile && touched.IdFile}
+                    >
+                      <FormLabel
+                        htmlFor="IdFile"
+                        ms="4px"
+                        fontSize="sm"
+                        bg="teal.300"
+                        color="white"
+                        fontWeight="xsmall"
+                        w="60%"
+                        h="45"
+                        // mb="24px"
+                        borderRadius="15px"
+                        style={{
+                          cursor: "pointer",
+                          textAlign: "center",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        Upload Id <span style={{ color: "red" }}>*</span>{" "}
+                        <AttachmentIcon boxSize={3} />
+                      </FormLabel>
+                      <Input
+                        type="file"
+                        placeholder="..."
+                        id="IdFile"
+                        name="IdFile"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setFieldValue("IdFile", event.target.files[0]);
+                        }}
+                      />
+                      <FormErrorMessage>{errors.IdFile}</FormErrorMessage>
+                      <Text>{field.value && field.value.name}</Text>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="MedicalLicense">
+                  {({ field }) => (
+                    <FormControl
+                      mb="24px"
+                      isInvalid={
+                        errors.MedicalLicense && touched.MedicalLicense
+                      }
+                    >
+                      <FormLabel
+                        htmlFor="MedicalLicense"
+                        ms="4px"
+                        fontSize="sm"
+                        bg="teal.300"
+                        color="white"
+                        fontWeight="xsmall"
+                        w="60%"
+                        h="45"
+                        // mb="24px"
+                        borderRadius="15px"
+                        style={{
+                          cursor: "pointer",
+                          textAlign: "center",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        Upload Medical License{" "}
+                        <span style={{ color: "red" }}>*</span>{" "}
+                        <AttachmentIcon boxSize={3} />{" "}
+                      </FormLabel>
+                      <Input
+                        type="file"
+                        placeholder="..."
+                        id="MedicalLicense"
+                        name="MedicalLicense"
+                        style={{ display: "none" }}
+                        onChange={(event) => {
+                          setFieldValue(
+                            "MedicalLicense",
+                            event.target.files[0]
+                          );
+                        }}
+                      />
+                      <FormErrorMessage>
+                        {errors.MedicalLicense}
+                      </FormErrorMessage>
+                      <Text>{field.value && field.value.name}</Text>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="MedicalDegree">
+                  {({ field }) => (
+                    <FormControl
+                      mb="24px"
+                      isInvalid={errors.MedicalDegree && touched.MedicalDegree}
+                    >
+                      <FormLabel
+                        htmlFor="MedicalDegree"
+                        ms="4px"
+                        fontSize="sm"
+                        bg="teal.300"
+                        color="white"
+                        fontWeight="xsmall"
+                        w="60%"
+                        h="45"
+                        // mb="24px"
+                        borderRadius="15px"
+                        style={{
+                          cursor: "pointer",
+                          textAlign: "center",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        Upload Medical Degree{" "}
+                        <span style={{ color: "red" }}>*</span>{" "}
+                        <AttachmentIcon boxSize={3} />{" "}
+                      </FormLabel>
+                      <Input
+                        type="file"
+                        placeholder="..."
+                        id="MedicalDegree"
+                        name="MedicalDegree"
+                        style={{ display: "none" }}
+                        // required
+                        // onChange={(e) => setMedicalDegree(e.target.files[0])}
+                        onChange={(event) => {
+                          setFieldValue("MedicalDegree", event.target.files[0]);
+                        }}
+                      />
+                      <FormErrorMessage>
+                        {errors.MedicalDegree}
+                      </FormErrorMessage>
+                      <Text>{field.value && field.value.name}</Text>
+                    </FormControl>
+                  )}
+                </Field>
+                {isSubmitting && <Progress value={uploadProgress} />}
+                {/* ////////////end of upload files //////////// */}
                 <Button
                   type="submit"
                   bg="teal.300"
@@ -592,11 +737,21 @@ function docSignUp() {
             </Text>
           </Flex>
           {/* //////// Modal ///////// */}
-          <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} h="200">
+          <Modal
+            closeOnOverlayClick={false}
+            isOpen={isOpen}
+            onClose={onClose}
+            h="200"
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalBody>
-                This will take a few seconds... <CircularProgress size='20px' isIndeterminate color='green.300' />
+                This will take a few seconds...{" "}
+                <CircularProgress
+                  size="20px"
+                  isIndeterminate
+                  color="green.300"
+                />
               </ModalBody>
             </ModalContent>
           </Modal>
