@@ -16,6 +16,7 @@ export default function ViewPatientAppointments() {
   });
   const [statusSearchValue, setStatusSearchValue] = useState("");
   const [dateSearchValue, setDateSearchValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -30,12 +31,17 @@ export default function ViewPatientAppointments() {
 
   useEffect(() => {
     const url = API_PATHS.viewAppointPat;
+    setIsLoading(true);
     axios
       .get(url, { params: searchParams, headers: { Authorization } })
       .then((response) => {
         setData(response.data);
+        setIsLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }, [searchParams]);
 
   const handleSearchButtonClick = () => {
@@ -105,6 +111,7 @@ export default function ViewPatientAppointments() {
           title={"Available Appointments"}
           captions={["Doctor Name", "Status", "Type", "Date", "Time"]}
           data={data}
+          isLoading={isLoading}
         />
         {/* )) || (
             <Text fontSize="3xl" fontWeight="bold">
