@@ -44,7 +44,7 @@ export const AppointmentsTable = ({ title, captions, data }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => {
+            {data?.map((row) => {
               return (
                 <AppointmentsRow
                   key={row.PatientUsername}

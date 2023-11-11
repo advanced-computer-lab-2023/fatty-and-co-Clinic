@@ -7,6 +7,7 @@ import {
   Th,
   Thead,
   Tr,
+  Spinner,
   useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
@@ -18,7 +19,7 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export const PatientAppTable = ({ title, captions, data }) => {
+export const PatientAppTable = ({ title, captions, data, isLoading }) => {
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -32,33 +33,41 @@ export const PatientAppTable = ({ title, captions, data }) => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Table variant="simple" color={textColor}>
-          <Thead>
-            <Tr my=".8rem" pl="0px">
-              {captions.map((caption, idx) => {
+        {isLoading ? (
+          <Spinner></Spinner>
+        ) : (
+          <Table variant="simple" color={textColor}>
+            <Thead>
+              <Tr my=".8rem" pl="0px">
+                {captions.map((caption, idx) => {
+                  return (
+                    <Th
+                      color="gray.400"
+                      key={idx}
+                      ps={idx === 0 ? "0px" : null}
+                    >
+                      {caption}
+                    </Th>
+                  );
+                })}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data?.map((row) => {
+                console.log(row);
                 return (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
+                  <AppointmentsRow
+                    key={row.DoctorUsername}
+                    DoctorName={row.DoctorName}
+                    Status={row.Status}
+                    Type={row.FollowUp ? "Follow Up" : "First Time"}
+                    DateTime={row.Date}
+                  />
                 );
               })}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.map((row) => {
-              console.log(row);
-              return (
-                <AppointmentsRow
-                  key={row.DoctorUsername}
-                  DoctorName={row.DoctorName}
-                  Status={row.Status}
-                  Type={row.FollowUp ? "Follow Up" : "First Time"}
-                  DateTime={row.Date}
-                />
-              );
-            })}
-          </Tbody>
-        </Table>
+            </Tbody>
+          </Table>
+        )}
       </CardBody>
     </Card>
   );

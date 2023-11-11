@@ -28,15 +28,14 @@ import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 
 function PatientTable() {
-  const { doctorUsername } = useParams();
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
-
-  const { user } = useAuthContext();
-  const Authorization = `Bearer ${user.token}`;
 
   const [filters, setFilters] = useState({
     patientName: "",
@@ -45,7 +44,7 @@ function PatientTable() {
 
   useEffect(() => {
     fetchPatient();
-  }, [doctorUsername, filters]);
+  }, [filters]);
 
   const fetchPatient = () => {
     // Construct the URL based on filters and user ID
@@ -53,9 +52,9 @@ function PatientTable() {
       ? API_PATHS.viewUpcomingAppointments
       : API_PATHS.viewDoctorPatients;
 
-    const params = { DoctorUsername: doctorUsername };
+    const params = {};
     if (filters.patientName) params.PatientName = filters.patientName;
-
+    console.log(params);
     axios
       .get(url, { params, headers: { Authorization } })
       .then((response) => {
@@ -70,11 +69,12 @@ function PatientTable() {
     try {
       const response = await axios.get(API_PATHS.getPatient, {
         params: { id },
+        headers: { Authorization },
       });
       setSelectedPatient(response.data);
       setModalOpen(true);
     } catch (error) {
-      console.error("Error fetching patient data:", error);
+      console.error("Error fetching patient data:", error.message);
     }
   };
 
@@ -88,8 +88,8 @@ function PatientTable() {
       const response = await axios.get(API_PATHS.viewInfoAndHealthRecords, {
         params: {
           PatientUsername: patientUsername,
-          DoctorUsername: doctorUsername,
         },
+        headers: { Authorization },
       });
       setSelectedPatientViewInfo(response.data);
       setInfoModalOpen(true);
@@ -162,14 +162,21 @@ function PatientTable() {
           </Tr>
         </Thead>
         <Tbody>
-          {patients.map((patient) => (
-            <Tr key={patient._id} onClick={() => openModal(patient._id)}>
+          {patients?.map((patient) => (
+            <Tr
+              _hover={{ backgroundColor: "gray.200" }}
+              cursor="pointer"
+              key={patient._id}
+              onClick={() => openModal(patient._id)}
+            >
               <Td>{patient && patient.Name ? patient.Name : "N/A"}</Td>
               <Td>
                 {patient && patient.MobileNum ? patient.MobileNum : "N/A"}
               </Td>
               <Td>
-                {patient && patient.DateOfBirth ? patient.DateOfBirth : "N/A"}
+                {patient && patient.DateOfBirth
+                  ? new Date(patient.DateOfBirth).toLocaleDateString("en-GB")
+                  : "N/A"}
               </Td>
               <Td>{patient && patient.Gender ? patient.Gender : "N/A"}</Td>
             </Tr>
@@ -185,7 +192,12 @@ function PatientTable() {
             <ModalBody>
               <p>patient name: {selectedPatient.Name}</p>
               <p>Mobile Number: {selectedPatient.MobileNum}</p>
-              <p>Date of birth: {selectedPatient.DateOfBirth}</p>
+              <p>
+                Date of birth:{" "}
+                {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
+                  "en-GB"
+                )}
+              </p>
               <p>Gender:{selectedPatient.Gender}</p>
               <p>Package Name:{selectedPatient.PackageName}</p>
               <p>
