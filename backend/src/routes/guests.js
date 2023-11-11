@@ -55,6 +55,7 @@ router.post("/addRequest", createRequest);
 // the following routes require authentication
 router.use(requireAuth);
 
+// TODO: add type check as middleware if needed
 router.put("/updateRequest/:id", updateRequest);
 
 // TODO: add type check as middleware if needed

@@ -2,7 +2,7 @@ const appointmentModel = require("../models/appointments");
 const doctorModel = require("../models/doctors");
 const patientModel = require("../models/patients");
 const familyMemberModel = require("../models/familymembers");
-const subscriptionModel=require("../models/subscriptions")
+const subscriptionModel = require("../models/subscriptions");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const prescriptionModel = require("../models/prescriptions");
@@ -175,6 +175,8 @@ const createPatient = async (req, res) => {
     await systemUserModel.addEntry(
       username,
 
+
+
       password,
       generateEmail(),
       "Patient"
@@ -189,10 +191,10 @@ const createPatient = async (req, res) => {
       PackageName: packageName,
     });
 
-    const newPat= await patientModel.findOne({Username:username})
+    const newPat = await patientModel.findOne({ Username: username });
     const newUnsubscribed = await subscriptionModel.create({
-      Patient:newPat,
-      Status:"Unsubscribed"
+      Patient: newPat,
+      Status: "Unsubscribed",
     });
     res.status(201).json(newPatient);
   } catch (error) {

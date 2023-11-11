@@ -67,14 +67,15 @@ router.get("/getDoctorByid/:id", getDoctorByID);
  */
 router.get("/getDoctorByUsername/:username", getDoctorByUsername);
 
-/**
- * @route GET /doctors/search
- * @desc Returns a list of doctors by name and speciality
- * @access Public
- * @prop {string} Name - The name of the doctor
- * @prop {string} Speciality - The speciality of the doctor
- */
-router.get("/search", getDoctorByNameAndSpeciality);
+// /**
+//  * USELESS ROUTE. SEARCH IS HANDLED BY THE PATIENTS ROUTE /view/doctors
+//  * @route GET /doctors/search
+//  * @desc Returns a list of doctors by name and speciality
+//  * @access Public
+//  * @prop {string} Name - The name of the doctor
+//  * @prop {string} Speciality - The speciality of the doctor
+//  */
+// router.get("/search", getDoctorByNameAndSpeciality);
 
 /**
  * @route GET /doctors/filter
@@ -97,6 +98,7 @@ router.get("/filter", checkPatient, filterDoctor);
  * @prop {string} Affiliation - The affiliation of the doctor
  * @prop {string} EducationalBackground - The educational background of the doctor
  */
+// TODO: add type check as middleware if needed
 router.post("/addDoctor", createDoctor);
 
 /**
@@ -112,6 +114,7 @@ router.get("/getAllDoctors", getAllDoctors);
  * @access Public
  * @param {string} id - The ID of the doctor to delete
  */
+// TODO: add type check as middleware if needed
 router.delete("/deleteDoctor/:id", deleteDoctor); // TODO: check if the one deleting is an admin or the currently logged in doctor
 
 /**
@@ -133,10 +136,6 @@ router.get(
   checkDoctor,
   viewPatientInfoAndHealthRecords
 );
-router.post(
-  "/followupAppointment",
-  checkDoctor,
-  followupAppointment
-);
+router.post("/followupAppointment", checkDoctor, followupAppointment);
 
 module.exports = router;

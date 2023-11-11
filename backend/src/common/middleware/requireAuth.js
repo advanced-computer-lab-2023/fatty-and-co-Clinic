@@ -26,7 +26,6 @@ const requireAuth = async (req, res, next) => {
     // console.log(user);
     req.user = user; // store user data in req.user for later use
 
-    
     next();
   } catch (err) {
     // if token expired or invalid then return null
