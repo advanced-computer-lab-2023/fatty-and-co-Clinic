@@ -16,32 +16,36 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { useParams } from "react-router-dom";
+import { useAuthContext } from "hooks/useAuthContext";
+import axios from "axios";
+
 function UpdateAffil() {
   const [Affiliation, setAffiliation] = useState("");
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
-  const { Username } = useParams();
+  // const { Username } = useParams();
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Send the username to the backend for deletion
-    try {
-      const response = await fetch(API_PATHS.updateAffil + Username, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Affiliation }),
+    if (Affiliation == "") {
+      toast({
+        title: "Please fill the new affiliation field",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
       });
-      if (Affiliation == "") {
-        toast({
-          title: "Please fill the new affiliation field",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      } else if (response.ok) {
-        // Handle success or provide feedback to the user
+      return;
+    }
+    axios
+      .patch(
+        API_PATHS.updateAffil,
+        { Affiliation },
+        { headers: { Authorization } }
+      )
+      .then((response) => {
         toast({
           title: "Affiliation updated successfully",
           status: "success",
@@ -49,8 +53,8 @@ function UpdateAffil() {
           isClosable: true,
         });
         setAffiliation(""); // Clear the input field
-      } else {
-        // Handle errors or provide feedback to the user
+      })
+      .catch((err) => {
         toast({
           title: "Failed to update Affiliation",
           description: "An error occurred while updating the affiliation.",
@@ -58,10 +62,7 @@ function UpdateAffil() {
           duration: 9000,
           isClosable: true,
         });
-      }
-    } catch (error) {
-      console.error("An error occurred", error);
-    }
+      });
   };
 
   return (

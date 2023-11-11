@@ -57,6 +57,7 @@ router.use(requireAuth);
 
 router.put("/updateRequest/:id", updateRequest);
 
-router.patch("/updateEmail/:Username", updateEmail);
+// TODO: add type check as middleware if needed
+router.patch("/updateEmail", updateEmail);
 
 module.exports = router;

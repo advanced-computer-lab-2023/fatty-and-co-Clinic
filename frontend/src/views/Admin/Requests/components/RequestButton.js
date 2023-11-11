@@ -19,11 +19,16 @@ function RequestButton({ Username }) {
 
   useEffect(() => {
     // Fetch data from the database when the component mounts
-    fetch(API_PATHS.getRequest + "?Username=" + Username, {
-      method: "GET",
-    })
-      .then(response => response.json())
-      .then(data => {
+    // fetch(API_PATHS.getRequest + "?Username=" + Username, {
+    //   method: "GET",
+    // })
+    axios
+      .get(API_PATHS.getRequest, {
+        params: { Username: Username },
+        headers: { Authorization },
+      })
+      .then((response) => response.json())
+      .then((data) => {
         setData(data);
       })
       .catch(error => {
