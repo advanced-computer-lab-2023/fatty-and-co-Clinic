@@ -162,7 +162,7 @@ function PatientTable() {
           </Tr>
         </Thead>
         <Tbody>
-          {patients.map((patient) => (
+          {patients?.map((patient) => (
             <Tr
               _hover={{ backgroundColor: "gray.200" }}
               cursor="pointer"

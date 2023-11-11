@@ -45,7 +45,7 @@ export const PatientAppTable = ({ title, captions, data }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => {
+            {data?.map((row) => {
               console.log(row);
               return (
                 <AppointmentsRow
