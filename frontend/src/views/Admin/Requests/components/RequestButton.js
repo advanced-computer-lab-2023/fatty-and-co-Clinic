@@ -27,7 +27,7 @@ function RequestButton({ Username }) {
   const Authorization = `Bearer ${user.token}`;
 
   useEffect(() => {
-<<<<<<<<< Temporary merge branch 1
+
     axios
       .get(API_PATHS.getRequest, {
         params: { Username: Username },
@@ -35,7 +35,7 @@ function RequestButton({ Username }) {
       })
       .then((response) => {
         setData(response.data);
-=========
+
     // Fetch data from the database when the component mounts
     fetch(API_PATHS.getRequest + "?Username=" + Username, {
       method: "GET",
@@ -43,7 +43,7 @@ function RequestButton({ Username }) {
       .then(response => response.json())
       .then(data => {
         setData(data);
->>>>>>>>> Temporary merge branch 2
+
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -86,5 +86,5 @@ function RequestButton({ Username }) {
     </>
   );
 }
-
+  )};
 export default RequestButton;
