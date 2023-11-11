@@ -37,7 +37,6 @@ const getRequestMedicalLicense = async (req, res) => {
     console.log("waiting for file");
     //const file = await getDoctorFile.getFile(MedicalLicenseName);
     const file = getDoctorFile.allFiles();
-    console.log("kkklklk");
     console.log("file done");
     res.status(200).json(file);
   } catch (error) {

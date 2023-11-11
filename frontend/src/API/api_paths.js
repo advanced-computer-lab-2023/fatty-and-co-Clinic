@@ -37,7 +37,10 @@ export const API_PATHS = {
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
-  uploadFile: PATIENT_BASE + "uploadFile",
+  uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
+  getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
+  downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
+  removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
 
   // Package
   packages: PACKAGE_BASE + "packages/",

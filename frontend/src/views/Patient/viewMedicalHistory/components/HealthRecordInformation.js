@@ -9,6 +9,8 @@ import React, { useState } from "react";
 
 const HealthRecordInformation = ({ title, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
+  
+
   return (
     <Card my={{ lg: "24px" }} me={{ lg: "24px" }}>
       <Flex direction="column">
@@ -19,20 +21,19 @@ const HealthRecordInformation = ({ title, data }) => {
         </CardHeader>
         <CardBody>
           <Flex direction="column" w="100%">
-            {data.map((row) => {
+            { data.map((row) => {
               return (
-                // Name, Price, Session_Discount,  Medicine_Discount ,Family_Discount
                 <HealthRecordRow
                   key={row._id}
-                  Name={row.Name}
-                  Price={row.Price}
-                  Session_Discount={row.Session_Discount}
-                  Medicine_Discount={row.Medicine_Discount}
-                  Family_Discount={row.Family_Discount}
+                  filename={row.filename}
+                  note={row.note}
                   _id={row._id}
                 />
               );
             })}
+            {
+              
+            }
           </Flex>
         </CardBody>
       </Flex>

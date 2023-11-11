@@ -11,6 +11,11 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+const {
+  findFiles,
+  findFileByFilename,
+  getFileByFilename,
+} = require("../common/middleware/upload");
 
 // const createPatient = async (req, res) => {
 //   const {
@@ -358,12 +363,43 @@ const subscribehealthpackage = async (req, res) => {
 const uploadFile = async (req, res) => {
   const user = req.user.Username;
   const filename = req.file.filename;
-  console.log(filename);
   await patientModel.findOneAndUpdate(
     { Username: user },
     { $push: { MedicalHistory: { filename: filename, note: req.body.note } } }
   );
-  res.status(200).send({ message: "File uploaded successfully" });
+  res
+    .status(200)
+    .send({ file: req.file, message: "File uploaded successfully" });
+};
+
+const getMedicalHistory = async (req, res) => {
+  const user = req.user.Username;
+  if (req.user.Type === "Admin") {
+    user = req.body.username;
+  }
+  const patient = await patientModel.findOne({ Username: user });
+  if (!patient) {
+    res.status(404).send({ message: "Patient not found." });
+    return;
+  }
+  const { MedicalHistory } = patient;
+  res.status(200).send({ MedicalHistory });
+};
+
+const downloadFile = async (req, res) => {
+  const { filename } = req.params;
+  const downloadStream = await getFileByFilename(filename);
+  downloadStream.pipe(res);
+};
+
+const removeHealthRecord = async (req, res) => {
+  const { filename } = req.params;
+  const user = req.user.Username;
+  await patientModel.findOneAndUpdate(
+    { Username: user },
+    { $pull: { MedicalHistory: { filename: filename } } }
+  );
+  res.status(200).send({ message: "File removed successfully" });
 };
 
 Date.prototype.addDays = function (days) {
@@ -390,4 +426,7 @@ module.exports = {
   getEmergencyContact,
   subscribepackagefamilymem,
   uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
 };

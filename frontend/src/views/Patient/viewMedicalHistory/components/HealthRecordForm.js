@@ -65,7 +65,7 @@ function HealthRecordForm() {
                   duration: 3000,
                   isClosable: true,
                 });
-                dispatch({ type: "ADD_PACKAGE", payload: data });
+                //dispatch({ type: "ADD_PACKAGE", payload: data });
               } else {
                 toast({
                   title: "File upload failed",
