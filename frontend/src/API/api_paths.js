@@ -27,12 +27,7 @@ export const API_PATHS = {
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
-
   followupAppointment: DOCTOR_BASE + "followupAppointment/",
-
-
-  subscribePackageSelf: PATIENT_BASE+"payForSubscription/",
-  subscribePackageFam:PATIENT_BASE+"payFamilySubscription/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -42,14 +37,16 @@ export const API_PATHS = {
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
-  viewFamPackage: PATIENT_BASE +"viewFamilyPackage/",
+  viewFamPackage: PATIENT_BASE + "viewFamilyPackage/",
   viewOptionPackages: PATIENT_BASE + "getOptionPackages/",
-  viewHealthFamwithstatus:PATIENT_BASE+"viewHealthFamwithstatus",
-  CancelFamilysubscribtion:PATIENT_BASE+"cancelSubscriptionfamilymember",
-  subscribepackagefamilymem:PATIENT_BASE+"subscribepackagefamilymem",
-  cancelSubscription:PATIENT_BASE+"/cancelSubscription",
-  
-  viewHealthPackagewithstatus:PATIENT_BASE+"viewHealthPackagewithstatus",
+  viewHealthFamwithstatus: PATIENT_BASE + "viewHealthFamwithstatus",
+  CancelFamilysubscribtion: PATIENT_BASE + "cancelSubscriptionfamilymember",
+  subscribepackagefamilymem: PATIENT_BASE + "subscribepackagefamilymem",
+  cancelSubscription: PATIENT_BASE + "/cancelSubscription",
+  subscribePackageSelf: PATIENT_BASE + "payForSubscription/",
+  subscribePackageFam: PATIENT_BASE + "payFamilySubscription/",
+  viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
+
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
