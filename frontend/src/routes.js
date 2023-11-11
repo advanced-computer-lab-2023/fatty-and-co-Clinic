@@ -22,6 +22,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
+import MedicalHistortDoctor from "views/Doctors/viewMedicalHistory/medicalHistory";
 import MakePayment from "views/Patient/makePayment";
 import {
   HomeIcon,
@@ -165,6 +166,12 @@ var dashRoutes = [
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,
+    layout: "/doctor",
+  },{
+    path: "/MedicalHistortDoctor",
+    name: "View Patients Medical History",
+    icon: <CreditIcon color="inherit" />,
+    component: MedicalHistortDoctor,
     layout: "/doctor",
   },
   {

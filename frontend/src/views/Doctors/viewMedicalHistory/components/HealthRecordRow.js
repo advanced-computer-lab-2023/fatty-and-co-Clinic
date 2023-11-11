@@ -20,13 +20,13 @@ import {
 import React, { useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { DownloadIcon } from '@chakra-ui/icons'
-import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
+import { usePackageContext } from "../hooks/usePackageContext";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useEffect } from "react";
 
 function HealthRecordRow(props) {
-  const { dispatch } = useMedicalHistoryContext();
+  const { dispatch } = usePackageContext();
   const textColor = useColorModeValue("gray.700", "white");
   const bgColor = useColorModeValue("#F8F9FA", "gray.800");
   const nameColor = useColorModeValue("gray.500", "white");

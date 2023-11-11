@@ -14,7 +14,7 @@ import {
 import { AttachmentIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
+import { usePackageContext } from "../hooks/usePackageContext";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -22,7 +22,7 @@ import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 
 function HealthRecordForm() {
-  const { dispatch } = useMedicalHistoryContext();
+  const { dispatch } = usePackageContext();
   const { user } = useAuthContext();
   const [ file, setFile ] = useState(null);
   const Authorization = `Bearer ${user.token}`;
