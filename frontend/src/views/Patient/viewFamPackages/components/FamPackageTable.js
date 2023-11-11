@@ -42,18 +42,18 @@ import {
             <Tbody>
               {data.map((row) => {
                 if(row){
-                const id = row.Patient?row.Patient._id: row.FamilyMem._id ;
-                const name = row.Patient?row.Patient.Name: row.FamilyMem.Name ;
-                
+                const id = row.Patient?row.Patient._id:row.FamilyMem? row.FamilyMem._id:"" ;
+                const name = row.Patient?row.Patient.Name: row.FamilyMem?row.FamilyMem.Name:"" ;
+            
                 return (
                   <FamPackageRow
                     key={id}
                     FamName={name}
-                    packName={row.PackageName.Name}
-                    packPrice={row.PackageName.Price}
-                    packSessionDiscount={row.PackageName.Session_Discount}
-                    packMedicineDiscount={row.PackageName.Medicine_Discount}
-                    packFamilyDiscount={row.PackageName.Family_Discount}
+                    packName={row.PackageName?row.PackageName.Name:""}
+                    packPrice={row.PackageName?row.PackageName.Price:""}
+                    packSessionDiscount={row.PackageName?row.PackageName.Session_Discount:""}
+                    packMedicineDiscount={row.PackageName?row.PackageName.Medicine_Discount:""}
+                    packFamilyDiscount={row.PackageName?row.PackageName.Family_Discount:""}
                   />
                 );}
               })}
