@@ -17,6 +17,7 @@ const patientSchema = new Schema(
     MobileNum: {
       type: Number,
       required: true,
+      unique: true,
     },
     DateOfBirth: {
       type: Date,
@@ -31,10 +32,10 @@ const patientSchema = new Schema(
       type: { FullName: String, PhoneNumber: Number },
       required: true,
     },
-    Wallet:{
-      type:Number,
-      required:false
-    }
+    Wallet: {
+      type: Number,
+      required: false,
+    },
   },
   { timestamps: true }
 );
