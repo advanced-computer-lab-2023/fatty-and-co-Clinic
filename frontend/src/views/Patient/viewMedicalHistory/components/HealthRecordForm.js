@@ -65,6 +65,7 @@ function HealthRecordForm() {
                   duration: 3000,
                   isClosable: true,
                 });
+                location.reload();
                 //dispatch({ type: "ADD_PACKAGE", payload: data });
               } else {
                 toast({
@@ -100,6 +101,7 @@ function HealthRecordForm() {
                 type="file"
                 id="file"
                 name="file"
+                accept=".pdf,.png,.jpg,.jpeg"
                 style={{ display: "none" }}
                 required
                 onChange={(e) => setFile(e.target.files[0])}

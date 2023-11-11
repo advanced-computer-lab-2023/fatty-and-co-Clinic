@@ -363,9 +363,11 @@ const subscribehealthpackage = async (req, res) => {
 const uploadFile = async (req, res) => {
   const user = req.user.Username;
   const filename = req.file.filename;
+  const originalname = req.file.originalname;
+  
   await patientModel.findOneAndUpdate(
     { Username: user },
-    { $push: { MedicalHistory: { filename: filename, note: req.body.note } } }
+    { $push: { MedicalHistory: { filename: filename, originalname : originalname, note: req.body.note } } }
   );
   res
     .status(200)
@@ -374,7 +376,7 @@ const uploadFile = async (req, res) => {
 
 const getMedicalHistory = async (req, res) => {
   const user = req.user.Username;
-  if (req.user.Type === "Admin") {
+  if (req.user.Type === "Doctor") {
     user = req.body.username;
   }
   const patient = await patientModel.findOne({ Username: user });
