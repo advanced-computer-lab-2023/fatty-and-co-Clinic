@@ -37,6 +37,9 @@ function PatientTable() {
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const [filters, setFilters] = useState({
     patientName: "",
     upcoming: false,
