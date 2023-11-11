@@ -50,11 +50,11 @@ const FamPackageStatusTable = ({ title, captions, data }) => {
                 <Statuspackagerow
                   key={id}
                   Name={name}
-                  Status={row.Status}
+                  Status={row.Status?row.Status:""}
                   PackageName={packageName}
-                  Enddate={row.Enddate}
-                  Startdate={row.Startdate}
-                  Renewaldate={row.Renewaldate}
+                  Enddate={row.Enddate?row.Enddate:""}
+                  Startdate={row.Startdate?row.Startdate:""}
+                  Renewaldate={row.Renewaldate?row.Renewaldate:""}
                 />
               );}
             })}
