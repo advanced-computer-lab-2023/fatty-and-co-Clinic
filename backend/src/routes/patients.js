@@ -183,6 +183,7 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 // TODO: add type check as middleware if needed
+// TODO: does this need the :Username param after adding authentication?
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/subscribehealthpackage/:id", subscribehealthpackage);
 router.patch("/subscribepackagefamilymem/:id", subscribepackagefamilymem);
