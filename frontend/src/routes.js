@@ -10,6 +10,7 @@ import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
 
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
+import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
 import Package from "views/Admin/Package/package";
 import Package2 from "views/Patient/viewPackagesFam/package2";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
@@ -58,6 +59,13 @@ var dashRoutes = [
     name: "My Package",
     icon: <HomeIcon color="inherit" />,
     component: ViewMyPackage,
+    layout: "/patient",
+  },
+  {
+    path: "/SubscribePackages",
+    name: "Subscription",
+    icon: <HomeIcon color="inherit" />,
+    component: SubscribePackage,
     layout: "/patient",
   },
   {
