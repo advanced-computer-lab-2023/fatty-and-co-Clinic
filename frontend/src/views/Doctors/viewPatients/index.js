@@ -163,13 +163,20 @@ function PatientTable() {
         </Thead>
         <Tbody>
           {patients.map((patient) => (
-            <Tr key={patient._id} onClick={() => openModal(patient._id)}>
+            <Tr
+              _hover={{ backgroundColor: "gray.200" }}
+              cursor="pointer"
+              key={patient._id}
+              onClick={() => openModal(patient._id)}
+            >
               <Td>{patient && patient.Name ? patient.Name : "N/A"}</Td>
               <Td>
                 {patient && patient.MobileNum ? patient.MobileNum : "N/A"}
               </Td>
               <Td>
-                {patient && patient.DateOfBirth ? patient.DateOfBirth : "N/A"}
+                {patient && patient.DateOfBirth
+                  ? new Date(patient.DateOfBirth).toLocaleDateString("en-GB")
+                  : "N/A"}
               </Td>
               <Td>{patient && patient.Gender ? patient.Gender : "N/A"}</Td>
             </Tr>
@@ -185,7 +192,12 @@ function PatientTable() {
             <ModalBody>
               <p>patient name: {selectedPatient.Name}</p>
               <p>Mobile Number: {selectedPatient.MobileNum}</p>
-              <p>Date of birth: {selectedPatient.DateOfBirth}</p>
+              <p>
+                Date of birth:{" "}
+                {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
+                  "en-GB"
+                )}
+              </p>
               <p>Gender:{selectedPatient.Gender}</p>
               <p>Package Name:{selectedPatient.PackageName}</p>
               <p>
