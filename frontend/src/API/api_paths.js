@@ -43,7 +43,7 @@ export const API_PATHS = {
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
   viewFamPackage: PATIENT_BASE +"viewFamilyPackage/",
-  //viewHealthFamwithstatus:PATIENT_BASE +"viewHealthFamwithstatus/",
+  viewOptionPackages: PATIENT_BASE + "getOptionPackages/",
   viewHealthFamwithstatus:PATIENT_BASE+"viewHealthFamwithstatus",
   CancelFamilysubscribtion:PATIENT_BASE+"cancelSubscriptionfamilymember",
   subscribepackagefamilymem:PATIENT_BASE+"subscribepackagefamilymem",
