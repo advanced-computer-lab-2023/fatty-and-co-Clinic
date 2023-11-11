@@ -25,6 +25,7 @@ import {
   filter,
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
+import { useAuthContext } from "hooks/useAuthContext";
 
 function PatientTable() {
   const { doctorUsername } = useParams();
@@ -33,6 +34,9 @@ function PatientTable() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
+
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
 
   const [filters, setFilters] = useState({
     patientName: "",
@@ -53,7 +57,7 @@ function PatientTable() {
     if (filters.patientName) params.PatientName = filters.patientName;
 
     axios
-      .get(url, { params })
+      .get(url, { params, headers: { Authorization } })
       .then((response) => {
         setPatients(response.data);
       })

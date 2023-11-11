@@ -51,26 +51,23 @@ const updateRequest = async (req, res) => {
 
 const updateEmail = async (req, res) => {
   try {
-    const { Username } = req.params;
-    const isUser = await systemUserModel.find({ Username: Username });
-    const isSigned = await systemUserModel.find({
-      Username: Username,
+    const Username = req.user.Username;
+
+    const isSigned = await systemUserModel.findOne({
       Email: req.body.Email,
     });
-    if (!isUser) {
-      res.status(404).send("User not registered");
-    } else if (isSigned != "" && isSigned.Username != Username) {
-      res.json({ error: "This email is already registered by another user!" }); //set status
-    } else {
-      const doc = await systemUserModel.findOneAndUpdate(
-        { Username: Username },
-        req.body
-      );
-      const doc1 = await systemUserModel.findOneAndUpdate(
-        { Username: Username },
-        req.body
-      );
+    if (isSigned) {
+      res
+        .status(400)
+        .json({ error: "This email is already registered by another user!" }); //set status
+      return;
     }
+    const doc = await systemUserModel.findOneAndUpdate(
+      { Username: Username },
+      req.body,
+      { new: true }
+    );
+    res.status(200).send({ doc });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }

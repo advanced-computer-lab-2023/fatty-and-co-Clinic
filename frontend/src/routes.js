@@ -6,12 +6,12 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
-import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; 
+import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
 
-import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus"
+import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import Package from "views/Admin/Package/package";
-import Package2 from "views/Patient/viewPackagesFam/package2"
+import Package2 from "views/Patient/viewPackagesFam/package2";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import createFamilymember from "views/Patient/createFamilyMember";
@@ -25,7 +25,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-import ViewMyPackage from "views/Patient/viewMyPackage"
+import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
@@ -81,7 +81,7 @@ var dashRoutes = [
     component: ViewFamPackageswithstatus,
     layout: "/patient",
   },
- 
+
   {
     path: "/package",
     name: "Packages",
@@ -91,11 +91,48 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointPat/:PatientUsername",
+    path: "/viewMyPackage",
+    name: "My Package",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewMyPackage,
+    layout: "/patient",
+  },
+  {
+    path: "/viewFamPackage",
+    name: "Family Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackages,
+    layout: "/patient",
+  },
+  {
+    path: "/viewMyPackageStatus",
+    name: "My Subscription",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewMyPackageswithstatus,
+    layout: "/patient",
+  },
+  {
+    path: "/ViewFamPackageswithstatus",
+    name: "Family Packages status",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackageswithstatus,
+    layout: "/patient",
+  },
+
+  {
+    path: "/package",
+    name: "Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: Package2,
+    layout: "/patient",
+  },
+
+  {
+    path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
-    layout: "/doctor",
+    layout: "/patient",
   },
 
   {
@@ -108,7 +145,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/updateEmailDoc/:DoctorUsername",
+    path: "/updateEmailDoc",
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -117,7 +154,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/updateHourly/:DoctorUsername",
+    path: "/updateHourly",
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -126,7 +163,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/updateAffil/:Username",
+    path: "/updateAffil",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -136,7 +173,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointments/:DoctorUsername",
+    path: "/viewAppointments",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -206,7 +243,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/doctorPatients/:doctorUsername",
+    path: "/doctorPatients",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,
@@ -286,7 +323,7 @@ var dashRoutes = [
         component: SignUp,
         layout: "/auth",
       },
-     
+
       {
         path: "/docsignup",
         name: "Doctor Sign Up",
@@ -296,7 +333,6 @@ var dashRoutes = [
         component: docSignUp,
         layout: "/auth",
       },
-      
     ],
   },
 ];

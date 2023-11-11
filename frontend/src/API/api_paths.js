@@ -11,10 +11,10 @@ const PAYEMENT_BASE = "http://localhost:8000/payment/";
 export const API_PATHS = {
   // Guest
   docSignUp: GUEST_BASE + "addRequest/",
-  updateEmailDoc: GUEST_BASE + "updateEmail/",
+  updateEmail: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
-  viewOptionPackages: PATIENT_BASE+"getOptionPackages/",
+  viewOptionPackages: PATIENT_BASE + "getOptionPackages/",
   // Admin
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
@@ -27,24 +27,25 @@ export const API_PATHS = {
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
-  subscribePackageSelf: PATIENT_BASE+"payForSubscription/",
-  subscribePackageFam:PATIENT_BASE+"payFamilySubscription/",
+  followupAppointment: DOCTOR_BASE + "followupAppointment/",
+  subscribePackageSelf: PATIENT_BASE + "payForSubscription/",
+  subscribePackageFam: PATIENT_BASE + "payFamilySubscription/",
   // Patient
-  viewMyPackage:PATIENT_BASE+"viewMyPackage",
+  viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
   viewPrescriptions: PATIENT_BASE + "getPrescriptions/", // add patient username as a param
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
-  viewFamPackage: PATIENT_BASE +"viewFamilyPackage/",
+  viewFamPackage: PATIENT_BASE + "viewFamilyPackage/",
   //viewHealthFamwithstatus:PATIENT_BASE +"viewHealthFamwithstatus/",
-  viewHealthFamwithstatus:PATIENT_BASE+"viewHealthFamwithstatus",
-  CancelFamilysubscribtion:PATIENT_BASE+"cancelSubscriptionfamilymember",
-  subscribepackagefamilymem:PATIENT_BASE+"subscribepackagefamilymem",
-  cancelSubscription:PATIENT_BASE+"/cancelSubscription",
-  
-  viewHealthPackagewithstatus:PATIENT_BASE+"viewHealthPackagewithstatus",
+  viewHealthFamwithstatus: PATIENT_BASE + "viewHealthFamwithstatus",
+  CancelFamilysubscribtion: PATIENT_BASE + "cancelSubscriptionfamilymember",
+  subscribepackagefamilymem: PATIENT_BASE + "subscribepackagefamilymem",
+  cancelSubscription: PATIENT_BASE + "/cancelSubscription",
+
+  viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
