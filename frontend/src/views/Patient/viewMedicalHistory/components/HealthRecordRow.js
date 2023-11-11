@@ -86,11 +86,11 @@ function HealthRecordRow(props) {
           <Text color={nameColor} fontSize="md" fontWeight="bold" mb="10px">
             {props.originalname}
           </Text>
-          {props.filename.includes(".png") ||
+          {(props.filename.includes(".png") ||
             props.filename.includes(".jpeg") ||
-            (props.filename.includes(".jpg") && (
+            props.filename.includes(".jpg")) && (
               <img src={file} width="100%" height="500px"></img>
-            ))}
+            )}
 
           {/* {props.filename.includes(".pdf") && (
             // <iframe
