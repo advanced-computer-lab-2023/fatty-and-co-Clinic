@@ -361,9 +361,10 @@ const subscribehealthpackage = async (req, res) => {
 };
 
 const uploadFile = async (req, res) => {
-  const user = req.user.Username;
+  console.log("here");
+  var user = req.user.Username;
   if (req.user.Type === "Doctor") {
-    user = req.body.username;
+    user = req.params.username;
   }
   const filename = req.file.filename;
   const originalname = req.file.originalname;
@@ -378,9 +379,9 @@ const uploadFile = async (req, res) => {
 };
 
 const getMedicalHistory = async (req, res) => {
-  const user = req.user.Username;
+  var user = req.user.Username;
   if (req.user.Type === "Doctor") {
-    user = req.body.username;
+    user = req.params.username;
   }
   const patient = await patientModel.findOne({ Username: user });
   if (!patient) {

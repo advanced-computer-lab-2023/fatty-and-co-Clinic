@@ -23,9 +23,14 @@ import {
   Select,
   Checkbox,
   filter,
+  Icon,
+  VStack,
+  Flex,
 } from "@chakra-ui/react";
+import { DownloadIcon } from "@chakra-ui/icons";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
+import HealthRecordForm from "./components/HealthRecordForm";
 
 function PatientTable() {
   const { user } = useAuthContext();
@@ -36,6 +41,7 @@ function PatientTable() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
+  const [healthRecords, setHealthRecords] = useState(null);
 
   const [filters, setFilters] = useState({
     patientName: "",
@@ -92,10 +98,30 @@ function PatientTable() {
         headers: { Authorization },
       });
       setSelectedPatientViewInfo(response.data);
+      
       setInfoModalOpen(true);
     } catch (error) {
       console.error("Error fetching info and health records:", error);
     }
+
+    const fetchHealthRecords = async () => {
+      const response = await fetch(
+        API_PATHS.getMedicalHistory + patientUsername,
+        {
+          headers: {
+            Authorization: Authorization,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setHealthRecords(data.MedicalHistory);
+        // dispatch({ type: "SET_PACKAGES", payload: data });
+      } else {
+        console.log(data);
+      }
+    };
+    fetchHealthRecords();
   };
 
   const closeInfoModal = () => {
@@ -215,9 +241,58 @@ function PatientTable() {
             <ModalCloseButton />
             <ModalBody>
               <Heading as="h5" size="sm">
-                Health Records:
+                Health Records
               </Heading>
-              <p>MyHistory.pdf</p>
+              {/* start of health records  TODO: make it a component */}
+              <Flex
+                direction={{ sm: "column", md: "row" }}
+                align="flex-start"
+                p={{ md: "5px" }}
+              >
+                <Flex direction="column" align="flex-start">
+                  {healthRecords &&
+                    healthRecords.map((healthRecord, index) => (
+                      <VStack spacing={1}>
+                        <button
+                          onClick={async () => {
+                            const filename = healthRecord.filename;
+                            const response = await fetch(
+                              API_PATHS.downloadFile + filename,
+                              {
+                                method: "GET",
+                                headers: {
+                                  Authorization,
+                                },
+                              }
+                            );
+                            const file = await response.blob();
+                            const fileUrl = URL.createObjectURL(file);
+
+                            const link = document.createElement("a");
+                            link.href = fileUrl;
+                            link.download = filename;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                        >
+                          {healthRecord.originalname}
+                          <Icon as={DownloadIcon} me="3px" />
+                        </button>
+                        <div>
+                          {healthRecord.note && healthRecord.note!="null" && (
+                            <p>note: {healthRecord.note}</p>
+                          )}
+                        </div>
+                        {index < healthRecords.length && <hr />}
+                      </VStack>
+                    ))}
+                </Flex>
+                <Flex direction="column" align="flex-start" >
+                <HealthRecordForm PatientUsername={selectedPatient.Username}/>
+                </Flex>
+              </Flex>
+              {/* end of health records */}
               <hr />
               <Heading as="h5" size="sm">
                 Appointments:

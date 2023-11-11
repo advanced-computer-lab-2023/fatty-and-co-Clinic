@@ -20,7 +20,7 @@ function MedicalHistoryI() {
   const [healthRecords, setHealthRecords] = useState(null);
   useEffect(() => {
     const fetchHealthRecords = async () => {
-      const response = await fetch(API_PATHS.getMedicalHistory ,{
+      const response = await fetch(API_PATHS.getMedicalHistory+user.userType ,{
         headers:{
           'Authorization': Authorization
         }
