@@ -90,44 +90,7 @@ var dashRoutes = [
     layout: "/patient",
   },
 
-  {
-
-    path: "/viewMyPackage",
-    name: "My Package",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewMyPackage,
-    layout: "/patient",
-  },
-  {
-    path: "/viewFamPackage",
-    name: "Family Packages",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewFamPackages,
-    layout: "/patient",
-  },
-  {
-    path: "/viewMyPackageStatus",
-    name: "My Subscription",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewMyPackageswithstatus,
-    layout: "/patient",
-  },
-  {
-    path: "/ViewFamPackageswithstatus",
-    name: "Family Packages status",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewFamPackageswithstatus,
-    layout: "/patient",
-  },
-
-  {
-    path: "/package",
-    name: "Packages",
-    icon: <HomeIcon color="inherit" />,
-    component: Package2,
-    layout: "/patient",
-  },
-
+ 
   {
 
     path: "/viewAppointPat",
