@@ -164,6 +164,11 @@ const { isNull } = require("util");
 // };
 
 // Get all the patients of a certain doctor.
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
 const findDoctorPatients = async (req, res) => {
   const doctorUsername = req.user.Username;
 
@@ -352,6 +357,7 @@ const searchPatient = async (req, res) => {
     res.status(200).send(patients);
   }
 };
+
 
 const getAppointmentsDoc = async (req, res) => {
   // Package discount starts with 0

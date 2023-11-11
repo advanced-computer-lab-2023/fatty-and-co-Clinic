@@ -33,15 +33,15 @@ function CancelSubscription() {
     e.preventDefault();
   
     try {
-      if (PackageName2 === "") {
-        toast({
-          title: "Please fill the PackageName field!",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        return; // Don't proceed further
-      } 
+      // if (PackageName2 === "") {
+      //   toast({
+      //     title: "Please fill the PackageName field!",
+      //     status: "error",
+      //     duration: 9000,
+      //     isClosable: true,
+      //   });
+      //   return; // Don't proceed further
+      // } 
   
       const response = await fetch(API_PATHS.cancelSubscription, {
         method: "PATCH",
@@ -49,7 +49,7 @@ function CancelSubscription() {
           Authorization,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({PackageName2}),
+      // body: JSON.stringify({PackageName2}),
       });
   
       console.log("Response", response.status);
@@ -81,15 +81,15 @@ function CancelSubscription() {
     e.preventDefault();
   
     try {
-      if (PackageName === "") {
-        toast({
-          title: "Please fill the PackageName field!",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        return; // Don't proceed further
-      } else if (NationalId === "") {
+      // if (PackageName === "") {
+      //   toast({
+      //     title: "Please fill the PackageName field!",
+      //     status: "error",
+      //     duration: 9000,
+      //     isClosable: true,
+      //   });
+      //   return; // Don't proceed further
+      if (NationalId === "") {
         toast({
           title: "Please fill the NationalId field!",
           status: "error",
@@ -105,7 +105,7 @@ function CancelSubscription() {
           Authorization,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ PackageName, NationalId }),
+        body: JSON.stringify({NationalId }),
       });
   
       //console.log("Response", response.status);
@@ -171,13 +171,13 @@ function CancelSubscription() {
         {selectedOption === 'cancelFamily' &&<form >
           <FormLabel> Cancel For family member</FormLabel>
             <Stack spacing={3}>
-              <Input
+              {/* <Input
                 variant="filled"
                 type="text"
                 placeholder="PackageName"
                 value={PackageName}
                 onChange={(e) => setPackageName(e.target.value)}
-              />
+              /> */}
                  <Input
                 variant="filled"
                 type="NationalId"
@@ -201,17 +201,17 @@ function CancelSubscription() {
               </Button>
             </Stack>
           </form>}
-          <br></br>
+          
           {selectedOption === 'cancelMyself' && <form >
-          <FormLabel> Cancel For Myself</FormLabel>
+          <FormLabel> Just cancel for yourself by clicking the button</FormLabel>
             <Stack spacing={3}>
-              <Input
+              {/* <Input
                 variant="filled"
                 type="text"
                 placeholder="PackageName"
                 value={PackageName2}
                 onChange={(e) => setPackageName2(e.target.value)}
-              />
+              /> */}
            
               <Button
              colorScheme="red"  // Change to red color scheme
