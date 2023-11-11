@@ -25,9 +25,12 @@ import {
   filter,
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
+import { useAuthContext } from "hooks/useAuthContext";
 
 function PatientTable() {
-  const { doctorUsername } = useParams();
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -41,7 +44,7 @@ function PatientTable() {
 
   useEffect(() => {
     fetchPatient();
-  }, [doctorUsername, filters]);
+  }, [filters]);
 
   const fetchPatient = () => {
     // Construct the URL based on filters and user ID
@@ -49,11 +52,11 @@ function PatientTable() {
       ? API_PATHS.viewUpcomingAppointments
       : API_PATHS.viewDoctorPatients;
 
-    const params = { DoctorUsername: doctorUsername };
+    const params = {};
     if (filters.patientName) params.PatientName = filters.patientName;
-
+    console.log(params);
     axios
-      .get(url, { params })
+      .get(url, { params, headers: { Authorization } })
       .then((response) => {
         setPatients(response.data);
       })
@@ -66,11 +69,12 @@ function PatientTable() {
     try {
       const response = await axios.get(API_PATHS.getPatient, {
         params: { id },
+        headers: { Authorization },
       });
       setSelectedPatient(response.data);
       setModalOpen(true);
     } catch (error) {
-      console.error("Error fetching patient data:", error);
+      console.error("Error fetching patient data:", error.message);
     }
   };
 
@@ -84,8 +88,8 @@ function PatientTable() {
       const response = await axios.get(API_PATHS.viewInfoAndHealthRecords, {
         params: {
           PatientUsername: patientUsername,
-          DoctorUsername: doctorUsername,
         },
+        headers: { Authorization },
       });
       setSelectedPatientViewInfo(response.data);
       setInfoModalOpen(true);
