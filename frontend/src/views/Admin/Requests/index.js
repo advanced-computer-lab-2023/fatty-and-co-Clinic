@@ -8,10 +8,8 @@ import axios from "axios";
 
 function ViewRequests() {
   const [data, setData] = useState([{}]);
-
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-
   useEffect(() => {
     axios
       .get(API_PATHS.getRequests, {

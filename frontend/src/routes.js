@@ -16,6 +16,7 @@ import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
+import MedicalHistoryPatient from "views/Patient/viewMedicalHistory/medicalHistory";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
@@ -47,15 +48,15 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointPat/:PatientUsername",
+    path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
-    layout: "/doctor",
+    layout: "/patient",
   },
 
   {
-    path: "/updateEmailDoc/:DoctorUsername",
+    path: "/updateEmailDoc",
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -64,7 +65,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/updateHourly/:DoctorUsername",
+    path: "/updateHourly",
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -73,7 +74,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/updateAffil/:Username",
+    path: "/updateAffil",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -83,7 +84,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/viewAppointments/:DoctorUsername",
+    path: "/viewAppointments",
     name: "View Doctor Appointments",
     icon: <HomeIcon color="inherit" />,
     component: ViewAppointments,
@@ -146,6 +147,13 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
+    path: "/medicalhistory/:patientUsername",
+    name: "Medical History",
+    icon: <HomeIcon color="inherit" />,
+    component: MedicalHistoryPatient,
+    layout: "/patient",
+  },
+  {
     path: "/prescriptions/:patientUsername",
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
@@ -153,7 +161,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/doctorPatients/:doctorUsername",
+    path: "/doctorPatients",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,

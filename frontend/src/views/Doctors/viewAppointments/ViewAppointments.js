@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import { Flex, Button, Box, Input, Text, Select } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Select } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { useRef } from "react";
-import PatientAppTable from "./components/PatientAppTable";
+import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
+import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 
-export default function ViewPatientAppointments() {
+export default function ViewAppointmentsInner() {
+  const { appointments, dispatch } = useDoctorAppointmentsContext();
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -20,7 +19,7 @@ export default function ViewPatientAppointments() {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
 
-  // const { PatientUsername } = useParams();
+  // const { DoctorUsername } = useParams();
   const options = [
     { label: "Cancelled", value: "Cancelled" },
     { label: "Upcoming", value: "Upcoming" },
@@ -29,11 +28,12 @@ export default function ViewPatientAppointments() {
   ];
 
   useEffect(() => {
-    const url = API_PATHS.viewAppointPat;
+    const url = API_PATHS.viewAppointments;
     axios
       .get(url, { params: searchParams, headers: { Authorization } })
       .then((response) => {
-        setData(response.data);
+        // setData(response.data);
+        dispatch({ type: "SET_APPOINTMENTS", payload: response.data });
       })
       .catch((err) => console.log(err));
   }, [searchParams]);
@@ -99,18 +99,11 @@ export default function ViewPatientAppointments() {
             Clear
           </Button>
         </Flex>
-
-        {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
-        <PatientAppTable
+        <AppointmentsTable
           title={"Available Appointments"}
-          captions={["Doctor Name", "Status", "Type", "Date", "Time"]}
-          data={data}
+          captions={["Patient Name", "Status", "Type", "Date", "Time"]}
+          data={appointments}
         />
-        {/* )) || (
-            <Text fontSize="3xl" fontWeight="bold">
-              Username not found
-            </Text>
-          )} */}
       </Flex>
     </Box>
   );

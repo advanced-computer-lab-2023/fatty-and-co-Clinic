@@ -16,55 +16,91 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { useParams } from "react-router-dom";
+import { useAuthContext } from "hooks/useAuthContext";
+import axios from "axios";
+
 function UpdateEmail() {
   const [Email, setEmail] = useState("");
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
-  const { DoctorUsername } = useParams();
+  // const { DoctorUsername } = useParams();
+
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Send the username to the backend for deletion
-    try {
-      const response = await fetch(API_PATHS.updateEmailDoc + DoctorUsername, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Email }),
+    if (Email == "") {
+      toast({
+        title: "Please fill the email field",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
       });
-      if (Email == "") {
-        toast({
-          title: "Please fill the email field!",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      } else if (response.ok) {
-        // Handle success or provide feedback to the user
+      return;
+    }
+    axios
+      .patch(API_PATHS.updateEmail, { Email }, { headers: { Authorization } })
+      .then((response) => {
         toast({
           title: "Email updated successfully",
           status: "success",
           duration: 9000,
           isClosable: true,
         });
-
-        setEmail;
-        (""); // Clear the input field
-      } else {
-        // Handle errors or provide feedback to the user
+        setEmail(""); // Clear the input field
+      })
+      .catch((err) => {
+        console.log(err);
         toast({
-          title: "Failed to update email",
-          description:
-            "You could be typing an invalid mail or an email that is already registered!",
+          title: "Failed to update Email",
+          description: err.response.data.error,
           status: "error",
           duration: 9000,
           isClosable: true,
         });
-      }
-    } catch (error) {
-      console.error("An error occurred", error);
-    }
+      });
+    // try {
+    //   const response = await fetch(API_PATHS.updateEmailDoc + DoctorUsername, {
+    //     method: "PATCH",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ Email }),
+    //   });
+    //   if (Email == "") {
+    //     toast({
+    //       title: "Please fill the email field!",
+    //       status: "error",
+    //       duration: 9000,
+    //       isClosable: true,
+    //     });
+    //   } else if (response.ok) {
+    //     // Handle success or provide feedback to the user
+    //     toast({
+    //       title: "Email updated successfully",
+    //       status: "success",
+    //       duration: 9000,
+    //       isClosable: true,
+    //     });
+
+    //     setEmail;
+    //     (""); // Clear the input field
+    //   } else {
+    //     // Handle errors or provide feedback to the user
+    //     toast({
+    //       title: "Failed to update email",
+    //       description:
+    //         "You could be typing an invalid mail or an email that is already registered!",
+    //       status: "error",
+    //       duration: 9000,
+    //       isClosable: true,
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.error("An error occurred", error);
+    // }
   };
 
   return (
