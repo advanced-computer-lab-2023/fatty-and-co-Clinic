@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const doctorSchema = new Schema(
   {
-    
     Username: {
       type: String,
       required: true,

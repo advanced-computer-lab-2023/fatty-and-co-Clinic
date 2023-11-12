@@ -1,10 +1,8 @@
-const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const appointmentSchema = new Schema(
   {
-  
     DoctorUsername: {
       type: String,
       required: true,
@@ -27,9 +25,9 @@ const appointmentSchema = new Schema(
       enum: ["Upcoming", "Completed", "Rescheduled", "Cancelled"],
       default: "Upcoming",
     },
-    FollowUp:{
+    FollowUp: {
       type: Boolean,
-      default: false
+      default: false,
     },
     Date: {
       type: Date,
@@ -38,7 +36,6 @@ const appointmentSchema = new Schema(
   },
   { timestamps: true }
 );
-
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 module.exports = Appointment;
