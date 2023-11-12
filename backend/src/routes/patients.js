@@ -31,7 +31,10 @@ const {
   payForSubscription,
   viewHealthPackagewithstatus,
   viewHealthFamwithstatus,
+  viewUpcomingAppointmentsPat,
+  viewPastAppoitmentsPat,
 } = require("../controllers/patientController");
+
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
 const { upload } = require("../common/middleware/upload");
@@ -204,5 +207,13 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);
+
+router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
+  viewUpcomingAppointmentsPat(req, res);
+});
+
+router.get("/viewPastAppoitmentsPat", checkPatient, (req, res) => {
+  viewPastAppoitmentsPat(req, res);
+});
 
 module.exports = router;

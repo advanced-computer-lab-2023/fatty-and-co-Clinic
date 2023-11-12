@@ -415,16 +415,14 @@ const payForSubscription = async (req, res) => {
       patSubscription.Status === "Subscribed" &&
       patSubscription.Package.Name !== PackageName
     ) {
-      res
-        .status(404)
-        .json({
-          error:
-            "If you want to subscribe to the " +
-            PackageName +
-            " package, make sure to cancel your " +
-            patSubscription.Package.Name +
-            " subscription first!",
-        });
+      res.status(404).json({
+        error:
+          "If you want to subscribe to the " +
+          PackageName +
+          " package, make sure to cancel your " +
+          patSubscription.Package.Name +
+          " subscription first!",
+      });
     } else if (
       patSubscription.Status === "Subscribed" &&
       patSubscription.Package.Name == PackageName
@@ -523,39 +521,33 @@ const getAmountSubscription = async (req, res) => {
       patSubscription.Status === "Unsubscribed" ||
       patSubscription.Status === "Cancelled"
     ) {
-      res
-        .status(200)
-        .json({
-          amount: amount,
-          description: "Subscription payment",
-          PackageName: PackageName,
-        });
+      res.status(200).json({
+        amount: amount,
+        description: "Subscription payment",
+        PackageName: PackageName,
+      });
     } else if (
       patSubscription.Status === "Subscribed" &&
       formattedDate === formattedDate4 &&
       patSubscription.Package.Name === Package.Name
     ) {
-      res
-        .status(200)
-        .json({
-          amount: amount,
-          description: "Subscription payment",
-          PackageName: PackageName,
-        });
+      res.status(200).json({
+        amount: amount,
+        description: "Subscription payment",
+        PackageName: PackageName,
+      });
     } else if (
       patSubscription.Status === "Subscribed" &&
       patSubscription.Package.Name !== PackageName
     ) {
-      res
-        .status(404)
-        .json({
-          error:
-            "If you want to subscribe to the " +
-            PackageName +
-            " package, make sure to cancel your " +
-            patSubscription.Package.Name +
-            " subscription first!",
-        });
+      res.status(404).json({
+        error:
+          "If you want to subscribe to the " +
+          PackageName +
+          " package, make sure to cancel your " +
+          patSubscription.Package.Name +
+          " subscription first!",
+      });
     } else if (
       patSubscription.Status === "Subscribed" &&
       patSubscription.Package.Name == PackageName
@@ -816,18 +808,16 @@ const payForFamSubscription = async (req, res) => {
         subscription.Status === "Subscribed" &&
         subscription.Package.Name !== PackageName
       ) {
-        res
-          .status(404)
-          .json({
-            error:
-              "If you want to subscribe " +
-              relative.Name +
-              " to the " +
-              PackageName +
-              " package, make sure to cancel the " +
-              subscription.Package.Name +
-              " subscription first!",
-          });
+        res.status(404).json({
+          error:
+            "If you want to subscribe " +
+            relative.Name +
+            " to the " +
+            PackageName +
+            " package, make sure to cancel the " +
+            subscription.Package.Name +
+            " subscription first!",
+        });
       } else if (
         subscription.Status === "Subscribed" &&
         subscription.Package.Name == PackageName
@@ -917,42 +907,36 @@ const getAmountFam = async (req, res) => {
         formattedDate === formattedDate4 &&
         subscription.Package.Name == PackageName
       ) {
-        res
-          .status(200)
-          .json({
-            amount: amount,
-            description: "Subscription payment",
-            PackageName: PackageName,
-            NationalId: NationalId,
-          });
+        res.status(200).json({
+          amount: amount,
+          description: "Subscription payment",
+          PackageName: PackageName,
+          NationalId: NationalId,
+        });
       } else if (
         subscription.Status === "Unsubscribed" ||
         subscription.Status === "Cancelled"
       ) {
-        res
-          .status(200)
-          .json({
-            amount: amount,
-            description: "Subscription payment",
-            PackageName: PackageName,
-            NationalId: NationalId,
-          });
+        res.status(200).json({
+          amount: amount,
+          description: "Subscription payment",
+          PackageName: PackageName,
+          NationalId: NationalId,
+        });
       } else if (
         subscription.Status === "Subscribed" &&
         subscription.Package.Name !== Package.Name
       ) {
-        res
-          .status(404)
-          .json({
-            error:
-              "If you want to subscribe " +
-              relative.Name +
-              " to the " +
-              PackageName +
-              " package, make sure to cancel the " +
-              subscription.Package.Name +
-              " subscription first!",
-          });
+        res.status(404).json({
+          error:
+            "If you want to subscribe " +
+            relative.Name +
+            " to the " +
+            PackageName +
+            " package, make sure to cancel the " +
+            subscription.Package.Name +
+            " subscription first!",
+        });
 
         s;
       } else if (
@@ -1479,6 +1463,37 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
+//
+const viewUpcomingAppointmentsPat = async (req, res) => {
+  const username = req.user.Username;
+  //put in mind the string thing if the (Status) condition in the find query does not work
+  try {
+    const pastAppointments = await appointmentModel.find(
+      { PatientUsername: username },
+      { Status: "Upcoming" }
+    );
+    //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+    res.status(200).json(pastAppointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//make sure from the ta that past appointments is completed bas
+const viewPastAppoitmentsPat = async (req, res) => {
+  const username = req.user.Username;
+  try {
+    const pastAppointments = await appointmentModel.find(
+      { PatientUsername: username },
+      { Status: "Completed" }
+    );
+    //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+    res.status(200).json(pastAppointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   uploadFile,
   getMedicalHistory,
@@ -1510,4 +1525,6 @@ module.exports = {
   payForSubscription,
   viewHealthPackagewithstatus,
   viewHealthFamwithstatus,
+  viewUpcomingAppointmentsPat,
+  viewPastAppoitmentsPat,
 };
