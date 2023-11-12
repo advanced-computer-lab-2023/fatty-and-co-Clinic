@@ -50,6 +50,7 @@ export default function Dashboard(props) {
     }
     return activeRoute;
   };
+
   // This changes navbar state(fixed or not)
   const getActiveNavbar = (routes) => {
     let activeNavbar = false;
