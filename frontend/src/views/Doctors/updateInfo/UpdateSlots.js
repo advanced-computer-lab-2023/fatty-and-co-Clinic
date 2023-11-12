@@ -57,39 +57,47 @@ export function UpdateSlots() {
     setStartTimeToAdd(newStartTimeToAdd);
   };
 
-  const fetchTableData = async () => {
+  const fetchTableData =  () => {
     const url = API_PATHS.viewMySlotsDoc;
-    const data = await axios.get(url, { headers: { Authorization } });
-   return data;  };
+    axios
+      .get(url, { headers: { Authorization } })
+      .then((response) => {
+        setTableData(response.data);
+        console.log("hello");
+      })
+      .catch((error) => {
+        console.log("Error fetching data: ", error);
+      });
+  };
 
-const fetchDataAA = async () => {
-  console.log("ana hena");
-  if (isChanged) {
-     const newTableData = await fetchTableData();
-     setTableData(newTableData);
-     setIsChanged(false);
-  }
-  console.log("this is table data" + tableData);
- };
+  const fetchDataAA = async () => {
+    console.log("ana hena");
+    if (isChanged) {
+      const newTableData = await fetchTableData();
+      setTableData(newTableData);
+      setIsChanged(false);
+    }
+    console.log("this is table data" + tableData);
+  };
 
+  //TODO: TRY CATCH
   const handleAddSlotConfirm = async () => {
     const url = API_PATHS.addMySlotsDoc;
-    const slot = await axios.post(url, null, {
+    //const slot =
+    await axios.post(url, null, {
       params: { dayNumber, StartTimeToAdd },
       headers: { Authorization },
     });
+    fetchTableData();
     //console.log(tableData);
-    if(slot)
-    setIsChanged(true);
+    //if(slot)
+    //setIsChanged(true);
   };
 
-  useEffect( () => {
+  useEffect(async() => {
     console.log("ana hena");
-    // if (isChanged) {
-      fetchDataAA();
-    //}
-    //console.log("this is table data" + tableData);
-  }, [isChanged]);
+     fetchTableData();
+  }, []);
 
   return (
     <Box>
@@ -122,6 +130,7 @@ const fetchDataAA = async () => {
         title={"My Slots"}
         captions={["Day", "Hour", "EditTime", "Delete"]}
         tableData={tableData}
+        setTableData={setTableData}
       />
     </Box>
   );

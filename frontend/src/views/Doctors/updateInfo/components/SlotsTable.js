@@ -22,12 +22,11 @@ import { useAuthContext } from "hooks/useAuthContext";
 
 import { useHistory } from "react-router-dom";
 
-const SlotsTable = ({ title, captions, data }) => {
+const SlotsTable = ({ title, captions, tableData, setTableData }) => {
   //const { id } = useParams();
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-  const [tableData, setTableData] = useState([{}]);
   const textColor = useColorModeValue("gray.700", "white");
 
   const [StartTimeToUpdate, setStartTimeToUpdate] = useState(0);
@@ -83,16 +82,10 @@ const SlotsTable = ({ title, captions, data }) => {
       });
   };
 
-  const initialRender = useRef(true);
-
-  useEffect(() => {
-   // if (initialRender.current) {
-      console.log("ana henak");
-      fetchTableData();
-      initialRender.current = false;
-
-    //} 
-  }, []);
+  // useEffect(() => {
+  //   console.log("ana henak");
+  //   fetchTableData();
+  // }, []);
 
   return (
     <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
