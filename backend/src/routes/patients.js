@@ -31,7 +31,6 @@ const {
   payForSubscription,
   viewHealthPackagewithstatus,
   viewHealthFamwithstatus,
-  
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -39,7 +38,7 @@ const { upload } = require("../common/middleware/upload");
 
 const router = express.Router();
 
-/** 
+/**
  * @route POST /patients/addPatient
  * @desc Creates a new patient
  * @access Public
@@ -51,7 +50,7 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.get("/viewFamilyPackage",viewHealthFam)
+router.get("/viewFamilyPackage", viewHealthFam);
 /**
 =======
 >>>>>>> main
@@ -77,15 +76,15 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  */
 router.get("/getPatient/:id", getPatient);
 router.get("/getOptionPackages", viewOptionPackages);
-router.patch("/getAmountCredit", getAmountSubscription)  //gets amount to be paid for self
-router.patch("/getAmountCreditFam",getAmountFam)//gets amount to be paid for fam
-router.patch("/updateFamSubs",updateFamCredit) //updates status fam
-router.patch("/updateMySubs",updateSubscription) //updates status leya 
-router.patch("/cancelSubscription",cancelSubscription);
-router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember);
-router.patch("/payForSubscription",payForSubscription);
-router.get("/viewHealthPackagewithstatus",viewHealthPackagewithstatus);
-router.get("/viewHealthFamwithstatus",viewHealthFamwithstatus);
+router.patch("/getAmountCredit", getAmountSubscription); //gets amount to be paid for self
+router.patch("/getAmountCreditFam", getAmountFam); //gets amount to be paid for fam
+router.patch("/updateFamSubs", updateFamCredit); //updates status fam
+router.patch("/updateMySubs", updateSubscription); //updates status leya
+router.patch("/cancelSubscription", cancelSubscription);
+router.patch("/cancelSubscriptionfamilymember", cancelSubscriptionfamilymember);
+router.patch("/payForSubscription", payForSubscription);
+router.get("/viewHealthPackagewithstatus", viewHealthPackagewithstatus);
+router.get("/viewHealthFamwithstatus", viewHealthFamwithstatus);
 //router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id
@@ -137,13 +136,15 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember/:Patient", GetFamilymembers);  //Changed name of params
 router.get("/getFamilymember", checkPatient, GetFamilymembers);
+// DO WE NEED THIS??
+router.get("/getFamilymember/:Patient", GetFamilymembers); //Changed name of params
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions
  * @access Public
  */
+// TODO: add type check as middleware if needed
 router.get("/getPrescriptions", getPrescriptions);
 
 /**
@@ -168,7 +169,7 @@ router.get("/getMedicalHistory", getMedicalHistory);
  * @access Patient or Admin
  * @param {string} filename - The filename in the params
  */
-router.get("/downloadFile/:filename", downloadFile); 
+router.get("/downloadFile/:filename", downloadFile);
 
 /**
  * @route DELETE /patients/removeHealthRecord
@@ -200,10 +201,8 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.post("/subscribepackagefamilymem",subscribepackagefamilymem)
-router.get("/viewMyPackage/",viewHealthPackage)
-router.patch("/payFamilySubscription/",payForFamSubscription)
-
-
+router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
+router.get("/viewMyPackage/", viewHealthPackage);
+router.patch("/payFamilySubscription/", payForFamSubscription);
 
 module.exports = router;

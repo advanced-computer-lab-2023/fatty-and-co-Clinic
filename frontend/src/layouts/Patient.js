@@ -23,8 +23,6 @@ export default function Dashboard(props) {
   // states and functions
   const [sidebarVariant, setSidebarVariant] = useState("transparent");
   const [fixed, setFixed] = useState(false);
-  const [wallet,setWallet]=useState([])
-  
   // functions for changing the states from components
   const getRoute = () => {
     return window.location.pathname !== "/admin/full-screen-maps";
@@ -52,8 +50,6 @@ export default function Dashboard(props) {
     }
     return activeRoute;
   };
-
- 
 
   // This changes navbar state(fixed or not)
   const getActiveNavbar = (routes) => {

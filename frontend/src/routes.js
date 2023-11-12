@@ -7,7 +7,6 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
-
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
@@ -99,9 +98,7 @@ var dashRoutes = [
     layout: "/patient",
   },
 
- 
   {
-
     path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
