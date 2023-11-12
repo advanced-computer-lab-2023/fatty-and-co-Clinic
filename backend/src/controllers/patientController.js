@@ -398,13 +398,13 @@ const getAmountSubscription= async(req,res)=>{
 
     if(patSubscription.Status==="Unsubscribed"||patSubscription.Status==="Cancelled"){
   
-      res.status(200).json({amount:amount,description:"Subscription payment",Package:Package})
+      res.status(200).json({amount:amount,description:"Subscription payment",PackageName:PackageName})
    
     }  
     else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.Package.Name
     ===Package.Name){
 
-        res.status(200).json({amount:amount,description:"Subscription payment",Package:Package})
+        res.status(200).json({amount:amount,description:"Subscription payment",PackageName:PackageName})
       
     
   }
