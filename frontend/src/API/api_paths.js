@@ -19,6 +19,7 @@ export const API_PATHS = {
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
   getRequestMedicalLicense: ADMIN_BASE + "getRequestMedicalLicense/",
+
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
 
@@ -38,7 +39,6 @@ export const API_PATHS = {
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
-<<<<<<< HEAD
   viewFamPackage: PATIENT_BASE + "viewFamilyPackage/",
   viewOptionPackages: PATIENT_BASE + "getOptionPackages/",
   viewHealthFamwithstatus: PATIENT_BASE + "viewHealthFamwithstatus",
@@ -47,19 +47,18 @@ export const API_PATHS = {
   cancelSubscription: PATIENT_BASE + "/cancelSubscription",
   subscribePackageSelf: PATIENT_BASE + "payForSubscription/",
   subscribePackageFam: PATIENT_BASE + "payFamilySubscription/",
-  viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
   getAmountCredit:PATIENT_BASE+"getAmountCredit/",
   getAmountCreditFam:PATIENT_BASE+"getAmountCreditFam/",
   updateFamSub:PATIENT_BASE+"updateFamSubs/",
   updateMySub:PATIENT_BASE+"updateMySubs/",
   viewHealthPackagewithstatus:PATIENT_BASE+"viewHealthPackagewithstatus",
-=======
   uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
   getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
+ 
 
->>>>>>> main
+
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",

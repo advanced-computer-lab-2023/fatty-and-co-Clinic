@@ -110,7 +110,47 @@ const deletePatient = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const uploadFile = async (req, res) => {
+  const user = req.user.Username;
+  const filename = req.file.filename;
+  await patientModel.findOneAndUpdate(
+    { Username: user },
+    { $push: { MedicalHistory: { filename: filename, note: req.body.note } } }
+  );
+  res
+    .status(200)
+    .send({ file: req.file, message: "File uploaded successfully" });
+};
 
+const getMedicalHistory = async (req, res) => {
+  const user = req.user.Username;
+  if (req.user.Type === "Admin") {
+    user = req.body.username;
+  }
+  const patient = await patientModel.findOne({ Username: user });
+  if (!patient) {
+    res.status(404).send({ message: "Patient not found." });
+    return;
+  }
+  const { MedicalHistory } = patient;
+  res.status(200).send({ MedicalHistory });
+};
+
+const downloadFile = async (req, res) => {
+  const { filename } = req.params;
+  const downloadStream = await getFileByFilename(filename);
+  downloadStream.pipe(res);
+};
+
+const removeHealthRecord = async (req, res) => {
+  const { filename } = req.params;
+  const user = req.user.Username;
+  await patientModel.findOneAndUpdate(
+    { Username: user },
+    { $pull: { MedicalHistory: { filename: filename } } }
+  );
+  res.status(200).send({ message: "File removed successfully" });
+};
 // TODO: REVISE THIS IF IT'S ACTUALLY USED
 const updatePatient = async (req, res) => {
   try {
@@ -1091,17 +1131,80 @@ console.log(subscribedcheck.Status=="Subscribed");
   }
 };
 
-const subscribehealthpackage = async (req, res) => {
+const cancelSubscription = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
-    res.status(200).send({ patient });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
+    const Startdate = new Date();
+    const signedIn = req.user.Username;
+    const year = Startdate.getFullYear();
+    const month = String(Startdate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(Startdate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+    const patient = await patientModel.findOne({ Username: signedIn });
+    const subscribed = await subscriptionModel.findOne({ Patient: patient });
+    //  console.log()
+    if (subscribed) {
+      console.log("Here");
+      if (subscribed.Status === "Cancelled") {
+        res
+          .status(400)
+          .send({ Error: "You have already cancelled your prescription" });
+      } else {
+        const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
+          { Patient: patient },
+          { Status: "Cancelled", Enddate: formattedDate }
+        );
+        res.status(200).json({ subscribedUpdate });
+      }
+    } else {
+      res.status(400).send({ Error: "You're not subscribed!" });
+    }
+  } catch {
+    res
+      .status(400)
+      .send({ Error: "Error occurred while cancelling subscription" });
   }
 };
+const cancelSubscriptionfamilymember = async (req, res) => {
+  try {
+    const Startdate = new Date();
+    const { NationalId } = req.body;
+    const signedIn = req.user.Username;
+    const year = Startdate.getFullYear();
+    const month = String(Startdate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(Startdate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+    const patient= await patientModel.findOne({Username:signedIn})
+    const fam = await familyMemberModel.findOne({NationalId:NationalId});
+    const subscribed= await subscriptionModel.findOne({FamilyMem:fam, FamilyMem:fam.id})
+    const famrelated=await familyMemberModel.find({Patient:patient.id,NationalId:NationalId});
+    console.log(req.user.Username)
+    if (famrelated ==null){
+      res.status(400).send({error:"Family member not related to you "})
+    }
+   else if (fam.FamilyMem!=null){
+      res.status(400).send({error:"He is already a system user"})
+    }
+  else  if(subscribed){
+      console.log("Here")
+ if(subscribed.Status==="Cancelled"){
+      res.status(400).send({error:"You have already cancelled your prescription"})
+    }
+    else{
+      const subscribedUpdate=await subscriptionModel.findOneAndUpdate({FamilyMem:fam},{Status:"Cancelled",Enddate:formattedDate})
+      console.log(subscribedUpdate);
+      res.status(200).json({subscribedUpdate});
+    }}
+
+    else{
+      res.send({Error:"You're not subscribed!"})
+    }
+  } catch {
+    res.send({ Error: "Error occurred while cancelling subscription" });
+  }
+};
+
+
+
 
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
@@ -1110,6 +1213,10 @@ Date.prototype.addDays = function (days) {
 };
 
 module.exports = {
+  uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
   updateFamCredit, //updates status fam
   updateSubscription, //updates status leya 
   getAmountSubscription,  //gets amount to be paid for self
@@ -1118,7 +1225,6 @@ module.exports = {
   viewHealthFam,
   viewOptionPackages,
   viewHealthPackage,
-  subscribehealthpackage,
   session_index,
   createFamilymember,
   GetFamilymembers,
@@ -1132,4 +1238,10 @@ module.exports = {
   selectPrescription,
   getEmergencyContact,
   subscribepackagefamilymem,
+  payForFamSubscription,
+  cancelSubscriptionfamilymember,
+  payForSubscription,
+  viewHealthPackagewithstatus,
+  viewHealthFamwithstatus,
 };
+

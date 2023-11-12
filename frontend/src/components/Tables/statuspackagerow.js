@@ -24,14 +24,14 @@ function Statuspackagerow(props) {
             </Text>
           </Flex>
         </Td>
-        <Td minWidth={{ sm: "75px" }} pl="25px">
+        <Td minWidth={{ sm: "75px" }} pl="15px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
               {Status}
             </Text>
           </Flex>
         </Td>
-        <Td minWidth={{ sm: "75px" }} pl="40px">
+        <Td minWidth={{ sm: "75px" }} pl="30px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
               {Package}
@@ -41,22 +41,21 @@ function Statuspackagerow(props) {
         <Td minWidth={{ sm: "50px" }} pl="10px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-              {Enddate}
+            {Enddate?new Date(Enddate).toLocaleDateString("en-GB"):""}            
             </Text>
           </Flex>
         </Td>
-        <Td minWidth={{ sm: "50px" }} pl="10px">
+        <Td minWidth={{ sm: "50px" }} pl="20px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-              {Startdate}
-            </Text>
+            {Startdate?new Date(Startdate).toLocaleDateString("en-GB"):""}        
+                </Text>
           </Flex>
         </Td>
-        <Td minWidth={{ sm: "50px" }} pl="10px">
+        <Td minWidth={{ sm: "50px" }} pl="20px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-              {Renewaldate}
-            </Text>
+            {Renewaldate?new Date(Renewaldate).toLocaleDateString("en-GB"):""}            </Text>
           </Flex>
         </Td>
       </Tr>

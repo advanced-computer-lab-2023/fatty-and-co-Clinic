@@ -1,5 +1,9 @@
 const express = require("express");
 const {
+  uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
   getAmountSubscription,
   getAmountFam,
   updateFamCredit,
@@ -26,10 +30,7 @@ const {
   payForSubscription,
   viewHealthPackagewithstatus,
   viewHealthFamwithstatus,
-  uploadFile,
-  getMedicalHistory,
-  downloadFile,
-  removeHealthRecord,
+  
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
@@ -198,7 +199,6 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.post("/subscribehealthpackage",subscribehealthpackage)
 router.post("/subscribepackagefamilymem",subscribepackagefamilymem)
 router.get("/viewMyPackage/",viewHealthPackage)
 router.patch("/payFamilySubscription/",payForFamSubscription)

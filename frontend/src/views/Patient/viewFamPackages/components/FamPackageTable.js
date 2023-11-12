@@ -51,9 +51,9 @@ import {
                     FamName={name}
                     packName={row.Package?row.Package.Name:""}
                     packPrice={row.Package?row.Package.Price:""}
-                    packSessionDiscount={row.Package?row.Package.Session_Discount:""}
-                    packMedicineDiscount={row.Package?row.Package.Medicine_Discount:""}
-                    packFamilyDiscount={row.Package?row.Package.Family_Discount:""}
+                    packSessionDiscount={row.Package?row.Package.Session_Discount+"%":""}
+                    packMedicineDiscount={row.Package?row.Package.Medicine_Discount+"%":""}
+                    packFamilyDiscount={row.Package?row.Package.Family_Discount+"%":""}
                   />
                 );}
               })}
