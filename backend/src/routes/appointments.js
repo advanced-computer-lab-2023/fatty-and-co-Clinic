@@ -9,6 +9,7 @@ const {
   filterAppointmentsByStatusPat,
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
+  testAppointRef,
 } = require("../controllers/appointmentController");
 
 const { checkDoctor, checkPatient } = require("../common/middleware/checkType");
@@ -66,4 +67,7 @@ router.get("/filterAppointmentsByDateDoc", checkPatient, filterAppointmentsByDat
 router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
 
 
+
+router.get("/testAppRef", testAppointRef);
+  
 module.exports = router;

@@ -30,6 +30,10 @@ export const API_PATHS = {
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
   followupAppointment: DOCTOR_BASE + "followupAppointment/",
+  viewMySlotsDoc: DOCTOR_BASE + "viewMySlotsDoc/",
+  addMySlotsDoc: DOCTOR_BASE + "addMySlotsDoc/",
+  deleteMySlotsDoc: DOCTOR_BASE + "deleteMySlotsDoc/",
+  updateMySlotsDoc: DOCTOR_BASE + "updateMySlotsDoc/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -47,17 +51,16 @@ export const API_PATHS = {
   cancelSubscription: PATIENT_BASE + "/cancelSubscription",
   subscribePackageSelf: PATIENT_BASE + "payForSubscription/",
   subscribePackageFam: PATIENT_BASE + "payFamilySubscription/",
-  getAmountCredit:PATIENT_BASE+"getAmountCredit/",
-  getAmountCreditFam:PATIENT_BASE+"getAmountCreditFam/",
-  updateFamSub:PATIENT_BASE+"updateFamSubs/",
-  updateMySub:PATIENT_BASE+"updateMySubs/",
-  viewHealthPackagewithstatus:PATIENT_BASE+"viewHealthPackagewithstatus",
+  getAmountCredit: PATIENT_BASE + "getAmountCredit/",
+  getAmountCreditFam: PATIENT_BASE + "getAmountCreditFam/",
+  updateFamSub: PATIENT_BASE + "updateFamSubs/",
+  updateMySub: PATIENT_BASE + "updateMySubs/",
+  viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
   uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
   getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
-  getWalletAmount:PATIENT_BASE+"getWalletAmount/",
-
+  getWalletAmount: PATIENT_BASE + "getWalletAmount/",
 
   // Package
   packages: PACKAGE_BASE + "packages/",

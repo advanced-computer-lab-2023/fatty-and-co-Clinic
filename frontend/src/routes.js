@@ -7,7 +7,6 @@ import SignIn from "views/Auth/SignIn";
 import SignUp from "views/Auth/SignUp";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
-
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
@@ -31,6 +30,8 @@ import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
+import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
+
 import {
   HomeIcon,
   StatsIcon,
@@ -99,9 +100,7 @@ var dashRoutes = [
     layout: "/patient",
   },
 
- 
   {
-
     path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
@@ -143,6 +142,14 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
     component: UpdateAffil,
+    layout: "/doctor",
+  },
+
+  {
+    path: "/UpdateSlots",
+    name: "Update Slots",
+    icon: <HomeIcon color="inherit" />,
+    component: UpdateSlots,
     layout: "/doctor",
   },
 
