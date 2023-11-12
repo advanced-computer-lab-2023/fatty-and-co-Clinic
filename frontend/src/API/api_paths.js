@@ -61,6 +61,7 @@ export const API_PATHS = {
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
+  viewAllAvailableSlots : DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
 
   // Package
   packages: PACKAGE_BASE + "packages/",

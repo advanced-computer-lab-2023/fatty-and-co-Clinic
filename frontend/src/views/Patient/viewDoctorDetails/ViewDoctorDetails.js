@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
+import DocSlotAptsTable from "../viewDoctors/components/DocSlotAptsTable";
 
 export const ViewDoctorDetails = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export const ViewDoctorDetails = () => {
     affiliation: "",
     educationalBackground: "",
   });
+  const [tableData, setTableData] = useState([{}]);
 
   const { username } = useParams();
   console.log(username);
@@ -37,27 +39,46 @@ export const ViewDoctorDetails = () => {
       .catch((error) => console.log(error));
   }, []);
 
-   
+  useEffect(() => {
+    axios
+      .get(API_PATHS.viewAllAvailableSlots + username, {
+        headers: { Authorization },
+      })
+      .then((response) => setTableData(response.data))
+      .catch((error) => {
+        console.log(error);
+      });
+  } ,[]);
+
   return (
     <Box pt="80px">
       {(username && username !== ":username" && (
         <Flex flexDirection="column">
-          <Text>
-            <strong>Name: </strong>
-            {formData.name}
-          </Text>
-          <Text>
-            <strong>Speciality: </strong>
-            {formData.speciality}
-          </Text>
-          <Text>
-            <strong>Affiliation: </strong>
-            {formData.affiliation}
-          </Text>
-          <Text>
-            <strong>Educational Background: </strong>
-            {formData.educationalBackground}
-          </Text>
+          <Box>
+            <Text>
+              <strong>Name: </strong>
+              {formData.name}
+            </Text>
+            <Text>
+              <strong>Speciality: </strong>
+              {formData.speciality}
+            </Text>
+            <Text>
+              <strong>Affiliation: </strong>
+              {formData.affiliation}
+            </Text>
+            <Text>
+              <strong>Educational Background: </strong>
+              {formData.educationalBackground}
+            </Text>
+            <DocSlotAptsTable
+              title={"Doctor's Working Slots"}
+              captions={["Day", "Hour", "Book"]}
+              data={tableData}
+
+              //setTableData={setTableData}
+            />
+          </Box>
         </Flex>
       )) || (
         <Text fontSize="3xl" fontWeight="bold">

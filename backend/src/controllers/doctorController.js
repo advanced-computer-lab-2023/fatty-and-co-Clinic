@@ -701,11 +701,19 @@ const viewPastAppoitmentsDoc = async (req, res) => {
 
 //the username of the doctor will be passed and added to the viewDoctorDetails page
 const viewAllAvailableSlots = async (req, res) => {
-  const { id } = req.params;
+  const { username } = req.params;
+  var slotsToView = new Array();
   try {
-    // const doctor = await doctorModel.findById(id);
-    const allDocSlots = await docSlotsModel.find({ DoctorId: id });
-    res.status(200).json(allDocSlots);
+    const doctor = await doctorModel.findOne({Username: username});
+    const allDocSlots = await docSlotsModel.find({ DoctorId: doctor._id });
+    for(let element of allDocSlots){
+      slotsToView.push({
+        DoctorId: element.DoctorId,
+        DayName: getDayNameFromNumber(element.WorkingDay),
+        Hour:element.StartTime,
+      })
+    }
+    res.status(200).json(slotsToView);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -721,7 +729,7 @@ const checkAptDateForBooking = async (req, res) => {
   //doctor Username ---> from URL
   const { username } = req.params;
 
-  //patient Username --> from session
+  //patient Username --> from session or family member
   const { patUsername } = req.user.Username;
 
   //TODO: check the local zone time thing

@@ -172,7 +172,7 @@ router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
   viewPastAppoitmentsDoc(req, res);
 });
 
-router.get("/viewAllAvailableSlots/:id", checkPatient, (req, res) => {
+router.get("/viewAllAvailableSlots/:username", checkPatient, (req, res) => {
   viewAllAvailableSlots(req, res);
 });
 
