@@ -4,7 +4,7 @@ const {
   getMedicalHistory,
   downloadFile,
   removeHealthRecord,
-  GetWalletAmount,
+  getWalletAmount,
   getAmountSubscription,
   getAmountFam,
   updateFamCredit,
@@ -22,7 +22,7 @@ const {
   viewOptionPackages,
   session_index,
   createFamilymember,
-  GetFamilymembers,
+  getFamilymembers,
   getPrescriptions,
   selectPatient,
   selectPrescription,
@@ -62,7 +62,7 @@ router.get("/viewFamilyPackage", viewHealthFam);
  * @access Public
  */
 router.get("/getAllPatients", getAllPatients);
-router.get("/getWalletAmount", GetWalletAmount);
+router.get("/getWalletAmount", getWalletAmount);
 /**
  * @route DELETE /patients/deletePatient/:id
  * @desc Deletes a patient by ID
@@ -139,9 +139,9 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember", checkPatient, GetFamilymembers);
+router.get("/getFamilymember", checkPatient, getFamilymembers);
 // DO WE NEED THIS??
-router.get("/getFamilymember/:Patient", GetFamilymembers); //Changed name of params
+router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of params
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions
