@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const familyMemberSchema = new Schema({
-  PatientID: {
-    type: mongoose.Schema.Types.ObjectId, //Changed this to id ref
+ 
+  Patient: {
+    type:  mongoose.Schema.Types.ObjectId, //Changed this to id ref
     ref: "Patient",
     required: true,
   },
@@ -17,6 +18,7 @@ const familyMemberSchema = new Schema({
     type: String,
     required: false,
   },
+
   Name: {
     type: String,
     required: true,
@@ -42,6 +44,8 @@ const familyMemberSchema = new Schema({
     required: true,
   },
 });
+
+
 
 const FamilyMember = mongoose.model("FamilyMember", familyMemberSchema);
 module.exports = FamilyMember;

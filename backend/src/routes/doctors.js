@@ -146,11 +146,7 @@ router.get(
   checkDoctor,
   viewPatientInfoAndHealthRecords
 );
-router.post(
-  "/followupAppointment",
-  checkDoctor,
-  followupAppointment
-);
+router.post("/followupAppointment", checkDoctor, followupAppointment);
 
 router.get("/filterDoctorSlotEdition", checkPatient, (req, res) => {
   filterDoctorSlotEdition(req, res);

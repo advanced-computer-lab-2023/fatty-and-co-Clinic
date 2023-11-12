@@ -17,7 +17,7 @@ export function FamilymemberRow(props) {
   return (
     <Tr>
     
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "50px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -30,7 +30,7 @@ export function FamilymemberRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "50px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -42,7 +42,7 @@ export function FamilymemberRow(props) {
           </Text>
         </Flex>
       </Td>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "50px" }} pl="25px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -55,7 +55,7 @@ export function FamilymemberRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "50px" }} pl="40px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -67,7 +67,7 @@ export function FamilymemberRow(props) {
           </Text>
         </Flex>
       </Td>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "50px" }} pl="25px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"

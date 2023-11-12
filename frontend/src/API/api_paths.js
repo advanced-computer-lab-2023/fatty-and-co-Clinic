@@ -19,6 +19,7 @@ export const API_PATHS = {
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
   getRequestMedicalLicense: ADMIN_BASE + "getRequestMedicalLicense/",
+
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
 
@@ -29,24 +30,37 @@ export const API_PATHS = {
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
   followupAppointment: DOCTOR_BASE + "followupAppointment/",
-  viewMySlotsDoc:DOCTOR_BASE + "viewMySlotsDoc/",
-  addMySlotsDoc: DOCTOR_BASE+"addMySlotsDoc/",
-  deleteMySlotsDoc: DOCTOR_BASE+"deleteMySlotsDoc/",
-  updateMySlotsDoc: DOCTOR_BASE+"updateMySlotsDoc/",
-
+  viewMySlotsDoc: DOCTOR_BASE + "viewMySlotsDoc/",
+  addMySlotsDoc: DOCTOR_BASE + "addMySlotsDoc/",
+  deleteMySlotsDoc: DOCTOR_BASE + "deleteMySlotsDoc/",
+  updateMySlotsDoc: DOCTOR_BASE + "updateMySlotsDoc/",
 
   // Patient
+  viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
   viewPrescriptions: PATIENT_BASE + "getPrescriptions/", // add patient username as a param
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
+  viewFamPackage: PATIENT_BASE + "viewFamilyPackage/",
+  viewOptionPackages: PATIENT_BASE + "getOptionPackages/",
+  viewHealthFamwithstatus: PATIENT_BASE + "viewHealthFamwithstatus",
+  CancelFamilysubscribtion: PATIENT_BASE + "cancelSubscriptionfamilymember",
+  subscribepackagefamilymem: PATIENT_BASE + "subscribepackagefamilymem",
+  cancelSubscription: PATIENT_BASE + "/cancelSubscription",
+  subscribePackageSelf: PATIENT_BASE + "payForSubscription/",
+  subscribePackageFam: PATIENT_BASE + "payFamilySubscription/",
+  getAmountCredit: PATIENT_BASE + "getAmountCredit/",
+  getAmountCreditFam: PATIENT_BASE + "getAmountCreditFam/",
+  updateFamSub: PATIENT_BASE + "updateFamSubs/",
+  updateMySub: PATIENT_BASE + "updateMySubs/",
+  viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
   uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
   getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
-  
+  getWalletAmount: PATIENT_BASE + "getWalletAmount/",
 
   // Package
   packages: PACKAGE_BASE + "packages/",

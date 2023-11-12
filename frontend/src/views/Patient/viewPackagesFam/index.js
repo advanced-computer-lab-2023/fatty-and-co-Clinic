@@ -7,20 +7,9 @@ import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { usePackageContext } from "./hooks/usePackageContext";
 import PackageForm from "./components/PackageForm";
-import DeleteUserForm from "./components/PackageForm";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 
-function DeleteUser() {
-  return (
-    <ChakraProvider>
-      <div className="DeleteUser">
-        <DeleteUserForm />
-        {/* Add other components or routing as needed */}
-      </div>
-    </ChakraProvider>
-  );
-}
 
 function PackageI() {
   const { packages, dispatch } = usePackageContext();
@@ -29,10 +18,10 @@ function PackageI() {
   // const [packages, setPackages] = useState(null);
   useEffect(() => {
     const fetchPackages = async () => {
-      const response = await fetch(API_PATHS.packages, {
-        headers: {
-          Authorization: Authorization,
-        },
+      const response = await fetch(API_PATHS.viewOptionPackages ,{
+        headers:{
+          'Authorization': Authorization
+        }
       });
       const data = await response.json();
       if (response.ok) {
@@ -60,4 +49,3 @@ function PackageI() {
 }
 
 export default PackageI;
-DeleteUser;
