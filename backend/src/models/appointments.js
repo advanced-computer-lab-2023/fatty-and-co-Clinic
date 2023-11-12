@@ -27,6 +27,10 @@ const appointmentSchema = new Schema(
       enum: ["Upcoming", "Completed", "Rescheduled", "Cancelled"],
       default: "Upcoming",
     },
+    FollowUp:{
+      type: Boolean,
+      default: false
+    },
     Date: {
       type: Date,
       required: true,

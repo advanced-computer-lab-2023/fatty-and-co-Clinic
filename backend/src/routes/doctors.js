@@ -9,6 +9,7 @@ const {
   filterDoctor,
   updateDoctor,
   viewPatientInfoAndHealthRecords,
+  followupAppointment,
   filterDoctorSlotEdition,
   addMySlotsDoc,
   deleteMySlotsDoc,
@@ -144,6 +145,11 @@ router.get(
   "/viewPatientInfoAndHealthRecords",
   checkDoctor,
   viewPatientInfoAndHealthRecords
+);
+router.post(
+  "/followupAppointment",
+  checkDoctor,
+  followupAppointment
 );
 
 router.get("/filterDoctorSlotEdition", checkPatient, (req, res) => {

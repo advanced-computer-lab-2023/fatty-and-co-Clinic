@@ -5,18 +5,20 @@ const PATIENT_BASE = "http://localhost:8000/patient/";
 const ADMIN_BASE = "http://localhost:8000/admin/";
 const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
+const PAYEMENT_BASE = "http://localhost:8000/payment/";
 
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
   // Guest
   docSignUp: GUEST_BASE + "addRequest/",
-  updateEmailDoc: GUEST_BASE + "updateEmail/",
+  updateEmail: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
+  getRequestMedicalLicense: ADMIN_BASE + "getRequestMedicalLicense/",
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
 
@@ -26,6 +28,7 @@ export const API_PATHS = {
   updateAffil: DOCTOR_BASE + "updateDoctor/",
   viewFilteredDoctors: DOCTOR_BASE + "filter/",
   viewInfoAndHealthRecords: DOCTOR_BASE + "viewPatientInfoAndHealthRecords/",
+  followupAppointment: DOCTOR_BASE + "followupAppointment/",
   viewMySlotsDoc:DOCTOR_BASE + "viewMySlotsDoc/",
   addMySlotsDoc: DOCTOR_BASE+"addMySlotsDoc/",
   deleteMySlotsDoc: DOCTOR_BASE+"deleteMySlotsDoc/",
@@ -39,6 +42,10 @@ export const API_PATHS = {
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
+  uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
+  getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
+  downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
+  removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   
 
   // Package
@@ -52,4 +59,7 @@ export const API_PATHS = {
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
+
+  // Payment
+  cardPayment: PAYEMENT_BASE + "cardPayment",
 };

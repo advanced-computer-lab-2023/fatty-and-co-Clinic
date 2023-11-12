@@ -5,6 +5,10 @@ const {
   findDoctorPatients,
   upcomingAppforDoc,
   searchPatient,
+  filterAppointmentsByStatusDoc,
+  filterAppointmentsByStatusPat,
+  filterAppointmentsByDateDoc,
+  filterAppointmentsByDatePat,
   testAppointRef,
 } = require("../controllers/appointmentController");
 
@@ -56,6 +60,12 @@ router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
  * @access Patient
  */
 router.get("/getAppointmentsPat", checkPatient, getAppointmentsPat);
+
+router.get("/filterAppointmentsByStatusDoc", checkPatient, filterAppointmentsByStatusDoc);
+router.get("/filterAppointmentsByStatusPat", checkPatient, filterAppointmentsByStatusPat);
+router.get("/filterAppointmentsByDateDoc", checkPatient, filterAppointmentsByDateDoc);
+router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
+
 
 
 router.get("/testAppRef", testAppointRef);

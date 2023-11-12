@@ -3,6 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+// file upload
+// but seems that express has a better way
+//const bodyParser = require("body-parser");
+//const methodOverride = require("method-override"); // to delete files
 
 // Route Variables
 const guestRoutes = require("./routes/guests");
@@ -12,6 +16,7 @@ const patientRoutes = require("./routes/patients");
 const adminRoutes = require("./routes/admins");
 const testRoutes = require("./routes/tests");
 const packageRoutes = require("./routes/package");
+const paymentRoutes = require("./routes/payments");
 
 // Middleware Variables
 const requireAuth = require("./common/middleware/requireAuth");
@@ -26,6 +31,9 @@ const app = express();
 // Middleware (applied on all routes)
 app.use(cors());
 app.use(express.json());
+//app.use(bodyParser.json());
+//app.use(methodOverride("_method"));
+
 app.use((req, res, next) => {
   console.log(req.method, req.path);
   next();
@@ -50,6 +58,7 @@ app.use("/doctor", doctorRoutes);
 app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/package", packageRoutes);
+app.use("/payment", paymentRoutes);
 
 // Server
 mongoose
@@ -64,3 +73,6 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+
+  

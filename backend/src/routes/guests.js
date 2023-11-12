@@ -7,6 +7,7 @@ const {
   login,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
+const {cpUpload} = require("../common/middleware/doctorUpload");
 
 const router = express.Router();
 
@@ -50,7 +51,7 @@ router.post("/addPatient", createPatient);
  * @prop {string} EducationalBackground - The educational background of the doctor
  * @prop {string} Speciality - The speciality of the doctor
  */
-router.post("/addRequest", createRequest);
+router.post("/addRequest",cpUpload, createRequest); 
 
 // the following routes require authentication
 router.use(requireAuth);
@@ -59,6 +60,6 @@ router.use(requireAuth);
 router.put("/updateRequest/:id", updateRequest);
 
 // TODO: add type check as middleware if needed
-router.patch("/updateEmail/:Username", updateEmail);
+router.patch("/updateEmail", updateEmail);
 
 module.exports = router;

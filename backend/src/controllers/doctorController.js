@@ -197,25 +197,7 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 
 // filter doctors by speciality or/and (date and time)
 
-// TODO: Make sure health record consists of appointments and prescriptions.
-// View information and health records of a doctor's patient
-const viewPatientInfoAndHealthRecords = async (req, res) => {
-  const patientUsername = req.query.PatientUsername;
-  const doctorUsername = req.query.DoctorUsername;
-  try {
-    const appointments = await appointmentModel.find({
-      PatientUsername: patientUsername,
-      DoctorUsername: doctorUsername,
-    });
-    const prescriptions = await prescriptionsModel.find({
-      PatientUsername: patientUsername,
-      DoctorUsername: doctorUsername,
-    });
-    res.status(200).json({ appointments, prescriptions });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+
 
 const filterDoctor = async (req, res) => {
   try {
@@ -331,6 +313,23 @@ const filterDoctor = async (req, res) => {
     console.log(err);
   }
 };
+const viewPatientInfoAndHealthRecords = async (req, res) => {
+  const patientUsername = req.query.PatientUsername;
+  const doctorUsername = req.user.Username;
+  try {
+    const appointments = await appointmentModel.find({
+      PatientUsername: patientUsername,
+      DoctorUsername: doctorUsername,
+    });
+    const prescriptions = await prescriptionsModel.find({
+      PatientUsername: patientUsername,
+      DoctorUsername: doctorUsername,
+    });
+    res.status(200).json({ appointments, prescriptions });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}; 
 
 function findDayRangeFromDate(startDate, endDate) {
   const dayDiff = parseInt((endDate - startDate) / (1000 * 60 * 60 * 24), 10);
@@ -814,6 +813,40 @@ const viewMySlotsDoc = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+const followupAppointment = async (req, res) => {
+  const patientUsername = req.query.PatientUsername;
+  const doctorUsername = req.user.Username;
+  const appointmentID = req.query.appointmentID;
+  const date = new Date(req.query.date);
+  const today = new Date();
+
+  try {
+    const patient = await patientModel.findOne({
+      Username: patientUsername,
+    });
+    const doctor = await doctorModel.findOne({
+      Username: doctorUsername,
+    });
+
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      const appointment = await appointmentModel.create({
+        DoctorUsername: doctorUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Upcoming",
+        FollowUp: true,
+        Date: date,
+      });
+      res.status(200).json(appointment);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
@@ -827,6 +860,7 @@ module.exports = {
   getAllDoctors,
   deleteDoctor,
   viewPatientInfoAndHealthRecords,
+  followupAppointment,
   filterDoctorSlotEdition,
   addMySlotsDoc,
   deleteMySlotsDoc,
