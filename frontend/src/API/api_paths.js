@@ -15,6 +15,7 @@ export const API_PATHS = {
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
   updatePass: GUEST_BASE + "updatePass/",
+  resetPass: GUEST_BASE + "resetPass/",
   sendOTP: GUEST_BASE + "sendOTP/",
   validateOTP: GUEST_BASE + "validateOTP/",
 

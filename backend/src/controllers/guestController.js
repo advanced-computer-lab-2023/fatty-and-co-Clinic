@@ -201,6 +201,40 @@ const updatePass = async (req, res) => {
   }
 };
 
+const resetPass = async (req, res) => {
+
+  try {
+
+    const{Email, Password} = req.body;
+    const test = await systemUserModel.findOne({Email: Email});
+
+    if (!Password ) {
+      throw Error("Please enter the new password!");
+    }
+    const passwordMatch = await bcrypt.compare(Password, test.Password);
+
+    if (passwordMatch) {
+      throw Error("Cannot enter the same password");
+    }
+
+    if (!validatePassword(Password)) {
+      throw Error(
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+      );
+    }
+    const salt = await bcrypt.genSalt(10);
+  
+    const hash = await bcrypt.hash(Password, salt);
+    console.log(Email);
+    const user = await systemUserModel.findOneAndUpdate(
+      { Email: Email}, {Password: hash });
+
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
 const createPatient = async (req, res) => {
   const {
     Username,
@@ -246,4 +280,5 @@ module.exports = {
   updatePass,
   sendOTP,
   validateOTP,
+  resetPass,
 };

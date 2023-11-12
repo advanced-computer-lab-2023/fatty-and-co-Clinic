@@ -8,6 +8,7 @@ const {
   updatePass,
   sendOTP,
   validateOTP,
+  resetPass,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
 const send = require("send");
@@ -62,7 +63,7 @@ router.post("/addPatient", createPatient);
  */
 router.post("/addRequest", createRequest);
 
-router.patch("/resetPass/", updatePass);
+router.patch("/resetPass/", resetPass);
 // the following routes require authentication
 router.use(requireAuth);
 

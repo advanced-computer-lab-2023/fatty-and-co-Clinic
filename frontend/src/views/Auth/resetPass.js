@@ -18,6 +18,8 @@ import {
   AlertIcon,
   FormErrorMessage,
 } from "@chakra-ui/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 
 // Assets
@@ -26,9 +28,22 @@ import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from 'axios';
 
+const SignInSchema = Yup.object().shape({
+    Password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
+        "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+      ),
+  });
+
 function resetPass() {
     const [email, setEmail] = useState('');
     const [isFormSubmitted, setFormSubmitted] = useState(false);
+    const [isOTPSubmitted, setOTPSubmitted] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleShowClick = () => setShowPassword(!showPassword);
   
     const handleSubmit = async (values, { setSubmitting }) => {
       console.log(values);
@@ -63,8 +78,26 @@ function resetPass() {
             
                 console.log('Server response:', response.data);
 
-            
+                setOTPSubmitted(true);
+                setFormSubmitted(false);
                 setSubmitting(false);
+        } catch (error) {
+            console.error(error);
+          }
+    };
+
+    const handlePasswordSubmit = async (values, { setSubmitting }) => {
+        try{
+            console.log('Password submitted:', values.Password);
+                const { Password} = values;
+                console.log(Password);
+                console.log('Request Payload:', { Email: email, Password: Password });
+
+                const response = await axios.patch(API_PATHS.resetPass, { Email: email, Password: Password });
+            
+                console.log('Server response:', response.data);
+
+            
                 window.location.href = '/auth/signin';
         } catch (error) {
             console.error(error);
@@ -99,7 +132,7 @@ function resetPass() {
             mt={{ md: '150px', lg: '80px' }}
           >
             <Heading color={titleColor} fontSize="32px" mb="10px">
-              {isFormSubmitted ? 'Enter OTP' : 'Welcome Back'}
+              {isFormSubmitted ? 'Enter OTP' : isOTPSubmitted? 'Reset Password' : 'Welcome Back'}
             </Heading>
             <Text
               mb="36px"
@@ -110,7 +143,7 @@ function resetPass() {
             >
               {isFormSubmitted
                 ? 'Enter the OTP sent to your email'
-                : 'Enter an email to reset your password'}
+                : isOTPSubmitted? 'Enter your new password': 'Enter an email to reset your password'}
             </Text>
 
             {isFormSubmitted ? (
@@ -163,7 +196,73 @@ function resetPass() {
                   </Form>
                 )}
               </Formik>
-            ) : (
+            ) : isOTPSubmitted ? (
+                
+                <Formik
+                initialValues={{
+                  Password: '',
+                }}
+                validationSchema={SignInSchema}
+                onSubmit={handlePasswordSubmit}
+              >
+                {({ isSubmitting, errors, touched }) => (
+                  <Form>
+                    <Field name="Password">
+                      {({ field, form }) => (
+                        <FormControl
+                          mb="24px"
+                          isInvalid={errors.Password && touched.Password}
+                        >
+                          <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                            Password
+                          </FormLabel>
+                          <InputGroup> 
+                          <Input
+                            {...field}
+                            fontSize="sm"
+                            ms="4px"
+                            borderRadius="15px"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Your Password"
+                            size="lg"
+                          />
+                          <InputRightElement>
+                            {showPassword ? (
+                              <FaEyeSlash onClick={handleShowClick} />
+                            ) : (
+                              <FaEye onClick={handleShowClick} />
+                            )}
+                          </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>{errors.Password}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+
+                    <Button
+                      fontSize="10px"
+                      isLoading={isSubmitting}
+                      type="submit"
+                      bg="teal.300"
+                      w="100%"
+                      h="45"
+                      mb="20px"
+                      color="white"
+                      mt="20px"
+                      _hover={{
+                        bg: 'teal.200',
+                      }}
+                      _active={{ 
+                        bg: 'teal.400',
+                      }}
+                    >
+                      RESET
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+
+              ): (
               <Formik
                 initialValues={{
                   Email: '',
@@ -208,7 +307,7 @@ function resetPass() {
                       _hover={{
                         bg: 'teal.200',
                       }}
-                      _active={{
+                      _active={{ 
                         bg: 'teal.400',
                       }}
                     >
