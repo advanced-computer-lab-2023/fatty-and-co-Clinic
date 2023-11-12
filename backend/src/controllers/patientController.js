@@ -1205,7 +1205,7 @@ const updateFamCredit = async (req, res) => {
   }
 };
 
-const GetWalletAmount = async (req, res) => {
+const getWalletAmount = async (req, res) => {
   try {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username });
@@ -1219,7 +1219,7 @@ const GetWalletAmount = async (req, res) => {
   }
 };
 
-const GetFamilymembers = async (req, res) => {
+const getFamilymembers = async (req, res) => {
   try {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
@@ -1509,7 +1509,7 @@ module.exports = {
   viewHealthPackage,
   session_index,
   createFamilymember,
-  GetFamilymembers,
+  getFamilymembers,
   selectPatient,
   getPrescriptions,
   getPatientUsername,
@@ -1527,4 +1527,5 @@ module.exports = {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
+  getWalletAmount,
 };
