@@ -10,8 +10,8 @@ const {
   validateOTP,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
+const {cpUpload} = require("../common/middleware/doctorUpload");
 const send = require("send");
-const cookieParser = require('cookie-parser');
 
 
 const router = express.Router();
@@ -60,7 +60,7 @@ router.post("/addPatient", createPatient);
  * @prop {string} EducationalBackground - The educational background of the doctor
  * @prop {string} Speciality - The speciality of the doctor
  */
-router.post("/addRequest", createRequest);
+router.post("/addRequest",cpUpload, createRequest); 
 
 // the following routes require authentication
 router.use(requireAuth);

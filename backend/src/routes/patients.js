@@ -16,13 +16,18 @@ const {
   selectPatient,
   selectPrescription,
   getEmergencyContact,
+  uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
+const { upload } = require("../common/middleware/upload");
 
 const router = express.Router();
 
-/** 
+/**
  * @route POST /patients/addPatient
  * @desc Creates a new patient
  * @access Public
@@ -34,7 +39,7 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.get("/viewFamilyPackage/:PatientID",viewHealthFam)
+router.get("/viewFamilyPackage/:PatientID", viewHealthFam);
 /**
 =======
 >>>>>>> main
@@ -112,7 +117,7 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember/:PatientID", GetFamilymembers);  //Changed name of params
+router.get("/getFamilymember/:PatientID", GetFamilymembers); //Changed name of params
 router.get("/getFamilymember", checkPatient, GetFamilymembers);
 /**
  * @route GET /patients/getPrescriptions
@@ -121,6 +126,38 @@ router.get("/getFamilymember", checkPatient, GetFamilymembers);
  */
 // TODO: add type check as middleware if needed
 router.get("/getPrescriptions", getPrescriptions);
+
+/**
+ * @route POST /patients/uploadFile
+ * @desc Uploads a file health record
+ * @access Patient
+ * @prop {string} note - The note of the file in the body
+ */
+router.post("/uploadFile", upload.single("file"), uploadFile);
+
+/**
+ * @route GET /patients/getFiles
+ * @desc Returns a list of all files for a patient
+ * @access Patient or Admin
+ * @param {string} username - The username of the patient in the body if the user is an admin
+ */
+router.get("/getMedicalHistory", getMedicalHistory);
+
+/**
+ * @route GET /patients/downloadFile
+ * @desc Downloads a file health record
+ * @access Patient or Admin
+ * @param {string} filename - The filename in the params
+ */
+router.get("/downloadFile/:filename", downloadFile); 
+
+/**
+ * @route DELETE /patients/removeHealthRecord
+ * @desc Removes a file health record
+ * @access Patient or Admin
+ * @param {string} filename - The filename in the params
+ */
+router.delete("/removeHealthRecord/:filename", removeHealthRecord);
 
 /**
  * @route GET /patients/selectPatient
@@ -146,10 +183,10 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 // TODO: add type check as middleware if needed
+// TODO: does this need the :Username param after adding authentication?
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.patch("/subscribehealthpackage/:id",subscribehealthpackage)
-router.patch("/subscribepackagefamilymem/:id",subscribepackagefamilymem)
-router.get("/viewMyPackage/:PatientID",viewHealthPackage)
-
+router.patch("/subscribehealthpackage/:id", subscribehealthpackage);
+router.patch("/subscribepackagefamilymem/:id", subscribepackagefamilymem);
+router.get("/viewMyPackage/:PatientID", viewHealthPackage);
 
 module.exports = router;

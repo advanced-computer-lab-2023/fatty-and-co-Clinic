@@ -57,6 +57,15 @@ const requestSchema = new Schema(
       required: true,
       default: "Pending",
     },
+    IdFileName :{
+      type: String,
+    },
+    MedicalLicenseName :{
+      type: String,
+    },
+    MedicalDegreeName :{
+      type: String,
+    }
   },
   { timestamps: true }
 );
@@ -70,7 +79,10 @@ requestSchema.statics.addEntry = async function (
   hourlyRate,
   affiliation,
   educationalBackground,
-  speciality
+  speciality,
+  idFileName,
+  medicalLicenseName,
+  medicalDegreeName
 ) {
   // validation done here instead of in db because password will be hashed by the time it reaches the db
   if (!validatePassword(password)) {
@@ -93,6 +105,9 @@ requestSchema.statics.addEntry = async function (
     EducationalBackground: educationalBackground,
     Speciality: speciality,
     Status: "Pending",
+    IdFileName : idFileName,
+    MedicalLicenseName : medicalLicenseName,
+    MedicalDegreeName : medicalDegreeName
   });
 
   return request;
