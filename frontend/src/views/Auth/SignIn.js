@@ -172,15 +172,11 @@ function SignIn() {
                         <FormErrorMessage>{errors.Password}</FormErrorMessage>
                         <Flex justify="flex-end">
                           <Box>
-                          <a href= "http://localhost:3000/auth/resetPass">
-                            <Button
-                              type="button"
-                              size="xs"
-                              mt="2"
-                            >
-                              Forgot Password?
-                            </Button>
-                          </a>
+                            <a href="./resetPass">
+                              <Button type="button" size="xs" mt="2">
+                                Forgot Password?
+                              </Button>
+                            </a>
                           </Box>
                         </Flex>
                       </FormControl>
