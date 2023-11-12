@@ -51,7 +51,7 @@ const MyPackageSubsTable = ({ title, captions, data }) => {
                    Status={data.Status?data.Status:""}
                    Enddate={data.Enddate?data.Enddate:""}
                    Startdate={data.Startdate?data.Startdate:""}
-                   Renewaldate={data.Renewaldate?data.Renewaldate:""}
+                   Renewaldate={!(data.Renewaldate||data.Status==="Cancelled")?"":data.Renewaldate}
                  />
                
            </Tbody>

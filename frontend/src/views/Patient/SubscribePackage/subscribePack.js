@@ -81,7 +81,8 @@ function SubscribePackage() {
           });
           const errorData = await response.json();
           if (response.ok) {
-            const { amount, description,PackageName,NationalId } = response.data;
+        
+            const { amount, description,PackageName,NationalId } = errorData;
             const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}&NationalId=${NationalId}`;
             history.replace(redirectUrl);
           

@@ -44,16 +44,17 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
               if(row){
               const id = row.Patient?row.Patient._id: row.FamilyMem._id ;
               const name = row.Patient?row.Patient.Name: row.FamilyMem.Name ;
-              
+           
+
               return (
                 <Statuspackagerow
                   key={id}
                   Name={name}
-                  Status={row.Status}
+                  Status={row.Status?row.Status:""}
                   Package={row.Package?row.Package.Name:""}
-                  Enddate={row.Enddate}
-                  Startdate={row.Startdate}
-                  Renewaldate={row.Renewaldate}
+                  Enddate={row.Enddate?row.Enddate:""}
+                  Startdate={row.Startdate?row.Startdate:""}
+                  Renewaldate={!row.Renewaldate||row.Status==="Cancelled"?"":row.Renewaldate}
                 />
               );}
             })}
