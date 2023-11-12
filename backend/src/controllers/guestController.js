@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const subscriptionModel=require("../models/subscriptions");
+
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
@@ -20,6 +20,12 @@ const createRequest = async (req, res) => {
       EducationalBackground,
       Speciality,
     } = req.body;
+    
+    const {IdFile , MedicalLicense , MedicalDegree} = req.files ;
+    
+    const IdFileName = IdFile[0].filename;
+    const MedicalLicenseName = MedicalLicense[0].filename; 
+    const MedicalDegreeName = MedicalDegree[0].filename;
     const request = await requestModel.addEntry(
       Username,
       Password,
@@ -29,8 +35,12 @@ const createRequest = async (req, res) => {
       HourlyRate,
       Affiliation,
       EducationalBackground,
-      Speciality
+      Speciality,
+      IdFileName,
+      MedicalLicenseName,
+      MedicalDegreeName
     );
+    
     res.status(200).send({ request });
   } catch (error) {
     res.status(400).send({ message: error.message });

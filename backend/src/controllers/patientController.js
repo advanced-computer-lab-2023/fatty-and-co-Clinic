@@ -11,8 +11,6 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
-const { getPackages } = require("./packageController");
-const { Console } = require("console");
 
 // const createPatient = async (req, res) => {
 //   const {
@@ -1091,181 +1089,25 @@ console.log(subscribedcheck.Status=="Subscribed");
     // console.log("HII");
     res.status(400).send({ message: error.message });
   }
-  
-}
-
- const subscribehealthpackage=async(req,res) =>{
-// console.log("Entered");
-//   try {
-//     const Startdate = new Date();
-
-//     const year = Startdate.getFullYear();
-//     const month = String(Startdate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-//     const day = String(Startdate.getDate()).padStart(2, '0');
-    
-//     const formattedDate = `${year}-${month}-${day}`;
-//     const enddate = new Date();
-    
-//     const year1 = (enddate.getFullYear())+1;
-//     const month1 = String(enddate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-//     const day1 = String(enddate.getDate()).padStart(2, '0');
-    
-//     const formattedDate1 = `${year1}-${month1}-${day1}`;
-//     const day3 = String(enddate.getDate()+1).padStart(2, '0');
-//     const formattedDate3 = `${year1}-${month1}-${day3}`;
-//     const { Package,Status} = req.body;
-//     const Package = await  packageModel.findOne({Name:Package});
-//     const PatientUserName=req.user.Username;
-//     const Patient  = await patientModel.findOne({Username:PatientUserName}); 
-//    // console.log(PatientUserName);
-//    // console.log(Patient) //changed this
-//    const subscribtion = await subscriptionModel.findOne({Patient:Patient});
-//    console.log(subscribtion);
-
-//    if (subscribtion==null){
-//     res.send({error:"Error"});
-//    }
-//    else if (subscribtion.Status=="Subscribed"){
-//     res.status(400).send({error:"You are already subscribed"});
-//    }
-
-//    else if (subscribtion.Status!="Subscribed"){
-//     console.log("Entered the if");
-    
-//     const patient12 = await subscriptionModel.findOneAndUpdate({Patient:Patient},
-//       { 
-//         Package:Package,
-//         Status:"Subscribed",
-//         Startdate:formattedDate,
-//         Renewaldate:formattedDate3,
-//         Enddate:formattedDate1
-//       }
-
-//     );
-//     console.log(patient12)
-//     res.status(200).send(patient12);
-//     }
-//  else {
-//   res.status(400).send({error:"Sorry already subscribed"});
-//  }
-//   } catch (error) {
-//     res.status(400).send({ Error:"Error occurred while  subscribing" });
-//   }
-  
-}
-
-
-
-
-const cancelSubscription = async (req, res) => {
-  try {
-    const Startdate = new Date();
-    const signedIn = req.user.Username;
-    const year = Startdate.getFullYear();
-    const month = String(Startdate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-    const day = String(Startdate.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-    const patient = await patientModel.findOne({ Username: signedIn });
-    const subscribed = await subscriptionModel.findOne({ Patient: patient });
-    //  console.log()
-    if (subscribed) {
-      console.log("Here");
-      if (subscribed.Status === "Cancelled") {
-        res
-          .status(400)
-          .send({ Error: "You have already cancelled your prescription" });
-      } else {
-        const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
-          { Patient: patient },
-          { Status: "Cancelled", Enddate: formattedDate }
-        );
-        res.status(200).json({ subscribedUpdate });
-      }
-    } else {
-      res.status(400).send({ Error: "You're not subscribed!" });
-    }
-  } catch {
-    res
-      .status(400)
-      .send({ Error: "Error occurred while cancelling subscription" });
-  }
 };
-const cancelSubscriptionfamilymember = async (req, res) => {
-  try {
-    const Startdate = new Date();
-    const { NationalId } = req.body;
-    const signedIn = req.user.Username;
-    const year = Startdate.getFullYear();
-    const month = String(Startdate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-    const day = String(Startdate.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-    const patient= await patientModel.findOne({Username:signedIn})
-    const fam = await familyMemberModel.findOne({NationalId:NationalId});
-    const subscribed= await subscriptionModel.findOne({FamilyMem:fam, FamilyMem:fam.id})
-    const famrelated=await familyMemberModel.find({Patient:patient.id,NationalId:NationalId});
-    console.log(req.user.Username)
-    if (famrelated ==null){
-      res.status(400).send({error:"Family member not related to you "})
-    }
-   else if (fam.FamilyMem!=null){
-      res.status(400).send({error:"He is already a system user"})
-    }
-  else  if(subscribed){
-      console.log("Here")
- if(subscribed.Status==="Cancelled"){
-      res.status(400).send({error:"You have already cancelled your prescription"})
-    }
-    else{
-      const subscribedUpdate=await subscriptionModel.findOneAndUpdate({FamilyMem:fam},{Status:"Cancelled",Enddate:formattedDate})
-      console.log(subscribedUpdate);
-      res.status(200).json({subscribedUpdate});
-    }}
 
-    else{
-      res.send({Error:"You're not subscribed!"})
-    }
-  } catch {
-    res.send({ Error: "Error occurred while cancelling subscription" });
+const subscribehealthpackage = async (req, res) => {
+  try {
+    const patient = await patientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).send({ patient });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 };
 
-/* const cancelSubscriptionFam=async(req,res) =>{
-//   try {
-//     const Startdate = new Date();
-//     const signedIn= req.user.Username
-    
-//     const year = Startdate.getFullYear();
-//     const month = String(Startdate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-//     const day = String(Startdate.getDate()).padStart(2, '0');
-//     const formattedDate = `${year}-${month}-${day}`;
-//     const patient= await patientModel.findOne({Username:signedIn})
-//     const subscribed= await subscriptionModel.findOne({Patient:patient})
-//     if(subscribed){
-//       console.log("Here")
-//     if(subscribed.Status==="Cancelled"){
-//       res.send({error:"You have already cancelled your prescription"})
-//     }
-//     else{
-//       const subscribedUpdate=await subscriptionModel.findOneAndUpdate({Patient:patient},{Status:"Cancelled",Enddate:formattedDate})
-//       res.json({subscribedUpdate});
-//     }}
-
-//     else{
-//       res.send({Error:"You're not subscribed!"})
-//     }
-// }
-// catch{
-//   res.send({Error:"Error occurred while cancelling subscription"})
-// }}
-
-// Date.prototype.addDays = function (days) {
-//   var date = new Date(this.valueOf());
-//   date.setDate(date.getDate() + days);
-//   return date;
-// };
-*/
-
-
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
 
 module.exports = {
   updateFamCredit, //updates status fam
@@ -1290,9 +1132,4 @@ module.exports = {
   selectPrescription,
   getEmergencyContact,
   subscribepackagefamilymem,
-  payForFamSubscription,
-  cancelSubscriptionfamilymember,
-  payForSubscription,
-  viewHealthPackagewithstatus,
-  viewHealthFamwithstatus,
 };

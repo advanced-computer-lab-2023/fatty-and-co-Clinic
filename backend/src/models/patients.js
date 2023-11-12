@@ -36,6 +36,11 @@ const patientSchema = new Schema(
       type: Number,
       required: false,
     },
+    MedicalHistory: {
+      // i want medical history to be a array of pairs of strings
+      type: [{ filename: String, note: String }],
+      required: false,
+    },
   },
   { timestamps: true }
 );

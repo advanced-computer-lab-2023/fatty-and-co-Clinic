@@ -8,7 +8,6 @@ const {
   cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
-  subscribehealthpackage,
   subscribepackagefamilymem,
   getAllPatients,
   deletePatient,
@@ -27,9 +26,14 @@ const {
   payForSubscription,
   viewHealthPackagewithstatus,
   viewHealthFamwithstatus,
+  uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
 } = require("../controllers/patientController");
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
+const { upload } = require("../common/middleware/upload");
 
 const router = express.Router();
 
@@ -139,6 +143,38 @@ router.get("/getFamilymember", checkPatient, GetFamilymembers);
  * @access Public
  */
 router.get("/getPrescriptions", getPrescriptions);
+
+/**
+ * @route POST /patients/uploadFile
+ * @desc Uploads a file health record
+ * @access Patient
+ * @prop {string} note - The note of the file in the body
+ */
+router.post("/uploadFile", upload.single("file"), uploadFile);
+
+/**
+ * @route GET /patients/getFiles
+ * @desc Returns a list of all files for a patient
+ * @access Patient or Admin
+ * @param {string} username - The username of the patient in the body if the user is an admin
+ */
+router.get("/getMedicalHistory", getMedicalHistory);
+
+/**
+ * @route GET /patients/downloadFile
+ * @desc Downloads a file health record
+ * @access Patient or Admin
+ * @param {string} filename - The filename in the params
+ */
+router.get("/downloadFile/:filename", downloadFile); 
+
+/**
+ * @route DELETE /patients/removeHealthRecord
+ * @desc Removes a file health record
+ * @access Patient or Admin
+ * @param {string} filename - The filename in the params
+ */
+router.delete("/removeHealthRecord/:filename", removeHealthRecord);
 
 /**
  * @route GET /patients/selectPatient
