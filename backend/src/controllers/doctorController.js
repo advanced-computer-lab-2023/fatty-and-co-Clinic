@@ -848,6 +848,18 @@ const followupAppointment = async (req, res) => {
   }
 };
 
+const payDoctor = async (req, res) => {
+  const { id } = req.body.DoctorId;
+  try {
+    const doctor = await doctorModel.findOne({ _id: id});
+    doctor.Wallet += doctor.HourlyRate;
+    await doctor.save();
+    res.status(200).json({ message: "Doctor got paid" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
 module.exports = {
@@ -870,4 +882,5 @@ module.exports = {
   viewAllAvailableSlots,
   checkAptDateForBooking,
   viewMySlotsDoc,
+  payDoctor,
 };
