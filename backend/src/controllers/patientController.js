@@ -1358,13 +1358,35 @@ const subscribepackagefamilymem = async (req, res) => {
 
 const cancelSubscription = async (req, res) => {
   try {
-    const patient = await patientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
-    res.status(200).send({ patient });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
+    const Startdate = new Date();
+    const signedIn = req.user.Username;
+    const year = Startdate.getFullYear();
+    const month = String(Startdate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(Startdate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+    const patient = await patientModel.findOne({ Username: signedIn });
+    const subscribed = await subscriptionModel.findOne({ Patient: patient });
+    //  console.log()
+    if (subscribed) {
+      console.log("Here");
+      if (subscribed.Status === "Cancelled") {
+        res
+          .status(400)
+          .send({ Error: "You have already cancelled your prescription" });
+      } else {
+        const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
+          { Patient: patient },
+          { Status: "Cancelled", Enddate: formattedDate }
+        );
+        res.status(200).json({ subscribedUpdate });
+      }
+    } else {
+      res.status(400).send({ Error: "You're not subscribed!" });
+    }
+  } catch {
+    res
+      .status(400)
+      .send({ Error: "Error occurred while cancelling subscription" });
   }
 };
 
