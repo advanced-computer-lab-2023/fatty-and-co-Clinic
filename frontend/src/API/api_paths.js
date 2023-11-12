@@ -56,8 +56,8 @@ export const API_PATHS = {
   updateFamSub: PATIENT_BASE + "updateFamSubs/",
   updateMySub: PATIENT_BASE + "updateMySubs/",
   viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
-  uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
-  getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
+  uploadFile: PATIENT_BASE + "uploadFile/", // upload file and note
+  getMedicalHistory: PATIENT_BASE + "getMedicalHistory/", // get getMedicalHistory for patient (by username if admin)
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
