@@ -4,6 +4,8 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
+import { useAuthContext } from "hooks/useAuthContext";
+
 export const ViewDoctorDetails = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,10 +15,16 @@ export const ViewDoctorDetails = () => {
   });
 
   const { username } = useParams();
+  console.log(username);
+
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
 
   useEffect(() => {
     axios
-      .get(API_PATHS.getDoctorByUsername + username)
+      .get(API_PATHS.getDoctorByUsername + username, {
+        headers: { Authorization },
+      })
       .then((response) => response.data)
       .then((data) => {
         setFormData({
@@ -29,6 +37,7 @@ export const ViewDoctorDetails = () => {
       .catch((error) => console.log(error));
   }, []);
 
+   
   return (
     <Box pt="80px">
       {(username && username !== ":username" && (

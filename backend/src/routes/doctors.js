@@ -16,6 +16,7 @@ const {
   viewUpcomingAppointmentsDoc,
   viewPastAppoitmentsDoc,
   viewAllAvailableSlots,
+  viewMySlotsDoc,
 } = require("../controllers/doctorController");
 
 const {
@@ -24,16 +25,18 @@ const {
   checkAdmin,
 } = require("../common/middleware/checkType");
 
-router = express.Router();
+
+const router = express.Router();
 
 /**
  * @route GET /doctors
  * @desc Returns a message indicating that the request was successful
  * @access Public
  */
-router.get("/", (req, res) => {
+router.get("/",  (req, res) => {
   res.send("Doctors");
 });
+
 
 /**
  * @route POST /doctors/createDoctor
@@ -71,7 +74,7 @@ router.get("/getDoctorByid/:id", getDoctorByID);
  * @access Public
  * @param {string} Username - The username of the doctor
  */
-router.get("/getDoctorByUsername/:username", getDoctorByUsername);
+router.get("/getDoctorByUsername/:username",checkPatient, getDoctorByUsername);
 
 // /**
 //  * USELESS ROUTE. SEARCH IS HANDLED BY THE PATIENTS ROUTE /view/doctors
@@ -169,6 +172,10 @@ router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
 
 router.get("/viewAllAvailableSlots/:id", checkPatient, (req, res) => {
   viewAllAvailableSlots(req, res);
+});
+
+router.get("/viewMySlotsDoc" ,checkDoctor, (req, res) => {
+  viewMySlotsDoc(req, res);
 });
 
 module.exports = router;

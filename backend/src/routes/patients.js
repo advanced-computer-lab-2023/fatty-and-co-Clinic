@@ -19,10 +19,12 @@ const {
   viewUpcomingAppointmentsPat, 
   viewPastAppoitmentsPat,
 } = require("../controllers/patientController");
+
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
 
 const router = express.Router();
+
 
 /** 
  * @route POST /patients/addPatient
@@ -161,6 +163,7 @@ router.get("/viewUpcomingAppointmentsPat",checkPatient, (req, res) => {
 router.get("/viewPastAppoitmentsPat",checkPatient, (req, res) => {
   viewPastAppoitmentsPat(req, res);
 });
+
 
 
 module.exports = router;

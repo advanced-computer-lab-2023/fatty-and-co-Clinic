@@ -6,6 +6,7 @@ const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
+const { Int32 } = require("bson");
 
 // I think this is useless?
 // create a doctor
@@ -218,6 +219,7 @@ const viewPatientInfoAndHealthRecords = async (req, res) => {
 
 const filterDoctor = async (req, res) => {
   try {
+    
     const urlParams = new URLSearchParams(req.query);
 
     let packageDis = 0;
@@ -357,26 +359,78 @@ function getDayNumberFromName(day) {
   ];
   return weekDays.indexOf(day);
 }
+function getDayNameFromNumber(day) {
+  const weekDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return weekDays[day];
+}
 
 const filterDoctorSlotEdition = async (req, res) => {
-  //TODO: Check if both end time and end Date required
-
+  //TODO: Check if both end time and end Date required (sprint 3)
   try {
-    var filteredDoctors = new Array();
+    var dateFilteredDoctors = new Array();
+    var specFilteredDoctors = new Array();
+    var finalRes = new Array();
 
-    await availableDocXSlots(req, res).then(async (elements) => {
-      for (let element of elements) {
-        if (await isDocAvailable(element)) filteredDoctors.push(element);
+
+    //first stage -> filter by date&time range
+    if (
+      req.body.startDate &&
+      req.body.endDate &&
+      req.body.startHour &&
+      req.body.endHour
+    ) {
+      //get all doctors who have slots within the date&time range passed by user.
+      const dateDocs = await availableDocXSlots(req, res);
+
+      //get all doctors who have slotss available for booking within the date&time range passed by user
+      var filteredDateDocs = await filteredDateDoctors(
+        dateDocs,
+        dateFilteredDoctors
+      );
+
+      //second stage -> filter first_Stage docs by speciality
+      if (req.body.speciality) {
+        var filteredSpecDocs = await filteredSpecDoctors(
+          filteredDateDocs,
+          specFilteredDoctors,
+          req.body.speciality
+        );
+        finalRes = filteredSpecDocs;
+      } else finalRes = filteredDateDocs;
+
+      //In case no date filter params
+    } else {
+      const query = req.body.speciality
+        ? { Speciality: { $regex: req.body.speciality.trim(), $options: "i" } }
+        : {};
+      const finalResTmp = await doctorModel.find(query);
+      for (let element of finalResTmp) {
+        finalRes.push({
+          Username: element.Username,
+          Name: element.Name,
+          Speciality: element.Speciality,
+          HourlyRate: element.HourlyRate,
+        });
       }
-    });
-    res.status(200).json(filteredDoctors);
+    }
+
+    res.status(200).json(finalRes);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-//this function returns the available slot(s) of all doctors
+//usage: returns the available slot(s) of all doctorsss
 //based on the date&time range passed from the user
+//returns DocSlots (ex: {doc: X, slot: Mon 3:00}, {doc: X, slot: Sun 4:00}, {doc: Y, slot: Sun 4:00} , ..)
 async function availableDocXSlots(req) {
   try {
     if (
@@ -427,11 +481,11 @@ async function availableDocXSlots(req) {
   }
 }
 
-//this function checks if A doctor in A slot is available
-//by checking if he has no appointment in this slot or apt is cancelled, ..
-async function isDocAvailable(docSlot) {
+//usage: checks if A doctor in A slot (aka docSlot) is available
+//by checking if he has no appointment in this slot or apt is not upcoming
+//returns false or the doc NEEDED fields for further operations
+async function isDocSlotAvailable(docSlot) {
   try {
-    const statusCheck = ["Upcoming"];
     const tmpSlotDay = docSlot.DocSlotCross.WorkingDay;
     const tmpSlotHour = docSlot.DocSlotCross.StartTime;
     console.log(docSlot);
@@ -456,26 +510,80 @@ async function isDocAvailable(docSlot) {
     console.log(docApts);
 
     if (docApts.length != 0) {
-      if ({ $expr: { $in: [docApts.Status, statusCheck] } }) {
+      if (docApts.Status === "Upcoming") {
         console.log("false");
         return false;
       }
     }
     console.log("true");
-    return true;
+    return {
+      Username: docSlot.Username,
+      Name: docSlot.Name,
+      Speciality: docSlot.Speciality,
+      HourlyRate: docSlot.HourlyRate,
+    };
+    //return true;
   } catch (error) {
     console.log(error);
   }
 }
 
-async function checkFilterSpeciality() {
-  
+//usage: does the (isDocSlotAvailable) check on all docs with slots within the range.
+async function filteredDateDoctors(dateDocs, dateFilteredDoctors) {
+  for (let element of dateDocs) {
+    //second stage
+    const tmpDocDate = await isDocSlotAvailable(element);
+    if (!tmpDocDate) {
+      continue;
+    } else {
+      if (!(await checkDuplicate(dateFilteredDoctors, tmpDocDate)))
+        dateFilteredDoctors.push(tmpDocDate);
+    }
+  }
+  return dateFilteredDoctors;
+}
+
+//usage: checks if element exists in an array
+async function checkDuplicate(array, element) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].Username === element.Username) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//usage: checks on speciality of A doctor
+//returns false or doc neede info
+async function isDocSpeciality(doc, speciality) {
+  try {
+    if (!(doc.Speciality === speciality)) {
+      return false;
+    }
+    return doc;
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+}
+
+//usage: does the (isDocSpeciality) check on all passed docs.
+async function filteredSpecDoctors(docs, specFilteredDoctors, speciality) {
+  for (let element of docs) {
+    const tmpDocSpec = await isDocSpeciality(element, speciality);
+    if (!tmpDocSpec) {
+      continue;
+    } else {
+      if (!(await checkDuplicate(specFilteredDoctors, tmpDocSpec)))
+        specFilteredDoctors.push(tmpDocSpec);
+    }
+  }
+  return specFilteredDoctors;
 }
 
 const addMySlotsDoc = async (req, res) => {
-  const { DayToAdd, StartTimeToAdd } = req.body;
+  const { dayNumber, StartTimeToAdd } = req.query;
   const username = req.user.Username;
-  const dayNumber = getDayNumberFromName(DayToAdd);
+  //const dayNumber = getDayNumberFromName(DayToAdd);
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     //find the slots of this doctor that are in the same day using docId
@@ -484,6 +592,8 @@ const addMySlotsDoc = async (req, res) => {
       WorkingDay: dayNumber,
     });
 
+    console.log("hello_add");
+    console.log(slots);
     //check that no conflict between existing slots
     for (let element of slots) {
       //idk if this is error (status 500) or not.
@@ -498,7 +608,16 @@ const addMySlotsDoc = async (req, res) => {
       StartTime: StartTimeToAdd,
       DoctorId: doctor._id,
     });
-    res.status(200).send({ newSlot });
+
+    const slotToTable = 
+    {SlotId: newSlot._id,
+    DayName: getDayNameFromNumber(newSlot.WorkingDay),
+    StartTime: newSlot.StartTime,}
+
+    console.log("hello_add_created");
+    console.log(slotToTable);
+
+    res.status(200).send({ slotToTable });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -507,8 +626,10 @@ const addMySlotsDoc = async (req, res) => {
 //update will basically update the time on;y, if you want to update the day this
 //means you delete it from the old day and insert a new one in the new day.
 const updateMySlotsDoc = async (req, res) => {
-  const { StartTimeToUpdate } = req.body;
+  const { StartTimeToUpdate } = req.query;
   const { id } = req.params;
+
+  var x = StartTimeToUpdate.split(":");
 
   try {
     const mySlot = await docSlotsModel.findById(id);
@@ -526,16 +647,12 @@ const updateMySlotsDoc = async (req, res) => {
         return;
       }
     }
-    const newSlot = await docSlotsModel.findByIdAndUpdate(
-      id,
-      {
-        StartTime: StartTimeToUpdate,
-      },
-      { new: true }
-    );
+    const newSlot = await docSlotsModel.findByIdAndUpdate(id, {
+      StartTime: StartTimeToUpdate,
+    });
     res.status(200).send({ newSlot });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -549,7 +666,7 @@ const deleteMySlotsDoc = async (req, res) => {
     }
     res.status(200).json(docSlot);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -564,7 +681,7 @@ const viewUpcomingAppointmentsDoc = async (req, res) => {
     //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
     res.status(200).json(pastAppointments);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -579,7 +696,7 @@ const viewPastAppoitmentsDoc = async (req, res) => {
     //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
     res.status(200).json(pastAppointments);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -591,13 +708,16 @@ const viewAllAvailableSlots = async (req, res) => {
     const allDocSlots = await docSlotsModel.find({ DoctorId: id });
     res.status(200).json(allDocSlots);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({ message: error.message });
   }
 };
 
-//you need to pass the username as well if it is in a different page
-//make the calendar thing validation greater than today
-//TODO: THE ROUTE OF THIS METHOD WILL HAVE THE DOCTOR USERNAME IN THE URL;
+//use: when booking appointment based on A doc slot, you need to validate that:
+//    -> the date day matches the day ; ex: 11/11 is Sat
+//     -> the doc has no appointment in that Day
+
+//TODO: make the calendar thing validation greater than today (CAN POSTPONE TO SPRINT_3)
+//TODO: ADD THE ROUTE OF THIS METHOD &  THE DOCTOR USERNAME IN THE URL;
 const checkAptDateForBooking = async (req, res) => {
   //doctor Username ---> from URL
   const { username } = req.params;
@@ -658,6 +778,43 @@ const checkAptDateForBooking = async (req, res) => {
   }
 };
 
+const viewMySlotsDoc = async (req, res) => {
+  const username = req.user.Username;
+
+  try {
+    const doctor = await doctorModel.findOne({ Username: username });
+    const slots = await docSlotsModel.find({ DoctorId: doctor._id });
+    var viewSlots = new Array();
+
+    for (let slot of slots) {
+      console.log("slot start time: " + slot.StartTime);
+
+      const dayName = getDayNameFromNumber(slot.WorkingDay);
+
+      //toFixed --> makes sure number contains 2 digits after point
+      //needed for cases like XX:10 , XX:20 since parsing into Number will make it XX.1, .2,..
+      const StartTime = slot.StartTime.toFixed(2);
+      const strtTime2 = StartTime.toString().split(".");
+      console.log("strtTime2: " + strtTime2);
+
+      //padStart --> makes sure you have two numbers before point
+      //and if no numbers it adds 0
+      //needed for cases like 00:XX, 04:XX since parsing into number makes it 0, 4 , ...
+      const StartTimeFinal = strtTime2[0].padStart(2, "0") + ":" + strtTime2[1];
+      console.log("StartTimeFinal: " + StartTimeFinal);
+
+      viewSlots.push({
+        SlotId: slot._id,
+        DayName: dayName,
+        StartTime: StartTimeFinal,
+      });
+    }
+    res.status(200).json(viewSlots);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
 module.exports = {
@@ -678,4 +835,5 @@ module.exports = {
   viewPastAppoitmentsDoc,
   viewAllAvailableSlots,
   checkAptDateForBooking,
+  viewMySlotsDoc,
 };
