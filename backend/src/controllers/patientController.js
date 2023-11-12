@@ -1399,6 +1399,81 @@ const getMedicalHistory = async (req, res) => {
   res.status(200).send({ MedicalHistory });
 };
 
+const cancelSubscriptionfamilymember = async (req, res) => {
+  try {
+    const Startdate = new Date();
+    const { NationalId } = req.body;
+    const signedIn = req.user.Username;
+    const year = Startdate.getFullYear();
+    const month = String(Startdate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(Startdate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+    const patient = await patientModel.findOne({ Username: signedIn });
+    const fam = await familyMemberModel.findOne({ NationalId: NationalId });
+    const subscribed = await subscriptionModel.findOne({
+      FamilyMem: fam,
+      FamilyMem: fam.id,
+    });
+    const famrelated = await familyMemberModel.find({
+      Patient: patient.id,
+      NationalId: NationalId,
+    });
+    console.log(req.user.Username);
+    if (famrelated == null) {
+      res.status(400).send({ error: "Family member not related to you " });
+    } else if (fam.FamilyMem != null) {
+      res.status(400).send({ error: "He is already a system user" });
+    } else if (subscribed) {
+      console.log("Here");
+      if (subscribed.Status === "Cancelled") {
+        res
+          .status(400)
+          .send({ error: "You have already cancelled your prescription" });
+      } else {
+        const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
+          { FamilyMem: fam },
+          { Status: "Cancelled", Enddate: formattedDate }
+        );
+        console.log(subscribedUpdate);
+        res.status(200).json({ subscribedUpdate });
+      }
+    } else {
+      res.send({ Error: "You're not subscribed!" });
+    }
+  } catch {
+    res.send({ Error: "Error occurred while cancelling subscription" });
+  }
+};
+
+const viewUpcomingAppointmentsPat = async (req, res) => {
+  const username = req.user.Username;
+  //put in mind the string thing if the (Status) condition in the find query does not work
+  try {
+    const pastAppointments = await appointmentModel.find(
+      { PatientUsername: username },
+      { Status: "Upcoming" }
+    );
+    //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+    res.status(200).json(pastAppointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+//make sure from the ta that past appointments is completed bas
+const viewPastAppoitmentsPat = async (req, res) => {
+  const username = req.user.Username;
+  try {
+    const pastAppointments = await appointmentModel.find(
+      { PatientUsername: username },
+      { Status: "Completed" }
+    );
+    //maybe for usability add smth that says no appointments in case length of pastAppointments == 0
+    res.status(200).json(pastAppointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 
 Date.prototype.addDays = function (days) {
