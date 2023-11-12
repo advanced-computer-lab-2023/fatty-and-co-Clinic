@@ -31,6 +31,14 @@ const systemUsersSchema = new Schema(
       enum: ["Admin", "Patient", "Doctor"],
       required: true,
     },
+    otp: {
+      type: String,
+      required: false,
+    },
+    otpDuration: {
+      type: Number,
+      required: false,
+    },
   },
   { timestamps: true }
 );
