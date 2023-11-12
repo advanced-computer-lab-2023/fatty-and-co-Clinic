@@ -30,13 +30,13 @@ import { API_PATHS } from "API/api_paths";
 
 const SignInSchema = Yup.object().shape({
   Username: Yup.string().required("Required"),
-  Password: Yup.string()
-    .required("Required")
-    .min(8, "Password must be at least 8 characters")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
-      "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
-    ),
+  // Password: Yup.string()
+  //   .required("Required")
+  //   .min(8, "Password must be at least 8 characters")
+  //   .matches(
+  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
+  //     "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+  //   ),
 });
 
 function SignIn() {

@@ -26,6 +26,7 @@ const HealthRecordInformation = ({ title, data }) => {
                 <HealthRecordRow
                   key={row._id}
                   filename={row.filename}
+                  originalname={row.originalname}
                   note={row.note}
                   _id={row._id}
                 />

@@ -4,7 +4,7 @@ const {
   getMedicalHistory,
   downloadFile,
   removeHealthRecord,
-  GetWalletAmount,
+  getWalletAmount,
   getAmountSubscription,
   getAmountFam,
   updateFamCredit,
@@ -22,7 +22,7 @@ const {
   viewOptionPackages,
   session_index,
   createFamilymember,
-  GetFamilymembers,
+  getFamilymembers,
   getPrescriptions,
   selectPatient,
   selectPrescription,
@@ -62,7 +62,7 @@ router.get("/viewFamilyPackage", viewHealthFam);
  * @access Public
  */
 router.get("/getAllPatients", getAllPatients);
-router.get("/getWalletAmount", GetWalletAmount);
+router.get("/getWalletAmount", getWalletAmount);
 /**
  * @route DELETE /patients/deletePatient/:id
  * @desc Deletes a patient by ID
@@ -139,9 +139,9 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember", checkPatient, GetFamilymembers);
+router.get("/getFamilymember", checkPatient, getFamilymembers);
 // DO WE NEED THIS??
-router.get("/getFamilymember/:Patient", GetFamilymembers); //Changed name of params
+router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of params
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions
@@ -153,23 +153,23 @@ router.get("/getPrescriptions", getPrescriptions);
 /**
  * @route POST /patients/uploadFile
  * @desc Uploads a file health record
- * @access Patient
- * @prop {string} note - The note of the file in the body
+ * @access Patient or Doctor
+ * @prop {string} note - The note of the file in the params
  */
-router.post("/uploadFile", upload.single("file"), uploadFile);
+router.post("/uploadFile/:username", upload.single("file"), uploadFile);
 
 /**
- * @route GET /patients/getFiles
- * @desc Returns a list of all files for a patient
- * @access Patient or Admin
- * @param {string} username - The username of the patient in the body if the user is an admin
+ * @route GET /patients/getMedicalHistory
+ * @desc Returns the medical history(list of [file,note]) for a patient
+ * @access Patient or Doctor
+ * @param {string} username - The username of the Patient in the params if the user is an Doctor
  */
-router.get("/getMedicalHistory", getMedicalHistory);
+router.get("/getMedicalHistory/:username", getMedicalHistory);
 
 /**
  * @route GET /patients/downloadFile
  * @desc Downloads a file health record
- * @access Patient or Admin
+ * @access Patient or Doctor
  * @param {string} filename - The filename in the params
  */
 router.get("/downloadFile/:filename", downloadFile);
@@ -177,7 +177,7 @@ router.get("/downloadFile/:filename", downloadFile);
 /**
  * @route DELETE /patients/removeHealthRecord
  * @desc Removes a file health record
- * @access Patient or Admin
+ * @access Patient 
  * @param {string} filename - The filename in the params
  */
 router.delete("/removeHealthRecord/:filename", removeHealthRecord);

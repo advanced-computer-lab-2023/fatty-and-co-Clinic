@@ -14,17 +14,16 @@ import {
 import { AttachmentIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { API_PATHS } from "API/api_paths";
-import { useAuthContext } from "hooks/useAuthContext";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
 
-function HealthRecordForm() {
-  const { dispatch } = useMedicalHistoryContext();
+function HealthRecordForm({ PatientUsername }) {
   const { user } = useAuthContext();
-  const [ file, setFile ] = useState(null);
+  const [file, setFile] = useState(null);
+  const [note, setNote] = useState(null);
   const Authorization = `Bearer ${user.token}`;
 
   const textColor = useColorModeValue("gray.700", "white");
@@ -35,28 +34,38 @@ function HealthRecordForm() {
       my={{ sm: "24px", lg: "0px" }}
       ms={{ sm: "0px", lg: "24px" }}
     >
-      <CardHeader>
-        <Flex justify="space-between" align="center" mb="1rem" w="100%">
-          <Text fontSize="lg" color={textColor} fontWeight="bold">
-            Upload new document
-          </Text>
-        </Flex>
-      </CardHeader>
       <CardBody>
         <Flex direction="column" w="100%">
+          <Text fontSize="md" color={textColor} fontWeight="bold">
+            Upload new document
+          </Text>
           <form
             id="myForm"
             onSubmit={async (e) => {
               e.preventDefault();
+              console.log(file);
               const formData = new FormData();
+              if (!file) {
+                toast({
+                  title: "Choose a file",
+                  status: "error",
+                  duration: 3000,
+                  isClosable: true,
+                });
+                return;
+              }
               formData.append("file", file);
-              const response = await fetch(API_PATHS.uploadFile+user.username, {
-                method: "POST",
-                headers: {
-                  Authorization: Authorization,
-                },
-                body: formData,
-              });
+              formData.append("note", note);
+              const response = await fetch(
+                API_PATHS.uploadFile + PatientUsername,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: Authorization,
+                  },
+                  body: formData,
+                }
+              );
               const data = await response.json();
               if (response.ok) {
                 toast({
@@ -65,7 +74,7 @@ function HealthRecordForm() {
                   duration: 3000,
                   isClosable: true,
                 });
-                location.reload();
+                //location.reload();
                 //dispatch({ type: "ADD_PACKAGE", payload: data });
               } else {
                 toast({
@@ -77,7 +86,7 @@ function HealthRecordForm() {
               }
             }}
           >
-            <Stack spacing={3}>
+            <Stack spacing={1}>
               <FormLabel
                 htmlFor="file"
                 ms="4px"
@@ -102,11 +111,18 @@ function HealthRecordForm() {
                 id="file"
                 name="file"
                 accept=".pdf,.png,.jpg,.jpeg"
-                style={{ display: "none" }}
                 required
+                style={{ display: "none" }}
                 onChange={(e) => setFile(e.target.files[0])}
               />
 
+              <Input
+                type="text"
+                id="note"
+                name="note"
+                placeholder="enter your notes.."
+                onChange={(e) => setNote(e.target.value)}
+              />
               <Button
                 colorScheme="teal"
                 borderColor="teal.300"
