@@ -17,16 +17,17 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
-import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
+import axios from "axios";
 
-function RequestButton({ Username }) {
+
+
+function RequestButton({ Username, Status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null); // State to store data from the database
   const { user } = useAuthContext();
   const [imgSrc, setImgSrc] = useState("");
   const Authorization = `Bearer ${user.token}`;
-
   useEffect(() => {
     axios
       .get(API_PATHS.getRequest, {
@@ -63,7 +64,26 @@ function RequestButton({ Username }) {
   }, []); // Empty dependency array ensures this effect runs only once
 
   const jsonData = JSON.stringify(data);
-  ///////////////////////////////////
+
+  const handleAccept = async () => {
+    axios
+      .post(API_PATHS.acceptRequest, { Username: Username }, {
+        headers: { Authorization },
+      })
+      .catch((error) => {
+        console.error("Error accepting request:", error);
+      });
+  } 
+
+  const handleReject = async () => {
+    axios
+      .put(API_PATHS.rejectRequest, { Username: Username },{
+        headers: { Authorization },
+      })
+      .catch((error) => {
+        console.error("Error rejecting request:", error);
+      });
+  } 
 
   return (
     <>
@@ -84,20 +104,30 @@ function RequestButton({ Username }) {
               <p>Loading data...</p>
             )}
           </ModalBody>
-          <ModalFooter>
-            {/* add accept + reject buttons here */}
-            <Button
-              colorScheme="blue"
-              mr={3}
-              onClick={() => setIsModalOpen(false)}
-            >
-              Close
-            </Button>
+          <ModalFooter> 
+          {Status == "Pending" ? (
+              <div>
+                <Button colorScheme="green" mr={3} onClick={handleAccept}>
+                  Accept
+                </Button>
+                <Button colorScheme="red" mr={3} onClick={handleReject}>
+                  Reject
+                </Button>
+                <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            ) : (
+              
+              <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+                Close
+              </Button>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>
     </>
   );
-}
 
+}
 export default RequestButton;
