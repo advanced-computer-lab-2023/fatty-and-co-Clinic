@@ -55,7 +55,7 @@ const PaymentForm = ({amount,description,PackageName,NationalId}) => {
           console.log("Successful payment");
           setSuccess(true);
         }
-        else if(PackageName && !NationalId){
+      if(PackageName && !NationalId){
              
         const response = await fetch(API_PATHS.updateMySub, {
           method: "PATCH",
@@ -66,11 +66,10 @@ const PaymentForm = ({amount,description,PackageName,NationalId}) => {
           body: JSON.stringify({PackageName}),
         })
         const errorData = await response.json();
-          if (response.data.success && PackageName) {
-            console.log("Successful payment");
-            setSuccess(true);
-            return;
-          }
+          if (response.ok ) {
+              console.log("Successful payment");
+              setSuccess(true);
+            }
         else{ toast({
               title: "Failed to pay & subscribe!",
               description: errorData.error,
@@ -97,10 +96,9 @@ const PaymentForm = ({amount,description,PackageName,NationalId}) => {
             body: JSON.stringify({PackageName,NationalId}),
           });
           const errorData = await response.json();
-          if (response.data.success && !PackageName) {
+          if (response.ok ) {
             console.log("Successful payment");
             setSuccess(true);
-            return;
           }
           else{ toast({
                 title: "Failed to pay & subscribe!",
