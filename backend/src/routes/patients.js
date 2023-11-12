@@ -4,6 +4,7 @@ const {
   getMedicalHistory,
   downloadFile,
   removeHealthRecord,
+  GetWalletAmount,
   getAmountSubscription,
   getAmountFam,
   updateFamCredit,
@@ -59,7 +60,7 @@ router.get("/viewFamilyPackage",viewHealthFam)
  * @access Public
  */
 router.get("/getAllPatients", getAllPatients);
-
+router.get("/getWalletAmount", GetWalletAmount);
 /**
  * @route DELETE /patients/deletePatient/:id
  * @desc Deletes a patient by ID

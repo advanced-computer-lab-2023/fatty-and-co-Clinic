@@ -56,7 +56,7 @@ export const API_PATHS = {
   getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
- 
+  getWalletAmount:PATIENT_BASE+"getWalletAmount/",
 
 
   // Package

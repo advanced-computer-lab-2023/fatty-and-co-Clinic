@@ -980,6 +980,23 @@ const updateFamCredit= async(req,res)=>{
 
 
 
+const GetWalletAmount= async(req,res)=>{
+  try {
+    const Username=req.user.Username;
+    const patient= await patientModel.findOne({Username:Username});
+    if(patient){
+      res.status(200).json({Wallet:patient.Wallet})
+    }
+    else{
+      res.status(404).json({error:"Cannot find wallet!"})
+    }
+
+}
+  catch{
+    res.status(404).json({error:"Error occured while fetching amount!"})
+  }
+}
+
 const GetFamilymembers = async (req, res) => {
   try {
     const Username=req.user.Username;
