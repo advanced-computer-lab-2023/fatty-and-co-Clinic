@@ -10,14 +10,18 @@ const PUBLIC_KEY =
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
 export default function MakePayment({ amount }) {
-  const location=useLocation()
-  const receipt=location.state.receipt
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const amount2 = searchParams.get('amount');
+  const description = searchParams.get('description');
+  const PackageName=searchParams.get('PackageName')
+  const NationalID=searchParams.get('NationalID')
   return (
     <Elements stripe={stripeTestPromise}>
-      <PaymentForm amount={receipt.amount?receipt.amount:amount}
-                   description={receipt.description?receipt.description:"Doctor's appointment"}
-                   Package={receipt.Package?receipt.Package:""}
-                   nationalID={receipt.nationalID?receipt.nationalID:""} />
+      <PaymentForm amount={amount2?amount2:amount}
+                   description={description?description:"Doctor's appointment"}
+                   Package={PackageName?PackageName:""}
+                   NationalID={NationalID?NationalID:""} />
     </Elements>
   );
 }
