@@ -34,6 +34,7 @@ export function linkPatient() {
           Id,
           Relation
         },
+        { mode: 'no-cors' },
         { headers: { Authorization } }
       );
       if (response.data.success) {
