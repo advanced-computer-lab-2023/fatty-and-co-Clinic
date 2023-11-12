@@ -1,7 +1,5 @@
 const { default: mongoose } = require("mongoose");
 
-
-
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
@@ -258,6 +256,7 @@ const createPatient = async (req, res) => {
     Gender,
     EmergencyContactNumber,
     EmergencyContactName,
+    Wallet
   } = req.body;
   try {
     const user = await systemUserModel.addEntry(
@@ -276,7 +275,12 @@ const createPatient = async (req, res) => {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
       },
+      Wallet:Wallet
     });
+     await subscriptionModel.addEntry(
+      patient,
+      "Unsubscribed"
+    );
     res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });
