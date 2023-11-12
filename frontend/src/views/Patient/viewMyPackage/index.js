@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import { FamilymemberTable } from "./components/FamilymemberTable.js";
-import { Flex, Button, Box } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Text, Select } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-//import { useParams } from "react-router-dom";
+import MyPackageTable from "./components/MyPackageTable";
 import { useAuthContext } from "hooks/useAuthContext";
 
- 
-function Viewmembers(){
-  const { user } = useAuthContext();
-const Authorization = `Bearer ${user.token}`;
+ const ViewMyPackage= ()=>{
   const [data, setData] = useState([{}]);
+ 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
 
 
   useEffect(() => {
-    const URL1 = API_PATHS.viewFamilyMembers ;
+    const url = API_PATHS.viewMyPackage;
     axios
-      .get(URL1,  {
+      .get(url, {
         headers:{
           'Authorization': Authorization
         }})
@@ -28,8 +27,6 @@ const Authorization = `Bearer ${user.token}`;
   });
 
 
- 
-
   return (
     <Box pt="80px">
       <Flex
@@ -38,14 +35,18 @@ const Authorization = `Bearer ${user.token}`;
         pt="50px"
         justifyContent="flex-start"
       >
-        <FamilymemberTable
-          title={"Registered Family Memebers"}
-          captions={["Name", "NationalId", "Age", "Gender", "Relation"]}
-          data={data}
-        />
+          <MyPackageTable
+            title={"My Package"}
+            captions={["Name", "Price", "Session_Discount", "Medicine_Discount","Family_Discount"]}
+            data={data}
+          />
+           
+            {/* <Text fontSize="3xl" fontWeight="bold">
+              No Subscriptions Found
+            </Text> 
+           */}
       </Flex>
     </Box>
   );
 }
-
-export default Viewmembers;
+export default ViewMyPackage

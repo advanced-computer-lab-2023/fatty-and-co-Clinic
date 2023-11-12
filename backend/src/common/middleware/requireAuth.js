@@ -25,6 +25,7 @@ const requireAuth = async (req, res, next) => {
     const user = await systemUserModel.findById(data.id);
     // console.log(user);
     req.user = user; // store user data in req.user for later use
+
     next();
   } catch (err) {
     // if token expired or invalid then return null

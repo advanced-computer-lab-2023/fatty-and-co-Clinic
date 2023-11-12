@@ -136,10 +136,6 @@ router.get(
   checkDoctor,
   viewPatientInfoAndHealthRecords
 );
-router.post(
-  "/followupAppointment",
-  checkDoctor,
-  followupAppointment
-);
+router.post("/followupAppointment", checkDoctor, followupAppointment);
 
 module.exports = router;
