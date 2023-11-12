@@ -71,8 +71,8 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  */
 router.get("/getPatient/:id", getPatient);
 router.get("/getOptionPackages", viewOptionPackages);
-router.get("/getAmountCredit", getAmountSubscription)  //gets amount to be paid for self
-router.get("/getAmountCreditFam",getAmountFam)//gets amount to be paid for fam
+router.patch("/getAmountCredit", getAmountSubscription)  //gets amount to be paid for self
+router.patch("/getAmountCreditFam",getAmountFam)//gets amount to be paid for fam
 router.patch("/updateFamSubs",updateFamCredit) //updates status fam
 router.patch("/updateMySubs",updateSubscription) //updates status leya 
 router.patch("/cancelSubscription",cancelSubscription);

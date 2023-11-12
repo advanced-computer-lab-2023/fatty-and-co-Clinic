@@ -15,13 +15,13 @@ export default function MakePayment({ amount }) {
   const amount2 = searchParams.get('amount');
   const description = searchParams.get('description');
   const PackageName=searchParams.get('PackageName')
-  const NationalID=searchParams.get('NationalID')
+  const NationalId=searchParams.get('NationalId')
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm amount={amount2?amount2:amount}
                    description={description?description:"Doctor's appointment"}
-                   Package={PackageName?PackageName:""}
-                   NationalID={NationalID?NationalID:""} />
+                   PackageName={PackageName?PackageName:""}
+                   NationalId={NationalId?NationalId:""} />
     </Elements>
   );
 }

@@ -9,7 +9,7 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
 import { API_PATHS } from "API/api_paths";
 import Card from "components/Card/Card.js";
@@ -22,14 +22,95 @@ import MakePayment from "../makePayment";
 function SubscribePackage() {
   const [PackageName, setPackageName] = useState("");
   const [NationalId, setNationalId] = useState("");
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const history = useHistory();
+  const [selectedOption, setSelectedOption] = useState('');
+
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
    const { user } = useAuthContext();
    const Authorization = `Bearer ${user.token}`;
 
    const handleSubscribeCredit= async (e) => {
+    e.preventDefault();
+  
+    try {
+
+      
+        if (!PackageName) {
+          toast({
+            title: "Please fill the Package field!",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          return; // Don't proceed further
+        } 
+        else if(PackageName && !NationalId){
+          
+        const response = await fetch(API_PATHS.getAmountCredit, {
+          method: "PATCH",
+          headers: {
+            Authorization,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({PackageName}),
+        });
+        const errorData = await response.json();
+        if (response.ok) {
+          const { amount, description, PackageName } = errorData;
+          const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}`;
+          history.replace(redirectUrl);
+        }
+        else{ toast({
+              title: "Failed to pay & subscribe!",
+              description: errorData.error,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+            return;
+        }}
+        else if(PackageName && NationalId){
+          const response = await fetch(API_PATHS.getAmountCreditFam, {
+            method: "PATCH",
+            headers: {
+              Authorization,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({PackageName,NationalId}),
+          });
+          const errorData = await response.json();
+          if (response.ok) {
+            const { amount, description,PackageName,NationalId } = response.data;
+            const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}&NationalId=${NationalId}`;
+            history.replace(redirectUrl);
+          
+            }
+          else {
+            toast({
+              title: "Failed to pay & subscribe",
+              description: errorData.error,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+          }
+      }} catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
+
+   const handleNoSelected= async(e)=>{
+    e.preventDefault();
+    toast({
+      title: "Please select a payment method!",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+    return;
+   }
+   const handleSubscribe = async (e) => {
     e.preventDefault();
   
     try {
@@ -40,66 +121,9 @@ function SubscribePackage() {
           duration: 9000,
           isClosable: true,
         });
-        return; // Don't proceed further
+        return; 
       } 
-      else if(PackageName && !NationalId){
-          useEffect(() => {
-            const url = API_PATHS.getAmountCredit;
-            axios
-              .get(url, { params: {PackageName}, headers: { Authorization } })
-              .then((response) => {
-                const { amount, description,PackageName } = response.data;
-                const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}`;
-                history.replace(redirectUrl);
-              })
-              .catch((error) => toast({
-                title: "Failed to pay & subscribe for family member!",
-                description: error,
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-              }));
-          })
-  }   else if(PackageName && NationalId){
-    useEffect(() => {
-      const url = API_PATHS.getAmountCreditFam;
-      axios
-        .get(url, { params: {PackageName,NationalId}, headers: { Authorization } })
-        .then((response) => {
-          const { amount, description,PackageName,NationalId } = response.data;
-          const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}&NationalID=${NationalId}`;
-          history.replace(redirectUrl);
-        })
-        .catch((error) =>    
-          toast({
-          title: "Failed to pay & subscribe for family member!",
-          description: error,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        }));
-    })
-
-      }} catch (error) {
-      console.error("An error occurred", error);
-    }
-  };
-
-
-   const handleSubscribe = async (e) => {
-    e.preventDefault();
-  
-    try {
-      if (Package === "" ) {
-        toast({
-          title: "Please fill the Package field!",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-        return; // Don't proceed further
-      } 
-      else if(PackageName!=="" && NationalId===""){
+      else if(PackageName&& !NationalId){
       const response = await fetch(API_PATHS.subscribePackageSelf, {
         method: "PATCH",
         headers: {
@@ -125,7 +149,7 @@ function SubscribePackage() {
           isClosable: true,
         });
       }}
-      else if(PackageName!=="" && NationalId!==""){
+      else if(PackageName && NationalId){
         const response = await fetch(API_PATHS.subscribePackageFam, {
           method: "PATCH",
           headers: {
@@ -176,8 +200,8 @@ function SubscribePackage() {
         <Flex direction="column" w="100%">
           <form >
           <Text>Steps To Subscribe:</Text>
-          <Text>1. Yourself by enter package name</Text>
-          <Text>2. Your family by entering package name & National ID</Text>
+          <Text>1.Enter package name for yourself</Text>
+          <Text>2. Enter package name & national ID of family member</Text>
           
           <br/>
             <Stack spacing={3}>
@@ -195,6 +219,22 @@ function SubscribePackage() {
                 value={NationalId}
                 onChange={(e) => setNationalId(e.target.value)}
               />
+               <Box>
+          <select
+            value={selectedOption}
+            onChange={(e) => setSelectedOption(e.target.value)}
+            style={{
+              backgroundColor: "teal.300", // Mint blue background color
+              color: '#319795', // Mint blue text color
+              padding: '8px 12px',
+              borderRadius: '4px',
+              border: '1px solid #319795', // Mint blue border color
+            }}
+          >   <option value="">Payment Method</option>
+            <option value="Wallet">Wallet</option>
+            <option value="Credit">Credit Card</option>
+          </select>
+        </Box>
               <Button
                 colorScheme="teal"
                 borderColor="teal.300"
@@ -203,22 +243,9 @@ function SubscribePackage() {
                 p="8px 32px"
                 type="submit"
                 textColor="white"
-                onClick={handleSubscribe}
+                onClick={selectedOption==="Wallet"?handleSubscribe:selectedOption==="Credit"?handleSubscribeCredit:handleNoSelected}
               > <Icon as={FaUserPlus} mr={2} />
-              Pay using Wallet
-              </Button>
-                 <Button
-                colorScheme="teal"
-                borderColor="teal.300"
-                color="teal.300"
-                fontSize="xs"
-                p="8px 32px"
-                type="submit"
-                textColor="white"
-                onClick={handleSubscribeCredit}
-              >
-                <Icon as={FaUserPlus} mr={2} />
-                Pay using Credit Card
+              Pay 
               </Button>
             </Stack>
           </form>

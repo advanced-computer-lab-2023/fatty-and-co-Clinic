@@ -24,7 +24,7 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = ({amount,description,Package,nationalID}) => {
+const PaymentForm = ({amount,description,PackageName,NationalId}) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
@@ -51,41 +51,71 @@ const PaymentForm = ({amount,description,Package,nationalID}) => {
           },
           { headers: { Authorization } }
         );
-        if (response.data.success && !Package) {
+        if (response.data.success ) {
           console.log("Successful payment");
           setSuccess(true);
         }
-        else if(Package && nationalID===""){
-          const response = await axios.patch(
-            API_PATHS.updateMySub,
-            {Package:Package
-            },
-            { headers: { Authorization } }
-          )
-          if (response.data.success) {
-          console.log("Subscription payment completed successfully!");
-          setSuccess(true);}
-          else {
-            console.log(error.message);
+        else if(PackageName && !NationalId){
+             
+        const response = await fetch(API_PATHS.updateMySub, {
+          method: "PATCH",
+          headers: {
+            Authorization,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({PackageName}),
+        })
+        const errorData = await response.json();
+          if (response.data.success && PackageName) {
+            console.log("Successful payment");
+            setSuccess(true);
+            return;
           }
+        else{ toast({
+              title: "Failed to pay & subscribe!",
+              description: errorData.error,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+            return;
+        }}
+          // if (response.data.success) {
+          // console.log("Subscription payment completed successfully!");
+          // setSuccess(true);}
+          // else {
+          //   console.log(error.message);
+          // }
          
-        }
-        else if(Package && nationalID){
-          const response = await axios.patch(
-            API_PATHS.updateFamSub,
-            {Package:Package,
-             NationalID:nationalID
+        else if(PackageName && NationalId){
+          const response = await fetch(API_PATHS.updateFamSub, {
+            method: "PATCH",
+            headers: {
+              Authorization,
+              "Content-Type": "application/json",
             },
-            { headers: { Authorization } }
-          )
-          if (response.data.success) {
-          console.log("Subscription payment completed for family member successfully!");
-          setSuccess(true);}
-          else {
-            console.log(error.message);
+            body: JSON.stringify({PackageName,NationalId}),
+          });
+          const errorData = await response.json();
+          if (response.data.success && !PackageName) {
+            console.log("Successful payment");
+            setSuccess(true);
+            return;
           }
-         
-        }
+          else{ toast({
+                title: "Failed to pay & subscribe!",
+                description: errorData.error,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              return;}}
+          // if (response.data.success) {
+          // console.log("Subscription payment completed for family member successfully!");
+          // setSuccess(true);}
+          // else {
+          //   console.log(error.message);
+          // }
      
      else {
       console.log(error.message);

@@ -291,7 +291,7 @@ const payForSubscription= async(req,res)=>{
       }
     }  
     else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.Package.Name
-    ===Package.Name){
+    ===PackageName){
 
       if(patient.Wallet>amount){
         const updatePat= await patientModel.findOneAndUpdate({Username:curr_user},{Wallet:patient.Wallet-amount})
@@ -313,12 +313,12 @@ const payForSubscription= async(req,res)=>{
     
   }
  
-  else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name!==Package.Name){
+  else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name!==PackageName){
 
-      res.status(404).json({error:"If you want to subscribe to the "+Package.Name+" package, make sure to cancel your " +patSubscription.Package.Name+" subscription first!"})
+      res.status(404).json({error:"If you want to subscribe to the "+PackageName+" package, make sure to cancel your " +patSubscription.Package.Name+" subscription first!"})
       }
  
- else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name==Package.Name){
+ else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name==PackageName){
   res.status(404).json({error:"Already Paid for subscription!"});
        }
     
@@ -326,7 +326,7 @@ const payForSubscription= async(req,res)=>{
       res.status(404).json({error:"Failed to subscribing "})
     }
   } catch {
-    res.status(400).send({ message: "Failed to pay" });
+    res.status(400).send({ error: "Failed to pay" });
   }
 }
 
@@ -409,12 +409,12 @@ const getAmountSubscription= async(req,res)=>{
     
   }
  
-  else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name!==Package.Name){
+  else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name!==PackageName){
 
-      res.status(404).json({error:"If you want to subscribe to the "+Package.Name+" package, make sure to cancel your " +patSubscription.Package.Name+" subscription first!"})
+      res.status(404).json({error:"If you want to subscribe to the "+PackageName+" package, make sure to cancel your " +patSubscription.Package.Name+" subscription first!"})
       }
  
- else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name==Package.Name){
+ else if(patSubscription.Status==="Subscribed" && patSubscription.Package.Name==PackageName){
   res.status(404).json({error:"Already Paid for subscription!"});
        }
     
@@ -422,7 +422,7 @@ const getAmountSubscription= async(req,res)=>{
       res.status(404).json({error:"Failed to subscribing "})
     }
   } catch {
-    res.status(400).send({ message: "Failed to pay" });
+    res.status(400).send({ error: "Failed to pay" });
   }
 }
 
@@ -507,7 +507,7 @@ const updateSubscription= async(req,res)=>{
    
     }  
     else if(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.Package.Name
-    ===Package.Name){
+    ===PackageName){
 
         const patient12 = await subscriptionModel.findOneAndUpdate({Patient:patient},
           { 
@@ -517,14 +517,14 @@ const updateSubscription= async(req,res)=>{
             Renewaldate:formattedDate2,
             Enddate:formattedDate11
           })
-        res.status(200).json(updatePat)
+        res.status(200).json("Subscription payment proceeded successfully!")
     
   }
     else  {
-      res.status(404).json({error:"Failed to subscribing "})
+      res.status(404).json({error:"Failed to subscribe!"})
     }
   } catch {
-    res.status(400).send({ message: "Failed to pay" });
+    res.status(400).send({ error: "Failed to pay" });
   }
 }
 
@@ -532,7 +532,7 @@ const payForFamSubscription = async (req, res) => {
   console.log("Entered");
   try{
  const curr_user= req.user.Username;
- const {NationalId,PackageName}=req.body;
+ const {PackageName,NationalId}=req.body;
  const Package = await  packageModel.findOne({Name:PackageName});
  const patient= await patientModel.findOne({Username:curr_user});
  const relative= await familyMemberModel.findOne({Patient:patient,NationalId:NationalId}).populate("Patient").populate("FamilyMem")
@@ -651,7 +651,7 @@ const getAmountFam = async (req, res) => {
   console.log("Entered");
   try{
  const curr_user= req.user.Username;
- const {NationalId,PackageName}=req.body;
+ const {PackageName,NationalId}=req.body;
  const Package = await  packageModel.findOne({Name:PackageName});
  const patient= await patientModel.findOne({Username:curr_user});
  const relative= await familyMemberModel.findOne({Patient:patient,NationalId:NationalId}).populate("Patient").populate("FamilyMem")
@@ -703,16 +703,16 @@ const getAmountFam = async (req, res) => {
   const max= patSubscription.Package!=null && patSubscription.Status==="Subscribed"?Package.Price*((patSubscription.Package.Family_Discount)/100):0
   const amount=Package.Price-(max);
  
-  if(subscription.Status==="Subscribed" && formattedDate===formattedDate4 &&subscription.Package.Name==Package.Name ){
-    res.status(200).json({amount:amount,Package:Package, description:"Subscription payment"})
+  if(subscription.Status==="Subscribed" && formattedDate===formattedDate4 &&subscription.Package.Name==PackageName ){
+    res.status(200).json({amount:amount,description:"Subscription payment",PackageName:PackageName })
   }
  else  if(subscription.Status==="Unsubscribed"||subscription.Status==="Cancelled"){
   
-    res.status(200).json({amount:amount,Package:Package, description:"Subscription payment"})
+    res.status(200).json({amount:amount, description:"Subscription payment",PackageName:PackageName})
     
   } 
   else if(subscription.Status==="Subscribed" && subscription.Package.Name!==Package.Name){
-    res.status(404).json({error:"If you want to subscribe "+ relative.Name+" to the "+Package.Name+" package, make sure to cancel the " +patSubscription.Package.Name+" subscription first!"})
+    res.status(404).json({error:"If you want to subscribe "+ relative.Name+" to the "+PackageName+" package, make sure to cancel the " +subscription.Package.Name+" subscription first!"})
 
     
   
@@ -852,7 +852,7 @@ const updateFamCredit= async(req,res)=>{
   console.log("Entered");
   try{
  const curr_user= req.user.Username;
- const {NationalId,PackageName}=req.body;
+ const {PackageName,NationalId}=req.body;
  const Package = await  packageModel.findOne({Name:PackageName});
  const patient= await patientModel.findOne({Username:curr_user});
  const relative= await familyMemberModel.findOne({Patient:patient,NationalId:NationalId}).populate("Patient").populate("FamilyMem")
