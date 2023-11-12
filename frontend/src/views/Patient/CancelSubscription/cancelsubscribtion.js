@@ -20,8 +20,8 @@ import CardHeader from "components/Card/CardHeader.js";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
 function CancelSubscription() {
-  const [PackageName, setPackageName] = useState("");
-  const [PackageName2, setPackageName2] = useState("");
+  const [Package, setPackage] = useState("");
+  const [Package2, setPackage2] = useState("");
   const [NationalId, setNationalId] = useState("");
   const [selectedOption, setSelectedOption] = useState('');
   const toast = useToast();
@@ -33,9 +33,9 @@ function CancelSubscription() {
     e.preventDefault();
   
     try {
-      // if (PackageName2 === "") {
+      // if (Package2 === "") {
       //   toast({
-      //     title: "Please fill the PackageName field!",
+      //     title: "Please fill the Package field!",
       //     status: "error",
       //     duration: 9000,
       //     isClosable: true,
@@ -49,7 +49,7 @@ function CancelSubscription() {
           Authorization,
           "Content-Type": "application/json",
         },
-      // body: JSON.stringify({PackageName2}),
+      // body: JSON.stringify({Package2}),
       });
   
       console.log("Response", response.status);
@@ -62,7 +62,7 @@ function CancelSubscription() {
           isClosable: true,
         });
   
-        setPackageName2("");
+        setPackage2("");
        // setNationalId(""); // Clear the input fields
       } else {
         toast({
@@ -81,9 +81,9 @@ function CancelSubscription() {
     e.preventDefault();
   
     try {
-      // if (PackageName === "") {
+      // if (Package === "") {
       //   toast({
-      //     title: "Please fill the PackageName field!",
+      //     title: "Please fill the Package field!",
       //     status: "error",
       //     duration: 9000,
       //     isClosable: true,
@@ -119,7 +119,7 @@ function CancelSubscription() {
           isClosable: true,
         });
   
-        setPackageName("");
+        setPackage("");
         setNationalId(""); // Clear the input fields
       } else {
         toast({
@@ -174,9 +174,9 @@ function CancelSubscription() {
               {/* <Input
                 variant="filled"
                 type="text"
-                placeholder="PackageName"
-                value={PackageName}
-                onChange={(e) => setPackageName(e.target.value)}
+                placeholder="Package"
+                value={Package}
+                onChange={(e) => setPackage(e.target.value)}
               /> */}
                  <Input
                 variant="filled"
@@ -208,9 +208,9 @@ function CancelSubscription() {
               {/* <Input
                 variant="filled"
                 type="text"
-                placeholder="PackageName"
-                value={PackageName2}
-                onChange={(e) => setPackageName2(e.target.value)}
+                placeholder="Package"
+                value={Package2}
+                onChange={(e) => setPackage2(e.target.value)}
               /> */}
            
               <Button

@@ -187,7 +187,7 @@ function PatientTable() {
               <p>Mobile Number: {selectedPatient.MobileNum}</p>
               <p>Date of birth: {selectedPatient.DateOfBirth}</p>
               <p>Gender:{selectedPatient.Gender}</p>
-              <p>Package Name:{selectedPatient.PackageName}</p>
+              <p>Package Name:{selectedPatient.Package}</p>
               <p>
                 Emergency Contact Name:
                 {selectedPatient.EmergencyContact.FullName}

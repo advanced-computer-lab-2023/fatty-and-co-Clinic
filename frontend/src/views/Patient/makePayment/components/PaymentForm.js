@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
 import { Input } from "@chakra-ui/react";
-
+import {useLocation} from "react-router-dom"
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -24,7 +24,7 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = ({amount}) => {
+const PaymentForm = ({amount,description,Package,nationalID}) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
@@ -47,20 +47,53 @@ const PaymentForm = ({amount}) => {
           {
             id,
             amount: amount * 100,
+            description:description
           },
           { headers: { Authorization } }
         );
-        if (response.data.success) {
+        if (response.data.success && !Package) {
           console.log("Successful payment");
           setSuccess(true);
         }
-      } catch (error) {
-        console.log("Error", error);
-      }
-    } else {
+        else if(Package && nationalID===""){
+          const response = await axios.patch(
+            API_PATHS.updateMySub,
+            {Package:Package
+            },
+            { headers: { Authorization } }
+          )
+          if (response.data.success) {
+          console.log("Subscription payment completed successfully!");
+          setSuccess(true);}
+          else {
+            console.log(error.message);
+          }
+         
+        }
+        else if(Package && nationalID){
+          const response = await axios.patch(
+            API_PATHS.updateFamSub,
+            {Package:Package,
+             NationalID:nationalID
+            },
+            { headers: { Authorization } }
+          )
+          if (response.data.success) {
+          console.log("Subscription payment completed for family member successfully!");
+          setSuccess(true);}
+          else {
+            console.log(error.message);
+          }
+         
+        }
+     
+     else {
       console.log(error.message);
     }
-  };
+  }
+  catch{error
+  }
+}}
 
   const formContainerStyle = {
     position: "relative",

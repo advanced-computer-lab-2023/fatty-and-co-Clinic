@@ -13,7 +13,7 @@ const subscriptionschema = new Schema(
       ref:"FamilyMember",
       required:false
     },
-      PackageName: {
+      Package: {
         type: mongoose.Schema.Types.ObjectId ,
         ref: "Package",
         required: false,

@@ -38,7 +38,7 @@ import FamPackageTable from "./components/FamPackageTable";
       >
          <FamPackageTable
             title={"My Package"}
-            captions={["Name", "PackageName","Price","Session_Discount", "Medicine_Discount","Family_Discount"]}
+            captions={["Name", "Package","Price","Session_Discount", "Medicine_Discount","Family_Discount"]}
             data={data}
          
            ></FamPackageTable>

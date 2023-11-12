@@ -43,7 +43,7 @@ import MyPackageSubsTable from "./components/MyPackageTable";
       >
          <MyPackageSubsTable
             title={"My Package"}
-            captions={["PackageName", "Status","Enddate", "Startdate","Renewaldate"]}
+            captions={["Package", "Status","Enddate", "Startdate","Renewaldate"]}
             data={data}
            />
             {/* <Text fontSize="3xl" fontWeight="bold">

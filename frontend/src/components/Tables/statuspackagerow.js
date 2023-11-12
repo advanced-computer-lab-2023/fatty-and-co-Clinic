@@ -12,7 +12,7 @@ import {
   } from "@chakra-ui/react";
   import React from "react";
 function Statuspackagerow(props) {
-    const { Name, Status,  PackageName, Enddate,Startdate,Renewaldate} = props;
+    const { Name, Status,  Package, Enddate,Startdate,Renewaldate} = props;
     const textColor = useColorModeValue("gray.700", "white");
   
     return (
@@ -34,7 +34,7 @@ function Statuspackagerow(props) {
         <Td minWidth={{ sm: "75px" }} pl="40px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-              {PackageName}
+              {Package}
             </Text>
           </Flex>
         </Td>

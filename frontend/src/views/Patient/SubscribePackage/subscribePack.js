@@ -16,36 +16,115 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { useAuthContext } from "hooks/useAuthContext";
+import MakePayment from "../makePayment";
 function SubscribePackage() {
-  const [PackageName, setPackageName] = useState("");
-  // const [PackageName2, setPackageName2] = useState("");
+  const [Package, setPackage] = useState("");
   const [NationalId, setNationalId] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
-
    const { user } = useAuthContext();
    const Authorization = `Bearer ${user.token}`;
-   const handleSubscribe = async (e) => {
+
+   const handleSubscribeCredit= async (e) => {
     e.preventDefault();
   
     try {
-      if (PackageName === "" ) {
+      if (!Package) {
         toast({
-          title: "Please fill the PackageName field!",
+          title: "Please fill the Package field!",
           status: "error",
           duration: 9000,
           isClosable: true,
         });
         return; // Don't proceed further
       } 
-      else if(PackageName!=="" && NationalId===""){
+      else if(Package && !NationalId){
+      
+        const handleCreditPaySelf = () => {
+          useEffect(() => {
+            const url = API_PATHS.getAmountSelf;
+            axios
+              .get(url, { params: {Package}, headers: { Authorization } })
+              .then((response) => {
+                
+              })
+              .catch((err) => console.log(err));
+          });
+        };
+      const errorData = await response.json();
+      if (response.ok) {
+        toast({
+          title: "Subscription process successfull!",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+  } else {
+        toast({
+          title: "Failed to pay & subscribe",
+          description: errorData.error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }}
+      else if(Package!=="" && NationalId!==""){
+        const response = await fetch(API_PATHS.subscribePackageFam, {
+          method: "PATCH",
+          headers: {
+            Authorization,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({Package,NationalId}),
+        });
+        const errorData = await response.json();
+        if (response.ok) {
+          toast({
+            title: "Subscription process successfull for family member!",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+    } else {
+          toast({
+            title: "Failed to pay & subscribe for family member!",
+            description: errorData.error,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
+
+
+   const handleSubscribe = async (e) => {
+    e.preventDefault();
+  
+    try {
+      if (Package === "" ) {
+        toast({
+          title: "Please fill the Package field!",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        return; // Don't proceed further
+      } 
+      else if(Package!=="" && NationalId===""){
       const response = await fetch(API_PATHS.subscribePackageSelf, {
         method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({PackageName}),
+        body: JSON.stringify({Package}),
       });
       const errorData = await response.json();
       if (response.ok) {
@@ -64,14 +143,14 @@ function SubscribePackage() {
           isClosable: true,
         });
       }}
-      else if(PackageName!=="" && NationalId!==""){
+      else if(Package!=="" && NationalId!==""){
         const response = await fetch(API_PATHS.subscribePackageFam, {
           method: "PATCH",
           headers: {
             Authorization,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({PackageName,NationalId}),
+          body: JSON.stringify({Package,NationalId}),
         });
         const errorData = await response.json();
         if (response.ok) {
@@ -123,9 +202,9 @@ function SubscribePackage() {
               <Input
                 variant="filled"
                 type="text"
-                placeholder="PackageName"
-                value={PackageName}
-                onChange={(e) => setPackageName(e.target.value)}
+                placeholder="Package"
+                value={Package}
+                onChange={(e) => setPackage(e.target.value)}
               />
                  <Input
                 variant="filled"
@@ -144,6 +223,16 @@ function SubscribePackage() {
                 textColor="white"
                 onClick={handleSubscribe}
               >
+                 <Button
+                colorScheme="teal"
+                borderColor="teal.300"
+                color="teal.300"
+                fontSize="xs"
+                p="8px 32px"
+                type="submit"
+                textColor="white"
+                onClick={handleSubscribeCredit}
+              ></Button>
                 <Icon as={FaUserPlus} mr={2} />
                 Pay with wallet
               </Button>

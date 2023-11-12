@@ -46,7 +46,11 @@ export const API_PATHS = {
   subscribePackageSelf: PATIENT_BASE + "payForSubscription/",
   subscribePackageFam: PATIENT_BASE + "payFamilySubscription/",
   viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
-
+  getAmountCredit:PATIENT_BASE+"getAmountCredit/",
+  getAmountCreditFam:PATIENT_BASE+"getAmountCreditFam/",
+  updateFamSub:PATIENT_BASE+"updateFamSubs/",
+  updateMySub:PATIENT_BASE+"updateMySubs/",
+  viewHealthPackagewithstatus:PATIENT_BASE+"viewHealthPackagewithstatus",
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",

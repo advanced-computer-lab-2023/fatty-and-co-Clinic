@@ -293,12 +293,12 @@ const filterDoctor = async (req, res) => {
 
     //getting package dis of patient
     patientModel.findOne({ Username: username }).then(async (result) => {
-      // Extract the 'PackageName' property from the patient document
-      const packageName = result.PackageName;
-      // If the 'PackageName' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
-      if (packageName) {
+      // Extract the 'Package' property from the patient document
+      const Package = result.Package;
+      // If the 'Package' property is not null, use the 'find' method of the 'packageModel' to retrieve a package document with the specified 'Name'
+      if (Package) {
         await packageModel
-          .findOne({ Name: packageName })
+          .findOne({ Name: Package })
           .then((result) => {
             // Extract the 'SessionDiscount' property from the package document and set the 'packageDis' variable to its value
             packageDis = result.Session_Discount;

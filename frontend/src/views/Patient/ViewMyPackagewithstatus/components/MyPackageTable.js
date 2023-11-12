@@ -46,8 +46,8 @@ const MyPackageSubsTable = ({ title, captions, data }) => {
            <Tbody>
           
                  <MyPackageSubRow
-                   key={data.PackageName?data.PackageName.Name:""}
-                   Name={data.PackageName?data.PackageName.Name:""}
+                   key={data.Package?data.Package.Name:""}
+                   Name={data.Package?data.Package.Name:""}
                    Status={data.Status?data.Status:""}
                    Enddate={data.Enddate?data.Enddate:""}
                    Startdate={data.Startdate?data.Startdate:""}

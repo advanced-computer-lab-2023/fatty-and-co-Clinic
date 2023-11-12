@@ -49,11 +49,11 @@ import {
                   <FamPackageRow
                     key={id}
                     FamName={name}
-                    packName={row.PackageName?row.PackageName.Name:""}
-                    packPrice={row.PackageName?row.PackageName.Price:""}
-                    packSessionDiscount={row.PackageName?row.PackageName.Session_Discount:""}
-                    packMedicineDiscount={row.PackageName?row.PackageName.Medicine_Discount:""}
-                    packFamilyDiscount={row.PackageName?row.PackageName.Family_Discount:""}
+                    packName={row.Package?row.Package.Name:""}
+                    packPrice={row.Package?row.Package.Price:""}
+                    packSessionDiscount={row.Package?row.Package.Session_Discount:""}
+                    packMedicineDiscount={row.Package?row.Package.Medicine_Discount:""}
+                    packFamilyDiscount={row.Package?row.Package.Family_Discount:""}
                   />
                 );}
               })}

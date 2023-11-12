@@ -1,5 +1,9 @@
 const express = require("express");
 const {
+  getAmountSubscription,
+  getAmountFam,
+  updateFamCredit,
+  updateSubscription,
   payForFamSubscription,
   cancelSubscription,
   viewHealthFam,
@@ -29,6 +33,19 @@ const { checkPatient } = require("../common/middleware/checkType");
 
 const router = express.Router();
 
+/** 
+ * @route POST /patients/addPatient
+ * @desc Creates a new patient
+ * @access Public
+ * @prop {string} Name - The name of the patient
+ * @prop {string} Username - The username of the patient
+ * @prop {string} Password - The password of the patient
+ * @prop {string} Email - The email of the patient
+ * @prop {string} NationalID - The national ID of the patient
+ * @prop {number} Age - The age of the patient
+ * @prop {string} Gender - The gender of the patient ["M", "F"]
+ */
+router.get("/viewFamilyPackage",viewHealthFam)
 /**
 =======
 >>>>>>> main
@@ -44,7 +61,6 @@ router.get("/getAllPatients", getAllPatients);
  * @access Public
  * @param {string} id - The ID of the patient to delete
  */
-// TODO: add type check as middleware if needed
 router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one deleting is an admin or the currently logged in patient
 
 /**
@@ -54,62 +70,16 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
-/**
- * @route GET /patients/viewFamilyPackage
- * @desc View family health package for the patient
- * @access Private
- */
-router.get("/viewFamilyPackage", checkPatient, viewHealthFam);
-
-/**
- * @route GET /patients/getOptionPackages
- * @desc Get option packages for the patient
- * @access Private
- */
-router.get("/getOptionPackages", checkPatient, viewOptionPackages);
-
-/**
- * @route PATCH /patients/cancelSubscription
- * @desc Cancel subscription for the patient
- * @access Private
- */
-router.patch("/cancelSubscription", checkPatient, cancelSubscription);
-
-/**
- * @route PATCH /patients/cancelSubscriptionfamilymember
- * @desc Cancel subscription for the family member of the patient
- * @access Private
- */
-router.patch(
-  "/cancelSubscriptionfamilymember",
-  checkPatient,
-  cancelSubscriptionfamilymember
-);
-
-/**
- * @route PATCH /patients/payForSubscription
- * @desc Pay for subscription for the patient
- * @access Private
- */
-router.patch("/payForSubscription", checkPatient, payForSubscription);
-
-/**
- * @route GET /patients/viewHealthPackagewithstatus
- * @desc View health package with status for the patient
- * @access Private
- */
-router.get(
-  "/viewHealthPackagewithstatus",
-  checkPatient,
-  viewHealthPackagewithstatus
-);
-
-/**
- * @route GET /patients/viewHealthFamwithstatus
- * @desc View health family with status for the patient
- * @access Private
- */
-router.get("/viewHealthFamwithstatus", checkPatient, viewHealthFamwithstatus);
+router.get("/getOptionPackages", viewOptionPackages);
+router.get("/getAmountCredit", getAmountSubscription)  //gets amount to be paid for self
+router.get("/getAmountCreditFam",getAmountFam)//gets amount to be paid for fam
+router.patch("/updateFamSubs",updateFamCredit) //updates status fam
+router.patch("/updateMySubs",updateSubscription) //updates status leya 
+router.patch("/cancelSubscription",cancelSubscription);
+router.patch("/cancelSubscriptionfamilymember",cancelSubscriptionfamilymember);
+router.patch("/payForSubscription",payForSubscription);
+router.get("/viewHealthPackagewithstatus",viewHealthPackagewithstatus);
+router.get("/viewHealthFamwithstatus",viewHealthFamwithstatus);
 //router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id
@@ -161,14 +131,13 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember/:PatientID", GetFamilymembers); //Changed name of params
+router.get("/getFamilymember/:Patient", GetFamilymembers);  //Changed name of params
 router.get("/getFamilymember", checkPatient, GetFamilymembers);
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions
  * @access Public
  */
-// TODO: add type check as middleware if needed
 router.get("/getPrescriptions", getPrescriptions);
 
 /**
@@ -176,7 +145,6 @@ router.get("/getPrescriptions", getPrescriptions);
  * @desc Returns a list of all patients
  * @access Public
  */
-// TODO: add type check as middleware if needed
 router.get("/selectPatient", selectPatient);
 
 /**
@@ -185,7 +153,6 @@ router.get("/selectPatient", selectPatient);
  * @access Public
  * @param {string} id - The ID of the prescription to get
  */
-// TODO: add type check as middleware if needed
 router.get("/selectPrescription", selectPrescription);
 
 /**
@@ -195,33 +162,11 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
+router.post("/subscribehealthpackage",subscribehealthpackage)
+router.post("/subscribepackagefamilymem",subscribepackagefamilymem)
+router.get("/viewMyPackage/",viewHealthPackage)
+router.patch("/payFamilySubscription/",payForFamSubscription)
 
-/**
- * @route POST /patients/subscribehealthpackage
- * @desc Subscribe to a health package for the patient
- * @access Private
- */
-router.post("/subscribehealthpackage", subscribehealthpackage);
 
-/**
- * @route POST /patients/subscribepackagefamilymem
- * @desc Subscribe to a health package for a family member of the patient
- * @access Private
- */
-router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
-
-/**
- * @route GET /patients/viewMyPackage
- * @desc View the health package of the patient
- * @access Private
- */
-router.get("/viewMyPackage/", viewHealthPackage);
-
-/**
- * @route PATCH /patients/payFamilySubscription
- * @desc Pay for the family subscription for the patient
- * @access Private
- */
-router.patch("/payFamilySubscription/", payForFamSubscription);
 
 module.exports = router;
