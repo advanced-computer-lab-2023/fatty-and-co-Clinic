@@ -44,10 +44,10 @@ export const AppointmentsTable = ({ title, captions, data }) => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => {
+            {data?.map((row) => {
               return (
                 <AppointmentsRow
-                  key={row.PatientUsername}
+                  key={row._id}
                   PatientName={row.PatientName}
                   PatientUsername={row.PatientUsername}
                   Type={row.FollowUp ? "Follow Up" : "First Time"}

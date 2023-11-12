@@ -16,6 +16,7 @@ import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
+import MedicalHistoryPatient from "views/Patient/viewMedicalHistory/medicalHistory";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
@@ -144,6 +145,13 @@ var dashRoutes = [
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
+    layout: "/patient",
+  },
+  {
+    path: "/medicalhistory/:patientUsername",
+    name: "Medical History",
+    icon: <HomeIcon color="inherit" />,
+    component: MedicalHistoryPatient,
     layout: "/patient",
   },
   {
