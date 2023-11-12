@@ -361,7 +361,6 @@ const subscribehealthpackage = async (req, res) => {
 };
 
 const uploadFile = async (req, res) => {
-  console.log("here");
   var user = req.user.Username;
   if (req.user.Type === "Doctor") {
     user = req.params.username;
