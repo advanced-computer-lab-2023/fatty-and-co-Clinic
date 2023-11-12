@@ -140,7 +140,7 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @access Patient
  */
 router.get("/getFamilymember", checkPatient, getFamilymembers);
-// DO WE NEED THIS??
+// TODO: DO WE NEED THIS??
 router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of params
 /**
  * @route GET /patients/getPrescriptions
