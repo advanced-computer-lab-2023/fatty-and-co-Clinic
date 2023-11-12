@@ -182,8 +182,8 @@ const validateOTP = async (req,res) => {
 const updatePass = async (req, res) => {
 
   try {
-
-    const{Username, Password} = req.body;
+    const Username = req.user.Username;
+    const{Password} = req.body;
     const test = await systemUserModel.findOne({Username: Username});
 
     if (!Password ) {

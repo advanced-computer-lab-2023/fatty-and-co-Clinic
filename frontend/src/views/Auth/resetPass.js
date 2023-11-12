@@ -17,6 +17,7 @@ import {
   Alert,
   AlertIcon,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
@@ -42,6 +43,7 @@ function resetPass() {
     const [isFormSubmitted, setFormSubmitted] = useState(false);
     const [isOTPSubmitted, setOTPSubmitted] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const toast = useToast();
 
     const handleShowClick = () => setShowPassword(!showPassword);
   
@@ -93,7 +95,26 @@ function resetPass() {
                 console.log(Password);
                 console.log('Request Payload:', { Email: email, Password: Password });
 
-                const response = await axios.patch(API_PATHS.resetPass, { Email: email, Password: Password });
+                const response = await axios.patch(API_PATHS.resetPass, { Email: email, Password: Password })
+                .then((response) => {
+                    // Handle success or provide feedback to the user
+                    toast({
+                      title: "Password reset successfully",
+                      status: "success",
+                      duration: 9000,
+                      isClosable: true,
+                    });
+                  })
+                  .catch((error) => {
+                    toast({
+                      title: "Failed to reset password",
+                      description: error.response.data.error,
+                      status: "error",
+                      duration: 9000,
+                      isClosable: true,
+                    });
+                    console.error("An error occurred", error);
+                  });;;
             
                 console.log('Server response:', response.data);
 

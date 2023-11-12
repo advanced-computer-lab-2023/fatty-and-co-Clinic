@@ -19,6 +19,7 @@ import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
 import MedicalHistoryPatient from "views/Patient/viewMedicalHistory/medicalHistory";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
+import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
@@ -73,6 +74,30 @@ var dashRoutes = [
     secondaryNavbar: true,
     component: UpdateHourly,
     layout: "/doctor",
+  },
+  {
+    path: "/updatePass",
+    name: "Change Password",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    component: UpdatePass,
+    layout: "/doctor",
+  },
+  {
+    path: "/updatePass",
+    name: "Change Password",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: UpdatePass,
+    layout: "/admin",
+  },
+  {
+    path: "/updatePass",
+    name: "Change Password",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: UpdatePass,
+    layout: "/patient",
   },
   {
     path: "/updateAffil",

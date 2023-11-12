@@ -27,7 +27,6 @@ router.get("/", (req, res) => {
 
 router.post("/login", login);
 
-router.use(cookieParser());
 router.post("/sendOTP", sendOTP);
 router.post("/validateOTP", validateOTP);
 
