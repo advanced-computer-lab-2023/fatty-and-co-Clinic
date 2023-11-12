@@ -117,31 +117,9 @@ const deletePatient = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
-const uploadFile = async (req, res) => {
-  const user = req.user.Username;
-  const filename = req.file.filename;
-  await patientModel.findOneAndUpdate(
-    { Username: user },
-    { $push: { MedicalHistory: { filename: filename, note: req.body.note } } }
-  );
-  res
-    .status(200)
-    .send({ file: req.file, message: "File uploaded successfully" });
-};
 
-const getMedicalHistory = async (req, res) => {
-  const user = req.user.Username;
-  if (req.user.Type === "Admin") {
-    user = req.body.username;
-  }
-  const patient = await patientModel.findOne({ Username: user });
-  if (!patient) {
-    res.status(404).send({ message: "Patient not found." });
-    return;
-  }
-  const { MedicalHistory } = patient;
-  res.status(200).send({ MedicalHistory });
-};
+
+
 
 const downloadFile = async (req, res) => {
   const { filename } = req.params;
@@ -1411,6 +1389,38 @@ const cancelSubscription = async (req, res) => {
       .send({ Error: "Error occurred while cancelling subscription" });
   }
 };
+
+const uploadFile = async (req, res) => {
+  var user = req.user.Username;
+  if (req.user.Type === "Doctor") {
+    user = req.params.username;
+  }
+  const filename = req.file.filename;
+  const originalname = req.file.originalname;
+  
+  await patientModel.findOneAndUpdate(
+    { Username: user },
+    { $push: { MedicalHistory: { filename: filename, originalname : originalname, note: req.body.note } } }
+  );
+  res
+    .status(200)
+    .send({ file: req.file, message: "File uploaded successfully" });
+};
+
+const getMedicalHistory = async (req, res) => {
+  const user = req.user.Username;
+  if (req.user.Type === "Admin") {
+    user = req.body.username;
+  }
+  const patient = await patientModel.findOne({ Username: user });
+  if (!patient) {
+    res.status(404).send({ message: "Patient not found." });
+    return;
+  }
+  const { MedicalHistory } = patient;
+  res.status(200).send({ MedicalHistory });
+};
+
 const cancelSubscriptionfamilymember = async (req, res) => {
   try {
     const Startdate = new Date();
@@ -1457,13 +1467,6 @@ const cancelSubscriptionfamilymember = async (req, res) => {
   }
 };
 
-Date.prototype.addDays = function (days) {
-  var date = new Date(this.valueOf());
-  date.setDate(date.getDate() + days);
-  return date;
-};
-
-//
 const viewUpcomingAppointmentsPat = async (req, res) => {
   const username = req.user.Username;
   //put in mind the string thing if the (Status) condition in the find query does not work
@@ -1492,6 +1495,13 @@ const viewPastAppoitmentsPat = async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
+};
+
+
+Date.prototype.addDays = function (days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
 };
 
 module.exports = {
