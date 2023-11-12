@@ -14,6 +14,10 @@ export const API_PATHS = {
   updateEmail: GUEST_BASE + "updateEmail/",
   login: GUEST_BASE + "login/",
   signup: GUEST_BASE + "addPatient/",
+  updatePass: GUEST_BASE + "updatePass/",
+  resetPass: GUEST_BASE + "resetPass/",
+  sendOTP: GUEST_BASE + "sendOTP/",
+  validateOTP: GUEST_BASE + "validateOTP/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
@@ -22,6 +26,9 @@ export const API_PATHS = {
 
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
+  acceptRequest: ADMIN_BASE + "acceptRequest/",
+  rejectRequest: ADMIN_BASE + "rejectRequest/",
+
 
   // Doctor
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
@@ -56,8 +63,8 @@ export const API_PATHS = {
   updateFamSub: PATIENT_BASE + "updateFamSubs/",
   updateMySub: PATIENT_BASE + "updateMySubs/",
   viewHealthPackagewithstatus: PATIENT_BASE + "viewHealthPackagewithstatus",
-  uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
-  getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
+  uploadFile: PATIENT_BASE + "uploadFile/", // upload file and note
+  getMedicalHistory: PATIENT_BASE + "getMedicalHistory/", // get getMedicalHistory for patient (by username if admin)
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
