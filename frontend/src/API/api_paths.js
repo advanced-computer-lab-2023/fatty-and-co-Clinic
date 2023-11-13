@@ -41,6 +41,7 @@ export const API_PATHS = {
   addMySlotsDoc: DOCTOR_BASE + "addMySlotsDoc/",
   deleteMySlotsDoc: DOCTOR_BASE + "deleteMySlotsDoc/",
   updateMySlotsDoc: DOCTOR_BASE + "updateMySlotsDoc/",
+  payDoctor: DOCTOR_BASE + "payDoctor/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -85,4 +86,5 @@ export const API_PATHS = {
 
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
+  walletPayment: PAYEMENT_BASE + "walletPayment",
 };

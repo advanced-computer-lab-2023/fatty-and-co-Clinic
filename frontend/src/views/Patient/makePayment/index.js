@@ -9,7 +9,7 @@ const PUBLIC_KEY =
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
-export default function MakePayment({ amount }) {
+export default function MakePayment({ amount, doctorUserName, doctorName, patientUsername, date }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const amount2 = searchParams.get('amount');
@@ -18,10 +18,18 @@ export default function MakePayment({ amount }) {
   const NationalId=searchParams.get('NationalId')
   return (
     <Elements stripe={stripeTestPromise}>
-      <PaymentForm amount={amount2?amount2:amount}
-                   description={description?description:"Doctor's appointment"}
-                   PackageName={PackageName?PackageName:""}
-                   NationalId={NationalId?NationalId:""} />
+      <PaymentForm
+        Amount={amount2 ? amount2 : amount}
+        Description={description ? description : "Doctor's appointment"}
+        PackageName={PackageName ? PackageName : ""}
+        NationalId={NationalId ? NationalId : ""}
+        DoctorUsername={doctorUserName}
+        DoctorName={doctorName}
+        PatientUsername={patientUsername}
+        Status="Pending"
+        Date={date}
+      />
+      {doctorUserName}
     </Elements>
   );
 }
