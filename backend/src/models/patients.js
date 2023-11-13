@@ -19,6 +19,11 @@ const patientSchema = new Schema(
       required: true,
       unique: true,
     },
+    NationalId: {
+      type: String,
+      required: false,
+      unique: true,
+    },
     DateOfBirth: {
       type: Date,
       required: true,
@@ -35,6 +40,15 @@ const patientSchema = new Schema(
     Wallet: {
       type: Number,
       required: false,
+    },
+    LinkedPatients: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "Patient",
+        },
+      ],
+      required: true,
     },
     MedicalHistory: {
       // i want medical history to be a array of pairs of strings

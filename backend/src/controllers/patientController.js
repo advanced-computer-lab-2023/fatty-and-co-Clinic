@@ -118,9 +118,6 @@ const deletePatient = async (req, res) => {
   }
 };
 
-
-
-
 const downloadFile = async (req, res) => {
   const { filename } = req.params;
   const downloadStream = await getFileByFilename(filename);
@@ -1202,10 +1199,9 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({ Patient: patient })
+      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
       .populate("Patient")
       .populate("FamilyMem");
-    console.log(Patient);
     res.status(200).send(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -1390,6 +1386,47 @@ const cancelSubscription = async (req, res) => {
   }
 };
 
+const linkPatient = async (req, res) => {
+  const { Id, Relation } = req.body;
+  var familyMember = null;
+  if (!isNaN(parseFloat(Id))) {
+    familyMember = await patientModel.findOne({ MobileNum: Id });
+  } else {
+    const familyMemberUser = await userModel.findOne({ Email: Id });
+    familyMember = await patientModel.findOne({
+      Username: familyMemberUser.Username,
+    });
+  }
+  if (!familyMember) {
+    res.status(404).send({ message: "Patient not found" });
+  } else {
+    const currentUser = await patientModel.findOne({
+      Username: req.user.Username,
+    });
+    if (currentUser.LinkedPatients.includes(familyMember._id)) {
+      res.status(202).send({ message: "Patient already linked" });
+    } else {
+      currentUser.LinkedPatients.push(familyMember._id);
+      await currentUser.save();
+      const currentDate = new Date();
+      const dob = new Date(familyMember.DateOfBirth);
+      const newFamilymember = await familyMemberModel.create({
+        Patient: currentUser,
+        FamilyMem: familyMember,
+        FamilyMemberUsername: familyMember.Username,
+        Name: familyMember.Name,
+        NationalId: familyMember.NationalId,
+        Age: Math.floor(
+          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+        ),
+        Gender: familyMember.Gender,
+        Relation: Relation,
+      });
+      res.status(200).json(newFamilymember);
+    }
+  }
+};
+
 const uploadFile = async (req, res) => {
   var user = req.user.Username;
   if (req.user.Type === "Doctor") {
@@ -1397,10 +1434,18 @@ const uploadFile = async (req, res) => {
   }
   const filename = req.file.filename;
   const originalname = req.file.originalname;
-  
+
   await patientModel.findOneAndUpdate(
     { Username: user },
-    { $push: { MedicalHistory: { filename: filename, originalname : originalname, note: req.body.note } } }
+    {
+      $push: {
+        MedicalHistory: {
+          filename: filename,
+          originalname: originalname,
+          note: req.body.note,
+        },
+      },
+    }
   );
   res
     .status(200)
@@ -1408,9 +1453,9 @@ const uploadFile = async (req, res) => {
 };
 
 const getMedicalHistory = async (req, res) => {
-  const user = req.user.Username;
-  if (req.user.Type === "Admin") {
-    user = req.body.username;
+  var user = req.user.Username;
+  if (req.user.Type === "Doctor") {
+    user = req.params.username;
   }
   const patient = await patientModel.findOne({ Username: user });
   if (!patient) {
@@ -1497,7 +1542,6 @@ const viewPastAppoitmentsPat = async (req, res) => {
   }
 };
 
-
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
@@ -1530,6 +1574,11 @@ module.exports = {
   selectPrescription,
   getEmergencyContact,
   subscribepackagefamilymem,
+  linkPatient,
+  uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
   payForFamSubscription,
   cancelSubscriptionfamilymember,
   payForSubscription,

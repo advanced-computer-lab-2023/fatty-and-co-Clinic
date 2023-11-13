@@ -18,6 +18,7 @@ const {
   generateEducationalBackground,
   generateSpeciality,
   generateMobileNum,
+  generateNationalId,
   generatePackage,
   generateEmail,
   generatePassword,
@@ -58,6 +59,30 @@ const createSystemUser = async (req, res) => {
     res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const acceptDoc = async (req, res) => {
+  const { request } = req.body;
+  try {
+    const doc = await doctorModel.create({
+      Username: Username,
+      Name: request.Name,
+      DateOfBirth: request.DateOfBirth,
+      HourlyRate: request.HourlyRate,
+      Affiliation: request.Affiliation,
+      EducationalBackground: request.EducationalBackground,
+      Speciality: request.Speciality,
+    });
+    const user = await userModel.addEntry(
+      Username,
+      request.Password,
+      request.Email,
+      "Doctor"
+    );
+    res.status(200).json({ doc, user });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -173,6 +198,7 @@ const createPatient = async (req, res) => {
     Password,
     Name,
     MobileNum,
+    NationalId,
     EmergencyContact,
     Gender,
     DateOfBirth,
@@ -183,6 +209,7 @@ const createPatient = async (req, res) => {
   const password = Password || generatePassword();
   const name = Name || generateName();
   const mobileNum = MobileNum || generateMobileNum();
+  const nationalId = NationalId || generateNationalId();
   const dateOfBirth = DateOfBirth || generateDateOfBirth();
   const packageName = PackageName || generatePackage();
   const emergencyContact = EmergencyContact || {
@@ -203,6 +230,7 @@ const createPatient = async (req, res) => {
       Username: username,
       Name: name,
       MobileNum: mobileNum,
+      NationalId: nationalId,
       Gender: gender,
       EmergencyContact: emergencyContact,
       DateOfBirth: dateOfBirth,
@@ -399,4 +427,5 @@ module.exports = {
   createPrescription,
   createDocSlot,
   getDocSlot,
+  acceptDoc,
 };

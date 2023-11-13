@@ -6,6 +6,7 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
 import resetPass from "views/Auth/resetPass";
 import SignUp from "views/Auth/SignUp";
+import DocAcc from "views/Auth/docAccepted";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
@@ -28,12 +29,13 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
+import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
-import  bookAptDetails  from "views/Patient/bookAptDetails/bookAptDetails";
+import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 
@@ -115,7 +117,7 @@ var dashRoutes = [
 
   {
     path: "/Subscribtions/",
-    name: " Cancel Subscribtions",
+    name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
@@ -209,7 +211,7 @@ var dashRoutes = [
   {
     path: "/createFamilymember/:Createparameter",
     name: "Add Family Member",
-    icon: <HomeIcon color="inherit" />,
+    icon: <PersonIcon color="inherit" />,
     component: createFamilymember,
     layout: "/patient",
   },
@@ -275,6 +277,13 @@ var dashRoutes = [
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
+    layout: "/patient",
+  },
+  {
+    path: "/linkPatient",
+    name: "Link Patient",
+    icon: <PersonIcon color="inherit" />,
+    component: linkPatient,
     layout: "/patient",
   },
   {
@@ -387,6 +396,14 @@ var dashRoutes = [
         icon: <RocketIcon color="inherit" />,
         secondaryNavbar: true,
         component: resetPass,
+        layout: "/auth",
+      },
+      {
+        path: "/docacc",
+        name: "Contract Accepted",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: DocAcc,
         layout: "/auth",
       },
     ],

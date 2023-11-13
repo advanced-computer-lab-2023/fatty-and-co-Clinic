@@ -3,14 +3,12 @@ const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
+const subscriptionModel = require("../models/subscriptions");
 
 const bcrypt = require("bcrypt");
-const {
-  validatePassword,
-} = require("../common/utils/validators");
-const nodemailer = require('nodemailer');
-const otpGenerator = require('otp-generator');
-
+const { validatePassword } = require("../common/utils/validators");
+const nodemailer = require("nodemailer");
+const otpGenerator = require("otp-generator");
 
 const generateToken = require("../common/jwt/generateToken");
 
@@ -29,11 +27,11 @@ const createRequest = async (req, res) => {
       EducationalBackground,
       Speciality,
     } = req.body;
-    
-    const {IdFile , MedicalLicense , MedicalDegree} = req.files ;
-    
+
+    const { IdFile, MedicalLicense, MedicalDegree } = req.files;
+
     const IdFileName = IdFile[0].filename;
-    const MedicalLicenseName = MedicalLicense[0].filename; 
+    const MedicalLicenseName = MedicalLicense[0].filename;
     const MedicalDegreeName = MedicalDegree[0].filename;
     const request = await requestModel.addEntry(
       Username,
@@ -49,7 +47,7 @@ const createRequest = async (req, res) => {
       MedicalLicenseName,
       MedicalDegreeName
     );
-    
+
     res.status(200).send({ request });
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -107,28 +105,35 @@ const login = async (req, res) => {
 
 const transporter = nodemailer.createTransport({
   //service: 'gmail',
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: 'shebeenhealthclinic@gmail.com',
-    pass: 'xojm teqp otis nknr',
+    user: "shebeenhealthclinic@gmail.com",
+    pass: "xojm teqp otis nknr",
   },
 });
 
-const sendOTP = async (req,res) => {
+const sendOTP = async (req, res) => {
   const { Email } = req.body;
 
   try {
     const user = await systemUserModel.findOne({ Email: Email });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
-    const test = await systemUserModel.findOneAndUpdate({ Email: Email },
-    { $set: { otp: otp ,otpDuration: Date.now() + 600000} } , {new:true});
+    const otp = otpGenerator.generate(6, {
+      upperCase: false,
+      specialChars: false,
+      alphabets: false,
+    });
+    const test = await systemUserModel.findOneAndUpdate(
+      { Email: Email },
+      { $set: { otp: otp, otpDuration: Date.now() + 600000 } },
+      { new: true }
+    );
     // user.otp = otp;
     // user.otpDuration = Date.now() + 600000;
     // user.save();
@@ -138,72 +143,78 @@ const sendOTP = async (req,res) => {
 
     await transporter.sendMail({
       to: Email,
-      subject: 'Password Reset OTP',
+      subject: "Password Reset OTP",
       text: `Your OTP for password reset is: ${otp}`,
     });
 
-    res.json({ message: 'OTP sent to your email' });
+    res.json({ message: "OTP sent to your email" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
+};
 
-} 
-
-const validateOTP = async (req,res) => {
-
+const validateOTP = async (req, res) => {
   const { Email, otp } = req.body;
 
   try {
     const user = await systemUserModel.findOne({ Email: Email });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-      console.log(user.otp);
-      console.log(user.otpDuration);
-      console.log(otp);
-      console.log(Date.now());
+    console.log(user.otp);
+    console.log(user.otpDuration);
+    console.log(otp);
+    console.log(Date.now());
     if (user.otp !== otp || Date.now() > user.otpDuration) {
-      return res.status(400).json({ message: 'Invalid or expired OTP' });
+      return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
-    res.status(200).json({ message: 'Password reset successful' });
+    res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
-
-}
+};
 
 const updatePass = async (req, res) => {
-
   try {
     const Username = req.user.Username;
-    const{Password} = req.body;
-    const test = await systemUserModel.findOne({Username: Username});
+    const { OldPassword, NewPassword } = req.body;
 
-    if (!Password ) {
+    if (!OldPassword) {
+      throw Error("Please enter the old password!");
+    }
+    if (!NewPassword) {
       throw Error("Please enter the new password!");
     }
-    const passwordMatch = await bcrypt.compare(Password, test.Password);
 
-    if (passwordMatch) {
+    if (OldPassword === NewPassword) {
       throw Error("Cannot enter the same password");
     }
 
-    if (!validatePassword(Password)) {
+    const test = await systemUserModel.findOne({ Username: Username });
+    const passwordMatch = await bcrypt.compare(OldPassword, test.Password);
+
+    if (!passwordMatch) {
+      throw Error("Incorrect password");
+    }
+
+    if (!validatePassword(NewPassword)) {
       throw Error(
         "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
       );
     }
     const salt = await bcrypt.genSalt(10);
-  
-    const hash = await bcrypt.hash(Password, salt);
+
+    const hash = await bcrypt.hash(NewPassword, salt);
     console.log(Username);
     const user = await systemUserModel.findOneAndUpdate(
-      { Username: Username}, {Password: hash });
+      { Username: Username },
+      { Password: hash }
+    );
 
     res.status(200).send(user);
   } catch (error) {
@@ -212,13 +223,11 @@ const updatePass = async (req, res) => {
 };
 
 const resetPass = async (req, res) => {
-
   try {
+    const { Email, Password } = req.body;
+    const test = await systemUserModel.findOne({ Email: Email });
 
-    const{Email, Password} = req.body;
-    const test = await systemUserModel.findOne({Email: Email});
-
-    if (!Password ) {
+    if (!Password) {
       throw Error("Please enter the new password!");
     }
     const passwordMatch = await bcrypt.compare(Password, test.Password);
@@ -233,11 +242,13 @@ const resetPass = async (req, res) => {
       );
     }
     const salt = await bcrypt.genSalt(10);
-  
+
     const hash = await bcrypt.hash(Password, salt);
     console.log(Email);
     const user = await systemUserModel.findOneAndUpdate(
-      { Email: Email}, {Password: hash });
+      { Email: Email },
+      { Password: hash }
+    );
 
     res.status(200).send(user);
   } catch (error) {
@@ -252,11 +263,12 @@ const createPatient = async (req, res) => {
     Password,
     Email,
     MobileNum,
+    NationalId,
     DateOfBirth,
     Gender,
     EmergencyContactNumber,
     EmergencyContactName,
-    Wallet
+    Wallet,
   } = req.body;
   try {
     const user = await systemUserModel.addEntry(
@@ -269,18 +281,17 @@ const createPatient = async (req, res) => {
       Username: Username,
       Name: Name,
       MobileNum: MobileNum,
+      NationalId: NationalId,
       DateOfBirth: DateOfBirth,
       Gender: Gender,
       EmergencyContact: {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
       },
-      Wallet:Wallet
+      LinkedPatients: [],
+      Wallet: Wallet,
     });
-     await subscriptionModel.addEntry(
-      patient,
-      "Unsubscribed"
-    );
+    await subscriptionModel.addEntry(patient, "Unsubscribed");
     res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });

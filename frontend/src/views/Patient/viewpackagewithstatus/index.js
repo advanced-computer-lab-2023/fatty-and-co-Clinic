@@ -8,27 +8,26 @@ import { useAuthContext } from "hooks/useAuthContext";
 import FamPackagestatusTable from "./components/FamPackagestatusTable";
 //import FamPackageRow from "components/Tables/FamPackageRow";
 //import statuspackagerow from "components/Tables/statuspackagerow";
- const ViewFamPackageswithstatus= ()=>{
+const ViewFamPackageswithstatus = () => {
   const [data, setData] = useState([]);
- 
+
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-
 
   useEffect(() => {
     const url = API_PATHS.viewHealthFamwithstatus;
     axios
       .get(url, {
-        headers:{
-          'Authorization': Authorization
-        }})
+        headers: {
+          Authorization: Authorization,
+        },
+      })
       .then((response) => {
         setData(response.data);
-        console.log(response.data)
+        console.log(response.data);
       })
       .catch((err) => console.log(err));
-  });
-
+  }, []);
 
   return (
     <Box pt="80px">
@@ -38,18 +37,24 @@ import FamPackagestatusTable from "./components/FamPackagestatusTable";
         pt="50px"
         justifyContent="flex-start"
       >
-         <FamPackagestatusTable
-            title={"My Package"}
-            captions={["Name", "Status","Package","Enddate", "Startdate","Renewaldate"]}
-            data={data}
-         
-           ></FamPackagestatusTable>
-            {/* <Text fontSize="3xl" fontWeight="bold">
+        <FamPackagestatusTable
+          title={"My Package"}
+          captions={[
+            "Name",
+            "Status",
+            "Package",
+            "Enddate",
+            "Startdate",
+            "Renewaldate",
+          ]}
+          data={data}
+        ></FamPackagestatusTable>
+        {/* <Text fontSize="3xl" fontWeight="bold">
               No Subscriptions Found
             </Text> 
            */}
       </Flex>
     </Box>
   );
-}
-export default ViewFamPackageswithstatus
+};
+export default ViewFamPackageswithstatus;

@@ -9,6 +9,7 @@ import {
   Tr,
   useColorModeValue,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 // Custom components
 import Card from "components/Card/Card.js";
@@ -22,7 +23,13 @@ import { useAuthContext } from "hooks/useAuthContext";
 
 import { useHistory } from "react-router-dom";
 
-const SlotsTable = ({ title, captions, tableData, setTableData }) => {
+const SlotsTable = ({
+  title,
+  captions,
+  tableData,
+  setTableData,
+  isLoading,
+}) => {
   //const { id } = useParams();
 
   const { user } = useAuthContext();
@@ -98,38 +105,48 @@ const SlotsTable = ({ title, captions, tableData, setTableData }) => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Table variant="simple" color={textColor}>
-          <Thead>
-            <Tr my=".8rem" pl="0px">
-              {captions.map((caption, idx) => {
-                return (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
-                );
-              })}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {tableData.map((row) => {
-              //console.log(row.Username);
-              return (
-                <DocSlotRow
-                  key={row.id}
-                  SlotId={row.SlotId}
-                  DayName={row.DayName}
-                  Hour={row.StartTime}
-                  // isSelected={selectedRow === row}
-                  timeValueChangeHandler={() =>
-                    handleEditTimeValueChange(event)
-                  }
-                  deleteClickHandler={() => handleDelete(row)}
-                  editConfirmHandler={() => handleEditConfirm(row)}
-                />
-              );
-            })}
-          </Tbody>
-        </Table>
+        {
+          <Table variant="simple" color={textColor}>
+            <Thead>
+              <Tr my=".8rem" pl="0px">
+                {captions.map((caption, idx) => {
+                  return (
+                    <Th
+                      color="gray.400"
+                      key={idx}
+                      ps={idx === 0 ? "0px" : null}
+                    >
+                      {caption}
+                    </Th>
+                  );
+                })}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                tableData.map((row) => {
+                  //console.log(row.Username);
+                  return (
+                    <DocSlotRow
+                      key={row.id}
+                      SlotId={row.SlotId}
+                      DayName={row.DayName}
+                      Hour={row.StartTime}
+                      // isSelected={selectedRow === row}
+                      timeValueChangeHandler={() =>
+                        handleEditTimeValueChange(event)
+                      }
+                      deleteClickHandler={() => handleDelete(row)}
+                      editConfirmHandler={() => handleEditConfirm(row)}
+                    />
+                  );
+                })
+              )}
+            </Tbody>
+          </Table>
+        }
       </CardBody>
     </Card>
   );

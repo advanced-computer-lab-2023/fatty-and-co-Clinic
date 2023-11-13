@@ -14,6 +14,7 @@ const {
   createPrescription,
   createDocSlot,
   getDocSlot,
+  acceptDoc,
 } = require("../controllers/testController");
 
 const { testAppointRef } = require("../controllers/appointmentController");
@@ -44,6 +45,9 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("Tests");
 });
+
+router.post("/acceptDoc", acceptDoc);
+
 
 /**
  * @route GET /tests/Users

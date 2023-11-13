@@ -19,6 +19,7 @@
     "apexcharts": "^3.27.3",
     "axios": "^1.6.1",
     "classnames": "2.3.1",
+    "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "env": "^0.0.2",
     "formik": "^2.4.5",
