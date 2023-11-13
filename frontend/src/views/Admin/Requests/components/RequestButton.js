@@ -13,8 +13,11 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  VStack,
+  Icon,
   Img,
 } from "@chakra-ui/react";
+import { DownloadIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
@@ -24,9 +27,6 @@ function RequestButton({ Username, Status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null); // State to store data from the database
   const { user } = useAuthContext();
-  const [IdFile, setIdFileName] = useState(null);
-  const [medicalLicense, setMedicalLicense] = useState(null);
-  const [MedicalDegree, setMedicalDegree] = useState(null);
   const Authorization = `Bearer ${user.token}`;
   useEffect(() => {
     axios
@@ -36,43 +36,6 @@ function RequestButton({ Username, Status }) {
       })
       .then(async (response) => {
         setData(response.data);
-        // get the files from the backend
-        const idF = await fetch(
-          API_PATHS.getRequestFile + response.data.IdFileName,
-          {
-            headers: {
-              Authorization: Authorization,
-            },
-          }
-        );
-        const idFileBlob = await idF.blob();
-        const idFileurl = URL.createObjectURL(idFileBlob);
-        setIdFileName(idFileurl);
-        //
-        const MedicalDegre = await fetch(
-          API_PATHS.getRequestFile + response.data.MedicalDegreeName,
-          {
-            headers: {
-              Authorization: Authorization,
-            },
-          }
-        );
-        const MedicalDegreeBlob = await MedicalDegre.blob();
-        const MedicalDegreurl = URL.createObjectURL(MedicalDegreeBlob);
-        setMedicalLicense(MedicalDegreurl);
-        //
-        const license = await fetch(
-          API_PATHS.getRequestFile + response.data.MedicalLicenseName,
-          {
-            headers: {
-              Authorization: Authorization,
-            },
-          }
-        );
-        const licenseBlob = await license.blob();
-        const url = URL.createObjectURL(licenseBlob);
-        setMedicalDegree(url);
-        //end of getting files
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -109,6 +72,63 @@ function RequestButton({ Username, Status }) {
       });
   };
 
+  const downloadIdFile = async () => {
+    const idF = await fetch(API_PATHS.getRequestFile + data.IdFileName, {
+      headers: {
+        Authorization: Authorization,
+      },
+    });
+    const idFileBlob = await idF.blob();
+    const idFileurl = URL.createObjectURL(idFileBlob);
+
+    const link = document.createElement("a");
+    link.href = idFileurl;
+    link.download = "id file" + data.IdFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadMedicalDegreeFile = async () => {
+    const MedicalDegre = await fetch(
+      API_PATHS.getRequestFile + data.MedicalDegreeName,
+      {
+        headers: {
+          Authorization: Authorization,
+        },
+      }
+    );
+    const MedicalDegreeBlob = await MedicalDegre.blob();
+    const MedicalDegreurl = URL.createObjectURL(MedicalDegreeBlob);
+
+    const link = document.createElement("a");
+    link.href = MedicalDegreurl;
+    link.download = "medical degree file" + data.MedicalDegreeName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadMedicallicenseFile = async () => {
+    const license = await fetch(
+      API_PATHS.getRequestFile + data.MedicalLicenseName,
+      {
+        headers: {
+          Authorization: Authorization,
+        },
+      }
+    );
+    const licenseBlob = await license.blob();
+    const licenseurl = URL.createObjectURL(licenseBlob);
+
+    const link = document.createElement("a");
+    link.href = licenseurl;
+    link.download = "medical license file" + data.MedicalLicenseName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <Button colorScheme="teal" onClick={() => setIsModalOpen(true)}>
@@ -122,10 +142,20 @@ function RequestButton({ Username, Status }) {
             {data ? (
               <div>
                 <p>Request Details: {jsonData}</p>
-                ID File<img src={IdFile} alt="ID File" />
-                Medical Degree<img src={MedicalDegree} alt="Medical Degree" />
-                Medical License<img src={medicalLicense} alt="Medical License" />
-                
+                <VStack spacing={3} w="80%">
+                  <button onClick={downloadIdFile}>
+                    ID File
+                    <Icon as={DownloadIcon} me="3px" />
+                  </button>
+                  <button onClick={downloadMedicalDegreeFile}>
+                    Medical Degree
+                    <Icon as={DownloadIcon} me="3px" />
+                  </button>
+                  <button onClick={downloadMedicallicenseFile}>
+                    Medical License
+                    <Icon as={DownloadIcon} me="3px" />
+                  </button>
+                </VStack>
               </div>
             ) : (
               <p>Loading data...</p>
