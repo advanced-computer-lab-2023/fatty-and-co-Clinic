@@ -20,62 +20,27 @@ conn.once("open", () => {
 const storage = new GridFsStorage({
   url: process.env.MONGO_URI,
   file: (req, file) => {
-    return Promise.all([
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString("hex") + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: "doctor_uploads",
-            metadata: {
-              type: "IdFile"
-            }
-          };
-          resolve(fileInfo);
-        });
-      }),
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString("hex") + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: "doctor_uploads",
-            metadata: {
-              type: "MedicalLicense"
-            }
-          };
-          resolve(fileInfo);
-        });
-      }),
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString("hex") + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: "doctor_uploads",
-            metadata: {
-              type: "MedicalDegree"
-            }
-          };
-          resolve(fileInfo);
-        });
-      })
-    ]);
-  }
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString("hex") + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: "request_uploads",
+        };
+        resolve(fileInfo);
+      });
+    });
+  },
 });
-const cpUpload = multer({storage }).fields([
+
+const upload = multer({ storage }); 
+const cpUpload = upload.fields([
   { name: "IdFile", maxCount: 1 },
   { name: "MedicalLicense", maxCount: 1 },
-  { name: "MedicalDegree", maxCount: 1 }
+  { name: "MedicalDegree", maxCount: 1 },
 ]);
 
 const getDoctorFiles = (req, res) => {
