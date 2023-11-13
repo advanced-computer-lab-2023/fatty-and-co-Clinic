@@ -197,11 +197,8 @@ const getDoctorByNameAndSpeciality = async (req, res) => {
 
 // filter doctors by speciality or/and (date and time)
 
-
-
 const filterDoctor = async (req, res) => {
   try {
-    
     const urlParams = new URLSearchParams(req.query);
 
     let packageDis = 0;
@@ -329,7 +326,7 @@ const viewPatientInfoAndHealthRecords = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}; 
+};
 
 function findDayRangeFromDate(startDate, endDate) {
   const dayDiff = parseInt((endDate - startDate) / (1000 * 60 * 60 * 24), 10);
@@ -377,7 +374,6 @@ const filterDoctorSlotEdition = async (req, res) => {
     var dateFilteredDoctors = new Array();
     var specFilteredDoctors = new Array();
     var finalRes = new Array();
-
 
     //first stage -> filter by date&time range
     if (
@@ -608,10 +604,11 @@ const addMySlotsDoc = async (req, res) => {
       DoctorId: doctor._id,
     });
 
-    const slotToTable = 
-    {SlotId: newSlot._id,
-    DayName: getDayNameFromNumber(newSlot.WorkingDay),
-    StartTime: newSlot.StartTime,}
+    const slotToTable = {
+      SlotId: newSlot._id,
+      DayName: getDayNameFromNumber(newSlot.WorkingDay),
+      StartTime: newSlot.StartTime,
+    };
 
     console.log("hello_add_created");
     console.log(slotToTable);
@@ -704,14 +701,20 @@ const viewAllAvailableSlots = async (req, res) => {
   const { username } = req.params;
   var slotsToView = new Array();
   try {
-    const doctor = await doctorModel.findOne({Username: username});
+    const doctor = await doctorModel.findOne({ Username: username });
     const allDocSlots = await docSlotsModel.find({ DoctorId: doctor._id });
-    for(let element of allDocSlots){
+    for (let element of allDocSlots) {
+      const StartTime = element.StartTime.toFixed(2);
+      const strtTime2 = StartTime.toString().split(".");
+      console.log("strtTime2: " + strtTime2);
+
+      const StartTimeFinal = strtTime2[0].padStart(2, "0") + ":" + strtTime2[1];
+      console.log("StartTimeFinal: " + StartTimeFinal);
       slotsToView.push({
         DoctorId: element.DoctorId,
         DayName: getDayNameFromNumber(element.WorkingDay),
-        Hour:element.StartTime,
-      })
+        StartTime: StartTimeFinal,
+      });
     }
     res.status(200).json(slotsToView);
   } catch (error) {
@@ -785,6 +788,34 @@ const checkAptDateForBooking = async (req, res) => {
   }
 };
 
+const validateBookingDate = async (req, res) => {
+  const {DayName, DateFinal, DoctorId} = req.query;
+
+
+  if (DateFinal.getDay == getDayNumberFromName(DayName)) {
+    try {
+      console.log(DateFinal.getDay);
+      console.lod(DateFinal);
+      const Doctor = await doctorModel.findOne({ _id: DoctorId });
+      const appointment = await appointmentModel.findOne({
+        DoctorUsername: Doctor.Username,
+        Date: DateFinal,
+        Status: "Upcoming",
+      });
+      if (appointment) {
+        res.status(500).send({ message: "this date is unavailable" });
+        console.log(appointment.Date);
+      } else {
+        console.log("valid");
+        res.status(200).json("validDate");
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  } else
+    res.status(500).send({ message: "Chosen Date does not match chosen Day" });
+};
+
 const viewMySlotsDoc = async (req, res) => {
   const username = req.user.Username;
 
@@ -821,6 +852,7 @@ const viewMySlotsDoc = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
 const followupAppointment = async (req, res) => {
   const patientUsername = req.query.PatientUsername;
   const doctorUsername = req.user.Username;
@@ -878,4 +910,5 @@ module.exports = {
   viewAllAvailableSlots,
   checkAptDateForBooking,
   viewMySlotsDoc,
+  validateBookingDate,
 };

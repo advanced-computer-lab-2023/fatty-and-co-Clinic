@@ -18,13 +18,26 @@ import DoctorsRow from "components/Tables/DoctorsRow";
 import { useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import DocSlotRowApt from "components/Tables/DocSlotRowApt";
+import { useAuthContext } from "hooks/useAuthContext";
+
+
 
 const DocSlotAptsTable = ({ title, captions, data }) => {
   const history = useHistory();
   const textColor = useColorModeValue("gray.700", "white");
 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const handleBookClick = (row) => {
-    history.replace(`/patient/bookAptDetails/${row.DoctorId}`);
+    let newUrl = `/patient/bookAptDetails/${row}`;
+    let newState = {
+      DayName: row.DayName,
+      StartTime: row.StartTime,
+      DoctorId: row.DoctorId,
+    };
+
+    history.replace(newUrl, newState);
   };
 
   return (
@@ -56,7 +69,7 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
                 <DocSlotRowApt
                   key={row.id}
                   DayName={row.DayName}
-                  Hour={row.Hour}
+                  StartTime={row.StartTime}
                   bookClickHandler={() => handleBookClick(row)}
                 />
               );

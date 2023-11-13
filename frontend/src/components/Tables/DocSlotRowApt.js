@@ -19,7 +19,7 @@ import {
 import React from "react";
 
 function DocSlotRowApt(props) {
-  const { DayName, Hour, bookClickHandler} = props;
+  const { DayName, StartTime, bookClickHandler} = props;
   const textColor = useColorModeValue("gray.700", "white");
 
   return (
@@ -46,7 +46,7 @@ function DocSlotRowApt(props) {
             fontWeight="bold"
             minWidth="100%"
           >
-            {Hour}
+            {StartTime}
           </Text>
         </Flex>
       </Td>

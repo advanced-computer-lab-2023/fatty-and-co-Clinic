@@ -18,6 +18,7 @@ const {
   viewPastAppoitmentsDoc,
   viewAllAvailableSlots,
   viewMySlotsDoc,
+  validateBookingDate,
 } = require("../controllers/doctorController");
 
 const {
@@ -178,6 +179,10 @@ router.get("/viewAllAvailableSlots/:username", checkPatient, (req, res) => {
 
 router.get("/viewMySlotsDoc" ,checkDoctor, (req, res) => {
   viewMySlotsDoc(req, res);
+});
+
+router.get("/validateBookingDate" , checkPatient, (req, res) => {
+  validateBookingDate(req, res);
 });
 
 module.exports = router;

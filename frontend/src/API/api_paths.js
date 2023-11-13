@@ -69,6 +69,7 @@ export const API_PATHS = {
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
   viewAllAvailableSlots : DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
+  validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
 
   // Package
   packages: PACKAGE_BASE + "packages/",

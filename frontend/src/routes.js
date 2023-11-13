@@ -230,7 +230,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/bookAptDetails/:id",
+    path: "/bookAptDetails/:row",
     name: "Book Appointment Details",
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
