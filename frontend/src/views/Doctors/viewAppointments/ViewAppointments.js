@@ -15,6 +15,7 @@ export default function ViewAppointmentsInner() {
   });
   const [statusSearchValue, setStatusSearchValue] = useState("");
   const [dateSearchValue, setDateSearchValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -28,6 +29,7 @@ export default function ViewAppointmentsInner() {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
     const url = API_PATHS.viewAppointments;
     axios
       .get(url, { params: searchParams, headers: { Authorization } })
@@ -35,7 +37,8 @@ export default function ViewAppointmentsInner() {
         // setData(response.data);
         dispatch({ type: "SET_APPOINTMENTS", payload: response.data });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   }, [searchParams]);
 
   const handleSearchButtonClick = () => {
@@ -103,6 +106,7 @@ export default function ViewAppointmentsInner() {
           title={"Available Appointments"}
           captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
+          isLoading={isLoading}
         />
       </Flex>
     </Box>

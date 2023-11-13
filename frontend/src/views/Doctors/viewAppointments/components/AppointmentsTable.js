@@ -1,6 +1,7 @@
 // Chakra imports
 import {
   Flex,
+  Spinner,
   Table,
   Tbody,
   Text,
@@ -17,7 +18,7 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export const AppointmentsTable = ({ title, captions, data }) => {
+export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -31,33 +32,41 @@ export const AppointmentsTable = ({ title, captions, data }) => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Table variant="simple" color={textColor}>
-          <Thead>
-            <Tr my=".8rem" pl="0px">
-              {captions.map((caption, idx) => {
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Table variant="simple" color={textColor}>
+            <Thead>
+              <Tr my=".8rem" pl="0px">
+                {captions.map((caption, idx) => {
+                  return (
+                    <Th
+                      color="gray.400"
+                      key={idx}
+                      ps={idx === 0 ? "0px" : null}
+                    >
+                      {caption}
+                    </Th>
+                  );
+                })}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data.map((row) => {
                 return (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
+                  <AppointmentsRow
+                    key={row._id}
+                    PatientName={row.PatientName}
+                    PatientUsername={row.PatientUsername}
+                    Type={row.FollowUp ? "Follow Up" : "First Time"}
+                    Status={row.Status}
+                    DateTime={row.Date}
+                  />
                 );
               })}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.map((row) => {
-              return (
-                <AppointmentsRow
-                  key={row._id}
-                  PatientName={row.PatientName}
-                  PatientUsername={row.PatientUsername}
-                  Type={row.FollowUp ? "Follow Up" : "First Time"}
-                  Status={row.Status}
-                  DateTime={row.Date}
-                />
-              );
-            })}
-          </Tbody>
-        </Table>
+            </Tbody>
+          </Table>
+        )}
       </CardBody>
     </Card>
   );
