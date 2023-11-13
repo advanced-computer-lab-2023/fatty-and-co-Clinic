@@ -791,11 +791,17 @@ const checkAptDateForBooking = async (req, res) => {
 const validateBookingDate = async (req, res) => {
   const {DayName, DateFinal, DoctorId} = req.query;
 
+  console.log(DateFinal);
+  console.log(new Date(DateFinal));
+  const tmpDate = new Date(DateFinal);
 
-  if (DateFinal.getDay == getDayNumberFromName(DayName)) {
+
+  console.log(getDayNameFromNumber(tmpDate.getDay()));
+  console.log(DayName);
+
+  if (getDayNameFromNumber(tmpDate.getDay()) === DayName) {
     try {
-      console.log(DateFinal.getDay);
-      console.lod(DateFinal);
+      console.log(DateFinal);
       const Doctor = await doctorModel.findOne({ _id: DoctorId });
       const appointment = await appointmentModel.findOne({
         DoctorUsername: Doctor.Username,
@@ -803,8 +809,9 @@ const validateBookingDate = async (req, res) => {
         Status: "Upcoming",
       });
       if (appointment) {
-        res.status(500).send({ message: "this date is unavailable" });
         console.log(appointment.Date);
+        res.status(500).send({ message: "this date is unavailable" });
+       
       } else {
         console.log("valid");
         res.status(200).json("validDate");
