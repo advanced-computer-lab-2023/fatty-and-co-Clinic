@@ -115,7 +115,7 @@ var dashRoutes = [
 
   {
     path: "/Subscribtions/",
-    name: " Cancel Subscribtions",
+    name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
