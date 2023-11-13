@@ -7,7 +7,7 @@ const patientModel = require("../models/patients");
 const appointmentModel = require("../models/appointments");
 const familyMemberModel = require("../models/familymembers");
 const prescriptionModel = require("../models/prescriptions");
-const getDoctorFile = require("../common/middleware/doctorUpload");
+const {getFileByFilename} = require("../common/middleware/doctorUpload");
 
 const createAdmin = async (req, res) => {
   const { Username, Password, Email } = req.body;
@@ -29,16 +29,11 @@ const getRequest = async (req, res) => {
   }
 };
 
-const getRequestMedicalLicense = async (req, res) => {
-  const { Username } = req.query;
+const getRequestFile = async (req, res) => {
   try {
-    const request = await requestModel.findOne({ Username: Username });
-    const MedicalLicenseName = request.MedicalLicenseName;
-    console.log("waiting for file");
-    //const file = await getDoctorFile.getFile(MedicalLicenseName);
-    const file = getDoctorFile.allFiles();
-    console.log("file done");
-    res.status(200).json(file);
+    const { filename } = req.params;
+    const downloadStream = await getFileByFilename(filename);
+    downloadStream.pipe(res);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -56,9 +51,11 @@ const getRequests = async (req, res) => {
 const acceptRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requestModel.findOneAndUpdate({ Username: Username, Status: { $ne: "Accepted" } },
-    { $set: { Status: "Accepted" } },
-    {new:true});
+    const request = await requestModel.findOneAndUpdate(
+      { Username: Username, Status: { $ne: "Accepted" } },
+      { $set: { Status: "Accepted" } },
+      { new: true }
+    );
     // const doc = await doctorModel.create({
     //   Username: Username,
     //   Name: request.Name,
@@ -84,9 +81,11 @@ const acceptRequest = async (req, res) => {
 const rejectRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requestModel.findOneAndUpdate({ Username: Username, Status: { $ne: "Rejected" } },
-    { $set: { Status: "Rejected" } },
-    {new:true});
+    const request = await requestModel.findOneAndUpdate(
+      { Username: Username, Status: { $ne: "Rejected" } },
+      { $set: { Status: "Rejected" } },
+      { new: true }
+    );
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -151,5 +150,5 @@ module.exports = {
   acceptRequest,
   rejectRequest,
   getRequests,
-  getRequestMedicalLicense,
+  getRequestFile,
 };

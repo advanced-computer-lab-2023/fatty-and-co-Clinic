@@ -2,7 +2,7 @@ const express = require("express");
 const {
   createAdmin,
   getRequest,
-  getRequestMedicalLicense,
+  getRequestFile,
   deleteUser,
   acceptRequest,
   rejectRequest,
@@ -58,7 +58,7 @@ router.get("/getRequest", getRequest);
  * @access Admin
  * @prop {string} Username - The username of the requesting doctor
  */
-router.get("/getRequestMedicalLicense", getRequestMedicalLicense);
+router.get("/getRequestFile/:filename", getRequestFile);
 
 /**
  * @route POST /admins/acceptRequest

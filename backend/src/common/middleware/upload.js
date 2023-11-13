@@ -36,7 +36,7 @@ const storage = new GridFsStorage({
     });
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage }); // TODO: chunk size to 10mb => chunkSize: 10,240,000
 
 // end of file upload
 
