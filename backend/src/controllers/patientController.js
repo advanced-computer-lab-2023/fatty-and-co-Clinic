@@ -363,7 +363,7 @@ const subscribehealthpackage = async (req, res) => {
 const linkPatient = async (req, res) => {
   const { Id, Relation } = req.body;
   var familyMember = null;
-  if (typeof Id === "number") {
+  if (!isNaN(parseFloat(Id))) {
     familyMember = await patientModel.findOne({ MobileNum: Id });
   } else {
     const familyMemberUser = await userModel.findOne({ Email: Id });
@@ -372,8 +372,9 @@ const linkPatient = async (req, res) => {
     });
   }
   if (!familyMember) {
-    res.status(404).send({ message: "User not found!" });
+    res.status(404).send({ message: "Patient not found" });
   }
+  else {
   const currentUser = await patientModel.findOne({
     Username: req.user.Username,
   });
@@ -390,6 +391,7 @@ const linkPatient = async (req, res) => {
     Relation: Relation
   });*/
   res.status(200).send({ familyMember });
+  }
 };
 
 const uploadFile = async (req, res) => {

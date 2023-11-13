@@ -7,6 +7,7 @@ import {
   useColorModeValue,
   Input,
   Stack,
+  useToast,
   Select,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -24,27 +25,126 @@ export function linkPatient() {
   const [Id, setId] = useState("");
   const [Relation, setRelation] = useState("");
   const textColor = useColorModeValue("gray.700", "white");
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(
-        API_PATHS.linkPatient,
-        {
-          Id,
-          Relation
-        },
-        { mode: 'no-cors' },
-        { headers: { Authorization } }
-      );
-      if (response.data.success) {
-        console.log("Patinet linked successfully");
-        setSuccess(true);
+      if (
+        Id == "" ||
+        Relation == ""
+      ) {
+        toast({
+          title: "Please fill all the inputs",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+      else {
+        const response = await axios.patch(
+          API_PATHS.linkPatient,
+          {
+            Id,
+            Relation
+          },
+          { headers: { Authorization, "Content-Type": "application/json" } },
+          { body: JSON.stringify({ Id, Relation }) }
+        );
+        if (response.status == 200) {
+          toast({
+            title: "Patient linked successfully",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+          setId(""),
+          setRelation("");
+        }
+        else {
+          toast({
+            title: "Failed to link patient",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
       }
     } catch (error) {
-      console.log(error.message);
+      toast({
+        title: "Patient not found",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
+
+  /*const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Send the username to the backend for deletion
+    try {
+      const response = await fetch(
+        API_PATHS.createFamilyMember + Createparameter,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Name, NationalId, Age, Gender, Relation }),
+        }
+      );
+      if (
+        Name == "" ||
+        NationalId == "" ||
+        Age == "" ||
+        Gender == "" ||
+        Relation == ""
+      ) {
+        toast({
+          title: "Please fill ALL the inputs",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+      if (NationalId.length !== 16) {
+        toast({
+          title: "National id must be 16",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+
+      if (response.ok) {
+        // Handle success or provide feedback to the user
+        toast({
+          title: "Family member Added successfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        setName(""),
+          setNationalId(""),
+          setAge(""),
+          setGender(""),
+          setRelation(""); // Clear the input field
+      } else {
+        // Handle errors or provide feedback to the user
+        toast({
+          title: "Failed to create Familymember",
+          description: "An error occurred while creating the admin.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };*/
 
   return (
     <Box pt="80px">

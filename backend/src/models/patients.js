@@ -49,8 +49,8 @@ const patientSchema = new Schema(
           ref: "Patient",
         },
       ],
+      required: true,
     },
-    required: true,
     MedicalHistory: {
       // i want medical history to be a array of pairs of strings
       type: [{ filename: String, note: String }],
