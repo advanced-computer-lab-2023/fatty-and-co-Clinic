@@ -7,18 +7,17 @@ const patientModel = require("../models/patients");
 const appointmentModel = require("../models/appointments");
 const familyMemberModel = require("../models/familymembers");
 const prescriptionModel = require("../models/prescriptions");
-const getDoctorFile = require("../common/middleware/doctorUpload");
-const nodemailer = require('nodemailer');
-
+const { getFileByFilename } = require("../common/middleware/doctorUpload");
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   //service: 'gmail',
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: 'shebeenhealthclinic@gmail.com',
-    pass: 'xojm teqp otis nknr',
+    user: "shebeenhealthclinic@gmail.com",
+    pass: "xojm teqp otis nknr",
   },
 });
 
@@ -42,16 +41,11 @@ const getRequest = async (req, res) => {
   }
 };
 
-const getRequestMedicalLicense = async (req, res) => {
-  const { Username } = req.query;
+const getRequestFile = async (req, res) => {
   try {
-    const request = await requestModel.findOne({ Username: Username });
-    const MedicalLicenseName = request.MedicalLicenseName;
-    console.log("waiting for file");
-    //const file = await getDoctorFile.getFile(MedicalLicenseName);
-    const file = getDoctorFile.allFiles();
-    console.log("file done");
-    res.status(200).json(file);
+    const { filename } = req.params;
+    const downloadStream = await getFileByFilename(filename);
+    downloadStream.pipe(res);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -69,11 +63,15 @@ const getRequests = async (req, res) => {
 const acceptRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requestModel.findOneAndUpdate({ Username: Username, Status: { $ne: "Accepted" } },
-    { $set: { Status: "Accepted" } },
-    {new:true});
+    const request = await requestModel.findOneAndUpdate(
+      { Username: Username, Status: { $ne: "Accepted" } },
+      { $set: { Status: "Accepted" } },
+      { new: true }
+    );
     var currentDate = new Date();
-    var oneWeekLater = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var oneWeekLater = new Date(
+      currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+    );
     const Email = request.Email;
 
     const doc = await doctorModel.create({
@@ -94,7 +92,7 @@ const acceptRequest = async (req, res) => {
 
     await transporter.sendMail({
       to: Email,
-      subject: 'Shebeen Health Clinic Employment Contract',
+      subject: "Shebeen Health Clinic Employment Contract",
       html: `
         <p>Please find the employment contract listed below.</p>
         <p>Please find the employment contract listed below. 
@@ -160,7 +158,6 @@ const acceptRequest = async (req, res) => {
 
       `,
     });
-  
 
     res.status(200).json(request);
   } catch (error) {
@@ -171,9 +168,11 @@ const acceptRequest = async (req, res) => {
 const rejectRequest = async (req, res) => {
   const { Username } = req.body;
   try {
-    const request = await requestModel.findOneAndUpdate({ Username: Username, Status: { $ne: "Rejected" } },
-    { $set: { Status: "Rejected" } },
-    {new:true});
+    const request = await requestModel.findOneAndUpdate(
+      { Username: Username, Status: { $ne: "Rejected" } },
+      { $set: { Status: "Rejected" } },
+      { new: true }
+    );
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -238,5 +237,5 @@ module.exports = {
   acceptRequest,
   rejectRequest,
   getRequests,
-  getRequestMedicalLicense,
+  getRequestFile,
 };

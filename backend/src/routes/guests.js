@@ -11,9 +11,8 @@ const {
   resetPass,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
-const {cpUpload} = require("../common/middleware/doctorUpload");
+const { cpUpload } = require("../common/middleware/doctorUpload");
 const send = require("send");
-
 
 const router = express.Router();
 
@@ -60,7 +59,7 @@ router.post("/addPatient", createPatient);
  * @prop {string} EducationalBackground - The educational background of the doctor
  * @prop {string} Speciality - The speciality of the doctor
  */
-router.post("/addRequest",cpUpload, createRequest); 
+router.post("/addRequest", cpUpload, createRequest);
 
 router.patch("/resetPass/", resetPass);
 // the following routes require authentication
@@ -73,6 +72,5 @@ router.put("/updateRequest/:id", updateRequest);
 router.patch("/updateEmail", updateEmail);
 
 router.patch("/updatePass/", updatePass);
-
 
 module.exports = router;

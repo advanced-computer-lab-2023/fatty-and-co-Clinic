@@ -22,7 +22,7 @@ export const API_PATHS = {
   // Admin
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
-  getRequestMedicalLicense: ADMIN_BASE + "getRequestMedicalLicense/",
+  getRequestFile: ADMIN_BASE + "getRequestFile/",
 
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
@@ -41,6 +41,7 @@ export const API_PATHS = {
   addMySlotsDoc: DOCTOR_BASE + "addMySlotsDoc/",
   deleteMySlotsDoc: DOCTOR_BASE + "deleteMySlotsDoc/",
   updateMySlotsDoc: DOCTOR_BASE + "updateMySlotsDoc/",
+  payDoctor: DOCTOR_BASE + "payDoctor/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -68,6 +69,8 @@ export const API_PATHS = {
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
+  viewAllAvailableSlots : DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
+  validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
 
   // Package
   packages: PACKAGE_BASE + "packages/",
@@ -83,4 +86,5 @@ export const API_PATHS = {
 
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
+  walletPayment: PAYEMENT_BASE + "walletPayment",
 };

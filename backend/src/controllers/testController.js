@@ -88,13 +88,16 @@ const acceptDoc = async (req, res) => {
 //Create a new appointment
 const createAppointment = async (req, res) => {
   const {
-    DoctorUsername,
-    DoctorName,
+    DoctorId,
     PatientUsername,
-    PatientName,
     Status,
     Date,
-  } = req.body;
+  } = req.query;
+  const patient = await patientModel.findOne({ Username: username });
+  const doctor = await doctorModel.findOne({ _id: DoctorId });
+  const PatientName = patient.Name;
+  const DoctorName = doctor.Name;
+  const DoctorUsername = doctor.Username;
   try {
     const newApp = await appointmentModel.create({
       DoctorUsername,

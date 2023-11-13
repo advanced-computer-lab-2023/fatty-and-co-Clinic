@@ -34,6 +34,7 @@ import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
+import  bookAptDetails  from "views/Patient/bookAptDetails/bookAptDetails";
 
 import {
   HomeIcon,
@@ -225,6 +226,15 @@ var dashRoutes = [
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
+    layout: "/patient",
+    show: false, // Add this to hide route from sidebar
+  },
+
+  {
+    path: "/bookAptDetails/:row",
+    name: "Book Appointment Details",
+    icon: <HomeIcon color="inherit" />,
+    component: bookAptDetails,
     layout: "/patient",
     show: false, // Add this to hide route from sidebar
   },
