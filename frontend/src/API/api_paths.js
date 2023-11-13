@@ -22,7 +22,7 @@ export const API_PATHS = {
   // Admin
   getRequests: ADMIN_BASE + "requests/",
   getRequest: ADMIN_BASE + "getRequest/",
-  getRequestMedicalLicense: ADMIN_BASE + "getRequestMedicalLicense/",
+  getRequestFile: ADMIN_BASE + "getRequestFile/",
 
   deleteUser: ADMIN_BASE + "deleteUser/",
   createAdmin: ADMIN_BASE + "addAdmin/",
