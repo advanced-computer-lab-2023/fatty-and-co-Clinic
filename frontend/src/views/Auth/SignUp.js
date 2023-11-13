@@ -48,6 +48,9 @@ const SignUpSchema = Yup.object().shape({
   MobileNum: Yup.string()
     .required("Required")
     .length(11, "Invalid Mobile Number"),
+  NationalId: Yup.string()
+    .required("Required")
+    .length(16, "Invalid National ID"),
   Gender: Yup.string()
     .required("Required")
     .oneOf(genders, "Gender must be M or F"),
@@ -67,11 +70,15 @@ function SignUp() {
   const bgColor = useColorModeValue("white", "gray.700");
   const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
   // const [Gender, setGender] = React.useState("M");
+  // const handleGenderChange = (event) => {
+  //   setGender(event.target.value);
+  // };
   // const [Username, setUsername] = useState("");
   // const [Name, setName] = useState("");
   // const [Email, setEmail] = useState("");
   // const [Password, setPassword] = useState("");
   // const [DateOfBirth, setDateOfBirth] = useState("");
+  // const [NationalId, setNationalId] = useState("");
   // const [EmergencyContactName, setEmergencyContactName] = useState("");
   // const [EmergencyContactNumber, setEmergencyContactNumber] = useState("");
   // const [MobileNum, setMobileNumber] = useState("");
@@ -95,6 +102,7 @@ function SignUp() {
       });
       const data = await response.json();
       console.log(data);
+      console.log(response);
       if (response.ok) {
         console.log("Patient added successfully!");
         toast({
@@ -190,6 +198,7 @@ function SignUp() {
               Email: "",
               Password: "",
               DateOfBirth: "",
+              NationalId: "",
               MobileNum: "",
               Gender: "",
               EmergencyContactName: "",
@@ -369,7 +378,38 @@ function SignUp() {
                     </FormControl>
                   )}
                 </Field>
-
+                <Field name="NationalId">
+                  {({ field }) => (
+                    <FormControl
+                      mb="24px"
+                      isInvalid={errors.NationalId && touched.NationalId}
+                    >
+                      <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                        National ID <span style={{ color: "red" }}>*</span>
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        fontSize="sm"
+                        ms="4px"
+                        borderRadius="15px"
+                        type="text"
+                        placeholder="..."
+                        // mb="24px"
+                        size="lg"
+                        onKeyPress={(event) => {
+                          const pattern = /[0-9]/;
+                          const inputChar = String.fromCharCode(event.charCode);
+                          if (!pattern.test(inputChar)) {
+                            event.preventDefault();
+                          }
+                        }}
+                        // required
+                        // onChange={(e) => setDateOfBirth(e.target.value)}
+                      />
+                      <FormErrorMessage>{errors.NationalId}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
                 {/* <FormControl>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Gender

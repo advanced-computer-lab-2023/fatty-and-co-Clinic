@@ -35,22 +35,27 @@ const doctorSchema = new Schema(
       lowercase: true,
       required: false,
     },
+    Wallet: {
+      type: Number,
+      required: false,
+    },
     //Adding working days and working hours to doctor
     //to get available timings of sessions for patients.
-    WorkingDays: {
-      //type is number so it's easier to compare with the getDay method
-      //for example (0-6 ---> Sunday-Saturday)
-      type: [Number],
-      required: false,
-    },
-    StartTime: {
-      type: Number,
-      required: false,
-    },
-    EndTime: {
-      type: Number,
-      required: false,
-    },
+
+    // WorkingDays: {
+    //   //type is number so it's easier to compare with the getDay method
+    //   //for example (0-6 ---> Sunday-Saturday)
+    //   type: [Number],
+    //   required: false,
+    // },
+    // StartTime: {
+    //   type: Number,
+    //   required: false,
+    // },
+    // EndTime: {
+    //   type: Number,
+    //   required: false,
+    // },
   },
   { timestamps: true }
 );

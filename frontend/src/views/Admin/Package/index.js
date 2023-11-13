@@ -29,10 +29,10 @@ function PackageI() {
   // const [packages, setPackages] = useState(null);
   useEffect(() => {
     const fetchPackages = async () => {
-      const response = await fetch(API_PATHS.packages ,{
-        headers:{
-          'Authorization': Authorization
-        }
+      const response = await fetch(API_PATHS.packages, {
+        headers: {
+          Authorization: Authorization,
+        },
       });
       const data = await response.json();
       if (response.ok) {

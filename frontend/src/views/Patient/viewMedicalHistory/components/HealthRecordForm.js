@@ -14,7 +14,7 @@ import {
 import { AttachmentIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { usePackageContext } from "../hooks/usePackageContext";
+import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -22,7 +22,7 @@ import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 
 function HealthRecordForm() {
-  const { dispatch } = usePackageContext();
+  const { dispatch } = useMedicalHistoryContext();
   const { user } = useAuthContext();
   const [ file, setFile ] = useState(null);
   const Authorization = `Bearer ${user.token}`;
@@ -50,7 +50,7 @@ function HealthRecordForm() {
               e.preventDefault();
               const formData = new FormData();
               formData.append("file", file);
-              const response = await fetch(API_PATHS.uploadFile, {
+              const response = await fetch(API_PATHS.uploadFile+user.username, {
                 method: "POST",
                 headers: {
                   Authorization: Authorization,
@@ -65,6 +65,7 @@ function HealthRecordForm() {
                   duration: 3000,
                   isClosable: true,
                 });
+                location.reload();
                 //dispatch({ type: "ADD_PACKAGE", payload: data });
               } else {
                 toast({
@@ -100,6 +101,7 @@ function HealthRecordForm() {
                 type="file"
                 id="file"
                 name="file"
+                accept=".pdf,.png,.jpg,.jpeg"
                 style={{ display: "none" }}
                 required
                 onChange={(e) => setFile(e.target.files[0])}

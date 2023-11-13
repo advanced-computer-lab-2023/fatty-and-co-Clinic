@@ -5,7 +5,6 @@ const appointmentSchema = new Schema(
   {
     DoctorUsername: {
       type: String,
-      ref: "Doctor",
       required: true,
     },
     DoctorName: {
@@ -26,9 +25,9 @@ const appointmentSchema = new Schema(
       enum: ["Upcoming", "Completed", "Rescheduled", "Cancelled"],
       default: "Upcoming",
     },
-    FollowUp:{
+    FollowUp: {
       type: Boolean,
-      default: false
+      default: false,
     },
     Date: {
       type: Date,

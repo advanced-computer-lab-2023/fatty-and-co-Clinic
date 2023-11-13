@@ -12,7 +12,28 @@ const {
   createDoctor,
   createRandomAppointment,
   createPrescription,
+  createDocSlot,
+  getDocSlot,
+  acceptDoc,
 } = require("../controllers/testController");
+
+const { testAppointRef } = require("../controllers/appointmentController");
+const { testDocSlotRef } = require("../controllers/docSlotController");
+
+const {
+  filterDoctorSlotEdition,
+  addMySlotsDoc,
+  deleteMySlotsDoc,
+  updateMySlotsDoc,
+  viewUpcomingAppointmentsDoc,
+  viewPastAppoitmentsDoc,
+  viewAllAvailableSlots,
+} = require("../controllers/doctorController");
+
+const {
+  viewUpcomingAppointmentsPat,
+  viewPastAppoitmentsPat,
+} = require("../controllers/patientController");
 
 const router = express.Router();
 
@@ -24,6 +45,9 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("Tests");
 });
+
+router.post("/acceptDoc", acceptDoc);
+
 
 /**
  * @route GET /tests/Users
@@ -121,6 +145,70 @@ router.post("/createRandomAppointment", (req, res) => {
 
 router.post("/createPrescription", (req, res) => {
   createPrescription(req, res);
+});
+router.post("/createPrescription", (req, res) => {
+  createPrescription(req, res);
+});
+
+router.get("/getDocSlot", (req, res) => {
+  getDocSlot(req, res);
+});
+
+router.get("/testDocSlotRef", (req, res) => {
+  testDocSlotRef(req, res);
+});
+
+router.get("/testDocSlotRef", (req, res) => {
+  testDocSlotRef(req, res);
+});
+
+router.get("/testAppointRef", (req, res) => {
+  testAppointRef(req, res);
+});
+
+//COPY TO DOCSLOTROUTES  DO NOT FORGET TO COPY THE const() = require above;
+//do not forget the middleware
+
+router.post("/createDocSlot", (req, res) => {
+  createDocSlot(req, res);
+});
+
+//COPY TO DOCTOR ROUTES
+router.get("/filterDoctorSlotEdition", (req, res) => {
+  filterDoctorSlotEdition(req, res);
+});
+
+router.post("/addMySlotsDoc", (req, res) => {
+  addMySlotsDoc(req, res);
+});
+
+router.put("/updateMySlotsDoc", (req, res) => {
+  updateMySlotsDoc(req, res);
+});
+
+router.delete("/deleteMySlotsDoc", (req, res) => {
+  deleteMySlotsDoc(req, res);
+});
+
+router.get("/viewUpcomingAppointmentsDoc", (req, res) => {
+  viewUpcomingAppointmentsDoc(req, res);
+});
+
+router.get("/viewPastAppoitmentsDoc", (req, res) => {
+  viewPastAppoitmentsDoc(req, res);
+});
+
+router.get("/viewAllAvailableSlots", (req, res) => {
+  viewAllAvailableSlots(req, res);
+});
+
+//COPY TO PATIENT ROUTES
+router.get("/viewUpcomingAppointmentsPat", (req, res) => {
+  viewUpcomingAppointmentsPat(req, res);
+});
+
+router.get("/viewPastAppoitmentsPat", (req, res) => {
+  viewPastAppoitmentsPat(req, res);
 });
 
 module.exports = router;

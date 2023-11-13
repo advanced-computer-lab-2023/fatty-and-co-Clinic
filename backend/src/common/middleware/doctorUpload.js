@@ -14,68 +14,32 @@ conn.once("open", () => {
   //Init stream
   gfs = new Grid(conn.db, mongoose.mongo);
   gfs.collection("doctor_uploads");
-  
 });
 //create storage engine
 const storage = new GridFsStorage({
   url: process.env.MONGO_URI,
   file: (req, file) => {
-    return Promise.all([
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString("hex") + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: "doctor_uploads",
-            metadata: {
-              type: "IdFile"
-            }
-          };
-          resolve(fileInfo);
-        });
-      }),
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString("hex") + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: "doctor_uploads",
-            metadata: {
-              type: "MedicalLicense"
-            }
-          };
-          resolve(fileInfo);
-        });
-      }),
-      new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-          if (err) {
-            return reject(err);
-          }
-          const filename = buf.toString("hex") + path.extname(file.originalname);
-          const fileInfo = {
-            filename: filename,
-            bucketName: "doctor_uploads",
-            metadata: {
-              type: "MedicalDegree"
-            }
-          };
-          resolve(fileInfo);
-        });
-      })
-    ]);
-  }
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString("hex") + path.extname(file.originalname);
+        const fileInfo = {
+          filename: filename,
+          bucketName: "request_uploads",
+        };
+        resolve(fileInfo);
+      });
+    });
+  },
 });
-const cpUpload = multer({storage }).fields([
+
+const upload = multer({ storage });
+const cpUpload = upload.fields([
   { name: "IdFile", maxCount: 1 },
   { name: "MedicalLicense", maxCount: 1 },
-  { name: "MedicalDegree", maxCount: 1 }
+  { name: "MedicalDegree", maxCount: 1 },
 ]);
 
 const getDoctorFiles = (req, res) => {
@@ -92,18 +56,17 @@ const getDoctorFiles = (req, res) => {
 };
 
 const getDoctorFile = (name) => {
-  
-    try {
-      const file = gfs.files.findOne({ filename: name }); //for all files we use find().toArray
-      if (!file || file.length === 0) {
-        retrun("No file found");
-      }
-      console.log("file", file);
-      resolve(file);
-    } catch (error) {
-      reject(error);
+  try {
+    const file = gfs.files.findOne({ filename: name }); //for all files we use find().toArray
+    if (!file || file.length === 0) {
+      retrun("No file found");
     }
-  };
+    console.log("file", file);
+    resolve(file);
+  } catch (error) {
+    reject(error);
+  }
+};
 
 const getFile = (name) => {
   return new Promise(async (resolve, reject) => {
@@ -125,23 +88,34 @@ const getFile = (name) => {
   });
 };
 
+const allFiles = () => {
+  console.log("out");
 
-const allFiles = ()=>{
-  console.log("out")
- 
-  gfs.files.find().toArray( (err, files) => {
-    console.log("in")
+  gfs.files.find().toArray((err, files) => {
+    console.log("in");
     //check if files exist
     if (!files || files.length === 0) {
-      
       return res.status(404).json({
         err: "No files exist",
       });
     }
     //files exist
-   
+
     return files;
   });
-}
+};
 
-module.exports = { cpUpload, getDoctorFile, getFile , allFiles};
+// download one file by filename
+const getFileByFilename = async (filename, res) => {
+  try {
+    const bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+      bucketName: "request_uploads",
+    });
+    const downloadStream = bucket.openDownloadStreamByName(filename);
+    return downloadStream;
+  } catch (err) {
+    res.status(404).send("File not found");
+  }
+};
+
+module.exports = { cpUpload, getDoctorFile, getFileByFilename };

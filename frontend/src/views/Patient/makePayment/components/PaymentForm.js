@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
 import { Input } from "@chakra-ui/react";
-
+import {useLocation} from "react-router-dom"
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -24,12 +24,31 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = ({amount}) => {
+const PaymentForm = ({
+  Amount,
+  Description,
+  PackageName,
+  NationalId,
+  DoctorId,
+  PatientUsername,
+  status,
+  Date
+}) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    if (success) {
+      const redirectTimeout = setTimeout(() => {
+        window.location.href = "./ThankYou.js";
+      }, 3000);
+
+      return () => clearTimeout(redirectTimeout);
+    }
+  }, [success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,19 +65,107 @@ const PaymentForm = ({amount}) => {
           API_PATHS.cardPayment,
           {
             id,
-            amount: amount * 100,
+            amount: Amount * 100,
+            description: Description,
           },
           { headers: { Authorization } }
         );
         if (response.data.success) {
+          if(Description==="Doctor's appointment"){
+          const response = await fetch(API_PATHS.addAppointment, {
+            method: "POST",
+            headers: {
+              Authorization,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              DoctorId,
+              PatientUsername,
+              status,
+              Date
+            }),
+          });
+          const response2 = await fetch(API_PATHS.payDoctor, {
+            method: "POST",
+            headers: {
+              Authorization,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              DoctorId,
+              Amount,
+            }),
+          });
+          }
           console.log("Successful payment");
           setSuccess(true);
         }
-      } catch (error) {
-        console.log("Error", error);
+        if (PackageName && !NationalId) {
+          const response = await fetch(API_PATHS.updateMySub, {
+            method: "PATCH",
+            headers: {
+              Authorization,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ PackageName }),
+          });
+          const errorData = await response.json();
+          if (response.ok) {
+            console.log("Successful payment");
+            setSuccess(true);
+          } else {
+            toast({
+              title: "Failed to pay & subscribe!",
+              description: errorData.error,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+            return;
+          }
+        }
+        // if (response.data.success) {
+        // console.log("Subscription payment completed successfully!");
+        // setSuccess(true);}
+        // else {
+        //   console.log(error.message);
+        // }
+        else if (PackageName && NationalId) {
+          const response = await fetch(API_PATHS.updateFamSub, {
+            method: "PATCH",
+            headers: {
+              Authorization,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ PackageName, NationalId }),
+          });
+          const errorData = await response.json();
+          if (response.ok) {
+            console.log("Successful payment");
+            setSuccess(true);
+          } else {
+            toast({
+              title: "Failed to pay & subscribe!",
+              description: errorData.error,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+            return;
+          }
+        }
+        // if (response.data.success) {
+        // console.log("Subscription payment completed for family member successfully!");
+        // setSuccess(true);}
+        // else {
+        //   console.log(error.message);
+        // }
+        else {
+          console.log(error.message);
+        }
+      } catch {
+        error;
       }
-    } else {
-      console.log(error.message);
     }
   };
 

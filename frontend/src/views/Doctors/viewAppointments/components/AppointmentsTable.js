@@ -47,7 +47,7 @@ export const AppointmentsTable = ({ title, captions, data }) => {
             {data?.map((row) => {
               return (
                 <AppointmentsRow
-                  key={row.PatientUsername}
+                  key={row._id}
                   PatientName={row.PatientName}
                   PatientUsername={row.PatientUsername}
                   Type={row.FollowUp ? "Follow Up" : "First Time"}

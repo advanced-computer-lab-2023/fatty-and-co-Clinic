@@ -4,10 +4,16 @@ import Billing from "views/Dashboard/Billing";
 import RTLPage from "views/Dashboard/RTL";
 import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
+import resetPass from "views/Auth/resetPass";
 import SignUp from "views/Auth/SignUp";
+import DocAcc from "views/Auth/docAccepted";
 import docSignUp from "views/Auth/docSignUp";
-import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js"; //Zawedna de
+import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
+import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
+import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
+import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
 import Package from "views/Admin/Package/package";
+import Package2 from "views/Patient/viewPackagesFam/package2";
 import DeleteUser from "views/Admin/DeleteUser/DeleteUserForm";
 import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import createFamilymember from "views/Patient/createFamilyMember";
@@ -18,11 +24,19 @@ import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
 import MedicalHistoryPatient from "views/Patient/viewMedicalHistory/medicalHistory";
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
+import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
+import linkPatient from "views/Patient/linkPatient";
+import ViewMyPackage from "views/Patient/viewMyPackage";
+import ViewFamPackages from "views/Patient/viewFamPackages";
+import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
+import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
+import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
+
 import {
   HomeIcon,
   StatsIcon,
@@ -48,6 +62,50 @@ var dashRoutes = [
   },
 
   {
+    path: "/viewMyPackage",
+    name: "My Package",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewMyPackage,
+    layout: "/patient",
+  },
+  {
+    path: "/SubscribePackages",
+    name: "Subscribe",
+    icon: <HomeIcon color="inherit" />,
+    component: SubscribePackage,
+    layout: "/patient",
+  },
+  {
+    path: "/viewFamPackage",
+    name: "Family Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackages,
+    layout: "/patient",
+  },
+  {
+    path: "/viewMyPackageStatus",
+    name: "My Subscription",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewMyPackageswithstatus,
+    layout: "/patient",
+  },
+  {
+    path: "/ViewFamPackageswithstatus",
+    name: "Family Subscriptions",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackageswithstatus,
+    layout: "/patient",
+  },
+
+  {
+    path: "/package",
+    name: "Packages",
+    icon: <HomeIcon color="inherit" />,
+    component: Package2,
+    layout: "/patient",
+  },
+
+  {
     path: "/viewAppointPat",
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
@@ -55,6 +113,15 @@ var dashRoutes = [
     layout: "/patient",
   },
 
+  {
+    path: "/Subscribtions/",
+    name: " Cancel Subscribtions",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: CancelSubscription,
+    layout: "/patient",
+  },
   {
     path: "/updateEmailDoc",
     name: "Update Email",
@@ -74,12 +141,44 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
+    path: "/updatePass",
+    name: "Change Password",
+    rtlName: "لوحة القيادة",
+    icon: <PersonIcon color="inherit" />,
+    component: UpdatePass,
+    layout: "/doctor",
+  },
+  {
+    path: "/updatePass",
+    name: "Change Password",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: UpdatePass,
+    layout: "/admin",
+  },
+  {
+    path: "/updatePass",
+    name: "Change Password",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: UpdatePass,
+    layout: "/patient",
+  },
+  {
     path: "/updateAffil",
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
     secondaryNavbar: true,
     component: UpdateAffil,
+    layout: "/doctor",
+  },
+
+  {
+    path: "/UpdateSlots",
+    name: "Update Slots",
+    icon: <HomeIcon color="inherit" />,
+    component: UpdateSlots,
     layout: "/doctor",
   },
 
@@ -110,7 +209,7 @@ var dashRoutes = [
   {
     path: "/createFamilymember/:Createparameter",
     name: "Add Family Member",
-    icon: <HomeIcon color="inherit" />,
+    icon: <PersonIcon color="inherit" />,
     component: createFamilymember,
     layout: "/patient",
   },
@@ -133,6 +232,15 @@ var dashRoutes = [
   },
 
   {
+    path: "/bookAptDetails/:row",
+    name: "Book Appointment Details",
+    icon: <HomeIcon color="inherit" />,
+    component: bookAptDetails,
+    layout: "/patient",
+    show: false, // Add this to hide route from sidebar
+  },
+
+  {
     path: "/viewDoctors",
     name: "View Doctors",
     icon: <HomeIcon color="inherit" />,
@@ -140,7 +248,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/viewmembers/:PatientUserName",
+    path: "/viewmembers",
     name: "View members",
     icon: <HomeIcon color="inherit" />,
     component: Viewmembers,
@@ -158,6 +266,13 @@ var dashRoutes = [
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
+    layout: "/patient",
+  },
+  {
+    path: "/linkPatient",
+    name: "Link Patient",
+    icon: <PersonIcon color="inherit" />,
+    component: linkPatient,
     layout: "/patient",
   },
   {
@@ -241,6 +356,7 @@ var dashRoutes = [
         component: SignUp,
         layout: "/auth",
       },
+
       {
         path: "/docsignup",
         name: "Doctor Sign Up",
@@ -248,6 +364,22 @@ var dashRoutes = [
         icon: <RocketIcon color="inherit" />,
         secondaryNavbar: true,
         component: docSignUp,
+        layout: "/auth",
+      },
+      {
+        path: "/resetPass",
+        name: "Password Reset",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: resetPass,
+        layout: "/auth",
+      },
+      {
+        path: "/docacc",
+        name: "Contract Accepted",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: DocAcc,
         layout: "/auth",
       },
     ],

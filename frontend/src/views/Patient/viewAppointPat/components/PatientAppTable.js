@@ -54,10 +54,9 @@ export const PatientAppTable = ({ title, captions, data, isLoading }) => {
             </Thead>
             <Tbody>
               {data?.map((row) => {
-                console.log(row);
                 return (
                   <AppointmentsRow
-                    key={row.DoctorUsername}
+                    key={row._id}
                     DoctorName={row.DoctorName}
                     Status={row.Status}
                     Type={row.FollowUp ? "Follow Up" : "First Time"}

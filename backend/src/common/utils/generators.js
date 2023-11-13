@@ -148,6 +148,11 @@ function generateMobileNum() {
   return mobileNum;
 }
 
+function generateNationalId() {
+  const nationalId = Math.floor(Math.random() * 9000000000000000) + 1000000000000000;
+  return nationalId;
+}
+
 function generatePackage() {
   const packages = ["Silver", "Gold", "Platinum"];
   return packages[Math.floor(Math.random() * packages.length)];
@@ -212,6 +217,18 @@ function generateStartTimeAndEndTime() {
   const endTime = Math.floor(Math.random() * 10) + 10;
   return { startTime, endTime };
 }
+
+function generateStartTime() {
+  const startTime = Math.floor(Math.random() * 10);
+  return { startTime };
+}
+
+
+function generateOneWorkingDay() {
+  const workingDay = Math.floor(Math.random() * 7);
+  return { workingDay };
+}
+
 
 function generateAppointmentStatus() {
   const status = ["Upcoming", "Completed", "Rescheduled", "Cancelled"];
@@ -325,6 +342,7 @@ module.exports = {
   generateEducationalBackground,
   generateSpeciality,
   generateMobileNum,
+  generateNationalId,
   generatePackage,
   generateEmail,
   generatePassword,
@@ -336,4 +354,6 @@ module.exports = {
   generateMedicine,
   generateDiagnosis,
   generatePrescriptionStatus,
+  generateStartTime,
+  generateOneWorkingDay,
 };
