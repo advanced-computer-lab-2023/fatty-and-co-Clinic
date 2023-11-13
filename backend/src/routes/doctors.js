@@ -18,6 +18,8 @@ const {
   viewPastAppoitmentsDoc,
   viewAllAvailableSlots,
   viewMySlotsDoc,
+  payDoctor,
+  validateBookingDate,
 } = require("../controllers/doctorController");
 
 const {
@@ -26,7 +28,6 @@ const {
   checkAdmin,
 } = require("../common/middleware/checkType");
 
-
 const router = express.Router();
 
 /**
@@ -34,10 +35,9 @@ const router = express.Router();
  * @desc Returns a message indicating that the request was successful
  * @access Public
  */
-router.get("/",  (req, res) => {
+router.get("/", (req, res) => {
   res.send("Doctors");
 });
-
 
 /**
  * @route POST /doctors/createDoctor
@@ -75,7 +75,7 @@ router.get("/getDoctorByid/:id", getDoctorByID);
  * @access Public
  * @param {string} Username - The username of the doctor
  */
-router.get("/getDoctorByUsername/:username",checkPatient, getDoctorByUsername);
+router.get("/getDoctorByUsername/:username", checkPatient, getDoctorByUsername);
 
 // /**
 //  * USELESS ROUTE. SEARCH IS HANDLED BY THE PATIENTS ROUTE /view/doctors
@@ -148,6 +148,8 @@ router.get(
 );
 router.post("/followupAppointment", checkDoctor, followupAppointment);
 
+router.post("/payDoctor", payDoctor);
+
 router.get("/filterDoctorSlotEdition", checkPatient, (req, res) => {
   filterDoctorSlotEdition(req, res);
 });
@@ -172,12 +174,16 @@ router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
   viewPastAppoitmentsDoc(req, res);
 });
 
-router.get("/viewAllAvailableSlots/:id", checkPatient, (req, res) => {
+router.get("/viewAllAvailableSlots/:username", checkPatient, (req, res) => {
   viewAllAvailableSlots(req, res);
 });
 
-router.get("/viewMySlotsDoc" ,checkDoctor, (req, res) => {
+router.get("/viewMySlotsDoc", checkDoctor, (req, res) => {
   viewMySlotsDoc(req, res);
+});
+
+router.get("/validateBookingDate", checkPatient, (req, res) => {
+  validateBookingDate(req, res);
 });
 
 module.exports = router;

@@ -1455,9 +1455,9 @@ const uploadFile = async (req, res) => {
 };
 
 const getMedicalHistory = async (req, res) => {
-  const user = req.user.Username;
-  if (req.user.Type === "Admin") {
-    user = req.body.username;
+  var user = req.user.Username;
+  if (req.user.Type === "Doctor") {
+    user = req.params.username;
   }
   const patient = await patientModel.findOne({ Username: user });
   if (!patient) {
