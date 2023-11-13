@@ -6,6 +6,7 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
 import resetPass from "views/Auth/resetPass";
 import SignUp from "views/Auth/SignUp";
+import DocAcc from "views/Auth/doccAccepted";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
@@ -353,6 +354,14 @@ var dashRoutes = [
         icon: <RocketIcon color="inherit" />,
         secondaryNavbar: true,
         component: resetPass,
+        layout: "/auth",
+      },
+      {
+        path: "/docacc",
+        name: "Contract Accepted",
+        icon: <RocketIcon color="inherit" />,
+        secondaryNavbar: true,
+        component: DocAcc,
         layout: "/auth",
       },
     ],
