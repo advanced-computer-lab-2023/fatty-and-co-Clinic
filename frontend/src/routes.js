@@ -6,7 +6,7 @@ import Profile from "views/Dashboard/Profile";
 import SignIn from "views/Auth/SignIn";
 import resetPass from "views/Auth/resetPass";
 import SignUp from "views/Auth/SignUp";
-import DocAcc from "views/Auth/doccAccepted";
+import DocAcc from "views/Auth/docAccepted";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
@@ -35,7 +35,7 @@ import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
-import  bookAptDetails  from "views/Patient/bookAptDetails/bookAptDetails";
+import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 
 import {
   HomeIcon,
