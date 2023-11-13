@@ -3,12 +3,12 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 const payWithCard = async (req, res) => {
     console.log(req.body);
-    const { amount, id } = req.body;
+    const { amount, description, id } = req.body;
     try {
         const payment = await stripe.paymentIntents.create({
             amount,
             currency: "USD",
-            description: "Doctor's Appointment",
+            description: description,
             payment_method: id,
             confirm: true,
             return_url: 'http://localhost:3000/'
@@ -26,6 +26,7 @@ const payWithCard = async (req, res) => {
         });
     }
 };
+
 
 
 module.exports = { payWithCard };

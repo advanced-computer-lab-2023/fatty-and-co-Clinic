@@ -1,17 +1,28 @@
 const express = require("express");
 const {
+  uploadFile,
+  getMedicalHistory,
+  downloadFile,
+  removeHealthRecord,
+  getWalletAmount,
+  getAmountSubscription,
+  getAmountFam,
+  updateFamCredit,
+  updateSubscription,
+  payForFamSubscription,
+  cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
-  subscribehealthpackage,
   subscribepackagefamilymem,
   getAllPatients,
   deletePatient,
   getPatient,
   updatePatient,
   getPatientUsername,
+  viewOptionPackages,
   session_index,
   createFamilymember,
-  GetFamilymembers,
+  getFamilymembers,
   getPrescriptions,
   selectPatient,
   selectPrescription,
@@ -21,7 +32,14 @@ const {
   getMedicalHistory,
   downloadFile,
   removeHealthRecord,
+  cancelSubscriptionfamilymember,
+  payForSubscription,
+  viewHealthPackagewithstatus,
+  viewHealthFamwithstatus,
+  viewUpcomingAppointmentsPat,
+  viewPastAppoitmentsPat,
 } = require("../controllers/patientController");
+
 const { constants } = require("buffer");
 const { checkPatient } = require("../common/middleware/checkType");
 const { upload } = require("../common/middleware/upload");
@@ -40,7 +58,7 @@ const router = express.Router();
  * @prop {number} Age - The age of the patient
  * @prop {string} Gender - The gender of the patient ["M", "F"]
  */
-router.get("/viewFamilyPackage/:PatientID", viewHealthFam);
+router.get("/viewFamilyPackage", viewHealthFam);
 /**
 =======
 >>>>>>> main
@@ -49,14 +67,13 @@ router.get("/viewFamilyPackage/:PatientID", viewHealthFam);
  * @access Public
  */
 router.get("/getAllPatients", getAllPatients);
-
+router.get("/getWalletAmount", getWalletAmount);
 /**
  * @route DELETE /patients/deletePatient/:id
  * @desc Deletes a patient by ID
  * @access Public
  * @param {string} id - The ID of the patient to delete
  */
-// TODO: add type check as middleware if needed
 router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one deleting is an admin or the currently logged in patient
 
 /**
@@ -66,7 +83,17 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
-
+router.get("/getOptionPackages", viewOptionPackages);
+router.patch("/getAmountCredit", getAmountSubscription); //gets amount to be paid for self
+router.patch("/getAmountCreditFam", getAmountFam); //gets amount to be paid for fam
+router.patch("/updateFamSubs", updateFamCredit); //updates status fam
+router.patch("/updateMySubs", updateSubscription); //updates status leya
+router.patch("/cancelSubscription", cancelSubscription);
+router.patch("/cancelSubscriptionfamilymember", cancelSubscriptionfamilymember);
+router.patch("/payForSubscription", payForSubscription);
+router.get("/viewHealthPackagewithstatus", viewHealthPackagewithstatus);
+router.get("/viewHealthFamwithstatus", viewHealthFamwithstatus);
+//router.patch("/cancelSubscription",paym)
 /**
  * @route PATCH /patients/updatePatient/:id
  * @desc Updates a patient by ID
@@ -81,7 +108,7 @@ router.get("/getPatient/:id", getPatient);
  */
 // TODO: does it have to be a patient? or can it be an admin?
 // TODO: check if the one updating is an admin or the currently logged in patient
-router.patch("/updatePatient/:id", checkPatient, updatePatient);
+router.patch("/updatePatient", checkPatient, updatePatient);
 
 /**
  * @route GET /patients/getPatientUsername/:Username
@@ -110,7 +137,6 @@ router.get("/view/doctors/", checkPatient, session_index);
  * @prop {string} Gender - The gender of the family member ["M", "F"]
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
-router.post("/createFamilymember/:Createparameter", createFamilymember);
 router.post("/createFamilymember", checkPatient, createFamilymember);
 
 /**
@@ -118,8 +144,9 @@ router.post("/createFamilymember", checkPatient, createFamilymember);
  * @desc Returns a list of all family members for a patient
  * @access Patient
  */
-router.get("/getFamilymember/:PatientID", GetFamilymembers); //Changed name of params
-router.get("/getFamilymember", checkPatient, GetFamilymembers);
+router.get("/getFamilymember", checkPatient, getFamilymembers);
+// TODO: DO WE NEED THIS??
+router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of params
 /**
  * @route GET /patients/getPrescriptions
  * @desc Returns a list of all prescriptions
@@ -131,31 +158,31 @@ router.get("/getPrescriptions", getPrescriptions);
 /**
  * @route POST /patients/uploadFile
  * @desc Uploads a file health record
- * @access Patient
- * @prop {string} note - The note of the file in the body
+ * @access Patient or Doctor
+ * @prop {string} note - The note of the file in the params
  */
-router.post("/uploadFile", upload.single("file"), uploadFile);
+router.post("/uploadFile/:username", upload.single("file"), uploadFile);
 
 /**
- * @route GET /patients/getFiles
- * @desc Returns a list of all files for a patient
- * @access Patient or Admin
- * @param {string} username - The username of the patient in the body if the user is an admin
+ * @route GET /patients/getMedicalHistory
+ * @desc Returns the medical history(list of [file,note]) for a patient
+ * @access Patient or Doctor
+ * @param {string} username - The username of the Patient in the params if the user is an Doctor
  */
-router.get("/getMedicalHistory", getMedicalHistory);
+router.get("/getMedicalHistory/:username", getMedicalHistory);
 
 /**
  * @route GET /patients/downloadFile
  * @desc Downloads a file health record
- * @access Patient or Admin
+ * @access Patient or Doctor
  * @param {string} filename - The filename in the params
  */
-router.get("/downloadFile/:filename", downloadFile); 
+router.get("/downloadFile/:filename", downloadFile);
 
 /**
  * @route DELETE /patients/removeHealthRecord
  * @desc Removes a file health record
- * @access Patient or Admin
+ * @access Patient 
  * @param {string} filename - The filename in the params
  */
 router.delete("/removeHealthRecord/:filename", removeHealthRecord);
@@ -165,7 +192,6 @@ router.delete("/removeHealthRecord/:filename", removeHealthRecord);
  * @desc Returns a list of all patients
  * @access Public
  */
-// TODO: add type check as middleware if needed
 router.get("/selectPatient", selectPatient);
 
 /**
@@ -174,7 +200,6 @@ router.get("/selectPatient", selectPatient);
  * @access Public
  * @param {string} id - The ID of the prescription to get
  */
-// TODO: add type check as middleware if needed
 router.get("/selectPrescription", selectPrescription);
 
 /**
@@ -183,12 +208,19 @@ router.get("/selectPrescription", selectPrescription);
  * @access Public
  * @param {string} username - The username of the patient
  */
-// TODO: add type check as middleware if needed
-// TODO: does this need the :Username param after adding authentication?
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/subscribehealthpackage/:id", subscribehealthpackage)
-router.patch("/subscribepackagefamilymem/:id", subscribepackagefamilymem)
-router.get("/viewMyPackage/:PatientID", viewHealthPackage)
 router.patch("/linkPatient", linkPatient)
+router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
+router.get("/viewMyPackage/", viewHealthPackage);
+router.patch("/payFamilySubscription/", payForFamSubscription);
+
+router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
+  viewUpcomingAppointmentsPat(req, res);
+});
+
+router.get("/viewPastAppoitmentsPat", checkPatient, (req, res) => {
+  viewPastAppoitmentsPat(req, res);
+});
 
 module.exports = router;

@@ -4,6 +4,8 @@ const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
 const User = require("../models/systemusers");
 const { isNull } = require("util");
+const DoctorModel = require("../models/doctors");
+const { MongoClient } = require("mongodb");
 
 // //Filter by date mengheir time wala be time?
 // const getAppointments = async (req, res) => {
@@ -164,6 +166,11 @@ const { isNull } = require("util");
 // };
 
 // Get all the patients of a certain doctor.
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+};
 const findDoctorPatients = async (req, res) => {
   const doctorUsername = req.user.Username;
 
@@ -353,6 +360,7 @@ const searchPatient = async (req, res) => {
   }
 };
 
+
 const getAppointmentsDoc = async (req, res) => {
   // Package discount starts with 0
   // Extract the 'id' parameter from the request object
@@ -502,6 +510,42 @@ const getAppointmentsPat = async (req, res) => {
   }
 };
 
+//const collection = client.db("test").collection("devices");
+
+const testAppointRef = async (req, res) => {
+ 
+  await appointmentModel
+    .aggregate([
+      //testing join by username instead of id -- works
+      // {
+      //   $lookup: {
+      //     from: DoctorModel.collection.name,
+      //     localField: "DoctorUsername",
+      //     foreignField: "Username",
+      //     as: "DoctorDetails",
+      //   },
+      // },
+      // {
+      //   $unwind: "$DoctorDetails",
+      // },
+
+      //testing adding fields to Appointments --works
+      {
+        $addFields: {
+          day: {$dayOfWeek: "$Date"},
+          hour: {$hour: "$Date"}
+        }
+      }
+      
+    ])
+    .then((value) => {
+      console.log(value);
+      res.status(200).json(value);
+    });
+};
+
+
+
 module.exports = {
   filterAppointmentsByStatusDoc,
   filterAppointmentsByStatusPat,
@@ -512,4 +556,5 @@ module.exports = {
   upcomingAppforDoc,
   searchPatient,
   getAppointmentsPat,
+  testAppointRef,
 };

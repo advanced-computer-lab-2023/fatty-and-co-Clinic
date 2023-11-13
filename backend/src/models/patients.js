@@ -37,9 +37,8 @@ const patientSchema = new Schema(
       type: { FullName: String, PhoneNumber: Number },
       required: true,
     },
-    PackageName: {
-      type: String,
-      ref: "Package",
+    Wallet: {
+      type: Number,
       required: false,
     },
     LinkedPatients: {
@@ -53,7 +52,7 @@ const patientSchema = new Schema(
     },
     MedicalHistory: {
       // i want medical history to be a array of pairs of strings
-      type: [{ filename: String, note: String }],
+      type: [{ filename: String, originalname: String, note: String }],
       required: false,
     },
   },

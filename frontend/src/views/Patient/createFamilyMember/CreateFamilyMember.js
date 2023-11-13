@@ -16,31 +16,36 @@ import { API_PATHS } from "API/api_paths";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import { useParams } from "react-router-dom";
-
+//import { useParams } from "react-router-dom";
+import { useAuthContext } from "hooks/useAuthContext";
 export function CreateFamilyMember() {
+const [Username, setUserName] = useState("");
   const [Name, setName] = useState("");
   const [NationalId, setNationalId] = useState("");
   const [Age, setAge] = useState("");
   const [Gender, setGender] = useState("");
   const [Relation, setRelation] = useState("");
   const toast = useToast();
-
+  const [data, setData] = useState([]);
+ 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
   const textColor = useColorModeValue("gray.700", "white");
-  const { Createparameter } = useParams();
+ // const { Createparameter } = useParams();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Send the username to the backend for deletion
     try {
       const response = await fetch(
-        API_PATHS.createFamilyMember + Createparameter,
+        API_PATHS.createFamilyMember,
         {
           method: "POST",
           headers: {
+            Authorization,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ Name, NationalId, Age, Gender, Relation }),
+          body: JSON.stringify({Username, Name, NationalId, Age, Gender, Relation }),
         }
       );
       if (
@@ -118,6 +123,13 @@ export function CreateFamilyMember() {
             <Flex direction="column" w="100%">
               <form onSubmit={handleSubmit}>
                 <Stack spacing={3}>
+                <Input
+                    variant="filled"
+                    type="text"
+                    placeholder="If Patient fill username of him"
+                    value={Username}
+                    onChange={(e) => setUserName(e.target.value)}
+                  />
                   <Input
                     variant="filled"
                     type="text"
