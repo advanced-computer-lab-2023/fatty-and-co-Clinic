@@ -45,7 +45,7 @@ export function bookAptDetails() {
 
   //check if date<new date
   const [aptDate, setAptDate] = useState(new Date());
-  const [isFamMember, setIsFamMember] = useState(false);
+  //const [isFamMember, setIsFamMember] = useState(false);
   const [famMemUsername, setFamMemUsername] = useState(null);
 
   const dateAptHandler = (event) => {
@@ -86,7 +86,7 @@ export function bookAptDetails() {
       DoctorId: row.DoctorId,
       Date: DateFinal,
       Cost: price,
-      PatientUsername: !isFamMember ? user.username : famMemUsername,
+      PatientUsername: !famMemUsername ? user.username : famMemUsername,
     };
 
     history.push(newUrl, newState);
@@ -148,6 +148,12 @@ export function bookAptDetails() {
                 </option>
               ))}
             </Select> */}
+            <Input
+              bg="white"
+              type="text"
+              placeholder="Username"
+              onChange={(event) => setFamMemUsername(event.target.value)}
+            />
 
             <Button onClick={dateConfirmHandler} colorScheme="green">
               Confirm
