@@ -1199,10 +1199,9 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({ Patient: patient })
+      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
       .populate("Patient")
       .populate("FamilyMem");
-    console.log(Patient);
     res.status(200).send(fam);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -1406,25 +1405,24 @@ const linkPatient = async (req, res) => {
     });
     if (currentUser.LinkedPatients.includes(familyMember._id)) {
       res.status(202).send({ message: "Patient already linked" });
-    }
-    else {
-    currentUser.LinkedPatients.push(familyMember._id);
-    await currentUser.save();
-    const currentDate = new Date();
-    const dob = new Date(familyMember.DateOfBirth);
-    const newFamilymember = await familyMemberModel.create({
-      Patient: currentUser,
-      FamilyMem: familyMember,
-      FamilyMemberUsername: familyMember.Username,
-      Name: familyMember.Name,
-      NationalId: familyMember.NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-      ),
-      Gender: familyMember.Gender,
-      Relation: Relation,
-    });
-    res.status(200).json(newFamilymember);
+    } else {
+      currentUser.LinkedPatients.push(familyMember._id);
+      await currentUser.save();
+      const currentDate = new Date();
+      const dob = new Date(familyMember.DateOfBirth);
+      const newFamilymember = await familyMemberModel.create({
+        Patient: currentUser,
+        FamilyMem: familyMember,
+        FamilyMemberUsername: familyMember.Username,
+        Name: familyMember.Name,
+        NationalId: familyMember.NationalId,
+        Age: Math.floor(
+          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+        ),
+        Gender: familyMember.Gender,
+        Relation: Relation,
+      });
+      res.status(200).json(newFamilymember);
     }
   }
 };

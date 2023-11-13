@@ -7,28 +7,25 @@ import axios from "axios";
 //import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
 
- 
-function Viewmembers(){
+function Viewmembers() {
   const { user } = useAuthContext();
-const Authorization = `Bearer ${user.token}`;
+  const Authorization = `Bearer ${user.token}`;
   const [data, setData] = useState([{}]);
 
-
   useEffect(() => {
-    const URL1 = API_PATHS.viewFamilyMembers ;
+    const URL1 = API_PATHS.viewFamilyMembers;
     axios
-      .get(URL1,  {
-        headers:{
-          'Authorization': Authorization
-        }})
+      .get(URL1, {
+        headers: {
+          Authorization: Authorization,
+        },
+      })
       .then((response) => {
         setData(response.data);
+        console.log(response.data);
       })
       .catch((err) => console.log(err));
-  });
-
-
- 
+  }, []);
 
   return (
     <Box pt="80px">

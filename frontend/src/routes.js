@@ -323,6 +323,7 @@ var dashRoutes = [
     secondaryNavbar: true,
     component: MakePayment,
     layout: "/patient",
+    show: false,
   },
   {
     name: "ACCOUNT PAGES",
