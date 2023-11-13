@@ -18,6 +18,7 @@ const {
   generateEducationalBackground,
   generateSpeciality,
   generateMobileNum,
+  generateNationalId,
   generatePackage,
   generateEmail,
   generatePassword,
@@ -187,6 +188,7 @@ const createPatient = async (req, res) => {
     Password,
     Name,
     MobileNum,
+    NationalId,
     EmergencyContact,
     Gender,
     DateOfBirth,
@@ -197,6 +199,7 @@ const createPatient = async (req, res) => {
   const password = Password || generatePassword();
   const name = Name || generateName();
   const mobileNum = MobileNum || generateMobileNum();
+  const nationalId = NationalId || generateNationalId();
   const dateOfBirth = DateOfBirth || generateDateOfBirth();
   const packageName = PackageName || generatePackage();
   const emergencyContact = EmergencyContact || {
@@ -219,6 +222,7 @@ const createPatient = async (req, res) => {
       Username: username,
       Name: name,
       MobileNum: mobileNum,
+      NationalId: nationalId,
       Gender: gender,
       EmergencyContact: emergencyContact,
       DateOfBirth: dateOfBirth,

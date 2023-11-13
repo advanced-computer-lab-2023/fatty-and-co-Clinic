@@ -3,6 +3,7 @@ const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
+const subscriptionModel = require("../models/subscriptions");
 
 const bcrypt = require("bcrypt");
 const {
@@ -252,6 +253,7 @@ const createPatient = async (req, res) => {
     Password,
     Email,
     MobileNum,
+    NationalId,
     DateOfBirth,
     Gender,
     EmergencyContactNumber,
@@ -269,12 +271,14 @@ const createPatient = async (req, res) => {
       Username: Username,
       Name: Name,
       MobileNum: MobileNum,
+      NationalId: NationalId,
       DateOfBirth: DateOfBirth,
       Gender: Gender,
       EmergencyContact: {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
       },
+      LinkedPatients: [],
       Wallet:Wallet
     });
      await subscriptionModel.addEntry(

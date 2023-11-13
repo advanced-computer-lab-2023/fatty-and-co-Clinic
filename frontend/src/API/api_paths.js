@@ -29,7 +29,6 @@ export const API_PATHS = {
   acceptRequest: ADMIN_BASE + "acceptRequest/",
   rejectRequest: ADMIN_BASE + "rejectRequest/",
 
-
   // Doctor
   getDoctorByUsername: DOCTOR_BASE + "getDoctorByUsername/", // add username as a param
   updateHourly: DOCTOR_BASE + "updateDoctor/",
@@ -42,6 +41,8 @@ export const API_PATHS = {
   deleteMySlotsDoc: DOCTOR_BASE + "deleteMySlotsDoc/",
   updateMySlotsDoc: DOCTOR_BASE + "updateMySlotsDoc/",
   payDoctor: DOCTOR_BASE + "payDoctor/",
+  viewAllAvailableSlots: DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
+  validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -51,6 +52,9 @@ export const API_PATHS = {
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
+  linkPatient: PATIENT_BASE + "linkPatient",
+  uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
+  getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
   viewFamPackage: PATIENT_BASE + "viewFamilyPackage/",
   viewOptionPackages: PATIENT_BASE + "getOptionPackages/",
   viewHealthFamwithstatus: PATIENT_BASE + "viewHealthFamwithstatus",
@@ -69,8 +73,6 @@ export const API_PATHS = {
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
-  viewAllAvailableSlots : DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
-  validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
 
   // Package
   packages: PACKAGE_BASE + "packages/",

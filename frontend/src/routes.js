@@ -29,6 +29,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
+import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
 import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
@@ -208,7 +209,7 @@ var dashRoutes = [
   {
     path: "/createFamilymember/:Createparameter",
     name: "Add Family Member",
-    icon: <HomeIcon color="inherit" />,
+    icon: <PersonIcon color="inherit" />,
     component: createFamilymember,
     layout: "/patient",
   },
@@ -265,6 +266,13 @@ var dashRoutes = [
     name: "My prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
+    layout: "/patient",
+  },
+  {
+    path: "/linkPatient",
+    name: "Link Patient",
+    icon: <PersonIcon color="inherit" />,
+    component: linkPatient,
     layout: "/patient",
   },
   {
