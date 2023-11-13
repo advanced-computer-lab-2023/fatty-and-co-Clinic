@@ -156,7 +156,7 @@ const acceptRequest = async (req, res) => {
   IN WITNESS WHEREOF, the parties have executed this Employment Contract as of the date first above written.</p>
     
         <p>To accept the contract, click the button below:</p>
-        <a href="http://localhost:3000/auth/docacc" class="button">Accept</a>
+        <a href="http://localhost:3000/auth/signin" class="button">Accept</a>
 
       `,
     });
