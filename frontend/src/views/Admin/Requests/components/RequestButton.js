@@ -20,13 +20,13 @@ import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
 
-
-
 function RequestButton({ Username, Status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null); // State to store data from the database
   const { user } = useAuthContext();
-  const [imgSrc, setImgSrc] = useState("");
+  const [IdFile, setIdFileName] = useState(null);
+  const [medicalLicense, setMedicalLicense] = useState(null);
+  const [MedicalDegree, setMedicalDegree] = useState(null);
   const Authorization = `Bearer ${user.token}`;
   useEffect(() => {
     axios
@@ -34,56 +34,80 @@ function RequestButton({ Username, Status }) {
         params: { Username: Username },
         headers: { Authorization },
       })
-      .then((response) => {
+      .then(async (response) => {
         setData(response.data);
+        // get the files from the backend
+        const idF = await fetch(
+          API_PATHS.getRequestFile + response.data.IdFileName,
+          {
+            headers: {
+              Authorization: Authorization,
+            },
+          }
+        );
+        const idFileBlob = await idF.blob();
+        const idFileurl = URL.createObjectURL(idFileBlob);
+        setIdFileName(idFileurl);
+        //
+        const MedicalDegre = await fetch(
+          API_PATHS.getRequestFile + response.data.MedicalDegreeName,
+          {
+            headers: {
+              Authorization: Authorization,
+            },
+          }
+        );
+        const MedicalDegreeBlob = await MedicalDegre.blob();
+        const MedicalDegreurl = URL.createObjectURL(MedicalDegreeBlob);
+        setMedicalLicense(MedicalDegreurl);
+        //
+        const license = await fetch(
+          API_PATHS.getRequestFile + response.data.MedicalLicenseName,
+          {
+            headers: {
+              Authorization: Authorization,
+            },
+          }
+        );
+        const licenseBlob = await license.blob();
+        const url = URL.createObjectURL(licenseBlob);
+        setMedicalDegree(url);
+        //end of getting files
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-
-    let url;
-    const getLic = async () => {
-      await fetch(
-        API_PATHS.getRequestMedicalLicense + "?Username=" + Username,
-        {
-          headers: {
-            Authorization: Authorization,
-          },
-        }
-      )
-        .then((response) => response.blob())
-        .then((images) => {
-          // Outside the scope of this function you cannot access `images`
-          // because it's async, so you need to handle it inside
-          url = URL.createObjectURL(images);
-          setImgSrc(url);
-        })
-        .catch((err) => console.error(err));
-    };
-    getLic();
   }, []); // Empty dependency array ensures this effect runs only once
 
   const jsonData = JSON.stringify(data);
 
   const handleAccept = async () => {
     axios
-      .post(API_PATHS.acceptRequest, { Username: Username }, {
-        headers: { Authorization },
-      })
+      .post(
+        API_PATHS.acceptRequest,
+        { Username: Username },
+        {
+          headers: { Authorization },
+        }
+      )
       .catch((error) => {
         console.error("Error accepting request:", error);
       });
-  } 
+  };
 
   const handleReject = async () => {
     axios
-      .put(API_PATHS.rejectRequest, { Username: Username },{
-        headers: { Authorization },
-      })
+      .put(
+        API_PATHS.rejectRequest,
+        { Username: Username },
+        {
+          headers: { Authorization },
+        }
+      )
       .catch((error) => {
         console.error("Error rejecting request:", error);
       });
-  } 
+  };
 
   return (
     <>
@@ -98,14 +122,17 @@ function RequestButton({ Username, Status }) {
             {data ? (
               <div>
                 <p>Request Details: {jsonData}</p>
-                <img src={imgSrc} alt="Medical License" />
+                ID File<img src={IdFile} alt="ID File" />
+                Medical Degree<img src={MedicalDegree} alt="Medical Degree" />
+                Medical License<img src={medicalLicense} alt="Medical License" />
+                
               </div>
             ) : (
               <p>Loading data...</p>
             )}
           </ModalBody>
-          <ModalFooter> 
-          {Status == "Pending" ? (
+          <ModalFooter>
+            {Status == "Pending" ? (
               <div>
                 <Button colorScheme="green" mr={3} onClick={handleAccept}>
                   Accept
@@ -113,13 +140,20 @@ function RequestButton({ Username, Status }) {
                 <Button colorScheme="red" mr={3} onClick={handleReject}>
                   Reject
                 </Button>
-                <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsModalOpen(false)}
+                >
                   Close
                 </Button>
               </div>
             ) : (
-              
-              <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={() => setIsModalOpen(false)}
+              >
                 Close
               </Button>
             )}
@@ -128,6 +162,5 @@ function RequestButton({ Username, Status }) {
       </Modal>
     </>
   );
-
 }
 export default RequestButton;
