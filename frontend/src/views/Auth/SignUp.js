@@ -28,7 +28,6 @@ import { Formik, Form, Field } from "formik";
 // Assets
 import BgSignUp from "assets/img/BgSignUp.png";
 import React from "react";
-import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
 
@@ -50,8 +49,8 @@ const SignUpSchema = Yup.object().shape({
     .required("Required")
     .length(11, "Invalid Mobile Number"),
   NationalId: Yup.string()
-  .required("Required")
-  .length(16, "Invalid National ID"),
+    .required("Required")
+    .length(16, "Invalid National ID"),
   Gender: Yup.string()
     .required("Required")
     .oneOf(genders, "Gender must be M or F"),
@@ -397,6 +396,13 @@ function SignUp() {
                         placeholder="..."
                         // mb="24px"
                         size="lg"
+                        onKeyPress={(event) => {
+                          const pattern = /[0-9]/;
+                          const inputChar = String.fromCharCode(event.charCode);
+                          if (!pattern.test(inputChar)) {
+                            event.preventDefault();
+                          }
+                        }}
                         // required
                         // onChange={(e) => setDateOfBirth(e.target.value)}
                       />
