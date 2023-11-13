@@ -20,7 +20,7 @@ const patientSchema = new Schema(
       unique: true,
     },
     NationalId: {
-      type: Number,
+      type: String,
       required: false,
       unique: true,
     },

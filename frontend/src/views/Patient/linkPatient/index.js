@@ -61,6 +61,14 @@ export function linkPatient() {
           setId(""),
           setRelation("");
         }
+        else if (response.status == 202) {
+          toast({
+            title: "Patient already linked",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
         else {
           toast({
             title: "Failed to link patient",

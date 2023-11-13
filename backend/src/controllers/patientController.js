@@ -118,9 +118,6 @@ const deletePatient = async (req, res) => {
   }
 };
 
-
-
-
 const downloadFile = async (req, res) => {
   const { filename } = req.params;
   const downloadStream = await getFileByFilename(filename);
@@ -1403,24 +1400,32 @@ const linkPatient = async (req, res) => {
   }
   if (!familyMember) {
     res.status(404).send({ message: "Patient not found" });
-  }
-  else {
-  const currentUser = await patientModel.findOne({
-    Username: req.user.Username,
-  });
-  currentUser.LinkedPatients.push(familyMember._id);
-  await currentUser.save();
-  const currentDate = new Date();
-  const dob = new Date(familyMember.DateOfBirth);
-  /*const newFamilyMember = await familyMemberModel.create({
-    FamilyMemberUsername: familyMember.Username,
-    Name: familyMember.Name,
-    NationalId: familyMember.NationalId,
-    Age: Math.floor(Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000),
-    Gender: familyMember.Gender,
-    Relation: Relation
-  });*/
-  res.status(200).send({ familyMember });
+  } else {
+    const currentUser = await patientModel.findOne({
+      Username: req.user.Username,
+    });
+    if (currentUser.LinkedPatients.includes(familyMember._id)) {
+      res.status(202).send({ message: "Patient already linked" });
+    }
+    else {
+    currentUser.LinkedPatients.push(familyMember._id);
+    await currentUser.save();
+    const currentDate = new Date();
+    const dob = new Date(familyMember.DateOfBirth);
+    const newFamilymember = await familyMemberModel.create({
+      Patient: currentUser,
+      FamilyMem: familyMember,
+      FamilyMemberUsername: familyMember.Username,
+      Name: familyMember.Name,
+      NationalId: familyMember.NationalId,
+      Age: Math.floor(
+        Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+      ),
+      Gender: familyMember.Gender,
+      Relation: Relation,
+    });
+    res.status(200).json(newFamilymember);
+    }
   }
 };
 
@@ -1431,10 +1436,18 @@ const uploadFile = async (req, res) => {
   }
   const filename = req.file.filename;
   const originalname = req.file.originalname;
-  
+
   await patientModel.findOneAndUpdate(
     { Username: user },
-    { $push: { MedicalHistory: { filename: filename, originalname : originalname, note: req.body.note } } }
+    {
+      $push: {
+        MedicalHistory: {
+          filename: filename,
+          originalname: originalname,
+          note: req.body.note,
+        },
+      },
+    }
   );
   res
     .status(200)
@@ -1530,7 +1543,6 @@ const viewPastAppoitmentsPat = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
 
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());

@@ -207,7 +207,7 @@ var dashRoutes = [
   {
     path: "/createFamilymember/:Createparameter",
     name: "Add Family Member",
-    icon: <HomeIcon color="inherit" />,
+    icon: <PersonIcon color="inherit" />,
     component: createFamilymember,
     layout: "/patient",
   },
@@ -260,7 +260,7 @@ var dashRoutes = [
   {
     path: "/linkPatient",
     name: "Link Patient",
-    icon: <HomeIcon color="inherit" />,
+    icon: <PersonIcon color="inherit" />,
     component: linkPatient,
     layout: "/patient",
   },

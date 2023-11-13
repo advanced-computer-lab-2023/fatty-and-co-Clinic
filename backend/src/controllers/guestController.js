@@ -3,6 +3,7 @@ const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
+const subscriptionModel = require("../models/subscriptions");
 
 const bcrypt = require("bcrypt");
 const {

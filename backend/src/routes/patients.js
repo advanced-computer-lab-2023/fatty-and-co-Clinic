@@ -28,10 +28,6 @@ const {
   selectPrescription,
   getEmergencyContact,
   linkPatient,
-  uploadFile,
-  getMedicalHistory,
-  downloadFile,
-  removeHealthRecord,
   cancelSubscriptionfamilymember,
   payForSubscription,
   viewHealthPackagewithstatus,
@@ -209,8 +205,7 @@ router.get("/selectPrescription", selectPrescription);
  * @param {string} username - The username of the patient
  */
 router.get("/getEmergencyContact/:Username", getEmergencyContact);
-router.patch("/subscribehealthpackage/:id", subscribehealthpackage)
-router.patch("/linkPatient", linkPatient)
+router.patch("/linkPatient", linkPatient);
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);

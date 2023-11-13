@@ -49,6 +49,9 @@ const SignUpSchema = Yup.object().shape({
   MobileNum: Yup.string()
     .required("Required")
     .length(11, "Invalid Mobile Number"),
+  NationalId: Yup.string()
+  .required("Required")
+  .length(16, "Invalid National ID"),
   Gender: Yup.string()
     .required("Required")
     .oneOf(genders, "Gender must be M or F"),
@@ -100,6 +103,7 @@ function SignUp() {
       });
       const data = await response.json();
       console.log(data);
+      console.log(response);
       if (response.ok) {
         console.log("Patient added successfully!");
         toast({
@@ -389,7 +393,7 @@ function SignUp() {
                         fontSize="sm"
                         ms="4px"
                         borderRadius="15px"
-                        type="number"
+                        type="text"
                         placeholder="..."
                         // mb="24px"
                         size="lg"
