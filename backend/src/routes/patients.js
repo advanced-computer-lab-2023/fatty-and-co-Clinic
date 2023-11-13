@@ -214,11 +214,9 @@ router.patch("/linkPatient", linkPatient)
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);
-
 router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
   viewUpcomingAppointmentsPat(req, res);
 });
-
 router.get("/viewPastAppoitmentsPat", checkPatient, (req, res) => {
   viewPastAppoitmentsPat(req, res);
 });

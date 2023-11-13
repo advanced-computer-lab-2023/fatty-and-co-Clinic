@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const familyMemberSchema = new Schema(
   {
-    PatientID: {
+    Patient: {
       type: mongoose.Schema.Types.ObjectId, //Changed this to id ref
       ref: "Patient",
       required: true,
