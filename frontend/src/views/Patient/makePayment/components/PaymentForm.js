@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
 import { Input } from "@chakra-ui/react";
-import {useLocation} from "react-router-dom"
+import { useLocation } from "react-router-dom";
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -31,8 +31,7 @@ const PaymentForm = ({
   NationalId,
   DoctorId,
   PatientUsername,
-  status,
-  Date
+  Date,
 }) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -71,31 +70,31 @@ const PaymentForm = ({
           { headers: { Authorization } }
         );
         if (response.data.success) {
-          if(Description==="Doctor's appointment"){
-          const response = await fetch(API_PATHS.addAppointment, {
-            method: "POST",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              DoctorId,
-              PatientUsername,
-              status,
-              Date
-            }),
-          });
-          const response2 = await fetch(API_PATHS.payDoctor, {
-            method: "POST",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              DoctorId,
-              Amount,
-            }),
-          });
+          if (Description === "Doctor's appointment") {
+            const response = await fetch(API_PATHS.createAppointment, {
+              method: "POST",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                DoctorId,
+                PatientUsername,
+
+                Date,
+              }),
+            });
+            const response2 = await fetch(API_PATHS.payDoctor, {
+              method: "POST",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                DoctorId,
+              
+              }),
+            });
           }
           console.log("Successful payment");
           setSuccess(true);

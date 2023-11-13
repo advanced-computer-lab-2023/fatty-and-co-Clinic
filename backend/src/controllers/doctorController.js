@@ -894,11 +894,14 @@ const followupAppointment = async (req, res) => {
 };
 
 const payDoctor = async (req, res) => {
-  const { id } = req.body.DoctorId;
+  const id  = req.body.DoctorId;
   try {
+    
     const doctor = await doctorModel.findOne({ _id: id });
+    console.log("before: " + doctor.Wallet)
     doctor.Wallet += doctor.HourlyRate;
     await doctor.save();
+    console.log("doqwallet" + doctor.Wallet);
     res.status(200).json({ message: "Doctor got paid" });
   } catch (error) {
     res.status(400).json({ error: error.message });

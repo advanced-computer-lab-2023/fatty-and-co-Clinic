@@ -34,6 +34,8 @@ import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import  bookAptDetails  from "views/Patient/bookAptDetails/bookAptDetails";
+import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
+import WalletPayment from "views/Patient/walletPayment";
 
 import {
   HomeIcon,
@@ -237,6 +239,15 @@ var dashRoutes = [
     layout: "/patient",
     show: false, // Add this to hide route from sidebar
   },
+  {
+    path: "/AppointmentConfirmation",
+    name: "Appointment Confirmation",
+    icon: <HomeIcon color="inherit" />,
+    component: AppointmentConfirmation,
+    layout: "/patient",
+    show: false, // Add this to hide route from sidebar
+  },
+  
 
   {
     path: "/viewDoctors",
@@ -314,7 +325,20 @@ var dashRoutes = [
     secondaryNavbar: true,
     component: MakePayment,
     layout: "/patient",
+    show: false,
   },
+
+  {
+    path: "/walletPayment",
+    name: "Wallet payment",
+    rtlName: "لوحة القيادة",
+    icon: <RocketIcon color="inherit" />,
+    secondaryNavbar: true,
+    component: WalletPayment,
+    layout: "/patient",
+    show: false,
+  },
+
   {
     name: "ACCOUNT PAGES",
     category: "account",

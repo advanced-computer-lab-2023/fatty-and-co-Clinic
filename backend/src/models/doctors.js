@@ -38,6 +38,7 @@ const doctorSchema = new Schema(
     Wallet: {
       type: Number,
       required: false,
+      default: 0,
     },
     //Adding working days and working hours to doctor
     //to get available timings of sessions for patients.

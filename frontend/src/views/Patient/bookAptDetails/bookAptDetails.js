@@ -15,6 +15,7 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams, useLocation } from "react-router-dom";
 import { formatISO } from "date-fns";
+import { useHistory } from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
 import DocSlotAptsTable from "../viewDoctors/components/DocSlotAptsTable";
@@ -28,6 +29,8 @@ export function bookAptDetails() {
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
 
+  const history = useHistory();
+
   //the doctor id
   //   const { row } = useParams();
   //   console.log(useParams());
@@ -36,6 +39,8 @@ export function bookAptDetails() {
   let StartTime = state.StartTime;
   let DayName = state.DayName;
   let DoctorId = state.DoctorId;
+
+  //const username = user.Username;
 
   console.log(StartTime);
   console.log(DayName);
@@ -48,13 +53,17 @@ export function bookAptDetails() {
   //const [isFamMember, setIsFamMember] = useState(false);
   const [famMemUsername, setFamMemUsername] = useState(null);
 
+  var DateFinal = new Date();
+  const price = 100;
+
+
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
     console.log(event.target.value);
   };
 
   const dateConfirmHandler = () => {
-    const hourMinString = StartTime.toString().split(":");
+    const hourMinString = (StartTime.toString()).split(":");
     console.log("hourmin: " + hourMinString);
     const bookingDate = new Date(aptDate);
     // console.log((new Date(aptDate)).getFullYear());
@@ -68,10 +77,10 @@ export function bookAptDetails() {
       hourMinString[1]
     );
     console.log("dateCheck" + dateToCheck);
-    const DateFinal = formatISO(dateToCheck);
+    DateFinal = formatISO(dateToCheck);
+
     console.log("dateCheckF" + DateFinal);
 
-    const price = 100;
 
     const url = API_PATHS.validateBookingDate;
     axios.get(url, {
@@ -79,22 +88,28 @@ export function bookAptDetails() {
       headers: { Authorization },
     });
   };
-
   const checkOutHandler = () => {
-    let newUrl = `../bookAptDetails/${row}`;
+    let newUrl = `../AppointmentConfirmation`;
     let newState = {
-      DoctorId: row.DoctorId,
+      DoctorId: DoctorId,
       Date: DateFinal,
-      Cost: price,
-      PatientUsername: !famMemUsername ? user.username : famMemUsername,
+      Amount: price,
+      FamMemUsername: famMemUsername,
     };
 
+    console.log(user.username);
+    console.log(user.Username);
+    console.log(user);
+   // console.log("hellostate");
+    console.log(newState )
     history.push(newUrl, newState);
   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
   }, []);
+
+  
 
   return (
     <Box mt="70px">

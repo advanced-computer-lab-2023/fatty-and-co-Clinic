@@ -38,6 +38,7 @@ const {
   getDoctor,
   getAppointment,
 } = require("../common/utils/dbGetters");
+const User = require("../models/systemusers");
 
 // create a new System User
 const createSystemUser = async (req, res) => {
@@ -62,26 +63,36 @@ const createSystemUser = async (req, res) => {
 
 //Create a new appointment
 const createAppointment = async (req, res) => {
-  const {
-    DoctorId,
-    PatientUsername,
-    Status,
-    Date,
-  } = req.query;
-  const patient = await patientModel.findOne({ Username: username });
+  const username = req.user.Username;
+  var patient  ;
+
+  const { DoctorId, PatientUsername, Date } = req.body;
+  console.log("body: " +req.body.DoctorId);
+  //this patient is technically fam member
+  if (PatientUsername === null) {
+     console.log("fam");
+     patient = await patientModel.findOne({ Username: PatientUsername, });
+  } else {
+     console.log("user");
+     patient = await patientModel.findOne({ Username: username, });
+  }
   const doctor = await doctorModel.findOne({ _id: DoctorId });
   const PatientName = patient.Name;
+  const PatientUsernameFinal = patient.Username;
   const DoctorName = doctor.Name;
   const DoctorUsername = doctor.Username;
+  const Status = "Upcoming"
   try {
+    console.log("creating");
     const newApp = await appointmentModel.create({
       DoctorUsername,
       DoctorName,
-      PatientUsername,
+      PatientUsername : PatientUsernameFinal,
       PatientName,
       Status,
       Date,
     });
+    console.log("created");
     res.status(201).json(newApp);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -183,8 +194,6 @@ const createPatient = async (req, res) => {
   try {
     await systemUserModel.addEntry(
       username,
-
-
 
       password,
       generateEmail(),
