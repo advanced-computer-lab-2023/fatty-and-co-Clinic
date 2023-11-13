@@ -20,8 +20,6 @@ import React, { useState } from "react";
 import DocSlotRowApt from "components/Tables/DocSlotRowApt";
 import { useAuthContext } from "hooks/useAuthContext";
 
-
-
 const DocSlotAptsTable = ({ title, captions, data }) => {
   const history = useHistory();
   const textColor = useColorModeValue("gray.700", "white");
@@ -30,14 +28,14 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
   const Authorization = `Bearer ${user.token}`;
 
   const handleBookClick = (row) => {
-    let newUrl = `/patient/bookAptDetails/${row}`;
+    let newUrl = `../bookAptDetails/${row}`;
     let newState = {
       DayName: row.DayName,
       StartTime: row.StartTime,
       DoctorId: row.DoctorId,
     };
 
-    history.replace(newUrl, newState);
+    history.push(newUrl, newState);
   };
 
   return (
