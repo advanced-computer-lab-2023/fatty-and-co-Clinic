@@ -5,7 +5,7 @@ import React from "react";
 import HealthRecordInformation from "./components/HealthRecordInformation";
 import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { usePackageContext } from "./hooks/usePackageContext";
+import { useMedicalHistoryContext } from "./hooks/useMedicalHistoryContext";
 import HealthRecordForm from "./components/HealthRecordForm";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
@@ -20,7 +20,7 @@ function MedicalHistoryI() {
   const [healthRecords, setHealthRecords] = useState(null);
   useEffect(() => {
     const fetchHealthRecords = async () => {
-      const response = await fetch(API_PATHS.getMedicalHistory ,{
+      const response = await fetch(API_PATHS.getMedicalHistory+user.userType ,{
         headers:{
           'Authorization': Authorization
         }

@@ -76,7 +76,7 @@ function RequestsRow(props) {
       </Td>
 
       <Td>
-        <RequestButton Username = {Username} ></RequestButton>
+        <RequestButton Username = {Username} Status = {Status} ></RequestButton>
         
       </Td>
     </Tr>

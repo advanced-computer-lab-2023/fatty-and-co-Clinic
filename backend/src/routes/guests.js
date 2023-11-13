@@ -5,9 +5,15 @@ const {
   updateRequest,
   updateEmail,
   login,
+  updatePass,
+  sendOTP,
+  validateOTP,
+  resetPass,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
 const {cpUpload} = require("../common/middleware/doctorUpload");
+const send = require("send");
+
 
 const router = express.Router();
 
@@ -20,6 +26,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/login", login);
+
+router.post("/sendOTP", sendOTP);
+router.post("/validateOTP", validateOTP);
 
 /**
  * @route POST /patients/addPatient
@@ -53,6 +62,7 @@ router.post("/addPatient", createPatient);
  */
 router.post("/addRequest",cpUpload, createRequest); 
 
+router.patch("/resetPass/", resetPass);
 // the following routes require authentication
 router.use(requireAuth);
 
@@ -61,5 +71,8 @@ router.put("/updateRequest/:id", updateRequest);
 
 // TODO: add type check as middleware if needed
 router.patch("/updateEmail", updateEmail);
+
+router.patch("/updatePass/", updatePass);
+
 
 module.exports = router;
