@@ -60,6 +60,31 @@ const createSystemUser = async (req, res) => {
   }
 };
 
+const acceptDoc = async (req, res) => {
+  const {request} = req.body;
+  try{
+    const doc = await doctorModel.create({
+        Username: Username,
+        Name: request.Name,
+        DateOfBirth: request.DateOfBirth,
+        HourlyRate: request.HourlyRate,
+        Affiliation: request.Affiliation,
+        EducationalBackground: request.EducationalBackground,
+        Speciality: request.Speciality,
+      });
+      const user = await userModel.addEntry(
+        Username,
+        request.Password,
+        request.Email,
+        "Doctor"
+      );
+      res.status(200).json({doc, user});
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+  
+}
+
 //Create a new appointment
 const createAppointment = async (req, res) => {
   const {
@@ -390,4 +415,5 @@ module.exports = {
   createPrescription,
   createDocSlot,
   getDocSlot,
+  acceptDoc,
 };

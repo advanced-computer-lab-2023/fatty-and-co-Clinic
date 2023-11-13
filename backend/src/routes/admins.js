@@ -7,6 +7,7 @@ const {
   acceptRequest,
   rejectRequest,
   getRequests,
+  acceptDoc,
 } = require("../controllers/adminController");
 
 const { checkAdmin } = require("../common/middleware/checkType");
@@ -21,6 +22,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send("Admins");
 });
+
 
 // middleware to check if user is an admin
 router.use(checkAdmin);
@@ -67,6 +69,8 @@ router.get("/getRequestFile/:filename", getRequestFile);
  * @prop {string} Username - The username of the requesting doctor
  */
 router.post("/acceptRequest", acceptRequest);
+
+
 
 /**
  * @route PUT /admins/rejectRequest
