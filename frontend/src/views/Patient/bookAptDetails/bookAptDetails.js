@@ -45,6 +45,8 @@ export function bookAptDetails() {
 
   //check if date<new date
   const [aptDate, setAptDate] = useState(new Date());
+  const [isFamMember, setIsFamMember] = useState(false);
+  const [famMemUsername, setFamMemUsername] = useState(null);
 
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
@@ -69,6 +71,8 @@ export function bookAptDetails() {
     const DateFinal = formatISO(dateToCheck);
     console.log("dateCheckF" + DateFinal);
 
+    const price = 100;
+
     const url = API_PATHS.validateBookingDate;
     axios.get(url, {
       params: { DayName, DateFinal, DoctorId },
@@ -77,8 +81,16 @@ export function bookAptDetails() {
   };
 
   const checkOutHandler = () => {
-    
-  }
+    let newUrl = `../bookAptDetails/${row}`;
+    let newState = {
+      DoctorId: row.DoctorId,
+      Date: DateFinal,
+      Cost: price,
+      PatientUsername: !isFamMember ? user.username : famMemUsername,
+    };
+
+    history.push(newUrl, newState);
+  };
 
   useEffect(() => {
     setFamMemOptions([{}]);
@@ -144,9 +156,9 @@ export function bookAptDetails() {
         </Collapse>
       </Box>
       <Box mt="90px">
-      <Button onClick={checkOutHandler} colorScheme="red">
-        Proceed to checkout 
-      </Button>
+        <Button onClick={checkOutHandler} colorScheme="red">
+          Proceed to checkout
+        </Button>
       </Box>
     </Box>
   );
