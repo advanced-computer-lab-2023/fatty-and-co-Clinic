@@ -90,15 +90,15 @@ const acceptDoc = async (req, res) => {
 const createAppointment = async (req, res) => {
   const username = req.user.Username;
   var patient;
-  var patNameFinal ;
+  var patNameFinal;
 
   const { DoctorId, FamMemName, Date } = req.body;
   console.log("body: " + req.body.DoctorId);
   //this patient is technically fam member
   if (!FamMemName) {
     console.log("fam");
-    patient = await patientModel.findOne({ Username: PatientUsername });
-    patNameFinal=patient.Name;
+    patient = await patientModel.findOne({ Username: username });
+    patNameFinal = patient.Name;
   } else {
     console.log("user");
     patient = await patientModel.findOne({ Username: username });
