@@ -252,7 +252,7 @@ export default function HeaderLinks(props) {
           w="100px"
           h="27px"
         >
-          {Wallet !== null ? `${Wallet}` : "Loading..."}
+          {Wallet !== null ? `${Wallet}` : ""}
         </Text>
       </ChakraProvider>
     </Flex>
