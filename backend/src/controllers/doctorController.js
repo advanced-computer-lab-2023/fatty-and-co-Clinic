@@ -375,6 +375,7 @@ const filterDoctorSlotEdition = async (req, res) => {
     var dateFilteredDoctors = new Array();
     var specFilteredDoctors = new Array();
     var finalRes = new Array();
+    var finalResView = new Array();
 
     //first stage -> filter by date&time range
     if (
@@ -404,24 +405,32 @@ const filterDoctorSlotEdition = async (req, res) => {
 
       //In case no date filter params
     } else {
+      console.log("helloelse");
       const query = req.query.speciality
         ? { Speciality: { $regex: req.query.speciality.trim(), $options: "i" } }
         : {};
       finalRes = await doctorModel.find(query);
     }
 
+    console.log("before for");
+    console.log(finalRes);
     const discount = await getPackageDiscount(req.user.Username);
 
+    console.log("dis: " + discount);
+
     for (let element of finalRes) {
-      finalRes.push({
+      finalResView.push({
         Username: element.Username,
         Name: element.Name,
         Speciality: element.Speciality,
         //HourlyRate: element.HourlyRate,
-        Cost: getSessionPrice(),
+        Cost: await getSessionPrice(element.HourlyRate, discount),
       });
     }
-    res.status(200).json(finalRes);
+    console.log("after for");
+
+    console.log(finalResView);
+    res.status(200).json(finalResView);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -433,12 +442,18 @@ async function getPackageDiscount(patientUsername) {
     .findOne({ Patient: patient._id })
     .populate("Package");
 
+  console.log("sub: " + subscription);
+  // if (subscription.Status === "Subscribed" && subscription.Package) {
+  //   return subscription.Package.Session_Discount;
+  // }
+  // return 0;
+  if (!subscription) {
+    return 0;
+  }
   if (subscription.Status === "Subscribed" && subscription.Package) {
     return subscription.Package.Session_Discount;
   }
-  return 0;
 }
-
 async function getSessionPrice(hourlyRate, packageDiscount) {
   return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
 }
