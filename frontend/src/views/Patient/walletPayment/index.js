@@ -35,13 +35,13 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   //   const amount2 = searchParams.get("amount");
   const Amount = state.Cost;
   const DoctorId = state.DoctorId;
-  const PatientUsername = state.PatientUsername;
+  const FamMemName = state.FamMemName;
   const Date = state.Date;
   // console.log("hello stripe");
   // console.log(searchParams);
   console.log(Amount);
   console.log("doctor's id:" + DoctorId);
-  console.log("patient's username:" + PatientUsername);
+  console.log("FamMemName" + FamMemName);
   console.log(Date);
 
   //   const handleWalletPayment = async () => {
@@ -146,7 +146,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
           },
           body: JSON.stringify({
             DoctorId: DoctorId,
-            PatientUsername: PatientUsername,
+            FamMemName: FamMemName,
             Date: Date,
           }),
         });

@@ -31,10 +31,11 @@ export default function MakePayment({ amount }) {
     const { state } = location;
     //amountApt = state.Amount;
     Amount= state.Cost,
-    CostFam= state.CostFam,
+   // CostFam= state.CostFam,
     DoctorId = state.DoctorId;
     FamMemName = state.FamMemName;
     Date = state.Date;
+    console.log("state fam name: " + FamMemName);
   }
 
   console.log("amount2:" + amount2);
@@ -54,7 +55,7 @@ export default function MakePayment({ amount }) {
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm
-        Amount={FamMemName? CostFam : amount2 ? amount2 : Amount ? Amount : 0}
+        Amount={ amount2 ? amount2 : Amount ? Amount : 0}
         Description={description ? description : "Doctor's appointment"}
         PackageName={PackageName ? PackageName : ""}
         NationalId={NationalId ? NationalId : ""}

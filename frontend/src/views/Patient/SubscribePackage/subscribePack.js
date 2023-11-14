@@ -134,31 +134,28 @@ function SubscribePackage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ PackageName }),
-        }).then((res) => {
-          try {
-            axios
-              .get(API_PATHS.getWalletAmount, {
-                headers: { Authorization },
-              })
-              .then((res) => {
-                dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
-              });
-          } catch (error) {
-            console.error("Error fetching wallet amount", error);
-          }
         });
-        // const errorData = await response.json();
+        const errorData = await response.json();
         if (response.ok) {
           toast({
             title: "Subscription process successfull!",
             status: "success",
+            description: errorData.success,
             duration: 9000,
             isClosable: true,
           });
+          try {
+            const res = await axios.get(API_PATHS.getWalletAmount, {
+              headers: { Authorization },
+            });
+            dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
+          } catch (error) {
+            console.error("Error fetching wallet amount", error);
+          }
         } else {
           toast({
             title: "Failed to pay & subscribe",
-            // description: errorData.error,
+            description: errorData.error,
             status: "error",
             duration: 9000,
             isClosable: true,
@@ -173,10 +170,11 @@ function SubscribePackage() {
           },
           body: JSON.stringify({ PackageName, NationalId }),
         });
-        // const errorData = await response.json();
+        const errorData = await response.json();
         if (response.ok) {
           toast({
-            title: "Subscription process successfull for family member!",
+            title: "Subscription process completed successfully!",
+            description: errorData.success,
             status: "success",
             duration: 9000,
             isClosable: true,
@@ -194,6 +192,7 @@ function SubscribePackage() {
             title: "Failed to pay & subscribe for family member!",
             // description: errorData.error,
             status: "error",
+            description:errorData.error,
             duration: 9000,
             isClosable: true,
           });
