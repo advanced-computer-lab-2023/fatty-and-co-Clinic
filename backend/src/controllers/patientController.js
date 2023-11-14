@@ -150,7 +150,6 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
   // if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -158,14 +157,6 @@ const session_index = async (req, res) => {
   // }
 
   try {
-    const patient = await patientModel.findOne({ Username: username });
-    let packageDis = 0;
-
-    if (patient.Package) {
-      const package = await packageModel.findOne({ Name: patient.Package });
-      packageDis = package.Session_Discount;
-    }
-
     const query = {
       ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
       ...(Speciality
@@ -174,14 +165,14 @@ const session_index = async (req, res) => {
     };
 
     const doctors = await doctorModel.find(query);
+    const discount = await getPackageDiscount(req.user.Username);
 
     const mySessions = doctors.map((doctor) => {
-      const calcCost = (1 - packageDis / 100) * (doctor.HourlyRate * 1.1);
       return {
         Username: doctor.Username,
         Name: doctor.Name,
         Speciality: doctor.Speciality,
-        Cost: calcCost,
+        Cost: getSessionPrice(element.HourlyRate, discount),
       };
     });
 
@@ -190,6 +181,28 @@ const session_index = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+async function getPackageDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
+
+  if (!subscription) {
+    return 0;
+  }
+  if (
+    subscription &&
+    subscription.Status === "Subscribed" &&
+    subscription.Package
+  ) {
+    return subscription.Package.Session_Discount;
+  }
+  return 0;
+}
+function getSessionPrice(hourlyRate, packageDiscount) {
+  return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
+}
 
 const viewHealthFam = async (req, res) => {
   try {

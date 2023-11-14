@@ -424,7 +424,7 @@ const filterDoctorSlotEdition = async (req, res) => {
         Name: element.Name,
         Speciality: element.Speciality,
         //HourlyRate: element.HourlyRate,
-        Cost: await getSessionPrice(element.HourlyRate, discount),
+        Cost:  getSessionPrice(element.HourlyRate, discount),
       });
     }
     console.log("after for");
@@ -442,19 +442,15 @@ async function getPackageDiscount(patientUsername) {
     .findOne({ Patient: patient._id })
     .populate("Package");
 
-  console.log("sub: " + subscription);
-  // if (subscription.Status === "Subscribed" && subscription.Package) {
-  //   return subscription.Package.Session_Discount;
-  // }
-  // return 0;
   if (!subscription) {
     return 0;
   }
   if (subscription.Status === "Subscribed" && subscription.Package) {
     return subscription.Package.Session_Discount;
   }
+  return 0;
 }
-async function getSessionPrice(hourlyRate, packageDiscount) {
+ function getSessionPrice(hourlyRate, packageDiscount) {
   return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
 }
 
