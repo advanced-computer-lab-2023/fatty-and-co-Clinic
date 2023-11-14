@@ -1,3 +1,4 @@
+const patientModel = require("../models/patients");
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const payWithCard = async (req, res) => {
@@ -6,7 +7,7 @@ const payWithCard = async (req, res) => {
   try {
     const payment = await stripe.paymentIntents.create({
       amount,
-      currency: "USD",
+      currency: "EGP",
       description: description,
       payment_method: id,
       confirm: true,
@@ -27,13 +28,18 @@ const payWithCard = async (req, res) => {
 };
 
 const walletPayment = async (req, res) => {
-  const { amount } = req.body;
-  const username = req.user.username;
+  const Amount = req.body.Amount;
+  const username = req.user.Username;
+  console.log("amount:" + Amount);
+  console.log("username:" + username);
   try {
     const patient = await patientModel.findOne({ Username: username });
-    if (patient.Wallet >= amount) {
-      patient.Wallet -= amount;
+    console.log(patient);
+    console.log(patient.Wallet);
+    if (patient.Wallet >= Amount) {
+      patient.Wallet -= Amount;
       await patient.save();
+      console.log(patient.Wallet);
       return res.json({ success: true, message: "Payment successful." });
     } else {
       return res.json({ success: false, message: "Insufficient funds." });
