@@ -8,6 +8,7 @@ import {
   Input,
   Stack,
   useToast,
+  Select,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FaUserPlus } from "react-icons/fa";

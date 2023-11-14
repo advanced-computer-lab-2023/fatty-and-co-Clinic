@@ -1,10 +1,21 @@
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Text,
+  useColorModeValue,
+  Input,
+  Stack,
+  useToast,
+  Select,
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
-import { Input } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import {useLocation} from "react-router-dom"
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -80,7 +91,6 @@ const PaymentForm = ({
               body: JSON.stringify({
                 DoctorId,
                 PatientUsername,
-
                 Date,
               }),
             });
@@ -92,7 +102,6 @@ const PaymentForm = ({
               },
               body: JSON.stringify({
                 DoctorId,
-              
               }),
             });
           }

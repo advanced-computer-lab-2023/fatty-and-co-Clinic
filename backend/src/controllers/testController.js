@@ -89,30 +89,31 @@ const acceptDoc = async (req, res) => {
 //Create a new appointment
 const createAppointment = async (req, res) => {
   const username = req.user.Username;
-  var patient  ;
+  var patient;
 
   const { DoctorId, PatientUsername, Date } = req.body;
-  console.log("body: " +req.body.DoctorId);
+  console.log("body: " + req.body.DoctorId);
   //this patient is technically fam member
   if (PatientUsername === null) {
-     console.log("fam");
-     patient = await patientModel.findOne({ Username: PatientUsername, });
+    console.log("fam");
+    patient = await patientModel.findOne({ Username: PatientUsername });
   } else {
-     console.log("user");
-     patient = await patientModel.findOne({ Username: username, });
+    console.log("user");
+    patient = await patientModel.findOne({ Username: username });
   }
   const doctor = await doctorModel.findOne({ _id: DoctorId });
   const PatientName = patient.Name;
   const PatientUsernameFinal = patient.Username;
   const DoctorName = doctor.Name;
+  console.log("doc name: " + DoctorName);
   const DoctorUsername = doctor.Username;
-  const Status = "Upcoming"
+  const Status = "Upcoming";
   try {
     console.log("creating");
     const newApp = await appointmentModel.create({
       DoctorUsername,
       DoctorName,
-      PatientUsername : PatientUsernameFinal,
+      PatientUsername: PatientUsernameFinal,
       PatientName,
       Status,
       Date,

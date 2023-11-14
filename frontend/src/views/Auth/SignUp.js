@@ -33,6 +33,8 @@ import { API_PATHS } from "API/api_paths";
 
 const genders = ["M", "F"];
 
+const eighteenYearsAgo = new Date();
+eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 const SignUpSchema = Yup.object().shape({
   Username: Yup.string().required("Required"),
   Name: Yup.string().required("Required"),
@@ -44,7 +46,9 @@ const SignUpSchema = Yup.object().shape({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
       "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
     ),
-  DateOfBirth: Yup.date().required("Required"),
+  DateOfBirth: Yup.date()
+    .required("Required")
+    .max(eighteenYearsAgo, "You must be at least 18 years old"),
   MobileNum: Yup.string()
     .required("Required")
     .length(11, "Invalid Mobile Number"),
