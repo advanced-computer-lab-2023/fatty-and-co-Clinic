@@ -791,7 +791,7 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate1,
             }
           );
-      res.status(200).json({success:"Amount paid "+amount +" with a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
+      res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
           
         } else {
           res.status(404).json({ error: "Not enough money" });
