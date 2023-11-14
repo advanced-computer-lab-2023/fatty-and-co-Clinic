@@ -25,7 +25,8 @@ export default function MakePayment({ amount }) {
 
   const amountApt = state.Amount;
   const DoctorId = state.DoctorId;
-  const PatientUsername = state.PatientUsername;
+  const PatientUsername = state.FamMemUsername;
+  const PatientName = state.FamMemName;
   const Date = state.Date;
   
 

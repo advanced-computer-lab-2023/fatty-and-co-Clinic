@@ -52,10 +52,11 @@ export function bookAptDetails() {
   const [aptDate, setAptDate] = useState(new Date());
   //const [isFamMember, setIsFamMember] = useState(false);
   const [famMemUsername, setFamMemUsername] = useState(null);
+  const [famMemName, setFamMemName] = useState(null);
+
 
   var DateFinal = new Date();
   const price = 100;
-
 
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
@@ -63,7 +64,7 @@ export function bookAptDetails() {
   };
 
   const dateConfirmHandler = () => {
-    const hourMinString = (StartTime.toString()).split(":");
+    const hourMinString = StartTime.toString().split(":");
     console.log("hourmin: " + hourMinString);
     const bookingDate = new Date(aptDate);
     // console.log((new Date(aptDate)).getFullYear());
@@ -81,7 +82,6 @@ export function bookAptDetails() {
 
     console.log("dateCheckF" + DateFinal);
 
-
     const url = API_PATHS.validateBookingDate;
     axios.get(url, {
       params: { DayName, DateFinal, DoctorId },
@@ -95,21 +95,20 @@ export function bookAptDetails() {
       Date: DateFinal,
       Amount: price,
       FamMemUsername: famMemUsername,
+      famMemName: famMemName,
     };
 
     console.log(user.username);
     console.log(user.Username);
     console.log(user);
-   // console.log("hellostate");
-    console.log(newState )
+    // console.log("hellostate");
+    console.log(newState);
     history.push(newUrl, newState);
   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
   }, []);
-
-  
 
   return (
     <Box mt="70px">
@@ -163,6 +162,7 @@ export function bookAptDetails() {
                 </option>
               ))}
             </Select> */}
+            <Text>Registered </Text>
             <Input
               bg="white"
               type="text"
@@ -170,6 +170,13 @@ export function bookAptDetails() {
               onChange={(event) => setFamMemUsername(event.target.value)}
             />
 
+            <Text>Unregistered </Text>
+            <Input
+              bg="white"
+              type="text"
+              placeholder="Name"
+              onChange={(event) => setFamMemName(event.target.value)}
+            />
             <Button onClick={dateConfirmHandler} colorScheme="green">
               Confirm
             </Button>
