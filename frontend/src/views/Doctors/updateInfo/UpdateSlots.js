@@ -87,10 +87,12 @@ export function UpdateSlots() {
   const handleAddSlotConfirm = async () => {
     const url = API_PATHS.addMySlotsDoc;
     //const slot =
-    await axios.post(url, null, {
-      params: { dayNumber, StartTimeToAdd },
-      headers: { Authorization },
-    });
+    await axios
+      .post(url, null, {
+        params: { dayNumber, StartTimeToAdd },
+        headers: { Authorization },
+      })
+      .catch((error) => console.log(error));
     fetchTableData();
     //console.log(tableData);
     //if(slot)
