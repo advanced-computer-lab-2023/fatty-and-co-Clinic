@@ -30,8 +30,8 @@ export default function MakePayment({ amount }) {
   if (!PackageName && description !== "Subscription payment") {
     const { state } = location;
     //amountApt = state.Amount;
-    Amount= state.Cost,
-   // CostFam= state.CostFam,
+    Amount = state.Cost;
+    // CostFam= state.CostFam,
     DoctorId = state.DoctorId;
     FamMemName = state.FamMemName;
     Date = state.Date;
@@ -55,7 +55,7 @@ export default function MakePayment({ amount }) {
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm
-        Amount={ amount2 ? amount2 : Amount ? Amount : 0}
+        Amount={amount2 ?? Amount ?? 0}
         Description={description ? description : "Doctor's appointment"}
         PackageName={PackageName ? PackageName : ""}
         NationalId={NationalId ? NationalId : ""}
