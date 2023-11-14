@@ -167,11 +167,10 @@ const PaymentForm = ({
           // else {
           //   console.log(error.message);
           // }
-          else {
-            console.log(error.message);
-          }
           console.log("Successful payment");
           setSuccess(true);
+        } else {
+          console.log(error.message);
         }
       } catch {
         error;
