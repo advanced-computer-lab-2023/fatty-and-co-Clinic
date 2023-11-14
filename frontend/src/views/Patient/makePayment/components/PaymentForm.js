@@ -80,7 +80,6 @@ const PaymentForm = ({
               body: JSON.stringify({
                 DoctorId,
                 PatientUsername,
-
                 Date,
               }),
             });
@@ -92,7 +91,6 @@ const PaymentForm = ({
               },
               body: JSON.stringify({
                 DoctorId,
-              
               }),
             });
           }
