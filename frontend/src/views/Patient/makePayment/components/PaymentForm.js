@@ -15,7 +15,8 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
-import {useLocation} from "react-router-dom"
+import { useLocation } from "react-router-dom";
+import ThankYouCard from "../ThankYou";
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -50,15 +51,15 @@ const PaymentForm = ({
   const stripe = useStripe();
   const elements = useElements();
 
-  useEffect(() => {
-    if (success) {
-      const redirectTimeout = setTimeout(() => {
-        window.location.href = "./ThankYou.js";
-      }, 3000);
+  // useEffect(() => {
+  //   if (success) {
+  //     const redirectTimeout = setTimeout(() => {
+  //       return <ThankYouCard />;
+  //     }, 3000);
 
-      return () => clearTimeout(redirectTimeout);
-    }
-  }, [success]);
+  //     return () => clearTimeout(redirectTimeout);
+  //   }
+  // }, [success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

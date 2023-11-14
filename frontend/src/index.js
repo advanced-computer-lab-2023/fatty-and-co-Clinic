@@ -18,12 +18,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { AuthContextProvider } from "context/AuthContext";
+import { WalletContextProvider } from "context/WalletContext";
 import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <App />
+      <WalletContextProvider>
+        <App />
+      </WalletContextProvider>
     </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById("root")

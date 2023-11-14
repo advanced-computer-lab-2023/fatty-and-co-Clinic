@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "aaron-bond.better-comments",
+    "steoates.autoimport",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "ms-vscode.atom-keybindings",
+    "gruntfuggly.todo-tree",
+    "esbenp.prettier-vscode",
+    "k--kato.intellij-idea-keybindings",
+    "wix.glean",
+    "github.vscode-pull-request-github",
+    "christian-kohler.npm-intellisense"
+  ]
+}

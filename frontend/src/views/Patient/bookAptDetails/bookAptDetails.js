@@ -10,6 +10,7 @@ import {
   useDisclosure,
   UseDisclosureProps,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
@@ -28,6 +29,8 @@ export function bookAptDetails() {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
+
+  const toast = useToast();
 
   const history = useHistory();
 
@@ -56,14 +59,13 @@ export function bookAptDetails() {
   var DateFinal = new Date();
   const price = 100;
 
-
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
     console.log(event.target.value);
   };
 
   const dateConfirmHandler = () => {
-    const hourMinString = (StartTime.toString()).split(":");
+    const hourMinString = StartTime.toString().split(":");
     console.log("hourmin: " + hourMinString);
     const bookingDate = new Date(aptDate);
     // console.log((new Date(aptDate)).getFullYear());
@@ -81,12 +83,22 @@ export function bookAptDetails() {
 
     console.log("dateCheckF" + DateFinal);
 
-
     const url = API_PATHS.validateBookingDate;
-    axios.get(url, {
-      params: { DayName, DateFinal, DoctorId },
-      headers: { Authorization },
-    });
+    axios
+      .get(url, {
+        params: { DayName, DateFinal, DoctorId },
+        headers: { Authorization },
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          title: "Error",
+          description: error.response.data.message,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
   };
   const checkOutHandler = () => {
     let newUrl = `../AppointmentConfirmation`;
@@ -100,16 +112,14 @@ export function bookAptDetails() {
     console.log(user.username);
     console.log(user.Username);
     console.log(user);
-   // console.log("hellostate");
-    console.log(newState )
+    // console.log("hellostate");
+    console.log(newState);
     history.push(newUrl, newState);
   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
   }, []);
-
-  
 
   return (
     <Box mt="70px">
