@@ -169,7 +169,7 @@ const session_index = async (req, res) => {
         Username: doctor.Username,
         Name: doctor.Name,
         Speciality: doctor.Speciality,
-        Cost: getSessionPrice(doctor.HourlyRate, discount),
+        Cost: getSessionPrice(doctor.HourlyRate, discount).toFixed(2),
       };
     });
 
