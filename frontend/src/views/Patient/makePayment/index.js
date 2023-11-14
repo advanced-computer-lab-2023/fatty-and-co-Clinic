@@ -16,31 +16,35 @@ export default function MakePayment({ amount }) {
   //const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const amount2 = searchParams.get("amount");
-  // const amountApt = searchParams.get('Amount')
+  //const amountApt = searchParams.get('Amount')
   const description = searchParams.get("description");
   const PackageName = searchParams.get("PackageName");
   const NationalId = searchParams.get("NationalId");
 
-  let amountApt;
+  let Amount;
+  let CostFam;
   let DoctorId;
-  let PatientUsername;
+  let FamMemName;
   let Date;
 
   if (!PackageName && description !== "Subscription payment") {
     const { state } = location;
-    amountApt = state.Amount;
+    //amountApt = state.Amount;
+    Amount= state.Cost,
+    CostFam= state.CostFam,
     DoctorId = state.DoctorId;
-    PatientUsername = state.PatientUsername;
+    FamMemName = state.FamMemName;
     Date = state.Date;
   }
 
   console.log("amount2:" + amount2);
-  console.log("amountApt:" + amountApt);
+  //console.log("amountApt:" + amountApt);
   console.log("description:" + description);
   console.log("PackageName:" + PackageName);
   console.log("NationalId:" + NationalId);
   console.log("DoctorId:" + DoctorId);
-  console.log("PatientUsername:" + PatientUsername);
+  //console.log("PatientUsername:" + PatientUsername);
+  console.log("fammemname:" + FamMemName);
   console.log("Date:" + Date);
   // console.log("hello stripe");
   // console.log(searchParams);
@@ -50,15 +54,16 @@ export default function MakePayment({ amount }) {
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm
-        Amount={amount2 ? amount2 : amountApt ? amountApt : 0}
+        Amount={FamMemName? CostFam : amount2 ? amount2 : Amount ? Amount : 0}
         Description={description ? description : "Doctor's appointment"}
         PackageName={PackageName ? PackageName : ""}
         NationalId={NationalId ? NationalId : ""}
         //DoctorUsername={doctorUserName}
         DoctorId={DoctorId || ""}
         //DoctorName={doctorName}
-        PatientUsername={PatientUsername || ""}
+        FamMemName={FamMemName || ""}
         Date={Date || ""}
+        //CostFam={CostFam? CostFam : 0}
       />
     </Elements>
   );
