@@ -20,6 +20,8 @@ import {
 
 const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,7 +33,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   console.log("hello wallet");
   // const searchParams = new URLSearchParams(location.search);
   //   const amount2 = searchParams.get("amount");
-  const Amount = state.Amount;
+  const Amount = state.Cost;
   const DoctorId = state.DoctorId;
   const PatientUsername = state.PatientUsername;
   const Date = state.Date;

@@ -38,6 +38,7 @@ const AppointmentConfirmation = () => {
   const location = useLocation();
   const { state } = location;
 
+  console.log("this state");
   console.log(state);
 
   const handleCheckout = () => {

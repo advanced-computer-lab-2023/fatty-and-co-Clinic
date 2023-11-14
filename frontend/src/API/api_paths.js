@@ -45,7 +45,7 @@ export const API_PATHS = {
   viewAllAvailableSlots: DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
   validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
   filterDoctorSlotEdition : DOCTOR_BASE + "filterDoctorSlotEdition/",
-
+  getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",

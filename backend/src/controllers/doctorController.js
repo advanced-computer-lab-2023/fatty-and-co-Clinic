@@ -418,6 +418,8 @@ const filterDoctorSlotEdition = async (req, res) => {
 
     console.log("dis: " + discount);
 
+    const famDiscount = await getPackageFamDiscount(req.user.Username);
+
     for (let element of finalRes) {
       finalResView.push({
         Username: element.Username,
@@ -425,6 +427,7 @@ const filterDoctorSlotEdition = async (req, res) => {
         Speciality: element.Speciality,
         //HourlyRate: element.HourlyRate,
         Cost: getSessionPrice(element.HourlyRate, discount).toFixed(2),
+        CostFam: getSessionPrice(element.HourlyRate, famDiscount).toFixed(2),
       });
     }
     console.log("after for");
@@ -453,6 +456,26 @@ async function getPackageDiscount(patientUsername) {
 function getSessionPrice(hourlyRate, packageDiscount) {
   return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
 }
+
+async function getPackageFamDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
+
+  if (!subscription) {
+    console.log("unsub");
+    return 0;
+  }
+  if (subscription.Status === "Subscribed" && subscription.Package) {
+    console.log("subscribed");
+    return subscription.Package.Family_Discount;
+  }
+ return 0;
+}
+
+
+
 
 //usage: returns the available slot(s) of all doctorsss
 //based on the date&time range passed from the user
@@ -927,13 +950,62 @@ const followupAppointment = async (req, res) => {
 
 const payDoctor = async (req, res) => {
   const id = req.body.DoctorId;
+  // const famMemName = req.body.FamMemName;
+  // const username = req.user.Username;
   try {
     const doctor = await doctorModel.findOne({ _id: id });
+
+    const HourlyRate = doctor.HourlyRate;
+    // const patient = await subscriptionModel.findOne
     console.log("before: " + doctor.Wallet);
     doctor.Wallet += doctor.HourlyRate;
     await doctor.save();
     console.log("doqwallet" + doctor.Wallet);
     res.status(200).json({ message: "Doctor got paid" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getPaymentAmount = async (req, res) => {
+  const id = req.body.DoctorId;
+  const famMemName = req.body.FamMemName;
+  const username = req.user.Username;
+
+  try {
+    //   const doctor = await doctorModel.findOne({ _id: id });
+
+    //   const HourlyRate = doctor.HourlyRate;
+    //  // const patient = await subscriptionModel.findOne
+    //   console.log("before: " + doctor.Wallet);
+    //   doctor.Wallet += doctor.HourlyRate;
+    //   await doctor.save();
+    //   console.log("doqwallet" + doctor.Wallet);
+    //   res.status(200).json({ message: "Doctor got paid" });
+
+    var discount;
+    const patient = await patientModel.findOne({ Username: username });
+    const subscription = await subscriptionModel
+      .findOne({ Patient: patient._id })
+      .populate("Package");
+
+    if (!subscription) {
+      discount = 0;
+    } else {
+      if (subscription.Status === "Subscribed" && subscription.Package) {
+        if (famMemName) {
+          discount = subscription.Package.Family_Discount;
+        } else {
+          discount = subscription.Package.Session_Discount;
+        }
+      }
+    }
+    const doctor = await doctorModel.findOne({ _id: id });
+    const hourlyRate = doctor.HourlyRate;
+
+    const amount = (1 - discount / 100) * (hourlyRate * 1.1);
+
+    res.status(200).json(amount);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -962,4 +1034,5 @@ module.exports = {
   viewMySlotsDoc,
   payDoctor,
   validateBookingDate,
+  getPaymentAmount,
 };

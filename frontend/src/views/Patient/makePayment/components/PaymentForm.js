@@ -42,7 +42,7 @@ const PaymentForm = ({
   PackageName,
   NationalId,
   DoctorId,
-  PatientUsername,
+  FamMemName,
   Date,
 }) => {
   const { user } = useAuthContext();
@@ -91,8 +91,8 @@ const PaymentForm = ({
               },
               body: JSON.stringify({
                 DoctorId,
-                PatientUsername,
                 Date,
+                FamMemName,
               }),
             });
             const response2 = await fetch(API_PATHS.payDoctor, {
@@ -103,6 +103,7 @@ const PaymentForm = ({
               },
               body: JSON.stringify({
                 DoctorId,
+                FamMemName,
               }),
             });
           }

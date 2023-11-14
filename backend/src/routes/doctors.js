@@ -20,7 +20,7 @@ const {
   viewMySlotsDoc,
   payDoctor,
   validateBookingDate,
-  
+  getPaymentAmount
 } = require("../controllers/doctorController");
 
 const {
@@ -185,6 +185,10 @@ router.get("/viewMySlotsDoc", checkDoctor, (req, res) => {
 
 router.get("/validateBookingDate", checkPatient, (req, res) => {
   validateBookingDate(req, res);
+});
+
+router.get("/getPaymentAmount", checkPatient, (req, res) => {
+  getPaymentAmount(req, res);
 });
 
 module.exports = router;

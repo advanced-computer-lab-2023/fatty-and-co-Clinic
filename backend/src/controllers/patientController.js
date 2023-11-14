@@ -163,6 +163,7 @@ const session_index = async (req, res) => {
 
     const doctors = await doctorModel.find(query);
     const discount = await getPackageDiscount(req.user.Username);
+    const famDiscount = await getPackageFamDiscount((req.user.Username));
 
     const mySessions = doctors.map((doctor) => {
       return {
@@ -170,6 +171,8 @@ const session_index = async (req, res) => {
         Name: doctor.Name,
         Speciality: doctor.Speciality,
         Cost: getSessionPrice(doctor.HourlyRate, discount).toFixed(2),
+        CostFam: getSessionPrice(doctor.HourlyRate, famDiscount).toFixed(2),
+
       };
     });
 
@@ -200,7 +203,22 @@ async function getPackageDiscount(patientUsername) {
 function getSessionPrice(hourlyRate, packageDiscount) {
   return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
 }
+async function getPackageFamDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
 
+  if (!subscription) {
+    console.log("unsub");
+    return 0;
+  }
+  if (subscription.Status === "Subscribed" && subscription.Package) {
+    console.log("subscribed");
+    return subscription.Package.Family_Discount;
+  }
+ return 0;
+}
 const viewHealthFam = async (req, res) => {
   try {
     //changed this
@@ -1534,6 +1552,23 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
+
+const getFamSessionCost = async (req,res) => {
+  const username = req.user.Username;
+  const famName = req.query.FamName;
+try
+  {const patient = await patientModel.findOne({Username: username});
+
+  const famMember = await familyMemberModel.findOne({Patient: patient , Name:famName});
+  const subscription = await subscriptionModel.findOne({FamilyMem: famMember}).populate("Package");
+
+  const myDiscount = sunscription.Package.Session_Discount;
+  res.status(200).json(myDiscount);
+  }
+catch(error){
+  res.status(500).send({message: error.message});
+}
+}
 module.exports = {
   uploadFile,
   getMedicalHistory,

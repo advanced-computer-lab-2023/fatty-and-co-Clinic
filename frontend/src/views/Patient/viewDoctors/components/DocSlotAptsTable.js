@@ -19,6 +19,7 @@ import { useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import DocSlotRowApt from "components/Tables/DocSlotRowApt";
 import { useAuthContext } from "hooks/useAuthContext";
+import { useParams , useLocation} from "react-router-dom";
 
 const DocSlotAptsTable = ({ title, captions, data }) => {
   const history = useHistory();
@@ -27,12 +28,19 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
 
+  const location = useLocation();
+  const { state } = location;
+  let Cost = state.Cost;
+  let CostFam = state.CostFam;
+  
   const handleBookClick = (row) => {
     let newUrl = `../bookAptDetails/${row}`;
     let newState = {
       DayName: row.DayName,
       StartTime: row.StartTime,
       DoctorId: row.DoctorId,
+      Cost: Cost,
+      CostFam: CostFam,
     };
 
     history.push(newUrl, newState);

@@ -42,24 +42,27 @@ export function bookAptDetails() {
   let StartTime = state.StartTime;
   let DayName = state.DayName;
   let DoctorId = state.DoctorId;
+  let Cost = state.Cost;
+  let CostFam = state.CostFam;
 
+
+
+  console.log(state);
   //const username = user.Username;
 
   console.log(StartTime);
   console.log(DayName);
   console.log(DoctorId);
 
-  const [famMemOptions, setFamMemOptions] = useState([{}]);
+  //const [famMemOptions, setFamMemOptions] = useState([{}]);
 
   //check if date<new date
   const [aptDate, setAptDate] = useState(new Date());
   //const [isFamMember, setIsFamMember] = useState(false);
-  const [famMemUsername, setFamMemUsername] = useState(null);
-  const [famMemName, setFamMemName] = useState(null);
+  const [FamMemName, setFamMemName] = useState(null);
 
 
   var DateFinal = new Date();
-  const price = 100;
 
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
@@ -107,9 +110,9 @@ export function bookAptDetails() {
     let newState = {
       DoctorId: DoctorId,
       Date: DateFinal,
-      Amount: price,
-      FamMemUsername: famMemUsername,
-      famMemName: famMemName,
+      FamMemName: FamMemName,
+      Cost: Cost,
+      CostFam: CostFam,
     };
 
     console.log(user.username);
@@ -120,9 +123,9 @@ export function bookAptDetails() {
     history.push(newUrl, newState);
   };
 
-  useEffect(() => {
-    setFamMemOptions([{}]);
-  }, []);
+  // useEffect(() => {
+  //   setFamMemOptions([{}]);
+  // }, []);
 
   return (
     <Box mt="70px">
@@ -176,19 +179,19 @@ export function bookAptDetails() {
                 </option>
               ))}
             </Select> */}
-            <Text>Registered </Text>
+            {/* <Text>Registered </Text>
             <Input
               bg="white"
               type="text"
               placeholder="Username"
               onChange={(event) => setFamMemUsername(event.target.value)}
-            />
+            /> */}
 
-            <Text>Unregistered </Text>
+            {/* <Text>Unregistered </Text> */}
             <Input
               bg="white"
               type="text"
-              placeholder="Name"
+              placeholder="Family Member Name"
               onChange={(event) => setFamMemName(event.target.value)}
             />
             <Button onClick={dateConfirmHandler} colorScheme="green">
