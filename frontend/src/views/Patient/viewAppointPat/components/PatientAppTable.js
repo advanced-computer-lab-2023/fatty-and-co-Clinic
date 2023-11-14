@@ -57,6 +57,7 @@ export const PatientAppTable = ({ title, captions, data, isLoading }) => {
                 return (
                   <AppointmentsRow
                     key={row._id}
+                    PatientName = {row.PatientName}
                     DoctorName={row.DoctorName}
                     Status={row.Status}
                     Type={row.FollowUp ? "Follow Up" : "First Time"}
