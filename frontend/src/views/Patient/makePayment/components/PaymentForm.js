@@ -107,72 +107,71 @@ const PaymentForm = ({
                 FamMemName,
               }),
             });
+          } else if (PackageName && !NationalId) {
+            const response = await fetch(API_PATHS.updateMySub, {
+              method: "PATCH",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ PackageName }),
+            });
+            const errorData = await response.json();
+            if (response.ok) {
+              console.log("Successful payment");
+              setSuccess(true);
+            } else {
+              toast({
+                title: "Failed to pay & subscribe!",
+                description: errorData.error,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              return;
+            }
+          }
+          // if (response.data.success) {
+          // console.log("Subscription payment completed successfully!");
+          // setSuccess(true);}
+          // else {
+          //   console.log(error.message);
+          // }
+          else if (PackageName && NationalId) {
+            const response = await fetch(API_PATHS.updateFamSub, {
+              method: "PATCH",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ PackageName, NationalId }),
+            });
+            const errorData = await response.json();
+            if (response.ok) {
+              console.log("Successful payment");
+              setSuccess(true);
+            } else {
+              toast({
+                title: "Failed to pay & subscribe!",
+                description: errorData.error,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              return;
+            }
+          }
+          // if (response.data.success) {
+          // console.log("Subscription payment completed for family member successfully!");
+          // setSuccess(true);}
+          // else {
+          //   console.log(error.message);
+          // }
+          else {
+            console.log(error.message);
           }
           console.log("Successful payment");
           setSuccess(true);
-        }
-        if (PackageName && !NationalId) {
-          const response = await fetch(API_PATHS.updateMySub, {
-            method: "PATCH",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ PackageName }),
-          });
-          const errorData = await response.json();
-          if (response.ok) {
-            console.log("Successful payment");
-            setSuccess(true);
-          } else {
-            toast({
-              title: "Failed to pay & subscribe!",
-              description: errorData.error,
-              status: "error",
-              duration: 9000,
-              isClosable: true,
-            });
-            return;
-          }
-        }
-        // if (response.data.success) {
-        // console.log("Subscription payment completed successfully!");
-        // setSuccess(true);}
-        // else {
-        //   console.log(error.message);
-        // }
-        else if (PackageName && NationalId) {
-          const response = await fetch(API_PATHS.updateFamSub, {
-            method: "PATCH",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ PackageName, NationalId }),
-          });
-          const errorData = await response.json();
-          if (response.ok) {
-            console.log("Successful payment");
-            setSuccess(true);
-          } else {
-            toast({
-              title: "Failed to pay & subscribe!",
-              description: errorData.error,
-              status: "error",
-              duration: 9000,
-              isClosable: true,
-            });
-            return;
-          }
-        }
-        // if (response.data.success) {
-        // console.log("Subscription payment completed for family member successfully!");
-        // setSuccess(true);}
-        // else {
-        //   console.log(error.message);
-        // }
-        else {
-          console.log(error.message);
         }
       } catch {
         error;
