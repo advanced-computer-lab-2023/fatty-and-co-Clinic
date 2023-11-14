@@ -51,6 +51,7 @@ const PaymentForm = ({
   const stripe = useStripe();
   const elements = useElements();
 
+  console.log("fam mem name pay form: " + FamMemName);
   // useEffect(() => {
   //   if (success) {
   //     const redirectTimeout = setTimeout(() => {
