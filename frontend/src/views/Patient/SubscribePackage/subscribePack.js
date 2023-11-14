@@ -137,7 +137,8 @@ function SubscribePackage() {
       const errorData = await response.json();
       if (response.ok) {
         toast({
-          title: "Subscription process successfull!",
+          title: "Subscription process successful!",
+          description:errorData.success,
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -163,7 +164,8 @@ function SubscribePackage() {
         const errorData = await response.json();
         if (response.ok) {
           toast({
-            title: "Subscription process successfull for family member!",
+            title: "Subscription process completed successfully!",
+            description:errorData.success,
             status: "success",
             duration: 9000,
             isClosable: true,
