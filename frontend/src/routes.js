@@ -281,6 +281,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     component: linkPatient,
     layout: "/patient",
+    show: false
   },
   {
     path: "/doctorPatients",

@@ -9,6 +9,7 @@ import {
   Stack,
   useToast,
   Select,
+  Link,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
@@ -19,7 +20,6 @@ import CardHeader from "components/Card/CardHeader.js";
 //import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
 export function CreateFamilyMember() {
-const [Username, setUserName] = useState("");
   const [Name, setName] = useState("");
   const [NationalId, setNationalId] = useState("");
   const [Age, setAge] = useState("");
@@ -27,27 +27,31 @@ const [Username, setUserName] = useState("");
   const [Relation, setRelation] = useState("");
   const toast = useToast();
   const [data, setData] = useState([]);
- 
+
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
+  const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.700", "white");
- // const { Createparameter } = useParams();
+  // const { Createparameter } = useParams();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Send the username to the backend for deletion
     try {
-      const response = await fetch(
-        API_PATHS.createFamilyMember,
-        {
-          method: "POST",
-          headers: {
-            Authorization,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({Username, Name, NationalId, Age, Gender, Relation }),
-        }
-      );
+      const response = await fetch(API_PATHS.createFamilyMember, {
+        method: "POST",
+        headers: {
+          Authorization,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Name,
+          NationalId,
+          Age,
+          Gender,
+          Relation,
+        }),
+      });
       if (
         Name == "" ||
         NationalId == "" ||
@@ -80,10 +84,10 @@ const [Username, setUserName] = useState("");
           isClosable: true,
         });
         setName(""),
-          setNationalId(""),
-          setAge(""),
-          setGender(""),
-          setRelation(""); // Clear the input field
+        setNationalId(""),
+        setAge(""),
+        setGender(""),
+        setRelation("");
       } else {
         // Handle errors or provide feedback to the user
         toast({
@@ -115,7 +119,7 @@ const [Username, setUserName] = useState("");
           <CardHeader>
             <Flex justify="space-between" align="center" mb="1rem" w="100%">
               <Text fontSize="lg" color={textColor} fontWeight="bold">
-                Add Family member
+                Add Family Member
               </Text>
             </Flex>
           </CardHeader>
@@ -123,13 +127,6 @@ const [Username, setUserName] = useState("");
             <Flex direction="column" w="100%">
               <form onSubmit={handleSubmit}>
                 <Stack spacing={3}>
-                <Input
-                    variant="filled"
-                    type="text"
-                    placeholder="If Patient fill username of him"
-                    value={Username}
-                    onChange={(e) => setUserName(e.target.value)}
-                  />
                   <Input
                     variant="filled"
                     type="text"
@@ -183,6 +180,24 @@ const [Username, setUserName] = useState("");
                   </Button>
                 </Stack>
               </form>
+              <Text
+                color={textColor}
+                fontWeight="medium"
+                justify="space-between"
+                align="center"
+                mt="20px"
+                w="100%"
+              >
+                Your family member already has an account?
+                <Link
+                  color={titleColor}
+                  ms="5px"
+                  fontWeight="bold"
+                  href="../linkPatient"
+                >
+                  Link an already existing patient
+                </Link>
+              </Text>
             </Flex>
           </CardBody>
         </Card>
