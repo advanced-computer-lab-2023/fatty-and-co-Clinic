@@ -22,24 +22,39 @@ export function ViewDoctors() {
     startHour: [],
   });
 
+  const [specialityFilterValue, setSpecialityFilterValue] = useState("");
+  const [dayFilterValue, setDayFilterValue] = useState([]);
+  const [hourFilterValue, setHourFilterValue] = useState([]);
+  const [dayHourFilterValue, setDayHourFilterValue] = useState([]);
+
+  const [startDateFilterVal, setStartDateFilterVal] = useState([]);
+  const [endDateFilterVal, setEndDateFilterVal] = useState([]);
+  const [startHourFilterVal, setStartHourFilterVal] = useState([]);
+  const [endHourFilterVal, setEndHourFilterVal] = useState([]);
+
+  const [nameSearchValue, setNameSearchValue] = useState("");
+  const [specialitySearchValue, setSpecialitySearchValue] = useState("");
+
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-  // TODO: change this to grab the specialities from the backend
-  const options = [
-    { label: "Cardiology", value: "Cardiology" },
-    { label: "Dermatology", value: "Dermatology" },
-    { label: "Endocrinology", value: "Endocrinology" },
-    { label: "Gastroenterology", value: "Gastroenterology" },
-    { label: "Hematology", value: "Hematology" },
-    { label: "Infectious Disease", value: "Infectious Disease" },
-    { label: "Nephrology", value: "Nephrology" },
-    { label: "Neurology", value: "Neurology" },
-    { label: "Oncology", value: "Oncology" },
-    { label: "Ophthalmology", value: "Ophthalmology" },
-    { label: "Orthopedics", value: "Orthopedics" },
-    { label: "Otolaryngology", value: "Otolaryngology" },
-    { label: "Pediatrics", value: "Pediatrics" },
-  ];
+
+  const options = data
+    .map((doctor) => ({
+      label: doctor.Speciality,
+      value: doctor.Speciality,
+    }))
+    .filter((v, i, a) => a.findIndex((t) => t.value === v.value) === i);
+
+  useEffect(() => {
+    const url = API_PATHS.viewDoctors;
+    axios
+      .get(url, { params: searchParams, headers: { Authorization } })
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, [searchParams]);
+
   const initialRender = useRef(true);
   useEffect(() => {
     if (initialRender.current) {
@@ -55,17 +70,6 @@ export function ViewDoctors() {
     }
   }, [filterParams]);
 
-  const [specialityFilterValue, setSpecialityFilterValue] = useState("");
-  const [dayFilterValue, setDayFilterValue] = useState([]);
-  const [hourFilterValue, setHourFilterValue] = useState([]);
-  const [dayHourFilterValue, setDayHourFilterValue] = useState([]);
-
-  const [startDateFilterVal, setStartDateFilterVal] = useState([]);
-  const [endDateFilterVal, setEndDateFilterVal] = useState([]);
-  const [startHourFilterVal, setStartHourFilterVal] = useState([]);
-  const [endHourFilterVal, setEndHourFilterVal] = useState([]);
-
-  console.log(filterParams);
   //add date and hour
   const handleFilterOnChange = (value) => {
     setFilterParams({
@@ -77,8 +81,6 @@ export function ViewDoctors() {
       endHour: endHourFilterVal,
     });
   };
-
-  console.log(filterParams);
 
   const handleSpecialityFilter = (event) => {
     setSpecialityFilterValue(event.target.value);
@@ -115,19 +117,6 @@ export function ViewDoctors() {
     setDayFilterValue(newDate);
     setHourFilterValue(newHour);
   };
-
-  useEffect(() => {
-    const url = API_PATHS.viewDoctors;
-    axios
-      .get(url, { params: searchParams, headers: { Authorization } })
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((err) => console.log(err));
-  }, [searchParams]);
-
-  const [nameSearchValue, setNameSearchValue] = useState("");
-  const [specialitySearchValue, setSpecialitySearchValue] = useState("");
 
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
@@ -190,7 +179,6 @@ export function ViewDoctors() {
               </option>
             ))}
           </select>
-
 
           {/* <Input
             placeholder="Select Date and Time"

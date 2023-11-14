@@ -33,6 +33,8 @@ export default function MakePayment({ amount }) {
   console.log("hello stripe");
   console.log(searchParams);
   console.log(amountApt);
+  console.log("doctor's id:" + DoctorId);
+  console.log("patient's username:" + PatientUsername);
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm

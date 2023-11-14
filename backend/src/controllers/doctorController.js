@@ -424,7 +424,7 @@ const filterDoctorSlotEdition = async (req, res) => {
         Name: element.Name,
         Speciality: element.Speciality,
         //HourlyRate: element.HourlyRate,
-        Cost: await getSessionPrice(element.HourlyRate, discount),
+        Cost: getSessionPrice(element.HourlyRate, discount).toFixed(2),
       });
     }
     console.log("after for");
@@ -442,19 +442,15 @@ async function getPackageDiscount(patientUsername) {
     .findOne({ Patient: patient._id })
     .populate("Package");
 
-  console.log("sub: " + subscription);
-  // if (subscription.Status === "Subscribed" && subscription.Package) {
-  //   return subscription.Package.Session_Discount;
-  // }
-  // return 0;
   if (!subscription) {
     return 0;
   }
   if (subscription.Status === "Subscribed" && subscription.Package) {
     return subscription.Package.Session_Discount;
   }
+  return 0;
 }
-async function getSessionPrice(hourlyRate, packageDiscount) {
+function getSessionPrice(hourlyRate, packageDiscount) {
   return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
 }
 
@@ -844,6 +840,7 @@ const validateBookingDate = async (req, res) => {
       });
       if (appointment) {
         console.log(appointment.Date);
+        console.log("invalid");
         res.status(500).send({ message: "this date is unavailable" });
       } else {
         console.log("valid");

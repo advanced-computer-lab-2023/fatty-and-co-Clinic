@@ -63,8 +63,6 @@ const getEmergencyContact = async (req, res) => {
     const { Username } = req.params;
     const patient = await patientModel.findOne({ Username: Username });
 
-    console.log(patient);
-
     if (!patient) {
       res.status(404).send({ message: "Patient not found." });
       return;
@@ -72,7 +70,6 @@ const getEmergencyContact = async (req, res) => {
 
     const EmergencyContact = patient.EmergencyContact;
     const Name = patient.Name;
-    console.log(Name);
     if (!EmergencyContact) {
       res
         .status(404)
@@ -150,7 +147,6 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
   // if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -158,14 +154,6 @@ const session_index = async (req, res) => {
   // }
 
   try {
-    const patient = await patientModel.findOne({ Username: username });
-    let packageDis = 0;
-
-    if (patient.Package) {
-      const package = await packageModel.findOne({ Name: patient.Package });
-      packageDis = package.Session_Discount;
-    }
-
     const query = {
       ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
       ...(Speciality
@@ -174,14 +162,14 @@ const session_index = async (req, res) => {
     };
 
     const doctors = await doctorModel.find(query);
+    const discount = await getPackageDiscount(req.user.Username);
 
     const mySessions = doctors.map((doctor) => {
-      const calcCost = (1 - packageDis / 100) * (doctor.HourlyRate * 1.1);
       return {
         Username: doctor.Username,
         Name: doctor.Name,
         Speciality: doctor.Speciality,
-        Cost: calcCost,
+        Cost: getSessionPrice(doctor.HourlyRate, discount).toFixed(2),
       };
     });
 
@@ -190,6 +178,28 @@ const session_index = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+async function getPackageDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
+
+  if (!subscription) {
+    return 0;
+  }
+  if (
+    subscription &&
+    subscription.Status === "Subscribed" &&
+    subscription.Package
+  ) {
+    return subscription.Package.Session_Discount;
+  }
+  return 0;
+}
+function getSessionPrice(hourlyRate, packageDiscount) {
+  return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
+}
 
 const viewHealthFam = async (req, res) => {
   try {
@@ -324,12 +334,9 @@ const payForSubscription = async (req, res) => {
     const day5 = String(renewCheck.getDate()).padStart(2, "0");
     const formattedDate5 = `${year5}-${month5}-${day5}`; // renewal Date el gdeda
     const amount = Package.Price - Package.Price * (max / 100);
-    console.log(formattedDate);
-    console.log(formattedDate4);
     //  console.log(patSubscription.Status==="Unsubscribed"||patSubscription.Status==="Cancelled");
     //  console.log(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.Package.Name
     //  ===Package.Name)
-    console.log(patient.Wallet > amount);
     if (
       patSubscription.Status === "Unsubscribed" ||
       patSubscription.Status === "Cancelled"
@@ -742,7 +749,6 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate12,
             }
           );
-          console.log("entered this if ");
           const updatePat = await patientModel.findOneAndUpdate(
             { Username: curr_user },
             { Wallet: patient.Wallet - amount }
@@ -808,7 +814,6 @@ const payForFamSubscription = async (req, res) => {
 };
 
 const getAmountFam = async (req, res) => {
-  console.log("Entered");
   try {
     const curr_user = req.user.Username;
     const { PackageName, NationalId } = req.body;
@@ -936,10 +941,8 @@ const viewHealthPackage = async (req, res) => {
       .findOne({ Patient: patient, Status: "Subscribed" })
       .populate("Patient")
       .populate("Package");
-    console.log(subscription);
     if (subscription) {
       const myPackage = subscription.Package;
-      console.log(myPackage);
       res.status(200).send(myPackage);
     } else {
       res.status(404).send({ Error: "Cannot find any current subscriptions!" });
@@ -962,8 +965,6 @@ const viewHealthPackagewithstatus = async (req, res) => {
       .populate("Patient")
       .populate("FamilyMem")
       .populate("Package");
-    // console.log(subscription.Patient.Username);
-    console.log(subscription);
     if (subscription) {
       res.status(200).send(subscription);
     } else {
@@ -1070,7 +1071,6 @@ const createFamilymember = async (req, res) => {
 };
 
 const updateFamCredit = async (req, res) => {
-  console.log("Entered");
   try {
     const curr_user = req.user.Username;
     const { PackageName, NationalId } = req.body;
@@ -1182,15 +1182,17 @@ const updateFamCredit = async (req, res) => {
 
 const getWalletAmount = async (req, res) => {
   try {
-    const Username = req.user.Username;
-    const patient = await patientModel.findOne({ Username: Username });
+    var patient = await patientModel.findOne({ Username: req.user.Username });
+    if (!patient) {
+      var patient = await doctorModel.findOne({ Username: req.user.Username });
+    }
     if (patient) {
       res.status(200).json({ Wallet: patient.Wallet });
     } else {
-      res.status(404).json({ error: "Cannot find wallet!" });
+      res.status(404).json({ error: "Cannot find wallet" });
     }
   } catch {
-    res.status(404).json({ error: "Error occured while fetching amount!" });
+    res.status(404).json({ error: "Error occured while fetching amount" });
   }
 };
 
@@ -1250,9 +1252,6 @@ const getPrescriptions = async (req, res) => {
         $gte: date,
         $lt: nextDay,
       };
-      console.log(date);
-      console.log(nextDay);
-      console.log(regexQuery.Date);
     }
     if (query.Status) {
       regexQuery.Status = query.Status;
@@ -1281,9 +1280,7 @@ const selectPrescription = async (req, res) => {
 };
 
 const subscribepackagefamilymem = async (req, res) => {
-  console.log("entered");
   try {
-    console.log("entered try");
     const Startdate = new Date();
 
     const year = Startdate.getFullYear();
@@ -1310,13 +1307,7 @@ const subscribepackagefamilymem = async (req, res) => {
       Patient: Patient.id,
       NationalId: NationalId,
     });
-    console.log("Familymem");
-    // console.log(fam)
-    console.log("Package");
-    //console.log(Package)
     const subscribedcheck = await subscriptionModel.findOne({ FamilyMem: fam });
-    console.log(subscribedcheck.Status);
-    console.log(subscribedcheck.Status == "Subscribed");
 
     if (famrelated == null || fam == null) {
       res.status(400).send({ error: "Wrong national id " });
@@ -1330,7 +1321,6 @@ const subscribepackagefamilymem = async (req, res) => {
     }
     // why it doesn't ente here
     else if (subscribedcheck.Status == "Subscribed") {
-      console.log("Entered here if subs");
       res.status(400).send({ error: "You are already subscribed" });
     } else {
       const subscribtion = await subscriptionModel.findOneAndUpdate(
@@ -1364,7 +1354,6 @@ const cancelSubscription = async (req, res) => {
     const subscribed = await subscriptionModel.findOne({ Patient: patient });
     //  console.log()
     if (subscribed) {
-      console.log("Here");
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
@@ -1485,13 +1474,11 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       Patient: patient.id,
       NationalId: NationalId,
     });
-    console.log(req.user.Username);
     if (famrelated == null) {
       res.status(400).send({ error: "Family member not related to you " });
     } else if (fam.FamilyMem != null) {
       res.status(400).send({ error: "He is already a system user" });
     } else if (subscribed) {
-      console.log("Here");
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
@@ -1501,7 +1488,6 @@ const cancelSubscriptionfamilymember = async (req, res) => {
           { FamilyMem: fam },
           { Status: "Cancelled", Enddate: formattedDate }
         );
-        console.log(subscribedUpdate);
         res.status(200).json({ subscribedUpdate });
       }
     } else {

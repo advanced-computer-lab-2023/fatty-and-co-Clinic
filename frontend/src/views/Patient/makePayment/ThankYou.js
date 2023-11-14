@@ -7,7 +7,7 @@ const ThankYouCard = () => {
   const history = useHistory();
 
   const returnToHomePage = () => {
-    history.push("/");
+    // history.push("/");
   };
 
   return (

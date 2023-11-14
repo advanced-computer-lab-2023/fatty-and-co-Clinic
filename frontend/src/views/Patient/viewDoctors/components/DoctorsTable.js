@@ -53,7 +53,6 @@ const DoctorsTable = ({ title, captions, data }) => {
           </Thead>
           <Tbody>
             {data.map((row) => {
-              console.log(row.Username);
               return (
                 <DoctorsRow
                   key={row.Username}
