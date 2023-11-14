@@ -20,6 +20,7 @@ const {
   viewMySlotsDoc,
   payDoctor,
   validateBookingDate,
+  
 } = require("../controllers/doctorController");
 
 const {

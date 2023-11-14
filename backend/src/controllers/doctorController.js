@@ -377,10 +377,10 @@ const filterDoctorSlotEdition = async (req, res) => {
 
     //first stage -> filter by date&time range
     if (
-      req.body.startDate &&
-      req.body.endDate &&
-      req.body.startHour &&
-      req.body.endHour
+      req.query.startDate &&
+      req.query.endDate &&
+      req.query.startHour &&
+      req.query.endHour
     ) {
       //get all doctors who have slots within the date&time range passed by user.
       const dateDocs = await availableDocXSlots(req, res);
@@ -392,34 +392,35 @@ const filterDoctorSlotEdition = async (req, res) => {
       );
 
       //second stage -> filter first_Stage docs by speciality
-      if (req.body.speciality) {
+      if (req.query.speciality) {
         var filteredSpecDocs = await filteredSpecDoctors(
           filteredDateDocs,
           specFilteredDoctors,
-          req.body.speciality
+          req.query.speciality
         );
         finalRes = filteredSpecDocs;
       } else finalRes = filteredDateDocs;
 
       //In case no date filter params
     } else {
-      const query = req.body.speciality
-        ? { Speciality: { $regex: req.body.speciality.trim(), $options: "i" } }
+      const query = req.query.speciality
+        ? { Speciality: { $regex: req.query.speciality.trim(), $options: "i" } }
         : {};
-      const finalResTmp = await doctorModel.find(query);
-      for (let element of finalResTmp) {
-        finalRes.push({
-          Username: element.Username,
-          Name: element.Name,
-          Speciality: element.Speciality,
-          HourlyRate: element.HourlyRate,
-        });
-      }
+       finalResTmp = await doctorModel.find(query);
+      
     }
-
+    for (let element of finalResTmp) {
+      finalRes.push({
+        Username: element.Username,
+        Name: element.Name,
+        Speciality: element.Speciality,
+        //HourlyRate: element.HourlyRate,
+        Cost: 100,
+      });
+    }
     res.status(200).json(finalRes);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send({message: error.message});
   }
 };
 
@@ -429,15 +430,15 @@ const filterDoctorSlotEdition = async (req, res) => {
 async function availableDocXSlots(req) {
   try {
     if (
-      (req.body.startDate && req.body.endDate,
-      req.body.startHour && req.body.endHour)
+      (req.query.startDate && req.query.endDate,
+      req.query.startHour && req.query.endHour)
     ) {
-      const startDate = new Date(req.body.startDate);
-      const endDate = new Date(req.body.endDate);
+      const startDate = new Date(req.query.startDate);
+      const endDate = new Date(req.query.endDate);
       dayRange = findDayRangeFromDate(startDate, endDate);
 
-      const startHour = parseInt(req.body.startHour);
-      const endHour = parseInt(req.body.endHour);
+      const startHour = parseInt(req.query.startHour);
+      const endHour = parseInt(req.query.endHour);
 
       const docSlotCross = await doctorModel.aggregate([
         {
@@ -728,65 +729,65 @@ const viewAllAvailableSlots = async (req, res) => {
 
 //TODO: make the calendar thing validation greater than today (CAN POSTPONE TO SPRINT_3)
 //TODO: ADD THE ROUTE OF THIS METHOD &  THE DOCTOR USERNAME IN THE URL;
-const checkAptDateForBooking = async (req, res) => {
-  //doctor Username ---> from URL
-  const { username } = req.params;
+// const checkAptDateForBooking = async (req, res) => {
+//   //doctor Username ---> from URL
+//   const { username } = req.params;
 
-  //patient Username --> from session or family member
-  const { patUsername } = req.user.Username;
+//   //patient Username --> from session or family member
+//   const { patUsername } = req.user.Username;
 
-  //TODO: check the local zone time thing
-  //you need to pass all docSlot fields in  case it is a new page
+//   //TODO: check the local zone time thing
+//   //you need to pass all docSlot fields in  case it is a new page
 
-  //the given date from the calendar
-  const date = req.body;
+//   //the given date from the calendar
+//   const date = req.body;
 
-  //slot fields from docSlot
-  const { WorkingDay, StartTime } = req.body;
-  const curDate = new Date();
+//   //slot fields from docSlot
+//   const { WorkingDay, StartTime } = req.body;
+//   const curDate = new Date();
 
-  try {
-    if (date < curDate || date.getDay != WorkingDay)
-      res.status(500).json("invalid date");
-    else {
-      const docApts = await appointmentModel.aggregate([
-        {
-          $addFields: {
-            aptDay: { $dayOfWeek: "$Date" },
-            aptHour: { $hour: "$Date" },
-          },
-        },
-        {
-          $match: {
-            $and: [
-              { DoctorUsername: { $eq: username } },
-              { aptDay: WorkingDay },
-              { aptHour: StartTime },
-              { Status: { $in: ["Upcoming", "FollowUp"] } },
-            ],
-          },
-        },
-      ]);
+//   try {
+//     if (date < curDate || date.getDay != WorkingDay)
+//       res.status(500).json("invalid date");
+//     else {
+//       const docApts = await appointmentModel.aggregate([
+//         {
+//           $addFields: {
+//             aptDay: { $dayOfWeek: "$Date" },
+//             aptHour: { $hour: "$Date" },
+//           },
+//         },
+//         {
+//           $match: {
+//             $and: [
+//               { DoctorUsername: { $eq: username } },
+//               { aptDay: WorkingDay },
+//               { aptHour: StartTime },
+//               { Status: { $in: ["Upcoming", "FollowUp"] } },
+//             ],
+//           },
+//         },
+//       ]);
 
-      if (docApts.length != 0) {
-        res.status(500).json("Can not book this appointment");
-      } else {
-        //TODO: make sure you have a create method that given a
-        // patient username or doctor username it adds the right patientName & docName
-        //and not the random generator
-        const newApt = await appointmentModel.create({
-          DoctorUsername: username,
-          Date: date.setHours(StartTime),
-          PatientUsername: patUsername,
-          Status: "Upcoming",
-        });
-        res.status(201).json(newApt);
-      }
-    }
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+//       if (docApts.length != 0) {
+//         res.status(500).json("Can not book this appointment");
+//       } else {
+//         //TODO: make sure you have a create method that given a
+//         // patient username or doctor username it adds the right patientName & docName
+//         //and not the random generator
+//         const newApt = await appointmentModel.create({
+//           DoctorUsername: username,
+//           Date: date.setHours(StartTime),
+//           PatientUsername: patUsername,
+//           Status: "Upcoming",
+//         });
+//         res.status(201).json(newApt);
+//       }
+//     }
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// };
 
 const validateBookingDate = async (req, res) => {
   const { DayName, DateFinal, DoctorId } = req.query;
@@ -928,7 +929,6 @@ module.exports = {
   viewUpcomingAppointmentsDoc,
   viewPastAppoitmentsDoc,
   viewAllAvailableSlots,
-  checkAptDateForBooking,
   viewMySlotsDoc,
   payDoctor,
   validateBookingDate,
