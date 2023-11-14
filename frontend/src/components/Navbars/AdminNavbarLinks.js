@@ -16,7 +16,7 @@ import {
   useColorModeValue,
   ChakraProvider,
   extendTheme,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/icon";
 import { MdAttachMoney } from "react-icons/md";
@@ -38,6 +38,7 @@ import routes from "routes.js";
 import axios from "axios";
 import { API_PATHS } from "API/api_paths";
 import { useState, useEffect } from "react";
+import { useWalletContext } from "hooks/useWalletContext";
 
 const theme = extendTheme({
   icons: {
@@ -49,14 +50,17 @@ export default function HeaderLinks(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
-  const [Wallet, setWallet] = useState(null);
+
+  const { Wallet, dispatch } = useWalletContext();
+  // const [Wallet, setWallet] = useState(null);
   useEffect(() => {
     const fetchWalletAmount = async () => {
       try {
         const response = await axios.get(API_PATHS.getWalletAmount, {
           headers: { Authorization },
         });
-        setWallet(response.data.Wallet);
+        console.log(response.data);
+        dispatch({ type: "GET_WALLET", payload: response.data.Wallet });
       } catch (error) {
         console.error("Error fetching wallet amount", error);
       }
@@ -234,6 +238,7 @@ export default function HeaderLinks(props) {
           </Flex>
         </MenuList>
       </Menu>
+      {user.userType !== "Admin" && (
       <ChakraProvider theme={theme}>
         <Icon
           as={MdAttachMoney}
@@ -244,6 +249,7 @@ export default function HeaderLinks(props) {
           mb="2px"
         />
       </ChakraProvider>
+      )}
       <ChakraProvider theme={theme}>
         <Text
           fontSize="sm"

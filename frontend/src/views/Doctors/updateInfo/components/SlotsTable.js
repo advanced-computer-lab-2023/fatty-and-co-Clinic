@@ -44,7 +44,9 @@ const SlotsTable = ({
 
   const handleDelete = (row) => {
     const url = API_PATHS.deleteMySlotsDoc + row.SlotId;
-    axios.delete(url, { headers: { Authorization } });
+    axios
+      .delete(url, { headers: { Authorization } })
+      .catch((error) => console.log(error));
     setTableData(tableData.filter((element) => element.SlotId !== row.SlotId));
   };
 
@@ -64,10 +66,12 @@ const SlotsTable = ({
 
   const handleEditConfirm = (row) => {
     const url = API_PATHS.updateMySlotsDoc + row.SlotId;
-    axios.patch(url, null, {
-      params: { StartTimeToUpdate },
-      headers: { Authorization },
-    });
+    axios
+      .patch(url, null, {
+        params: { StartTimeToUpdate },
+        headers: { Authorization },
+      })
+      .catch((error) => console.log(error));
     // .then( () => fetchTableData());
     setTableData(
       tableData.map((item) =>

@@ -22,6 +22,9 @@ import { useAuthContext } from "hooks/useAuthContext";
 import MakePayment from "../makePayment";
 import { PackageContextProvider } from "../viewPackagesFam/components/Context";
 import PackageI from "../viewPackagesFam";
+import { useWalletContext } from "hooks/useWalletContext";
+
+import axios from "axios";
 
 function SubscribePackage() {
   const [PackageName, setPackageName] = useState("");
@@ -33,6 +36,8 @@ function SubscribePackage() {
   const textColor = useColorModeValue("gray.700", "white");
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
+
+  const { Wallet, dispatch } = useWalletContext();
 
   const handleSubscribeCredit = async (e) => {
     e.preventDefault();
@@ -120,35 +125,34 @@ function SubscribePackage() {
           duration: 9000,
           isClosable: true,
         });
-        return; 
-      } 
-      else if(PackageName&& !NationalId){
-      const response = await fetch(API_PATHS.subscribePackageSelf, {
-        method: "PATCH",
-        headers: {
-          Authorization,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({PackageName}),
-      });
-      const errorData = await response.json();
-      if (response.ok) {
-        toast({
-          title: "Subscription process successfull!",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
+        return;
+      } else if (PackageName && !NationalId) {
+        const response = await fetch(API_PATHS.subscribePackageSelf, {
+          method: "PATCH",
+          headers: {
+            Authorization,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ PackageName }),
         });
-  } else {
-        toast({
-          title: "Failed to pay & subscribe",
-          description: errorData.error,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }}
-      else if(PackageName && NationalId){
+        const errorData = await response.json();
+        if (response.ok) {
+          toast({
+            title: "Subscription process successfull!",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "Failed to pay & subscribe",
+            description: errorData.error,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+      } else if (PackageName && NationalId) {
         const response = await fetch(API_PATHS.subscribePackageFam, {
           method: "PATCH",
           headers: {
@@ -157,7 +161,7 @@ function SubscribePackage() {
           },
           body: JSON.stringify({ PackageName, NationalId }),
         });
-        const errorData = await response.json();
+        // const errorData = await response.json();
         if (response.ok) {
           toast({
             title: "Subscription process completed successfully!",
@@ -166,10 +170,18 @@ function SubscribePackage() {
             duration: 9000,
             isClosable: true,
           });
+          try {
+            const res = await axios.get(API_PATHS.getWalletAmount, {
+              headers: { Authorization },
+            });
+            dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
+          } catch (error) {
+            console.error("Error fetching wallet amount", error);
+          }
         } else {
           toast({
             title: "Failed to pay & subscribe for family member!",
-            description: errorData.error,
+            // description: errorData.error,
             status: "error",
             duration: 9000,
             isClosable: true,
