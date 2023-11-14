@@ -1182,8 +1182,7 @@ const updateFamCredit = async (req, res) => {
 
 const getWalletAmount = async (req, res) => {
   try {
-    const Username = req.user.Username;
-    const patient = await patientModel.findOne({ Username: Username });
+    const patient = await patientModel.findOne({ Username: req.user.Username });
     if (patient) {
       res.status(200).json({ Wallet: patient.Wallet });
     } else {

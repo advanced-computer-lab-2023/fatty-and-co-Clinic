@@ -14,7 +14,11 @@ import {
   MenuList,
   Text,
   useColorModeValue,
+  ChakraProvider,
+  extendTheme,
 } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/icon";
+import { MdAttachMoney } from "react-icons/md";
 // Assets
 import avatar1 from "assets/img/avatars/avatar1.png";
 import avatar2 from "assets/img/avatars/avatar2.png";
@@ -30,10 +34,34 @@ import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import routes from "routes.js";
+import axios from "axios";
+import { API_PATHS } from "API/api_paths";
+import { useState, useEffect } from "react";
+
+const theme = extendTheme({
+  icons: {
+    MdAttachMoney,
+  },
+});
 
 export default function HeaderLinks(props) {
-  const { variant, children, fixed, secondary, onOpen, ...rest } = props;
   const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  const { variant, children, fixed, secondary, onOpen, ...rest } = props;
+  const [Wallet, setWallet] = useState(null);
+  useEffect(() => {
+    const fetchWalletAmount = async () => {
+      try {
+        const response = await axios.get(API_PATHS.getWalletAmount, {
+          headers: { Authorization },
+        });
+        setWallet(response.data.Wallet);
+      } catch (error) {
+        console.error("Error fetching wallet amount", error);
+      }
+    };
+    fetchWalletAmount();
+  }, [Authorization]);
 
   // Chakra Color Mode
   let mainTeal = useColorModeValue("teal.300", "teal.300");
@@ -57,7 +85,7 @@ export default function HeaderLinks(props) {
       <InputGroup
         cursor="pointer"
         bg={inputBg}
-        borderRadius="15px"
+        borderRadius="16px"
         w={{
           sm: "128px",
           md: "200px",
@@ -170,7 +198,7 @@ export default function HeaderLinks(props) {
       />
       <Menu>
         <MenuButton>
-          <BellIcon color={navbarIcon} w="18px" h="18px" />
+          <BellIcon color={navbarIcon} w="18px" h="18px" me="16px" mb="5px" />
         </MenuButton>
         <MenuList p="16px 8px">
           <Flex flexDirection="column">
@@ -204,6 +232,27 @@ export default function HeaderLinks(props) {
           </Flex>
         </MenuList>
       </Menu>
+      <ChakraProvider theme={theme}>
+        <Icon
+          as={MdAttachMoney}
+          boxSize={5}
+          color={navbarIcon}
+          w="18px"
+          h="18px"
+          mb="2px"
+        />
+      </ChakraProvider>
+      <ChakraProvider theme={theme}>
+        <Text
+          fontSize="sm"
+          fontWeight="bold"
+          color={navbarIcon}
+          w="100px"
+          h="27px"
+        >
+          {Wallet !== null ? `${Wallet}` : "Loading..."}
+        </Text>
+      </ChakraProvider>
     </Flex>
   );
 }
