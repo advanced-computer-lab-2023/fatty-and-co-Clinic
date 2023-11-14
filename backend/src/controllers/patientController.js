@@ -1395,36 +1395,57 @@ const linkPatient = async (req, res) => {
     familyMember = await patientModel.findOne({ MobileNum: Id });
   } else {
     const familyMemberUser = await userModel.findOne({ Email: Id });
-    familyMember = await patientModel.findOne({
-      Username: familyMemberUser.Username,
-    });
+    if (!familyMemberUser) {
+      res.status(404).send({ message: "Patient not found" });
+      return;
+    } else {
+      familyMember = await patientModel.findOne({
+        Username: familyMemberUser.Username,
+      });
+    }
   }
   if (!familyMember) {
     res.status(404).send({ message: "Patient not found" });
+    return;
   } else {
     const currentUser = await patientModel.findOne({
       Username: req.user.Username,
     });
     if (currentUser.LinkedPatients.includes(familyMember._id)) {
-      res.status(202).send({ message: "Patient already linked" });
+      res.status(202).send({ message: "Patient already linked to you" });
+    } else if (currentUser.MobileNum == familyMember.MobileNum) {
+      res.status(204).send({ message: "Can't link yourself" });
     } else {
-      currentUser.LinkedPatients.push(familyMember._id);
-      await currentUser.save();
-      const currentDate = new Date();
-      const dob = new Date(familyMember.DateOfBirth);
-      const newFamilymember = await familyMemberModel.create({
-        Patient: currentUser,
-        FamilyMem: familyMember,
-        FamilyMemberUsername: familyMember.Username,
-        Name: familyMember.Name,
+      const formerlyLinked = await familyMemberModel.findOne({
         NationalId: familyMember.NationalId,
-        Age: Math.floor(
-          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-        ),
-        Gender: familyMember.Gender,
-        Relation: Relation,
       });
-      res.status(200).json(newFamilymember);
+      var newFamilymember = null;
+      if (!formerlyLinked) {
+        currentUser.LinkedPatients.push(familyMember._id);
+        await currentUser.save();
+        const currentDate = new Date();
+        const dob = new Date(familyMember.DateOfBirth);
+        newFamilymember = await familyMemberModel.create({
+          Patient: currentUser,
+          FamilyMem: familyMember,
+          FamilyMemberUsername: familyMember.Username,
+          Name: familyMember.Name,
+          NationalId: familyMember.NationalId,
+          Age: Math.floor(
+            Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+          ),
+          Gender: familyMember.Gender,
+          Relation: Relation,
+        });
+      } else {
+        res.status(206).send({ message: "Patient already linked to another user" });
+      }
+      if (!newFamilymember) {
+        res.status(200).json({ familyMember });
+      } else {
+        await subscriptionModel.addEntry1(newFamilymember);
+        res.status(200).json({ newFamilymember });
+      }
     }
   }
 };
