@@ -109,6 +109,7 @@ const PaymentForm = ({
           }
           console.log("Successful payment");
           setSuccess(true);
+          history.push(".../");
         }
         if (PackageName && !NationalId) {
           const response = await fetch(API_PATHS.updateMySub, {

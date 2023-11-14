@@ -185,7 +185,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
         } catch (error) {
           console.error("Error fetching wallet amount", error);
         }
-        // history.push("../makePayment/ThankYou");
+        history.push(".../");
       } else {
         console.log("Payment declined. Insufficient funds.");
         setLoading(false);
