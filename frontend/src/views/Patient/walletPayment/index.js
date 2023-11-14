@@ -7,6 +7,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "views/Patient/makePayment/components/PaymentForm";
 import { useHistory, useLocation } from "react-router-dom";
+import { useWalletContext } from "hooks/useWalletContext";
 //import { ToastContainer, toast } from "react-toastify";
 import {
   Button,
@@ -25,6 +26,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   const toast = useToast();
   const location = useLocation();
   const { state } = location;
+  const { Wallet, dispatch } = useWalletContext();
   console.log(state);
   console.log("hello wallet");
   // const searchParams = new URLSearchParams(location.search);
@@ -170,7 +172,18 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
         });
 
         onClose();
-        history.push("../makePayment/ThankYou");
+        try {
+          axios
+            .get(API_PATHS.getWalletAmount, {
+              headers: { Authorization },
+            })
+            .then((res) => {
+              dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
+            });
+        } catch (error) {
+          console.error("Error fetching wallet amount", error);
+        }
+        // history.push("../makePayment/ThankYou");
       } else {
         console.log("Payment declined. Insufficient funds.");
         setLoading(false);
