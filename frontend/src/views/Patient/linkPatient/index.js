@@ -63,7 +63,23 @@ export function linkPatient() {
         }
         else if (response.status == 202) {
           toast({
-            title: "Patient already linked",
+            title: "Patient already linked to you",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+        else if (response.status == 204) {
+          toast({
+            title: "Can't link yourself",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+        else if (response.status == 206) {
+          toast({
+            title: "Patient already linked to another user",
             status: "error",
             duration: 9000,
             isClosable: true,
