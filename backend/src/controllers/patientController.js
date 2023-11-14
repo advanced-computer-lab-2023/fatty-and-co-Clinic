@@ -364,7 +364,7 @@ const payForSubscription = async (req, res) => {
             Enddate: formattedDate11,
           }
         );
-        res.status(200).json({success:"Amount paid "+amount +" with a discount of "+max+"%"});
+        res.status(200).json({success:"Amount paid "+amount +" after a discount of "+max+"%"});
       } else {
         res.status(404).json({ error: "Not enough money" });
       }
@@ -388,7 +388,7 @@ const payForSubscription = async (req, res) => {
             Enddate: formattedDate11,
           }
         );
-        res.status(200).json({success:"Amount paid "+amount +" with a discount of "+max+"%"});
+        res.status(200).json({success:"Amount paid "+amount +" after a discount of "+max+"%"});
       } else {
         const updateRenewal = await subscriptionModel.findOneAndUpdate(
           { Patient: patient },
@@ -738,6 +738,7 @@ const payForFamSubscription = async (req, res) => {
         patSubscription.Status === "Subscribed"
           ? Package.Price * (patSubscription.Package.Family_Discount / 100)
           : 0;
+      const discount= patSubscription.Package?patSubscription.Package.Family_Discount:0    
       const amount = Package.Price - max;
 
       if (
@@ -761,13 +762,13 @@ const payForFamSubscription = async (req, res) => {
             { Username: curr_user },
             { Wallet: patient.Wallet - amount }
           );
-          res.status(200).json({success:"Amount paid "+amount +" with a discount of "+max+"%"+ " for "+ relative.Name+"!"});
+          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
         } else {
           const updateRenewal = await subscriptionModel.findOneAndUpdate(
             { FamilyMem: relative },
             { Status: "Cancelled", Enddate: formattedDate, Renewaldate: null }
           );
-          res.status(200).json({success:"Amount paid "+amount +" with a discount of "+max+"%"+ " for "+ relative.Name+"!"});
+          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
 
         }
       } else if (
@@ -790,7 +791,7 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate1,
             }
           );
-      res.status(200).json({success:"Amount paid "+amount +" with a discount of "+max+"%"+ " for "+ relative.Name+"!"});
+      res.status(200).json({success:"Amount paid "+amount +" with a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
           
         } else {
           res.status(404).json({ error: "Not enough money" });
