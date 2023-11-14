@@ -170,7 +170,7 @@ function SubscribePackage() {
           },
           body: JSON.stringify({ PackageName, NationalId }),
         });
-        // const errorData = await response.json();
+        const errorData = await response.json();
         if (response.ok) {
           toast({
             title: "Subscription process completed successfully!",
@@ -192,6 +192,7 @@ function SubscribePackage() {
             title: "Failed to pay & subscribe for family member!",
             // description: errorData.error,
             status: "error",
+            description:errorData.error,
             duration: 9000,
             isClosable: true,
           });
