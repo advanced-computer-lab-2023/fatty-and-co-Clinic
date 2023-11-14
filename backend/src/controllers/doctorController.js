@@ -6,6 +6,7 @@ const { default: mongoose } = require("mongoose");
 const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
+const subscriptionModel = require("../models/subscriptions");
 const { Int32 } = require("bson");
 
 // I think this is useless?
@@ -406,23 +407,41 @@ const filterDoctorSlotEdition = async (req, res) => {
       const query = req.query.speciality
         ? { Speciality: { $regex: req.query.speciality.trim(), $options: "i" } }
         : {};
-       finalResTmp = await doctorModel.find(query);
-      
+      finalRes = await doctorModel.find(query);
     }
-    for (let element of finalResTmp) {
+
+    const discount = await getPackageDiscount(req.user.Username);
+
+    for (let element of finalRes) {
       finalRes.push({
         Username: element.Username,
         Name: element.Name,
         Speciality: element.Speciality,
         //HourlyRate: element.HourlyRate,
-        Cost: 100,
+        Cost: getSessionPrice(),
       });
     }
     res.status(200).json(finalRes);
   } catch (error) {
-    res.status(500).send({message: error.message});
+    res.status(500).send({ message: error.message });
   }
 };
+
+async function getPackageDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
+
+  if (subscription.Status === "Subscribed" && subscription.Package) {
+    return subscription.Package.Session_Discount;
+  }
+  return 0;
+}
+
+async function getSessionPrice(hourlyRate, packageDiscount) {
+  return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
+}
 
 //usage: returns the available slot(s) of all doctorsss
 //based on the date&time range passed from the user
@@ -895,11 +914,10 @@ const followupAppointment = async (req, res) => {
 };
 
 const payDoctor = async (req, res) => {
-  const id  = req.body.DoctorId;
+  const id = req.body.DoctorId;
   try {
-    
     const doctor = await doctorModel.findOne({ _id: id });
-    console.log("before: " + doctor.Wallet)
+    console.log("before: " + doctor.Wallet);
     doctor.Wallet += doctor.HourlyRate;
     await doctor.save();
     console.log("doqwallet" + doctor.Wallet);
