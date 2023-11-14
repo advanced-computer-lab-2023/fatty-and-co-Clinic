@@ -140,6 +140,7 @@ function SubscribePackage() {
           toast({
             title: "Subscription process successfull!",
             status: "success",
+            description:errorData.success,
             duration: 9000,
             isClosable: true,
           });
