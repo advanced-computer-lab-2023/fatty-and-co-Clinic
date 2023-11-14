@@ -140,10 +140,18 @@ function SubscribePackage() {
           toast({
             title: "Subscription process successfull!",
             status: "success",
-            description:errorData.success,
+            description: errorData.success,
             duration: 9000,
             isClosable: true,
           });
+          try {
+            const res = await axios.get(API_PATHS.getWalletAmount, {
+              headers: { Authorization },
+            });
+            dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
+          } catch (error) {
+            console.error("Error fetching wallet amount", error);
+          }
         } else {
           toast({
             title: "Failed to pay & subscribe",
@@ -166,7 +174,7 @@ function SubscribePackage() {
         if (response.ok) {
           toast({
             title: "Subscription process completed successfully!",
-            description:errorData.success,
+            description: errorData.success,
             status: "success",
             duration: 9000,
             isClosable: true,
