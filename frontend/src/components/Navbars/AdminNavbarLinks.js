@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   ChakraProvider,
   extendTheme,
+  Divider
 } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/icon";
 import { MdAttachMoney } from "react-icons/md";
@@ -190,6 +191,7 @@ export default function HeaderLinks(props) {
         cursor="pointer"
         ms={{ base: "16px", xl: "0px" }}
         me="16px"
+        mw="16px"
         ref={settingsRef}
         onClick={props.onOpen}
         color={navbarIcon}
