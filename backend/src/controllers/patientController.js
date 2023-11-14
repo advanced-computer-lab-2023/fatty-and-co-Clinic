@@ -1410,21 +1410,30 @@ const linkPatient = async (req, res) => {
     } else {
       currentUser.LinkedPatients.push(familyMember._id);
       await currentUser.save();
-      const currentDate = new Date();
-      const dob = new Date(familyMember.DateOfBirth);
-      const newFamilymember = await familyMemberModel.create({
-        Patient: currentUser,
-        FamilyMem: familyMember,
-        FamilyMemberUsername: familyMember.Username,
-        Name: familyMember.Name,
-        NationalId: familyMember.NationalId,
-        Age: Math.floor(
-          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-        ),
-        Gender: familyMember.Gender,
-        Relation: Relation,
-      });
-      res.status(200).json(newFamilymember);
+      const formerlyLinked = await familyMemberModel.findOne({ NationalId: familyMember.NationalId });
+      var newFamilymember = null;
+      if (!formerlyLinked) {
+        const currentDate = new Date();
+        const dob = new Date(familyMember.DateOfBirth);
+        newFamilymember = await familyMemberModel.create({
+          Patient: currentUser,
+          FamilyMem: familyMember,
+          FamilyMemberUsername: familyMember.Username,
+          Name: familyMember.Name,
+          NationalId: familyMember.NationalId,
+          Age: Math.floor(
+            Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+          ),
+          Gender: familyMember.Gender,
+          Relation: Relation,
+        });
+      }
+      if (!newFamilymember) {
+        res.status(200).json({ familyMember });
+      }
+      else {
+        res.status(200).json({ newFamilymember });
+      }
     }
   }
 };
