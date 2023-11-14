@@ -10,44 +10,56 @@ const PUBLIC_KEY =
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
 export default function MakePayment({ amount }) {
-
   const location = useLocation();
-  const { state } = location;
 
-  console.log(state);
+  // console.log(state);
   //const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const amount2 = searchParams.get('amount');
- // const amountApt = searchParams.get('Amount')
-  const description = searchParams.get('description');
-  const PackageName=searchParams.get('PackageName');
-  const NationalId=searchParams.get('NationalId');
+  const amount2 = searchParams.get("amount");
+  // const amountApt = searchParams.get('Amount')
+  const description = searchParams.get("description");
+  const PackageName = searchParams.get("PackageName");
+  const NationalId = searchParams.get("NationalId");
 
-  const amountApt = state.Amount;
-  const DoctorId = state.DoctorId;
-  const PatientUsername = state.PatientUsername;
-  const Date = state.Date;
-  
+  let amountApt;
+  let DoctorId;
+  let PatientUsername;
+  let Date;
 
-  console.log("hello stripe");
-  console.log(searchParams);
-  console.log(amountApt);
-  console.log("doctor's id:" + DoctorId);
-  console.log("patient's username:" + PatientUsername);
+  if (!PackageName && description !== "Subscription payment") {
+    const { state } = location;
+    amountApt = state.Amount;
+    DoctorId = state.DoctorId;
+    PatientUsername = state.PatientUsername;
+    Date = state.Date;
+  }
+
+  console.log("amount2:" + amount2);
+  console.log("amountApt:" + amountApt);
+  console.log("description:" + description);
+  console.log("PackageName:" + PackageName);
+  console.log("NationalId:" + NationalId);
+  console.log("DoctorId:" + DoctorId);
+  console.log("PatientUsername:" + PatientUsername);
+  console.log("Date:" + Date);
+  // console.log("hello stripe");
+  // console.log(searchParams);
+  // console.log(amountApt);
+  // console.log("doctor's id:" + DoctorId);
+  // console.log("patient's username:" + PatientUsername);
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm
-        Amount={amount2 ? amount2 : amountApt}
+        Amount={amount2 ? amount2 : amountApt ? amountApt : 0}
         Description={description ? description : "Doctor's appointment"}
         PackageName={PackageName ? PackageName : ""}
         NationalId={NationalId ? NationalId : ""}
         //DoctorUsername={doctorUserName}
-        DoctorId = {DoctorId}
+        DoctorId={DoctorId || ""}
         //DoctorName={doctorName}
-        PatientUsername={PatientUsername}
-        Date={Date}
+        PatientUsername={PatientUsername || ""}
+        Date={Date || ""}
       />
-     
     </Elements>
   );
 }
