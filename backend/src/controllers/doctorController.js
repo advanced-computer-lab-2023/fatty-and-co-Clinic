@@ -840,6 +840,7 @@ const validateBookingDate = async (req, res) => {
       });
       if (appointment) {
         console.log(appointment.Date);
+        console.log("invalid");
         res.status(500).send({ message: "this date is unavailable" });
       } else {
         console.log("valid");
