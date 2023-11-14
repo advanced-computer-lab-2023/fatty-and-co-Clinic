@@ -1412,17 +1412,17 @@ const linkPatient = async (req, res) => {
       Username: req.user.Username,
     });
     if (currentUser.LinkedPatients.includes(familyMember._id)) {
-      res.status(202).send({ message: "Patient already linked" });
+      res.status(202).send({ message: "Patient already linked to you" });
     } else if (currentUser.MobileNum == familyMember.MobileNum) {
       res.status(204).send({ message: "Can't link yourself" });
     } else {
-      currentUser.LinkedPatients.push(familyMember._id);
-      await currentUser.save();
       const formerlyLinked = await familyMemberModel.findOne({
         NationalId: familyMember.NationalId,
       });
       var newFamilymember = null;
       if (!formerlyLinked) {
+        currentUser.LinkedPatients.push(familyMember._id);
+        await currentUser.save();
         const currentDate = new Date();
         const dob = new Date(familyMember.DateOfBirth);
         newFamilymember = await familyMemberModel.create({
@@ -1437,10 +1437,13 @@ const linkPatient = async (req, res) => {
           Gender: familyMember.Gender,
           Relation: Relation,
         });
+      } else {
+        res.status(206).send({ message: "Patient already linked to another user" });
       }
       if (!newFamilymember) {
         res.status(200).json({ familyMember });
       } else {
+        await subscriptionModel.addEntry1(newFamilymember);
         res.status(200).json({ newFamilymember });
       }
     }
