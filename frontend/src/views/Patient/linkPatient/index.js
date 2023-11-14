@@ -69,6 +69,14 @@ export function linkPatient() {
             isClosable: true,
           });
         }
+        else if (response.status == 204) {
+          toast({
+            title: "Can't link yourself",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
         else {
           toast({
             title: "Failed to link patient",

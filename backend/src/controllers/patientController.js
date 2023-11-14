@@ -1395,22 +1395,32 @@ const linkPatient = async (req, res) => {
     familyMember = await patientModel.findOne({ MobileNum: Id });
   } else {
     const familyMemberUser = await userModel.findOne({ Email: Id });
-    familyMember = await patientModel.findOne({
-      Username: familyMemberUser.Username,
-    });
+    if (!familyMemberUser) {
+      res.status(404).send({ message: "Patient not found" });
+      return;
+    } else {
+      familyMember = await patientModel.findOne({
+        Username: familyMemberUser.Username,
+      });
+    }
   }
   if (!familyMember) {
     res.status(404).send({ message: "Patient not found" });
+    return;
   } else {
     const currentUser = await patientModel.findOne({
       Username: req.user.Username,
     });
     if (currentUser.LinkedPatients.includes(familyMember._id)) {
       res.status(202).send({ message: "Patient already linked" });
+    } else if (currentUser.MobileNum == familyMember.MobileNum) {
+      res.status(204).send({ message: "Can't link yourself" });
     } else {
       currentUser.LinkedPatients.push(familyMember._id);
       await currentUser.save();
-      const formerlyLinked = await familyMemberModel.findOne({ NationalId: familyMember.NationalId });
+      const formerlyLinked = await familyMemberModel.findOne({
+        NationalId: familyMember.NationalId,
+      });
       var newFamilymember = null;
       if (!formerlyLinked) {
         const currentDate = new Date();
@@ -1430,8 +1440,7 @@ const linkPatient = async (req, res) => {
       }
       if (!newFamilymember) {
         res.status(200).json({ familyMember });
-      }
-      else {
+      } else {
         res.status(200).json({ newFamilymember });
       }
     }
