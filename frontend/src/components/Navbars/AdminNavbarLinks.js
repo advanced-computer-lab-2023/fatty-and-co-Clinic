@@ -238,6 +238,7 @@ export default function HeaderLinks(props) {
           </Flex>
         </MenuList>
       </Menu>
+      {user.userType !== "Admin" && (
       <ChakraProvider theme={theme}>
         <Icon
           as={MdAttachMoney}
@@ -248,6 +249,7 @@ export default function HeaderLinks(props) {
           mb="2px"
         />
       </ChakraProvider>
+      )}
       <ChakraProvider theme={theme}>
         <Text
           fontSize="sm"
