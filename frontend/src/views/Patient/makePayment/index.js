@@ -9,27 +9,43 @@ const PUBLIC_KEY =
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
-export default function MakePayment({ amount, doctorUserName, doctorName, patientUsername, date }) {
+export default function MakePayment({ amount }) {
+
   const location = useLocation();
+  const { state } = location;
+
+  console.log(state);
+  //const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const amount2 = searchParams.get('amount');
+ // const amountApt = searchParams.get('Amount')
   const description = searchParams.get('description');
-  const PackageName=searchParams.get('PackageName')
-  const NationalId=searchParams.get('NationalId')
+  const PackageName=searchParams.get('PackageName');
+  const NationalId=searchParams.get('NationalId');
+
+  const amountApt = state.Amount;
+  const DoctorId = state.DoctorId;
+  const PatientUsername = state.PatientUsername;
+  const Date = state.Date;
+  
+
+  console.log("hello stripe");
+  console.log(searchParams);
+  console.log(amountApt);
   return (
     <Elements stripe={stripeTestPromise}>
       <PaymentForm
-        Amount={amount2 ? amount2 : amount}
+        Amount={amount2 ? amount2 : amountApt}
         Description={description ? description : "Doctor's appointment"}
         PackageName={PackageName ? PackageName : ""}
         NationalId={NationalId ? NationalId : ""}
-        DoctorUsername={doctorUserName}
-        DoctorName={doctorName}
-        PatientUsername={patientUsername}
-        Status="Pending"
-        Date={date}
+        //DoctorUsername={doctorUserName}
+        DoctorId = {DoctorId}
+        //DoctorName={doctorName}
+        PatientUsername={PatientUsername}
+        Date={Date}
       />
-      {doctorUserName}
+     
     </Elements>
   );
 }

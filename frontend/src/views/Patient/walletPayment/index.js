@@ -7,13 +7,16 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "views/Patient/makePayment/components/PaymentForm";
 import { useHistory } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { Button, Box, Text, Spinner } from "@chakra-ui/react";
+//import { ToastContainer, toast } from "react-toastify";
+import { Button, Box, Text, Spinner, useToast, useDisclosure } from "@chakra-ui/react";
 
 const WalletPayment = ({ Amount, DoctorId, PatientUsername, Date }) => {
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
 
   const handleWalletPayment = async () => {
     try {
@@ -60,12 +63,28 @@ const WalletPayment = ({ Amount, DoctorId, PatientUsername, Date }) => {
           }),
         });
         setLoading(false);
-        toast.success("Payment successful!");
+       // toast.success("Payment successful!");
+       toast({
+        title: "Payment successful!",
+        description: "You booked the appointment succsefuly.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      onClose();
         history.push("../makePayment/ThankYou");
       } else {
         console.log("Payment declined. Insufficient funds.");
         setLoading(false);
-        toast.error("Insufficient funds. Please add funds to your wallet.");
+        //toast.error("Insufficient funds. Please add funds to your wallet.");
+        return toast({
+          title: "failed Appointment booking",
+          description:
+            "Payment declined. Insufficient funds.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       setLoading(false);
@@ -88,7 +107,7 @@ const WalletPayment = ({ Amount, DoctorId, PatientUsername, Date }) => {
           Confirm Wallet Payment
         </Button>
       )}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </Box>
   );
 };
