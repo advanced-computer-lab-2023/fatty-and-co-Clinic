@@ -71,8 +71,9 @@ const PaymentForm = ({
 
     if (!error) {
       try {
+        console.log("trying")
         const { id } = paymentMethod;
-
+        console.log("id: " + id);
         const response = await axios.post(
           API_PATHS.cardPayment,
           {
@@ -82,7 +83,9 @@ const PaymentForm = ({
           },
           { headers: { Authorization } }
         );
+        console.log("here");
         if (response.data.success) {
+          console.log("attempting payment...");
           if (Description === "Doctor's appointment") {
             const response = await fetch(API_PATHS.createAppointment, {
               method: "POST",
