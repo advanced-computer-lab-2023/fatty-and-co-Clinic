@@ -1438,10 +1438,16 @@ const linkPatient = async (req, res) => {
           Relation: Relation,
         });
       } else {
+        if (formerlyLinked.Patient.MobileNum === currentUser.MobileNum) {
+          currentUser.LinkedPatients.push(familyMember._id);
+          await currentUser.save();
+          res.status(200).json({ formerlyLinked });
+        } else {
         res.status(206).send({ message: "Patient already linked to another user" });
+        }
       }
       if (!newFamilymember) {
-        res.status(200).json({ familyMember });
+        res.status(200).json({ formerlyLinked });
       } else {
         await subscriptionModel.addEntry1(newFamilymember);
         res.status(200).json({ newFamilymember });
