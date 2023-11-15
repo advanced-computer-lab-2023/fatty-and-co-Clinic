@@ -88,21 +88,25 @@ const acceptDoc = async (req, res) => {
 
 //Create a new appointment
 const createAppointment = async (req, res) => {
+  console.log("creating appointment");
   const username = req.user.Username;
   var patient;
+  var patNameFinal;
 
-  const { DoctorId, PatientUsername, Date } = req.body;
-  console.log("body: " + req.body.DoctorId);
+  const { DoctorId, FamMemName, Date } = req.body;
+  console.log("body: " + req.body.FamMemName);
   //this patient is technically fam member
-  if (PatientUsername === null) {
+  if (!FamMemName) {
     console.log("fam");
-    patient = await patientModel.findOne({ Username: PatientUsername });
+    patient = await patientModel.findOne({ Username: username });
+    patNameFinal = patient.Name;
   } else {
     console.log("user");
     patient = await patientModel.findOne({ Username: username });
+    patNameFinal = FamMemName;
   }
   const doctor = await doctorModel.findOne({ _id: DoctorId });
-  const PatientName = patient.Name;
+  const PatientName = patNameFinal;
   const PatientUsernameFinal = patient.Username;
   const DoctorName = doctor.Name;
   console.log("doc name: " + DoctorName);

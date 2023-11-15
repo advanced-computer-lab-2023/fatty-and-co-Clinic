@@ -20,6 +20,8 @@ import {
 
 const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,15 +33,15 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   console.log("hello wallet");
   // const searchParams = new URLSearchParams(location.search);
   //   const amount2 = searchParams.get("amount");
-  const Amount = state.Amount;
+  const Amount = state.Cost;
   const DoctorId = state.DoctorId;
-  const PatientUsername = state.PatientUsername;
+  const FamMemName = state.FamMemName;
   const Date = state.Date;
   // console.log("hello stripe");
   // console.log(searchParams);
   console.log(Amount);
   console.log("doctor's id:" + DoctorId);
-  console.log("patient's username:" + PatientUsername);
+  console.log("FamMemName" + FamMemName);
   console.log(Date);
 
   //   const handleWalletPayment = async () => {
@@ -144,7 +146,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
           },
           body: JSON.stringify({
             DoctorId: DoctorId,
-            PatientUsername: PatientUsername,
+            FamMemName: FamMemName,
             Date: Date,
           }),
         });
@@ -183,7 +185,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
         } catch (error) {
           console.error("Error fetching wallet amount", error);
         }
-        // history.push("../makePayment/ThankYou");
+        history.push(".../");
       } else {
         console.log("Payment declined. Insufficient funds.");
         setLoading(false);

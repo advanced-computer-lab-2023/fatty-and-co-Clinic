@@ -6,9 +6,10 @@ const payWithCard = async (req, res) => {
   try {
     const payment = await stripe.paymentIntents.create({
       amount,
-      currency: "EGP",
+      currency: "USD",
       description: description,
       payment_method: id,
+      // payment_method_types: ["card"],
       confirm: true,
       return_url: "http://localhost:3000/",
     });

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Box, Text, Flex } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams , useLocation} from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
 import DocSlotAptsTable from "../viewDoctors/components/DocSlotAptsTable";
@@ -16,8 +16,12 @@ export const ViewDoctorDetails = () => {
   });
   const [tableData, setTableData] = useState([{}]);
 
-  const { username } = useParams();
+  const location = useLocation();
+  const { state } = location;
+  //const { username } = useParams();
+  let username = state.Username;
   console.log(username);
+  console.log(state);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;

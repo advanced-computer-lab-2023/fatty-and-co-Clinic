@@ -17,6 +17,7 @@ const {
   getFileByFilename,
 } = require("../common/middleware/upload");
 
+
 // const createPatient = async (req, res) => {
 //   const {
 //     Username,
@@ -63,8 +64,6 @@ const getEmergencyContact = async (req, res) => {
     const { Username } = req.params;
     const patient = await patientModel.findOne({ Username: Username });
 
-    console.log(patient);
-
     if (!patient) {
       res.status(404).send({ message: "Patient not found." });
       return;
@@ -72,7 +71,6 @@ const getEmergencyContact = async (req, res) => {
 
     const EmergencyContact = patient.EmergencyContact;
     const Name = patient.Name;
-    console.log(Name);
     if (!EmergencyContact) {
       res
         .status(404)
@@ -107,8 +105,6 @@ const getPatientUsername = async (req, res) => {
   }
 };
 
-// I think this is useless?
-// if not useless it needs to delete from user model, apppointments, etc just like in admin controller
 const deletePatient = async (req, res) => {
   try {
     const patient = await patientModel.findByIdAndDelete(req.params.id);
@@ -116,6 +112,19 @@ const deletePatient = async (req, res) => {
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
+};
+const getMedicalHistory = async (req, res) => {
+  var user = req.user.Username;
+  if (req.user.Type === "Doctor") {
+    user = req.params.username;
+  }
+  const patient = await patientModel.findOne({ Username: user });
+  if (!patient) {
+    res.status(404).send({ message: "Patient not found." });
+    return;
+  }
+  const { MedicalHistory } = patient;
+  res.status(200).send({ MedicalHistory });
 };
 
 const downloadFile = async (req, res) => {
@@ -133,7 +142,6 @@ const removeHealthRecord = async (req, res) => {
   );
   res.status(200).send({ message: "File removed successfully" });
 };
-
 // TODO: REVISE THIS IF IT'S ACTUALLY USED
 const updatePatient = async (req, res) => {
   try {
@@ -150,7 +158,6 @@ const updatePatient = async (req, res) => {
 
 // view all doctors with speciality and session price
 const session_index = async (req, res) => {
-  const username = req.user.Username;
   const { Name, Speciality } = req.query;
 
   // if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -158,14 +165,6 @@ const session_index = async (req, res) => {
   // }
 
   try {
-    const patient = await patientModel.findOne({ Username: username });
-    let packageDis = 0;
-
-    if (patient.Package) {
-      const package = await packageModel.findOne({ Name: patient.Package });
-      packageDis = package.Session_Discount;
-    }
-
     const query = {
       ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
       ...(Speciality
@@ -174,14 +173,17 @@ const session_index = async (req, res) => {
     };
 
     const doctors = await doctorModel.find(query);
+    const discount = await getPackageDiscount(req.user.Username);
+    const famDiscount = await getPackageFamDiscount((req.user.Username));
 
     const mySessions = doctors.map((doctor) => {
-      const calcCost = (1 - packageDis / 100) * (doctor.HourlyRate * 1.1);
       return {
         Username: doctor.Username,
         Name: doctor.Name,
         Speciality: doctor.Speciality,
-        Cost: calcCost,
+        Cost: getSessionPrice(doctor.HourlyRate, discount).toFixed(2),
+        CostFam: getSessionPrice(doctor.HourlyRate, famDiscount).toFixed(2),
+
       };
     });
 
@@ -191,6 +193,45 @@ const session_index = async (req, res) => {
   }
 };
 
+
+
+async function getPackageDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
+
+  if (!subscription) {
+    return 0;
+  }
+  if (
+    subscription &&
+    subscription.Status === "Subscribed" &&
+    subscription.Package
+  ) {
+    return subscription.Package.Session_Discount;
+  }
+  return 0;
+}
+function getSessionPrice(hourlyRate, packageDiscount) {
+  return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
+}
+async function getPackageFamDiscount(patientUsername) {
+  const patient = await patientModel.findOne({ Username: patientUsername });
+  const subscription = await subscriptionModel
+    .findOne({ Patient: patient._id })
+    .populate("Package");
+ 
+  if (!subscription) {
+    console.log("unsub");
+    return 0;
+  }
+  if (subscription.Status === "Subscribed" && subscription.Package) {
+    console.log("subscribed");
+    return subscription.Package.Family_Discount;
+  }
+ return 0;
+}
 const viewHealthFam = async (req, res) => {
   try {
     //changed this
@@ -243,6 +284,7 @@ const viewOptionPackages = async (req, res) => {
     res.status(400).send("Cannot find it");
   }
 };
+
 
 const payForSubscription = async (req, res) => {
   try {
@@ -324,12 +366,9 @@ const payForSubscription = async (req, res) => {
     const day5 = String(renewCheck.getDate()).padStart(2, "0");
     const formattedDate5 = `${year5}-${month5}-${day5}`; // renewal Date el gdeda
     const amount = Package.Price - Package.Price * (max / 100);
-    console.log(formattedDate);
-    console.log(formattedDate4);
     //  console.log(patSubscription.Status==="Unsubscribed"||patSubscription.Status==="Cancelled");
     //  console.log(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.Package.Name
     //  ===Package.Name)
-    console.log(patient.Wallet > amount);
     if (
       patSubscription.Status === "Unsubscribed" ||
       patSubscription.Status === "Cancelled"
@@ -350,7 +389,7 @@ const payForSubscription = async (req, res) => {
             Enddate: formattedDate11,
           }
         );
-        res.status(200).json(updatePat);
+        res.status(200).json({success:"Amount paid "+amount +" after a discount of "+max+"%"});
       } else {
         res.status(404).json({ error: "Not enough money" });
       }
@@ -374,7 +413,7 @@ const payForSubscription = async (req, res) => {
             Enddate: formattedDate11,
           }
         );
-        res.status(200).json(updatePat);
+        res.status(200).json({success:"Amount paid "+amount +" after a discount of "+max+"%"});
       } else {
         const updateRenewal = await subscriptionModel.findOneAndUpdate(
           { Patient: patient },
@@ -724,6 +763,7 @@ const payForFamSubscription = async (req, res) => {
         patSubscription.Status === "Subscribed"
           ? Package.Price * (patSubscription.Package.Family_Discount / 100)
           : 0;
+      const discount= patSubscription.Package?patSubscription.Package.Family_Discount:0    
       const amount = Package.Price - max;
 
       if (
@@ -742,18 +782,19 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate12,
             }
           );
-          console.log("entered this if ");
+
           const updatePat = await patientModel.findOneAndUpdate(
             { Username: curr_user },
             { Wallet: patient.Wallet - amount }
           );
-          res.status(200).json(updatePat);
+          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
         } else {
           const updateRenewal = await subscriptionModel.findOneAndUpdate(
             { FamilyMem: relative },
             { Status: "Cancelled", Enddate: formattedDate, Renewaldate: null }
           );
-          res.status(200).json(updateRenewal);
+          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
+
         }
       } else if (
         subscription.Status === "Unsubscribed" ||
@@ -775,7 +816,8 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate1,
             }
           );
-          res.status(200).json(updatePat);
+      res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
+          
         } else {
           res.status(404).json({ error: "Not enough money" });
         }
@@ -808,7 +850,6 @@ const payForFamSubscription = async (req, res) => {
 };
 
 const getAmountFam = async (req, res) => {
-  console.log("Entered");
   try {
     const curr_user = req.user.Username;
     const { PackageName, NationalId } = req.body;
@@ -936,10 +977,8 @@ const viewHealthPackage = async (req, res) => {
       .findOne({ Patient: patient, Status: "Subscribed" })
       .populate("Patient")
       .populate("Package");
-    console.log(subscription);
     if (subscription) {
       const myPackage = subscription.Package;
-      console.log(myPackage);
       res.status(200).send(myPackage);
     } else {
       res.status(404).send({ Error: "Cannot find any current subscriptions!" });
@@ -962,8 +1001,6 @@ const viewHealthPackagewithstatus = async (req, res) => {
       .populate("Patient")
       .populate("FamilyMem")
       .populate("Package");
-    // console.log(subscription.Patient.Username);
-    console.log(subscription);
     if (subscription) {
       res.status(200).send(subscription);
     } else {
@@ -1022,6 +1059,8 @@ const viewHealthFamwithstatus = async (req, res) => {
 };
 //hi khalkhoola
 
+
+
 const createFamilymember = async (req, res) => {
   const { FamilyMemberUsername, Name, NationalId, Age, Gender, Relation } =
     req.body;
@@ -1048,8 +1087,8 @@ const createFamilymember = async (req, res) => {
     });
     const newFamilymember = await familyMemberModel.create({
       Patient: findPatientMain,
-      FamilyMem: findPatientRel,
-      FamilyMemberUsername: FamilyMemberUsername,
+      FamilyMem:findPatientRel,
+      FamilyMemberUsername:FamilyMemberUsername,
       Name: Name,
       NationalId: NationalId,
       Age: Age,
@@ -1069,8 +1108,9 @@ const createFamilymember = async (req, res) => {
   }
 };
 
+
+
 const updateFamCredit = async (req, res) => {
-  console.log("Entered");
   try {
     const curr_user = req.user.Username;
     const { PackageName, NationalId } = req.body;
@@ -1180,6 +1220,7 @@ const updateFamCredit = async (req, res) => {
   }
 };
 
+
 const getWalletAmount = async (req, res) => {
   try {
     var patient = await patientModel.findOne({ Username: req.user.Username });
@@ -1252,9 +1293,6 @@ const getPrescriptions = async (req, res) => {
         $gte: date,
         $lt: nextDay,
       };
-      console.log(date);
-      console.log(nextDay);
-      console.log(regexQuery.Date);
     }
     if (query.Status) {
       regexQuery.Status = query.Status;
@@ -1283,9 +1321,7 @@ const selectPrescription = async (req, res) => {
 };
 
 const subscribepackagefamilymem = async (req, res) => {
-  console.log("entered");
   try {
-    console.log("entered try");
     const Startdate = new Date();
 
     const year = Startdate.getFullYear();
@@ -1312,13 +1348,7 @@ const subscribepackagefamilymem = async (req, res) => {
       Patient: Patient.id,
       NationalId: NationalId,
     });
-    console.log("Familymem");
-    // console.log(fam)
-    console.log("Package");
-    //console.log(Package)
     const subscribedcheck = await subscriptionModel.findOne({ FamilyMem: fam });
-    console.log(subscribedcheck.Status);
-    console.log(subscribedcheck.Status == "Subscribed");
 
     if (famrelated == null || fam == null) {
       res.status(400).send({ error: "Wrong national id " });
@@ -1332,7 +1362,6 @@ const subscribepackagefamilymem = async (req, res) => {
     }
     // why it doesn't ente here
     else if (subscribedcheck.Status == "Subscribed") {
-      console.log("Entered here if subs");
       res.status(400).send({ error: "You are already subscribed" });
     } else {
       const subscribtion = await subscriptionModel.findOneAndUpdate(
@@ -1354,6 +1383,7 @@ const subscribepackagefamilymem = async (req, res) => {
   }
 };
 
+
 const cancelSubscription = async (req, res) => {
   try {
     const Startdate = new Date();
@@ -1366,7 +1396,6 @@ const cancelSubscription = async (req, res) => {
     const subscribed = await subscriptionModel.findOne({ Patient: patient });
     //  console.log()
     if (subscribed) {
-      console.log("Here");
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
@@ -1481,19 +1510,6 @@ const uploadFile = async (req, res) => {
     .send({ file: req.file, message: "File uploaded successfully" });
 };
 
-const getMedicalHistory = async (req, res) => {
-  var user = req.user.Username;
-  if (req.user.Type === "Doctor") {
-    user = req.params.username;
-  }
-  const patient = await patientModel.findOne({ Username: user });
-  if (!patient) {
-    res.status(404).send({ message: "Patient not found." });
-    return;
-  }
-  const { MedicalHistory } = patient;
-  res.status(200).send({ MedicalHistory });
-};
 
 const cancelSubscriptionfamilymember = async (req, res) => {
   try {
@@ -1514,13 +1530,11 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       Patient: patient.id,
       NationalId: NationalId,
     });
-    console.log(req.user.Username);
     if (famrelated == null) {
       res.status(400).send({ error: "Family member not related to you " });
     } else if (fam.FamilyMem != null) {
       res.status(400).send({ error: "He is already a system user" });
     } else if (subscribed) {
-      console.log("Here");
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
@@ -1530,7 +1544,6 @@ const cancelSubscriptionfamilymember = async (req, res) => {
           { FamilyMem: fam },
           { Status: "Cancelled", Enddate: formattedDate }
         );
-        console.log(subscribedUpdate);
         res.status(200).json({ subscribedUpdate });
       }
     } else {
@@ -1570,21 +1583,37 @@ const viewPastAppoitmentsPat = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
 Date.prototype.addDays = function (days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
   return date;
 };
 
+
+const getFamSessionCost = async (req,res) => {
+  const username = req.user.Username;
+  const famName = req.query.FamName;
+try
+  {const patient = await patientModel.findOne({Username: username});
+
+  const famMember = await familyMemberModel.findOne({Patient: patient , Name:famName});
+  const subscription = await subscriptionModel.findOne({FamilyMem: famMember}).populate("Package");
+
+  const myDiscount = sunscription.Package.Session_Discount;
+  res.status(200).json(myDiscount);
+  }
+catch(error){
+  res.status(500).send({message: error.message});
+}
+}
 module.exports = {
   uploadFile,
   getMedicalHistory,
   downloadFile,
   removeHealthRecord,
   updateFamCredit, //updates status fam
-  updateSubscription, //updates status leya
-  getAmountSubscription, //gets amount to be paid for self
+  updateSubscription, //updates status leya 
+  getAmountSubscription,  //gets amount to be paid for self
   getAmountFam, //gets amount to be paid for fam
   cancelSubscription,
   viewHealthFam,
@@ -1604,8 +1633,6 @@ module.exports = {
   getEmergencyContact,
   subscribepackagefamilymem,
   linkPatient,
-  uploadFile,
-  getMedicalHistory,
   downloadFile,
   removeHealthRecord,
   payForFamSubscription,
@@ -1617,3 +1644,4 @@ module.exports = {
   viewPastAppoitmentsPat,
   getWalletAmount,
 };
+

@@ -48,9 +48,9 @@ const MyPackageTable = ({ title, captions, data }) => {
               key={data.Name}
               Name={data.Name}
               Price={data.Price}
-              Session_Discount={data.Session_Discount}
-              Medicine_Discount={data.Medicine_Discount}
-              Family_Discount={data.Family_Discount}
+              Session_Discount={data.Session_Discount?data.Session_Discount:""}
+              Medicine_Discount={data.Medicine_Discount?data.Medicine_Discount:""}
+              Family_Discount={data.Family_Discount?data.Family_Discount:""}
             />
           </Tbody>
         </Table>

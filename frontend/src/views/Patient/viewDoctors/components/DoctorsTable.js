@@ -25,7 +25,15 @@ const DoctorsTable = ({ title, captions, data }) => {
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
-    history.push(`./viewDoctorDetails/${row.Username}`);
+
+    let newUrl = `./viewDoctorDetails/${row}`;
+    let newState = {
+      Username: row.Username,
+      Cost: row.Cost,
+      CostFam: row.CostFam,
+    }
+
+    history.push(newUrl,newState );
   };
 
   return (
@@ -53,7 +61,6 @@ const DoctorsTable = ({ title, captions, data }) => {
           </Thead>
           <Tbody>
             {data.map((row) => {
-              console.log(row.Username);
               return (
                 <DoctorsRow
                   key={row.Username}
