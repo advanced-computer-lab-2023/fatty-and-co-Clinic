@@ -66,6 +66,7 @@ const SignUpSchema = Yup.object().shape({
       [Yup.ref("MobileNum")],
       "Emergency contact number cannot be the same as mobile number"
     ),
+  EmergencyContactRelation: Yup.string().required("Required"),
 });
 
 function SignUp() {
@@ -207,6 +208,7 @@ function SignUp() {
               Gender: "",
               EmergencyContactName: "",
               EmergencyContactNumber: "",
+              EmergencyContactRelation: "",
             }}
             validationSchema={SignUpSchema}
             onSubmit={handleSubmit}
@@ -539,6 +541,36 @@ function SignUp() {
                     </FormControl>
                   )}
                 </Field>
+
+                <Field name="EmergencyContactRelation">
+                  {({ field }) => (
+                    <FormControl
+                      mb="24px"
+                      isInvalid={
+                        errors.EmergencyContactRelation &&
+                        touched.EmergencyContactRelation
+                      }
+                    >
+                      <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                        Relation to Emergency Contact{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        fontSize="sm"
+                        ms="4px"
+                        borderRadius="15px"
+                        type="text"
+                        placeholder="Enter Your Relation To Your Emergency Contact"
+                        size="lg"
+                      />
+                      <FormErrorMessage>
+                        {errors.EmergencyContactRelation}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
                 <Button
                   type="submit"
                   isLoading={isSubmitting}
