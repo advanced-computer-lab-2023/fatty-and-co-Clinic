@@ -4,6 +4,7 @@ const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
 const User = require("../models/systemusers");
 const { isNull } = require("util");
+const docSlotsModel = require("../models/docSlots");
 const DoctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
 
@@ -545,8 +546,57 @@ const testAppointRef = async (req, res) => {
 };
 
 
+const reschedulePatient = async (req, res) => {
+ 
+  try {
+     const docUsername= req.user.username
+     const {patientUsername,date}=req.body
+     const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername,Status:"Upcoming"})
+     if(!prevApp){
+      res.status(404).json({err:"Patient wasn't scheduled for an upcoming appointment!"})
+     }
+     else{
+     const doctor= await DoctorModel.findOne({Username:docUsername})
+     const docSlots= await docSlotsModel.find({DoctorId:doctor._id})
+     const patientApp= await appointmentModel.find({DoctorUsername:doctor.Username,Status:"Upcoming"})
+     const reqDate= new Date(date)
+     const isBooked = patientApp.map((appReserved) => {
+      
+      if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth() && reqDate.getDay()==appReserved.Date.getDay() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
+           return true;
+      }
+              
+      })
+     if(isBooked){
+      res.status(400).json({err:"There is another appointment booked on same date!"})
+     }
+     else{ 
+     const isAvailable = docSlots.map(async (docSlot) => {
+      if(docSlot.WorkingDay==reqDate.getDay() && docSlot.StartTime==reqDate.getUTCHours()){
+           return true
+      }
+              
+      })
+  
+    if(isAvailable){
+      const newApp=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date})
+      res.status(200).json("You have rescheduled appointment successfully!")
+    }
+    else{
+      res.status(404).json({err:"This isn't an available slot you work in!"})
+    }
+  }
+
+
+  }
+  } catch (error) {
+    res.status(404).json(error)
+  }
+}
+
 
 module.exports = {
+  reschedulePatient,
   filterAppointmentsByStatusDoc,
   filterAppointmentsByStatusPat,
   filterAppointmentsByDateDoc,
