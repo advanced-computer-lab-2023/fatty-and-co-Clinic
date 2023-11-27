@@ -13,7 +13,6 @@ const appointmentSchema = new Schema(
     },
     PatientUsername: {
       type: String,
-      ref: "Patient",
       required: true,
     },
     PatientName: {
