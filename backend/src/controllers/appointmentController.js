@@ -166,6 +166,12 @@ const { MongoClient } = require("mongodb");
 // };
 
 // Get all the patients of a certain doctor.
+
+// Date.prototype.addDays = function(days) {
+//   var date = new Date(this.valueOf());
+//   date.setDate(date.getDate() + days);
+//   return date;
+// };
 Date.prototype.addDays = function(days) {
   var date = new Date(this.valueOf());
   date.setDate(date.getDate() + days);
@@ -509,9 +515,6 @@ const getAppointmentsPat = async (req, res) => {
     res.status(200).json(appointments);
   }
 };
-
-//const collection = client.db("test").collection("devices");
-
 const testAppointRef = async (req, res) => {
  
   await appointmentModel
@@ -545,6 +548,49 @@ const testAppointRef = async (req, res) => {
 };
 
 
+const rescheduleAppointmentPatient= async(req,res) =>{
+  try {
+    const PatientUser = req.user.Username;
+    const {doctorUsername,date}=req.body;
+   const newDate = newDate(date);
+    const Patient =await patientModel.findOne({Username:PatientUser});
+    const Doctor = await DoctorModel.findOne({ Username: doctorUsername });
+    const hasappointment=await appointmentModel.findOne({DoctorUsername:doctorUsername,
+    PatientUsername:PatientUser,Status:"Upcoming" })
+  const Appointmentreserved =await appointmentModel.find({DoctorUsername:doctorUsername});
+  // Check is slot is avaliable 
+  let isSlotAvailable = true;
+  for (const appointment of Appointmentreserved) {
+    const existingDate = new Date(appointment.Date);
+    if (newDate.getHours() === existingDate.getHours()) {
+      isSlotAvailable = false;
+      break;
+    }
+  }
+  if (!Patient){
+    res.status(500).send({message:"Wrong Patient Username "});
+  }
+ else  if (!Doctor){
+    res.status(500).send({message:"No such a doctor with username "});
+  }
+  else if (isSlotAvailable){
+    res.status(500).send({message:" This slot is not avaliable for this dctor  "});
+  }
+  else if (!hasappointment){
+    res.status(500).send({message:"You don't have any appointments with this doctor to reschdule "});
+  }
+  else {
+     const rescheduledappointment=await appointmentModel.findOneAndUpdate(
+      {DoctorUsername:doctorUsername,
+        PatientUsername:PatientUser,Status:"Upcoming"},{Status:"Rescheduled",
+      Date:newDate}
+     )
+    res.status(200).json(rescheduledappointment);
+  }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
 
 module.exports = {
   filterAppointmentsByStatusDoc,
@@ -557,4 +603,5 @@ module.exports = {
   searchPatient,
   getAppointmentsPat,
   testAppointRef,
+  rescheduleAppointmentPatient
 };
