@@ -10,6 +10,7 @@ const {
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
   testAppointRef,
+  rescheduleAppointmentPatient
 } = require("../controllers/appointmentController");
 
 
@@ -55,7 +56,7 @@ router.get("/searchpatient", checkDoctor, searchPatient);
  * @access Doctor
  */
 router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
-
+router.patch("/rescheduleAppointmentPatient", checkDoctor, rescheduleAppointmentPatient);
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient

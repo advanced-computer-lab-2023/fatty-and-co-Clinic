@@ -596,7 +596,20 @@ const reschedulePatient = async (req, res) => {
     res.status(404).json(error)
   }
 }
-
+/*  {
+    "Username":"Dockholoud12&",
+    "Password":"Dockholoud12&",
+    "Email":"kholoud@yahooo.com",
+    "Name":"kholoud",
+    "DateOfBirth":"2002-12-1",
+    "HourlyRate":"3",
+    "Affiliation":"helloworld",
+    "EducationalBackground":"Hsrvard",
+    "Speciality":"Pulmonology"
+    // WorkingDays,
+    // StartTime,
+    // EndTime,
+  }  */
 const rescheduleAppointmentPatient= async(req,res) =>{
   try {
     const PatientUser = req.user.Username;
@@ -608,8 +621,9 @@ const rescheduleAppointmentPatient= async(req,res) =>{
     PatientUsername:PatientUser,Status:"Upcoming" })
   const Appointmentreserved =await appointmentModel.find({DoctorUsername:doctorUsername});
   // Check is slot is avaliable 
+  const isslotfordoctor =await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay(),StartTime:newDate.getHours()});
   let isSlotAvailable = true;
-  for (const appointment of Appointmentreserved) {
+  for (const appointment of Appointmentreserved){
     const existingDate = new Date(appointment.Date);
     if (newDate.getHours() === existingDate.getHours()) {
       isSlotAvailable = false;
@@ -621,6 +635,9 @@ const rescheduleAppointmentPatient= async(req,res) =>{
   }
  else  if (!Doctor){
     res.status(500).send({message:"No such a doctor with username "});
+  }
+  else if (!isslotfordoctor){
+    res.status(500).send({message:"The doctor don't have sunch a slot "});
   }
   else if (isSlotAvailable){
     res.status(500).send({message:" This slot is not avaliable for this dctor  "});
