@@ -552,7 +552,7 @@ const testAppointRef = async (req, res) => {
 const reschedulePatient = async (req, res) => {
  
   try {
-     const docUsername= req.user.username
+     const docUsername= req.user.Username
      const {patientUsername,date}=req.body
      const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername,Status:"Upcoming"})
      if(!prevApp){
@@ -560,42 +560,33 @@ const reschedulePatient = async (req, res) => {
      }
      else{
      const doctor= await DoctorModel.findOne({Username:docUsername})
-     const docSlots= await docSlotsModel.find({DoctorId:doctor._id})
-     const patientApp= await appointmentModel.find({DoctorUsername:doctor.Username,Status:"Upcoming"})
+     const patientApp= await appointmentModel.find({
+      $or: [
+        { PatientUsername: patientUsername, Status:"Upcoming" },
+        { DoctorUsername:docUsername,Status:"Upcoming"},
+      ],
+    })
      const reqDate= new Date(date)
-     const isBooked = patientApp.map((appReserved) => {
-      
+     const isBooked = patientApp.map((appReserved) => {      
       if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth()+1 && reqDate.getDate()==appReserved.Date.getDate() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
            return true;
       }
               
       })
+ 
      if(isBooked[0]!==undefined){
       res.status(400).json({err:"There is another appointment booked on same date!"})
+      return;
      }
-     else{ 
-     const isAvailable = docSlots.map(async (docSlot) => {
-      if(docSlot.WorkingDay==reqDate.getDay() && docSlot.StartTime==reqDate.getUTCHours()){
-           return true
-      }
-              
-      })
   
-    if(isAvailable){
       const newApp=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date})
       res.status(200).json("You have rescheduled appointment successfully!")
-    }
-    else{
-      res.status(404).json({err:"This isn't an available slot you work in!"})
-    }
-  }
-
-
-  }
+     }
   } catch (error) {
     res.status(404).json(error)
   }
 }
+
 /*  {
     "Username":"Dockholoud12&",
     "Password":"Dockholoud12&",
@@ -610,6 +601,51 @@ const reschedulePatient = async (req, res) => {
     // StartTime,
     // EndTime,
   }  */
+
+
+
+const createAppointment = async (req, res) => {
+  console.log("creating appointment");
+  console.log(req.user.Username)
+  const username = req.user.Username;
+  var patient;
+  var patNameFinal;
+
+  const { DoctorId, FamMemName, Date } = req.body;
+  console.log("body: " + req.body.FamMemName);
+  //this patient is technically fam member
+  if (!FamMemName) {
+    console.log("fam");
+    patient = await patientModel.findOne({ Username: username });
+    patNameFinal = patient.Name;
+  } else {
+    console.log("user");
+    patient = await patientModel.findOne({ Username: username });
+    patNameFinal = FamMemName;
+  }
+  const doctor = await doctorModel.findOne({ _id: DoctorId });
+  const PatientName = patNameFinal;
+  const PatientUsernameFinal = patient.Username;
+  const DoctorName = doctor.Name;
+  console.log("doc name: " + DoctorName);
+  const DoctorUsername = doctor.Username;
+  const Status = "Upcoming";
+  try {
+    console.log("creating");
+    const newApp = await appointmentModel.create({
+      DoctorUsername,
+      DoctorName,
+      PatientUsername: PatientUsernameFinal,
+      PatientName,
+      Status,
+      Date,
+    });
+    console.log("created");
+    res.status(201).json(newApp);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 const rescheduleAppointmentPatient= async(req,res) =>{
   try {
     const PatientUser = req.user.Username;
@@ -659,6 +695,7 @@ const rescheduleAppointmentPatient= async(req,res) =>{
 }
 
 module.exports = {
+  createAppointment,
   reschedulePatient,
   filterAppointmentsByStatusDoc,
   filterAppointmentsByStatusPat,

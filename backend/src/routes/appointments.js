@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  reschedulePatient,
   getAppointmentsDoc,
   getAppointmentsPat,
   findDoctorPatients,
@@ -74,7 +75,6 @@ router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDat
 router.get("/testAppRef", testAppointRef);
 
 router.post("/createAppointment", createAppointment);
-
-
+router.patch("/rescheduleForPatient",reschedulePatient);
 
 module.exports = router;
