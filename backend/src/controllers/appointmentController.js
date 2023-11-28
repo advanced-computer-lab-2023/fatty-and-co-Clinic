@@ -565,12 +565,12 @@ const reschedulePatient = async (req, res) => {
      const reqDate= new Date(date)
      const isBooked = patientApp.map((appReserved) => {
       
-      if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth() && reqDate.getDay()==appReserved.Date.getDay() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
+      if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth()+1 && reqDate.getDate()==appReserved.Date.getDate() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
            return true;
       }
               
       })
-     if(isBooked){
+     if(isBooked[0]!==undefined){
       res.status(400).json({err:"There is another appointment booked on same date!"})
      }
      else{ 
