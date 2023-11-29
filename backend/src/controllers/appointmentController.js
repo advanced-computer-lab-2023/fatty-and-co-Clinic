@@ -554,32 +554,34 @@ const reschedulePatient = async (req, res) => {
   try {
      const docUsername= req.user.Username
      const {patientUsername,date}=req.body
-    const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, $or: [{Status:"Upcoming"},{Status:"Rescheduled"}
-    ]})
+     const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, $or: [{Status:"Upcoming"},{Status:"Rescheduled"}
+    ]})  
      if(!prevApp){
       res.status(404).json({err:"Patient wasn't scheduled for an upcoming appointment!"})
      }
      else{
-     const doctor= await DoctorModel.findOne({Username:docUsername})
-     const docSlots= await docSlotsModel.find({DoctorId:doctor._id})
-     const patientApp= await appointmentModel.find({DoctorUsername:doctor.Username,Status:"Upcoming"})
+     const doctor= await doctorModel.findOne({Username:docUsername})
+     const patientApp= await appointmentModel.find({
+      $or: [  { PatientUsername: patientUsername, $or: [{Status:"Upcoming"},{Status:"Rescheduled"}]},
+      { DoctorUsername:docUsername,$or: [{Status:"Upcoming"},{Status:"Rescheduled"}]},
+    ],
+  })
      const reqDate= new Date(date)
-     const isBooked = patientApp.map((appReserved) => {
-      
-      if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth() && reqDate.getDay()==appReserved.Date.getDay() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
-           return true;
-      }
-              
-      }
+     let isBooked = false
+     for(const appReserved of patientApp){      
+     if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth()+1 && reqDate.getDate()==appReserved.Date.getDate() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
+          isBooked= true;
+          break;
+     }
  
      if(isBooked){
       res.status(400).json({err:"There is another appointment booked on same date!"})
       return;
      }
   
-      const newApp=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Rescheduled"},{Date:date})
-      res.status(200).json("You have rescheduled appointment successfully!")
-     }
+     const newApp=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Rescheduled"},{Date:date})      
+     res.status(200).json("You have rescheduled appointment successfully!")
+    }}
   } catch (error) {
     res.status(404).json(error)
   }
