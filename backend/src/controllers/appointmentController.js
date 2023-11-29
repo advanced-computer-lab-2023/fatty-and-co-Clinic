@@ -5,7 +5,7 @@ const patientModel = require("../models/patients");
 const User = require("../models/systemusers");
 const { isNull } = require("util");
 const docSlotsModel = require("../models/docSlots");
-const DoctorModel = require("../models/doctors");
+const doctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
 
 // //Filter by date mengheir time wala be time?
@@ -562,7 +562,6 @@ const reschedulePatient = async (req, res) => {
      const doctor= await DoctorModel.findOne({Username:docUsername})
      const docSlots= await docSlotsModel.find({DoctorId:doctor._id})
      const patientApp= await appointmentModel.find({DoctorUsername:doctor.Username,Status:"Upcoming"})
-     const reqDate= new Date(date)
      const isBooked = patientApp.map((appReserved) => {
       
       if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth() && reqDate.getDay()==appReserved.Date.getDay() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
@@ -613,36 +612,69 @@ const reschedulePatient = async (req, res) => {
 const rescheduleAppointmentPatient= async(req,res) =>{
   try {
     const PatientUser = req.user.Username;
-    const {doctorUsername,date}=req.body;
-   const newDate = newDate(date);
-    const Patient =await patientModel.findOne({Username:PatientUser});
-    const Doctor = await DoctorModel.findOne({ Username: doctorUsername });
+    const {doctorUsername,date }=req.body;
+   const newDate = new Date(date);
+    const Doctor = await doctorModel.findOne({ Username: doctorUsername });
     const hasappointment=await appointmentModel.findOne({DoctorUsername:doctorUsername,
-    PatientUsername:PatientUser,Status:"Upcoming" })
-  const Appointmentreserved =await appointmentModel.find({DoctorUsername:doctorUsername});
-  // Check is slot is avaliable 
-  const isslotfordoctor =await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay(),StartTime:newDate.getHours()});
+    PatientUsername:PatientUser,Status:"Upcoming"});
+  //  console.log("hhh"+hasappointment);
+  //  console.log("1");
+  let timeinhour=newDate.getUTCHours();
+  let timeinminutes=newDate.getUTCMinutes();
+  let combined =timeinhour+(timeinminutes/100);
+  console.log(combined);
+  const Appointmentreserved =await appointmentModel.find({DoctorUsername:doctorUsername,Status:"Upcoming"});
+  // is slot for doctor avliable 
+  //console.log(Appointmentreserved);
+  // you need to check minute
+  let isdocslotavaliable=await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay()+1,
+    StartTime:combined});
+    
+    //console.log(newDate.getDay());
+    //console.log(newDate.getUTCHours());
+  // Check is slot is avaliable  as doctor don't have appointment in this slot 
   let isSlotAvailable = true;
   for (const appointment of Appointmentreserved){
     const existingDate = new Date(appointment.Date);
-    if (newDate.getHours() === existingDate.getHours()) {
+   // console.log(existingDate);
+    
+    if (newDate.getFullYear()==existingDate.getFullYear() && newDate.getMonth()+1==existingDate.getMonth()
+     && newDate.getDay()==existingDate.getDay() 
+    &&newDate.getUTCHours()==existingDate.getUTCHours()) {
       isSlotAvailable = false;
       break;
     }
   }
-  if (!Patient){
-    res.status(500).send({message:"Wrong Patient Username "});
-  }
- else  if (!Doctor){
-    res.status(500).send({message:"No such a doctor with username "});
-  }
-  else if (!isslotfordoctor){
-    res.status(500).send({message:"The doctor don't have sunch a slot "});
-  }
-  else if (isSlotAvailable){
+
+const PatientAppointments = await appointmentModel.find({
+  PatientUsername: PatientUser,
+  $or: [
+    { Status: "Upcoming" },
+    { Status: "Rescheduled" } 
+  ]
+});
+   // console.log(PatientAppointments);
+
+    let patientavaliable = true;
+    for (const appointment1 of PatientAppointments){
+      const existingDate1 = new Date(appointment1.Date);
+      console.log(existingDate1);
+      if (newDate.getFullYear()==existingDate1.getFullYear() && newDate.getMonth()+1==existingDate1.getMonth()+1
+       && newDate.getDay()==existingDate1.getDay() 
+      &&newDate.getUTCHours()==existingDate1.getUTCHours()) {
+        patientavaliable = false;
+        break;
+      }
+    }
+//console.log(patientavaliable);
+
+if (!patientavaliable){
+  res.status(500).send({message:"You already have an appointment  "});
+}
+  else if (!isdocslotavaliable&&hasappointment){
     res.status(500).send({message:" This slot is not avaliable for this dctor  "});
   }
-  else if (!hasappointment){
+  else if (hasappointment==null){
     res.status(500).send({message:"You don't have any appointments with this doctor to reschdule "});
   }
   else {
@@ -671,4 +703,5 @@ module.exports = {
   getAppointmentsPat,
   testAppointRef,
   rescheduleAppointmentPatient
+
 };
