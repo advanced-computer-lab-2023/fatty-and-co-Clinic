@@ -675,7 +675,7 @@ if (!patientavaliable){
     res.status(500).send({message:" This slot is not avaliable for this dctor  "});
   }
   else if (hasappointment==null){
-    res.status(500).send({message:"You don't have any appointments with this doctor to reschdule "});
+    res.status(500).send({message:"You don't have any appointments Upcooming appointments with this doctor"});
   }
   else {
      const rescheduledappointment=await appointmentModel.findOneAndUpdate(
