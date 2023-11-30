@@ -1,11 +1,23 @@
-// Chakra imports
-import { ChakraProvider, Portal, useDisclosure } from "@chakra-ui/react";
+import {
+  Button,
+  ChakraProvider,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  Portal,
+  useDisclosure,
+  IconButton,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import Configurator from "components/Configurator/Configurator";
 import Footer from "components/Footer/Footer.js";
 // Layout components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Sidebar from "components/Sidebar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import routes from "routes.js";
 import "@fontsource/roboto/400.css";
@@ -18,6 +30,7 @@ import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
 import MainPanel from "../components/Layout/MainPanel";
 import PanelContainer from "../components/Layout/PanelContainer";
 import PanelContent from "../components/Layout/PanelContent";
+
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
@@ -93,24 +106,81 @@ export default function Dashboard(props) {
     });
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [scrolling, setScrolling] = useState(false);
+  const [scrollTop, setScrollTop] = useState(0);
+
+  const handleScroll = () => {
+    setScrollTop(document.documentElement.scrollTop);
+    setScrolling(document.documentElement.scrollTop > scrollTop);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollTop]);
+
   document.documentElement.dir = "ltr";
   // Chakra Color Mode
   return (
     <ChakraProvider theme={theme} resetCss={false}>
-      <Sidebar
-        routes={routes}
-        logoText={"PURITY UI DASHBOARD"}
-        display="none"
-        sidebarVariant={sidebarVariant}
-        {...rest}
-      />
       <MainPanel
         w={{
           base: "100%",
-          xl: "calc(100% - 275px)",
+          xl: "100%",
         }}
       >
+        <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader fontSize="sm" px="2" py="2"></DrawerHeader>
+            <DrawerBody>
+              {/* Content for the drawer */}
+              <Sidebar
+                routes={routes}
+                logoText={"PURITY UI DASHBOARD"}
+                display="none"
+                sidebarVariant={sidebarVariant}
+                {...rest}
+              />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+
+        <Button
+          h="52px"
+          w="52px"
+          onClick={onOpen}
+          position="fixed"
+          top="7"
+          left="2"
+          bgColor="white"
+          zIndex="999"
+          opacity={scrolling ? 0 : 1}
+          pointerEvents={scrolling ? "none" : "auto"}
+          transition="opacity 0.3s"
+          bottom="30px"
+          borderRadius="50px"
+          boxShadow={scrolling ? "none" : "0 2px 12px 0 rgb(0 0 0 / 16%)"}
+        >
+          <HamburgerIcon cursor="pointer" w="20px" h="20px" />
+        </Button>
+
         <Portal>
+          {/* TODO: Make navbar appear when scrolling up.*/}
+          {/* <Box
+            position="fixed"
+            top={scrolling ? "-100px" : "0"}
+            left="0"
+            right="0"
+            opacity={scrolling ? 0 : 1}
+            pointerEvents={scrolling ? "none" : "auto"}
+            transition="top 0.3s, opacity 0.3s"
+            zIndex="998"
+            bgColor="white"
+          > */}
           <AdminNavbar
             onOpen={onOpen}
             logoText={"PURITY UI DASHBOARD"}
@@ -119,6 +189,7 @@ export default function Dashboard(props) {
             fixed={fixed}
             {...rest}
           />
+          {/* </Box> */}
         </Portal>
         {getRoute() ? (
           <PanelContent>
@@ -131,24 +202,6 @@ export default function Dashboard(props) {
           </PanelContent>
         ) : null}
         <Footer />
-        <Portal>
-          <FixedPlugin
-            secondary={getActiveNavbar(routes)}
-            fixed={fixed}
-            onOpen={onOpen}
-          />
-        </Portal>
-        <Configurator
-          secondary={getActiveNavbar(routes)}
-          isOpen={isOpen}
-          onClose={onClose}
-          isChecked={fixed}
-          onSwitch={(value) => {
-            setFixed(value);
-          }}
-          onOpaque={() => setSidebarVariant("opaque")}
-          onTransparent={() => setSidebarVariant("transparent")}
-        />
       </MainPanel>
     </ChakraProvider>
   );
