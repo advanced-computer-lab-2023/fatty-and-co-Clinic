@@ -75,6 +75,6 @@ router.patch("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByD
 router.get("/testAppRef", testAppointRef);
 
 router.post("/createAppointment", createAppointment);
-router.patch("/rescheduleForPatient",reschedulePatient);
+router.post("/rescheduleForPatient",reschedulePatient);
 
 module.exports = router;

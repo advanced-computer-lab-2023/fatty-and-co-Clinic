@@ -552,18 +552,22 @@ const testAppointRef = async (req, res) => {
 const reschedulePatient = async (req, res) => {
  
   try {
+
      const docUsername= req.user.Username
      const {patientUsername,date}=req.body
-     const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, $or: [{Status:"Upcoming"},{Status:"Rescheduled"}
-    ]})  
+     const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, Status:"Upcoming"})
+     const reqDate= new Date(date)
      if(!prevApp){
       res.status(404).json({err:"Patient wasn't scheduled for an upcoming appointment!"})
+      return;
+     }
+     else if(prevApp.Date.getFullYear()==reqDate.getFullYear()&& prevApp.Date.getMonth()+1==reqDate.getMonth()+1&& prevApp.Date.getDate()+1==reqDate.getDate()+1&& prevApp.Date.getUTCHours()==reqDate.getUTCHours()){
+      res.status(404).json({err:"You're rescheduling appointment on the same date it's scheduled on!"})
      }
      else{
-     const doctor= await doctorModel.findOne({Username:docUsername})
      const patientApp= await appointmentModel.find({
-      $or: [  { PatientUsername: patientUsername, $or: [{Status:"Upcoming"},{Status:"Rescheduled"}]},
-      { DoctorUsername:docUsername,$or: [{Status:"Upcoming"},{Status:"Rescheduled"}]},
+      $or: [  { PatientUsername: patientUsername, Status:"Upcoming"},
+      { DoctorUsername:docUsername,Status:"Upcoming"},
     ],
   })
      const reqDate= new Date(date)
@@ -578,9 +582,11 @@ const reschedulePatient = async (req, res) => {
       res.status(400).json({err:"There is another appointment booked on same date!"})
       return;
      }
-  
-     const newApp=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Rescheduled"},{Date:date})      
+     else{
+     const updateAppOld=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date,Status:"Rescheduled"})      
+     const newApp= await appointmentModel.create({PatientUsername:patientUsername,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
      res.status(200).json("You have rescheduled appointment successfully!")
+     return;}
     }}
   } catch (error) {
     res.status(404).json(error)
@@ -605,8 +611,6 @@ const reschedulePatient = async (req, res) => {
 
 
 const createAppointment = async (req, res) => {
-  console.log("creating appointment");
-  console.log(req.user.Username)
   const username = req.user.Username;
   var patient;
   var patNameFinal;
@@ -615,11 +619,9 @@ const createAppointment = async (req, res) => {
   console.log("body: " + req.body.FamMemName);
   //this patient is technically fam member
   if (!FamMemName) {
-    console.log("fam");
     patient = await patientModel.findOne({ Username: username });
     patNameFinal = patient.Name;
   } else {
-    console.log("user");
     patient = await patientModel.findOne({ Username: username });
     patNameFinal = FamMemName;
   }
@@ -627,11 +629,9 @@ const createAppointment = async (req, res) => {
   const PatientName = patNameFinal;
   const PatientUsernameFinal = patient.Username;
   const DoctorName = doctor.Name;
-  console.log("doc name: " + DoctorName);
   const DoctorUsername = doctor.Username;
   const Status = "Upcoming";
   try {
-    console.log("creating");
     const newApp = await appointmentModel.create({
       DoctorUsername,
       DoctorName,
