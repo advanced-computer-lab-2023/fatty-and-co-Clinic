@@ -1,5 +1,7 @@
 const express = require("express");
 const {
+  cancelAppForFam,
+  cancelAppForSelf,
   reschedulePatient,
   getAppointmentsDoc,
   getAppointmentsPat,
@@ -74,7 +76,12 @@ router.patch("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByD
 
 router.get("/testAppRef", testAppointRef);
 
-router.post("/createAppointment", createAppointment);
-router.post("/rescheduleForPatient",reschedulePatient);
+router.post("/createAppointment",checkPatient, createAppointment);
+router.post("/rescheduleForPatient",checkPatient,reschedulePatient);
+
+// Cancel for family member + for myself
+
+router.patch("/cancelAppFam",checkPatient,cancelAppForFam)
+router.patch("/cancelAppointment",checkPatient,cancelAppForSelf)
 
 module.exports = router;

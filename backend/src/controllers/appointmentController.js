@@ -2,6 +2,7 @@ const { trusted } = require("mongoose");
 const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
+const subscriptionModel = require("../models/subscriptions");
 const User = require("../models/systemusers");
 const { isNull } = require("util");
 const docSlotsModel = require("../models/docSlots");
@@ -593,6 +594,82 @@ const reschedulePatient = async (req, res) => {
   }
 }
 
+const cancelAppForFam = async (req, res) => {
+ 
+  try {
+
+     const patientSignedIn= req.user.Username
+     const {doctorUsername,patientUsername}=req.body
+     const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientSignedIn, Status:"Upcoming"})
+     const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientSignedIn})
+     const currDate= new Date()
+     var refund=0
+     if(!upcomingApp && existApp){
+      res.status(404).json({err:"Can't cancel an appointment that's rescheduled/cancelled/completed!"})
+      return;
+     }
+     else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
+      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+      res.status(200).json("Appointment cancelled successfully!")
+     }
+     else{
+     const patient= await patientModel.findOne({Username:patientSignedIn})
+     const doctor= await doctorModel.findOne({Username:doctorUsername})
+     const package= await subscriptionModel.findOne({Patient:patient,Status:"Subscribed"}).populate("Package")
+     const packDisc= package?package.Package.Family_Discount:0
+     const refund= getSessionPrice(doctor.HourlyRate,packDisc).toFixed(2)
+     await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
+     await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+  
+  }
+    
+  } catch (error) {
+    res.status(404).json(error)
+  }
+}
+
+const cancelAppForSelf = async (req, res) => {
+ 
+  try {
+
+     const patientUsername= req.user.Username
+     const {doctorUsername}=req.body
+     const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
+     const currDate= new Date();
+     var refund=0
+     if(!upcomingApp){
+      res.status(404).json({err:"Can't cancel an appointment that's rescheduled/cancelled/completed!"})
+      return;
+     }
+     else if(upcomingApp.BookedBy!=patientUsername){
+      res.status(404).json({err:"Can't cancel an appointment that wasn't booked by you!"})
+      return;
+     }
+     else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
+      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+      res.status(200).json("Appointment cancelled successfully!")
+     }
+     else{
+     const patient= await patientModel.findOne({Username:patientUsername})
+     const doctor= await doctorModel.findOne({Username:doctorUsername})
+     const package= await subscriptionModel.findOne({Patient:patient,Status:"Subscribed"}).populate("Package")
+     const packDisc= package?package.Package.Session_Discount:0
+     const refund= getSessionPrice(doctor.HourlyRate,packDisc)
+     await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
+     await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+  
+  }
+    
+  } catch (error) {
+    res.status(404).json(error)
+  }
+}
+
+function getSessionPrice(hourlyRate, packageDiscount) {
+  return (1 - packageDiscount / 100) * (hourlyRate * 1.1); // 1.1 to add 10% clinic markup
+}
+
+
 /*  {
     "Username":"Dockholoud12&",
     "Password":"Dockholoud12&",
@@ -727,7 +804,10 @@ if (!patientavaliable){
   }
 }
 
+  
 module.exports = {
+  cancelAppForFam,
+  cancelAppForSelf,
   createAppointment,
   reschedulePatient,
   filterAppointmentsByStatusDoc,
