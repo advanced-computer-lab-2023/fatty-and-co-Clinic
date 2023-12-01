@@ -4,10 +4,12 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Button,
   Flex,
   Link,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import AdminNavbarLinks from "./AdminNavbarLinks";
@@ -27,6 +29,7 @@ export default function AdminNavbar(props) {
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.200");
+  let navbarIcon = useColorModeValue("gray.500", "gray.200");
   let navbarPosition = "absolute";
   let navbarFilter = "none";
   let navbarBackdrop = "blur(21px)";
@@ -113,19 +116,27 @@ export default function AdminNavbar(props) {
         alignItems={{ xl: "center" }}
       >
         <Box mb={{ sm: "8px", md: "0px" }}>
-          <Breadcrumb>
-            <BreadcrumbItem color={mainText}>
-              <BreadcrumbLink href="#" color={secondaryText}>
-                Pages
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+          <Button 
+          style={{ width:"16", marginRight:"10px"}}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15" // Increase the width to make the icon bigger
+              height="15" // Increase the height to make the icon bigger
+              fill="currentColor"
+              class="bi bi-arrow-left-circle"
+              viewBox="0 0 16 16"
+              style={{ cursor: "pointer", margin: "0px" }}
+              onClick={(e) => {
+                history.back();
+              }}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+              />
+            </svg>
+          </Button>
 
-            <BreadcrumbItem color={mainText}>
-              <BreadcrumbLink href="#" color={mainText}>
-                {brandText}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
           {/* Here we create navbar brand, based on route name */}
           <Link
             color={mainText}
