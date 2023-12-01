@@ -59,7 +59,7 @@ router.get("/searchpatient", checkDoctor, searchPatient);
  * @access Doctor
  */
 router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
-router.patch("/rescheduleAppointmentPatient", checkPatient, rescheduleAppointmentPatient);
+router.post("/rescheduleAppointmentPatient", checkPatient, rescheduleAppointmentPatient);
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient
