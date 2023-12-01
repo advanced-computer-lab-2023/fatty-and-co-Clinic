@@ -617,6 +617,7 @@ const rescheduleAppointmentPatient= async(req,res) =>{
     const Doctor = await doctorModel.findOne({ Username: doctorUsername });
     const hasappointment=await appointmentModel.findOne({DoctorUsername:doctorUsername,
     PatientUsername:PatientUser,Status:"Upcoming"});
+    const Patient=await patientModel.findOne({Username:PatientUser});
   //  console.log("hhh"+hasappointment);
   //  console.log("1");
   let timeinhour=newDate.getUTCHours();
@@ -637,7 +638,6 @@ const rescheduleAppointmentPatient= async(req,res) =>{
   for (const appointment of Appointmentreserved){
     const existingDate = new Date(appointment.Date);
    // console.log(existingDate);
-    
     if (newDate.getFullYear()==existingDate.getFullYear() && newDate.getMonth()+1==existingDate.getMonth()
      && newDate.getDay()==existingDate.getDay() 
     &&newDate.getUTCHours()==existingDate.getUTCHours()) {
@@ -671,6 +671,9 @@ const PatientAppointments = await appointmentModel.find({
 if (!patientavaliable){
   res.status(500).send({message:"You already have an appointment  "});
 }
+else if (!isSlotAvailable){
+  res.status(500).send({message:"Doctor has an appointment in this date "});
+}
   else if (!isdocslotavaliable&&hasappointment){
     res.status(500).send({message:" This slot is not avaliable for this dctor  "});
   }
@@ -680,10 +683,17 @@ if (!patientavaliable){
   else {
      const rescheduledappointment=await appointmentModel.findOneAndUpdate(
       {DoctorUsername:doctorUsername,
-        PatientUsername:PatientUser,Status:"Upcoming"},{Status:"Rescheduled",
-      Date:newDate}
+        PatientUsername:PatientUser,Status:"Upcoming"},{Status:"Rescheduled"}
      )
-    res.status(200).json(rescheduledappointment);
+     const newappointment=await appointmentModel.create(
+      {DoctorUsername:doctorUsername,
+        DoctorName:Doctor.Name,
+        PatientUsername:PatientUser,
+        PatientName:Patient.Name,
+        Status:"Upcoming",Date:newDate
+      }
+     )
+    res.status(200).json(newappointment);
   }
   } catch (error) {
     res.status(500).json(error);

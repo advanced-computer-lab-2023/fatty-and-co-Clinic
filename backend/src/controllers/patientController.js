@@ -1526,9 +1526,8 @@ const cancelSubscriptionfamilymember = async (req, res) => {
     });
     if (famrelated == null) {
       res.status(400).send({ error: "Family member not related to you " });
-    } else if (fam.FamilyMem != null) {
-      res.status(400).send({ error: "He is already a system user" });
-    } else if (subscribed) {
+    } 
+   else if (subscribed) {
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
