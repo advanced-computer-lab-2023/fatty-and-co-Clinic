@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const appointmentSchema = new Schema(
-  {
-    DoctorUsername: {
+  { DoctorUsername: {
       type: String,
       required: true,
     },
@@ -17,6 +16,10 @@ const appointmentSchema = new Schema(
     },
     PatientName: {
       type: String,
+      required: true,
+    },
+    BookedBy:{
+      type:String,
       required: true,
     },
     Status: {
