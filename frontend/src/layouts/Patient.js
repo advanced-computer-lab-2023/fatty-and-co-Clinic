@@ -16,7 +16,7 @@ import Configurator from "components/Configurator/Configurator";
 import Footer from "components/Footer/Footer.js";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Sidebar from "components/Sidebar";
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import routes from "routes.js";
 import "@fontsource/roboto/400.css";
@@ -52,7 +52,7 @@ export default function Dashboard(props) {
   const getRoute = () => {
     return window.location.pathname !== "/admin/full-screen-maps";
   };
-const getActiveRoute = (routes) => {
+  const getActiveRoute = (routes) => {
     let activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
@@ -137,7 +137,6 @@ const getActiveRoute = (routes) => {
               <Sidebar
                 routes={routes}
                 logoText={"PURITY UI DASHBOARD"}
-                display="none"
                 sidebarVariant={sidebarVariant}
                 {...rest}
               />
@@ -163,14 +162,14 @@ const getActiveRoute = (routes) => {
         >
           <HamburgerIcon cursor="pointer" w="20px" h="20px" />
         </Button>
-<Portal>
-        <AdminNavbar
-          logoText={"PURITY UI DASHBOARD"}
-          brandText={getActiveRoute(routes)}
-          secondary={getActiveNavbar(routes)}
-          fixed={fixed}
-          {...rest}
-        />
+        <Portal>
+          <AdminNavbar
+            logoText={"PURITY UI DASHBOARD"}
+            brandText={getActiveRoute(routes)}
+            secondary={getActiveNavbar(routes)}
+            fixed={fixed}
+            {...rest}
+          />
         </Portal>
 
         {getRoute() ? (
