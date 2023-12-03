@@ -4,6 +4,7 @@ const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
 const subscriptionModel = require("../models/subscriptions");
+const cartModel = require("../models/cart");
 
 const bcrypt = require("bcrypt");
 const { validatePassword } = require("../common/utils/validators");
@@ -268,6 +269,7 @@ const createPatient = async (req, res) => {
     Gender,
     EmergencyContactNumber,
     EmergencyContactName,
+    EmergencyContactRelation,
     Wallet,
   } = req.body;
   try {
@@ -287,11 +289,17 @@ const createPatient = async (req, res) => {
       EmergencyContact: {
         FullName: EmergencyContactName,
         PhoneNumber: EmergencyContactNumber,
+        Relation: EmergencyContactRelation,
       },
       LinkedPatients: [],
       Wallet: Wallet,
     });
     await subscriptionModel.addEntry(patient, "Unsubscribed");
+    const cart = await cartModel.create({
+      PatientUsername: Username,
+      TotalCost: 0,
+      Medicine: [],
+    });
     res.status(200).send({ patient, user });
   } catch (error) {
     res.status(400).send({ message: error.message });
