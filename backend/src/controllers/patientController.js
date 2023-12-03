@@ -1276,7 +1276,7 @@ const selectPatient = async (req, res) => {
 const getPrescriptions = async (req, res) => {
   const query = req.query;
   // console.log(query);
-  const patientUsername = query.PatientUsername; // Extract patientUsername
+  const patientUsername = req.user.Username; // Extract patientUsername
   // console.log(req.params.patientUsername);
 
   try {
