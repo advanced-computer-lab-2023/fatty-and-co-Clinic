@@ -305,7 +305,7 @@ function PrescriptionTable() {
                   doc.save("Prescription.pdf");
                 }}
               >
-                Print
+                Download
               </Button>
             </ModalBody>
           </ModalContent>
