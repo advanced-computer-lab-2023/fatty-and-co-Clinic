@@ -62,18 +62,33 @@ const getRequests = async (req, res) => {
 
 const acceptRequest = async (req, res) => {
   const { Username } = req.body;
+  console.log(Username);
   try {
-    const request = await requestModel.findOneAndUpdate(
-      { Username: Username, Status: { $ne: "Accepted" } },
-      { $set: { Status: "Accepted" } },
-      { new: true }
-    );
+    // const request = await requestModel.findOneAndUpdate(
+    //   { Username: Username, Status: { $ne: "Accepted" } },
+    //   { $set: { Status: "Accepted" } },
+    //   { new: true }
+    // );
+
+    // only finding now and not updating so that it's not marked as accepted until everything is done
+    const request = await requestModel.findOne({
+      Username: Username,
+      Status: { $ne: "Accepted" },
+    });
+    console.log(request);
     var currentDate = new Date();
     var oneWeekLater = new Date(
       currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );
     const Email = request.Email;
 
+    // create instead of addentry so that the password is not hashed twice
+    const user = await userModel.create({
+      Username: Username,
+      Password: request.Password,
+      Email: request.Email,
+      Type: "Doctor",
+    });
     const doc = await doctorModel.create({
       Username: Username,
       Name: request.Name,
@@ -83,12 +98,6 @@ const acceptRequest = async (req, res) => {
       EducationalBackground: request.EducationalBackground,
       Speciality: request.Speciality,
     });
-    const user = await userModel.addEntry(
-      Username,
-      request.Password,
-      request.Email,
-      "Doctor"
-    );
 
     await transporter.sendMail({
       to: Email,
@@ -159,8 +168,11 @@ const acceptRequest = async (req, res) => {
       `,
     });
 
+    request.Status = "Accepted";
+    await request.save();
     res.status(200).json(request);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };

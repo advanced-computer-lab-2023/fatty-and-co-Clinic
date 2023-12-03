@@ -10,11 +10,13 @@ import {
   useDisclosure,
   UseDisclosureProps,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams, useLocation } from "react-router-dom";
 import { formatISO } from "date-fns";
+import { useHistory } from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
 import DocSlotAptsTable from "../viewDoctors/components/DocSlotAptsTable";
@@ -28,6 +30,10 @@ export function bookAptDetails() {
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
 
+  const toast = useToast();
+
+  const history = useHistory();
+
   //the doctor id
   //   const { row } = useParams();
   //   console.log(useParams());
@@ -36,17 +42,27 @@ export function bookAptDetails() {
   let StartTime = state.StartTime;
   let DayName = state.DayName;
   let DoctorId = state.DoctorId;
+  let Cost = state.Cost;
+  let CostFam = state.CostFam;
+
+
+
+  console.log(state);
+  //const username = user.Username;
 
   console.log(StartTime);
   console.log(DayName);
   console.log(DoctorId);
 
-  const [famMemOptions, setFamMemOptions] = useState([{}]);
+  //const [famMemOptions, setFamMemOptions] = useState([{}]);
 
   //check if date<new date
   const [aptDate, setAptDate] = useState(new Date());
   //const [isFamMember, setIsFamMember] = useState(false);
-  const [famMemUsername, setFamMemUsername] = useState(null);
+  const [FamMemName, setFamMemName] = useState(null);
+
+
+  var DateFinal = new Date();
 
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
@@ -68,33 +84,48 @@ export function bookAptDetails() {
       hourMinString[1]
     );
     console.log("dateCheck" + dateToCheck);
-    const DateFinal = formatISO(dateToCheck);
+    DateFinal = formatISO(dateToCheck);
+
     console.log("dateCheckF" + DateFinal);
 
-    const price = 100;
-
     const url = API_PATHS.validateBookingDate;
-    axios.get(url, {
-      params: { DayName, DateFinal, DoctorId },
-      headers: { Authorization },
-    });
+    axios
+      .get(url, {
+        params: { DayName, DateFinal, DoctorId },
+        headers: { Authorization },
+      })
+      .catch((error) => {
+        console.log(error);
+        toast({
+          title: "Error",
+          description: error.response.data.message,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
   };
-
   const checkOutHandler = () => {
-    let newUrl = `../bookAptDetails/${row}`;
+    let newUrl = `../AppointmentConfirmation`;
     let newState = {
-      DoctorId: row.DoctorId,
+      DoctorId: DoctorId,
       Date: DateFinal,
-      Cost: price,
-      PatientUsername: !famMemUsername ? user.username : famMemUsername,
+      FamMemName: FamMemName,
+      Cost: Cost,
+      CostFam: CostFam,
     };
 
+    console.log(user.username);
+    console.log(user.Username);
+    console.log(user);
+    // console.log("hellostate");
+    console.log(newState);
     history.push(newUrl, newState);
   };
 
-  useEffect(() => {
-    setFamMemOptions([{}]);
-  }, []);
+  // useEffect(() => {
+  //   setFamMemOptions([{}]);
+  // }, []);
 
   return (
     <Box mt="70px">
@@ -148,13 +179,21 @@ export function bookAptDetails() {
                 </option>
               ))}
             </Select> */}
+            {/* <Text>Registered </Text>
             <Input
               bg="white"
               type="text"
               placeholder="Username"
               onChange={(event) => setFamMemUsername(event.target.value)}
-            />
+            /> */}
 
+            {/* <Text>Unregistered </Text> */}
+            <Input
+              bg="white"
+              type="text"
+              placeholder="Family Member Name"
+              onChange={(event) => setFamMemName(event.target.value)}
+            />
             <Button onClick={dateConfirmHandler} colorScheme="green">
               Confirm
             </Button>

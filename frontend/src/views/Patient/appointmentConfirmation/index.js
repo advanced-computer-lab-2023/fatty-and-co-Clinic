@@ -11,21 +11,44 @@ import react from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "views/Patient/makePayment/components/PaymentForm";
-import { useHistory } from "react-router-dom";
-
+import { useHistory, useLocation } from "react-router-dom";
+import {
+  Flex,
+  Button,
+  Box,
+  Text,
+  Input,
+  Textarea,
+  Collapse,
+  useDisclosure,
+  UseDisclosureProps,
+  Select,
+  FormControl,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Heading
+} from "@chakra-ui/react";
 
 
 const AppointmentConfirmation = () => {
   const [selectedPayment, setSelectedPayment] = useState("");
   const history = useHistory();
 
+  const location = useLocation();
+  const { state } = location;
+
+  console.log("this state");
+  console.log(state);
+
   const handleCheckout = () => {
     console.log("Checkout with payment method:", selectedPayment);
 
     if (selectedPayment === "Credit Card") {
-      history.push("../makePayment");
+      history.push("./payment", state);
     } else if (selectedPayment === "Wallet") {
-      history.push("../walletPayment");
+      console.log("hello wallet");
+      history.push("./walletPayment", state);
     }
   };
 

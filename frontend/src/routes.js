@@ -36,6 +36,8 @@ import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
+import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
+import WalletPayment from "views/Patient/walletPayment";
 
 import {
   HomeIcon,
@@ -115,10 +117,9 @@ var dashRoutes = [
 
   {
     path: "/Subscribtions/",
-    name: " Cancel Subscribtions",
+    name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
     component: CancelSubscription,
     layout: "/patient",
   },
@@ -127,7 +128,6 @@ var dashRoutes = [
     name: "Update Email",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
     component: UpdateEmail,
     layout: "/doctor",
   },
@@ -136,7 +136,6 @@ var dashRoutes = [
     name: "Update Hourly Rate",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
     component: UpdateHourly,
     layout: "/doctor",
   },
@@ -169,7 +168,6 @@ var dashRoutes = [
     name: "Update Affiliation",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
     component: UpdateAffil,
     layout: "/doctor",
   },
@@ -239,6 +237,15 @@ var dashRoutes = [
     layout: "/patient",
     show: false, // Add this to hide route from sidebar
   },
+  {
+    path: "/AppointmentConfirmation",
+    name: "Appointment Confirmation",
+    icon: <HomeIcon color="inherit" />,
+    component: AppointmentConfirmation,
+    layout: "/patient",
+    show: false, // Add this to hide route from sidebar
+  },
+  
 
   {
     path: "/viewDoctors",
@@ -274,6 +281,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     component: linkPatient,
     layout: "/patient",
+    show: false
   },
   {
     path: "/doctorPatients",
@@ -289,6 +297,14 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: Dashboard,
     layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: "/doctor",
   },
 
   {
@@ -320,10 +336,21 @@ var dashRoutes = [
     name: "Payment",
     rtlName: "لوحة القيادة",
     icon: <RocketIcon color="inherit" />,
-    secondaryNavbar: true,
     component: MakePayment,
     layout: "/patient",
+    show: false,
   },
+
+  {
+    path: "/walletPayment",
+    name: "Wallet payment",
+    rtlName: "لوحة القيادة",
+    icon: <RocketIcon color="inherit" />,
+    component: WalletPayment,
+    layout: "/patient",
+    show: false,
+  },
+
   {
     name: "ACCOUNT PAGES",
     category: "account",
@@ -335,7 +362,6 @@ var dashRoutes = [
         name: "Profile",
         rtlName: "لوحة القيادة",
         icon: <PersonIcon color="inherit" />,
-        secondaryNavbar: true,
         component: Profile,
         layout: "/admin", // TODO: figure out what to do with this to make it work for all user types
       },
@@ -352,7 +378,6 @@ var dashRoutes = [
         name: "Sign Up",
         rtlName: "لوحة القيادة",
         icon: <RocketIcon color="inherit" />,
-        secondaryNavbar: true,
         component: SignUp,
         layout: "/auth",
       },
@@ -362,7 +387,6 @@ var dashRoutes = [
         name: "Doctor Sign Up",
         rtlName: "لوحة القيادة",
         icon: <RocketIcon color="inherit" />,
-        secondaryNavbar: true,
         component: docSignUp,
         layout: "/auth",
       },
@@ -370,7 +394,6 @@ var dashRoutes = [
         path: "/resetPass",
         name: "Password Reset",
         icon: <RocketIcon color="inherit" />,
-        secondaryNavbar: true,
         component: resetPass,
         layout: "/auth",
       },
@@ -378,7 +401,6 @@ var dashRoutes = [
         path: "/docacc",
         name: "Contract Accepted",
         icon: <RocketIcon color="inherit" />,
-        secondaryNavbar: true,
         component: DocAcc,
         layout: "/auth",
       },

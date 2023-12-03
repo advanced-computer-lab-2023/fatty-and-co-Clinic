@@ -21,7 +21,7 @@ const patientSchema = new Schema(
     },
     NationalId: {
       type: String,
-      required: false,
+      required: true,
       unique: true,
     },
     DateOfBirth: {
@@ -34,12 +34,13 @@ const patientSchema = new Schema(
       required: true,
     },
     EmergencyContact: {
-      type: { FullName: String, PhoneNumber: Number },
+      type: { FullName: String, PhoneNumber: Number, Relation: String }, //NOT SURE OF THIS SYNTAX
       required: true,
     },
     Wallet: {
       type: Number,
       required: false,
+      default: 5000,
     },
     LinkedPatients: {
       type: [

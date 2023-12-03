@@ -1,14 +1,21 @@
 import React from "react";
-import { Box, Button, Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Text,
+  useColorModeValue,
+  Link,
+} from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
 const ThankYouCard = () => {
   const textColor = useColorModeValue("gray.700", "white");
   const history = useHistory();
 
-  const returnToHomePage = () => {
-    history.push("/");
-  };
+  // const returnToHomePage = () => {
+  //   history.replace("/");
+  // };
 
   return (
     <Flex
@@ -28,8 +35,8 @@ const ThankYouCard = () => {
         <Text fontSize="xl" fontWeight="bold" mb="4">
           Thank You for your purchase, your order has been confirmed.
         </Text>
-        <Button colorScheme="teal" onClick={returnToHomePage}>
-          Return to Home Page
+        <Button colorScheme="teal">
+          <Link href="/">Return to Home Page</Link>
         </Button>
       </Box>
     </Flex>

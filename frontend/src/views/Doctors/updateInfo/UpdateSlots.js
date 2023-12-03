@@ -28,6 +28,7 @@ export function UpdateSlots() {
   const [dayNumber, setDayNumber] = useState(0);
   const [StartTimeToAdd, setStartTimeToAdd] = useState(0);
   const [isChanged, setIsChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const options = [
     { key: "sunday", value: 0 },
@@ -57,8 +58,9 @@ export function UpdateSlots() {
     setStartTimeToAdd(newStartTimeToAdd);
   };
 
-  const fetchTableData =  () => {
+  const fetchTableData = () => {
     const url = API_PATHS.viewMySlotsDoc;
+    setIsLoading(true);
     axios
       .get(url, { headers: { Authorization } })
       .then((response) => {
@@ -67,7 +69,8 @@ export function UpdateSlots() {
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const fetchDataAA = async () => {
@@ -84,19 +87,21 @@ export function UpdateSlots() {
   const handleAddSlotConfirm = async () => {
     const url = API_PATHS.addMySlotsDoc;
     //const slot =
-    await axios.post(url, null, {
-      params: { dayNumber, StartTimeToAdd },
-      headers: { Authorization },
-    });
+    await axios
+      .post(url, null, {
+        params: { dayNumber, StartTimeToAdd },
+        headers: { Authorization },
+      })
+      .catch((error) => console.log(error));
     fetchTableData();
     //console.log(tableData);
     //if(slot)
     //setIsChanged(true);
   };
 
-  useEffect(async() => {
+  useEffect(() => {
     console.log("ana hena");
-     fetchTableData();
+    fetchTableData();
   }, []);
 
   return (
@@ -131,6 +136,7 @@ export function UpdateSlots() {
         captions={["Day", "Hour", "EditTime", "Delete"]}
         tableData={tableData}
         setTableData={setTableData}
+        isLoading={isLoading}
       />
     </Box>
   );

@@ -63,7 +63,23 @@ export function linkPatient() {
         }
         else if (response.status == 202) {
           toast({
-            title: "Patient already linked",
+            title: "Patient already linked to you",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+        else if (response.status == 204) {
+          toast({
+            title: "Can't link yourself",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        }
+        else if (response.status == 206) {
+          toast({
+            title: "Patient already linked to another user",
             status: "error",
             duration: 9000,
             isClosable: true,
@@ -87,72 +103,6 @@ export function linkPatient() {
       });
     }
   };
-
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Send the username to the backend for deletion
-    try {
-      const response = await fetch(
-        API_PATHS.createFamilyMember + Createparameter,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Name, NationalId, Age, Gender, Relation }),
-        }
-      );
-      if (
-        Name == "" ||
-        NationalId == "" ||
-        Age == "" ||
-        Gender == "" ||
-        Relation == ""
-      ) {
-        toast({
-          title: "Please fill ALL the inputs",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }
-      if (NationalId.length !== 16) {
-        toast({
-          title: "National id must be 16",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }
-
-      if (response.ok) {
-        // Handle success or provide feedback to the user
-        toast({
-          title: "Family member Added successfully",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        setName(""),
-          setNationalId(""),
-          setAge(""),
-          setGender(""),
-          setRelation(""); // Clear the input field
-      } else {
-        // Handle errors or provide feedback to the user
-        toast({
-          title: "Failed to create Familymember",
-          description: "An error occurred while creating the admin.",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("An error occurred", error);
-    }
-  };*/
 
   return (
     <Box pt="80px">

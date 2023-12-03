@@ -16,18 +16,24 @@ import {
   VStack,
   Icon,
   Img,
+  useToast,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
+import { useRequestsContext } from "hooks/useRequestsContext";
 
 function RequestButton({ Username, Status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null); // State to store data from the database
+  const { requests, dispatch } = useRequestsContext();
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
+
+  const toast = useToast();
+
   useEffect(() => {
     axios
       .get(API_PATHS.getRequest, {
@@ -39,6 +45,13 @@ function RequestButton({ Username, Status }) {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        toast({
+          title: "Error",
+          description: error.response.data.error,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       });
   }, []); // Empty dependency array ensures this effect runs only once
 
@@ -53,8 +66,26 @@ function RequestButton({ Username, Status }) {
           headers: { Authorization },
         }
       )
+      .then((response) => {
+        console.log(response);
+        toast({
+          title: "Request accepted",
+          description: "Request accepted successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        dispatch({ type: "UPDATE_REQUEST", payload: response.data });
+      })
       .catch((error) => {
         console.error("Error accepting request:", error);
+        toast({
+          title: "Error accepting request",
+          description: error.response.data.error,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       });
   };
 
@@ -67,8 +98,26 @@ function RequestButton({ Username, Status }) {
           headers: { Authorization },
         }
       )
+      .then((response) => {
+        console.log(response);
+        toast({
+          title: "Request rejected",
+          description: "Request rejected successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        dispatch({ type: "UPDATE_REQUEST", payload: response.data });
+      })
       .catch((error) => {
         console.error("Error rejecting request:", error);
+        toast({
+          title: "Error rejecting request",
+          description: error.response.data.error,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       });
   };
 

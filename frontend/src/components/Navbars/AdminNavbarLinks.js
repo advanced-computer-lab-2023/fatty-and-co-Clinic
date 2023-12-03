@@ -14,7 +14,13 @@ import {
   MenuList,
   Text,
   useColorModeValue,
+  ChakraProvider,
+  extendTheme,
+  Divider,
 } from "@chakra-ui/react";
+import { BsBoxArrowRight } from "react-icons/bs";
+import { Icon } from "@chakra-ui/icon";
+import { MdAttachMoney } from "react-icons/md";
 // Assets
 import avatar1 from "assets/img/avatars/avatar1.png";
 import avatar2 from "assets/img/avatars/avatar2.png";
@@ -30,10 +36,38 @@ import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import routes from "routes.js";
+import axios from "axios";
+import { API_PATHS } from "API/api_paths";
+import { useState, useEffect } from "react";
+import { useWalletContext } from "hooks/useWalletContext";
+
+const theme = extendTheme({
+  icons: {
+    MdAttachMoney,
+  },
+});
 
 export default function HeaderLinks(props) {
-  const { variant, children, fixed, secondary, onOpen, ...rest } = props;
   const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  const { variant, children, fixed, secondary, onOpen, ...rest } = props;
+
+  const { Wallet, dispatch } = useWalletContext();
+  // const [Wallet, setWallet] = useState(null);
+  useEffect(() => {
+    const fetchWalletAmount = async () => {
+      try {
+        const response = await axios.get(API_PATHS.getWalletAmount, {
+          headers: { Authorization },
+        });
+        console.log(response.data);
+        dispatch({ type: "GET_WALLET", payload: response.data.Wallet });
+      } catch (error) {
+        console.error("Error fetching wallet amount", error);
+      }
+    };
+    fetchWalletAmount();
+  }, [Authorization]);
 
   // Chakra Color Mode
   let mainTeal = useColorModeValue("teal.300", "teal.300");
@@ -54,123 +88,10 @@ export default function HeaderLinks(props) {
       alignItems="center"
       flexDirection="row"
     >
-      <InputGroup
-        cursor="pointer"
-        bg={inputBg}
-        borderRadius="15px"
-        w={{
-          sm: "128px",
-          md: "200px",
-        }}
-        me={{ sm: "auto", md: "20px" }}
-        _focus={{
-          borderColor: { mainTeal },
-        }}
-        _active={{
-          borderColor: { mainTeal },
-        }}
-      >
-        <InputLeftElement
-          children={
-            <IconButton
-              bg="inherit"
-              borderRadius="inherit"
-              _hover="none"
-              _active={{
-                bg: "inherit",
-                transform: "none",
-                borderColor: "transparent",
-              }}
-              _focus={{
-                boxShadow: "none",
-              }}
-              icon={<SearchIcon color={searchIcon} w="15px" h="15px" />}
-            ></IconButton>
-          }
-        />
-        <Input
-          fontSize="xs"
-          py="11px"
-          color={mainText}
-          placeholder="Type here..."
-          borderRadius="inherit"
-        />
-      </InputGroup>
-      {!user && (
-        <NavLink to="/auth/signin">
-          <Button
-            ms="0px"
-            px="0px"
-            me={{ sm: "2px", md: "16px" }}
-            color={navbarIcon}
-            variant="transparent-with-icon"
-            rightIcon={
-              document.documentElement.dir ? (
-                ""
-              ) : (
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-              )
-            }
-            leftIcon={
-              document.documentElement.dir ? (
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-              ) : (
-                ""
-              )
-            }
-          >
-            <Text display={{ sm: "none", md: "flex" }}>Sign In</Text>
-          </Button>
-        </NavLink>
-      )}
-      {user && (
-        <>
-          <Button
-            ms="0px"
-            px="0px"
-            me={{ sm: "2px", md: "16px" }}
-            color={navbarIcon}
-            variant="transparent-with-icon"
-            rightIcon={
-              document.documentElement.dir ? (
-                ""
-              ) : (
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-              )
-            }
-            leftIcon={
-              document.documentElement.dir ? (
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-              ) : (
-                ""
-              )
-            }
-            onClick={useLogout()}
-          >
-            <Text display={{ sm: "none", md: "flex" }}>Log out</Text>
-          </Button>
-        </>
-      )}
-      <SidebarResponsive
-        logoText={props.logoText}
-        secondary={props.secondary}
-        routes={routes}
-        // logo={logo}
-        {...rest}
-      />
-      <SettingsIcon
-        cursor="pointer"
-        ms={{ base: "16px", xl: "0px" }}
-        me="16px"
-        ref={settingsRef}
-        onClick={props.onOpen}
-        color={navbarIcon}
-        w="18px"
-        h="18px"
-      />
+      
       <Menu>
         <MenuButton>
-          <BellIcon color={navbarIcon} w="18px" h="18px" />
+          <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
         </MenuButton>
         <MenuList p="16px 8px">
           <Flex flexDirection="column">
@@ -204,6 +125,127 @@ export default function HeaderLinks(props) {
           </Flex>
         </MenuList>
       </Menu>
+      {!user && (
+        <NavLink to="/auth/signin">
+          <Button
+            ms="0px"
+            px="0px"
+            me={{ sm: "2px", md: "16px" }}
+            color={navbarIcon}
+            variant="transparent-with-icon"
+            rightIcon={
+              document.documentElement.dir ? (
+                ""
+              ) : (
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
+              )
+            }
+            leftIcon={
+              document.documentElement.dir ? (
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
+              ) : (
+                ""
+              )
+            }
+          >
+            <Text display={{ sm: "none", md: "flex" }}>Sign In</Text>
+          </Button>
+        </NavLink>
+      )}
+      {user && (
+        <>
+        <Button
+            ms="0px"
+            px="0px"
+            me={{ sm: "2px", md: "16px" }}
+            color={navbarIcon}
+            variant="transparent-with-icon"
+            rightIcon={
+              document.documentElement.dir ? (
+                ""
+              ) : (
+                <ProfileIcon  color={navbarIcon} w="22px" h="22px" me="0px" />
+              )
+            }
+            leftIcon={
+              document.documentElement.dir ? (
+                <ProfileIcon  color={navbarIcon} w="22px" h="22px" me="0px" />
+              ) : (
+                ""
+              )
+            }
+            // TODO: On click navigate to profile
+            // onClick={}
+          >
+          </Button>
+          <Button
+            ms="0px"
+            px="0px"
+            me={{ sm: "2px", md: "16px" }}
+            color={navbarIcon}
+            variant="transparent-with-icon"
+            rightIcon={
+              document.documentElement.dir ? (
+                ""
+              ) : (
+                <Icon as={BsBoxArrowRight}  color={navbarIcon} w="22px" h="22px" me="0px" />
+              )
+            }
+            leftIcon={
+              document.documentElement.dir ? (
+                <Icon as={BsBoxArrowRight}  color={navbarIcon} w="22px" h="22px" me="0px" />
+              ) : (
+                ""
+              )
+            }
+            onClick={useLogout()}
+          >
+            <Text display={{ sm: "none", md: "flex" }}>Log out</Text>
+          </Button>
+        </>
+      )}
+      <SidebarResponsive
+        logoText={props.logoText}
+        secondary={props.secondary}
+        routes={routes}
+        // logo={logo}
+        {...rest}
+      />
+      {/* <SettingsIcon
+        cursor="pointer"
+        ms={{ base: "16px", xl: "0px" }}
+        me="16px"
+        mw="16px"
+        ref={settingsRef}
+        onClick={props.onOpen}
+        color={navbarIcon}
+        w="18px"
+        h="18px"
+      /> */}
+  
+      {/* {user.userType !== "Admin" && (
+      <ChakraProvider theme={theme}>
+        <Icon
+          as={MdAttachMoney}
+          boxSize={5}
+          color={navbarIcon}
+          w="18px"
+          h="18px"
+          mb="2px"
+        />
+      </ChakraProvider>
+      )}
+      <ChakraProvider theme={theme}>
+        <Text
+          fontSize="sm"
+          fontWeight="bold"
+          color={navbarIcon}
+          w="100px"
+          h="27px"
+        >
+          {Wallet !== null ? `${Wallet}` : ""}
+        </Text>
+      </ChakraProvider> */}
     </Flex>
   );
 }

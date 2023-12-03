@@ -1,10 +1,22 @@
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Text,
+  useColorModeValue,
+  Input,
+  Stack,
+  useToast,
+  Select,
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
-import { Input } from "@chakra-ui/react";
-import {useLocation} from "react-router-dom"
+import { useLocation } from "react-router-dom";
+import ThankYouCard from "../ThankYou";
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -30,9 +42,8 @@ const PaymentForm = ({
   PackageName,
   NationalId,
   DoctorId,
-  PatientUsername,
-  status,
-  Date
+  FamMemName,
+  Date,
 }) => {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -40,15 +51,16 @@ const PaymentForm = ({
   const stripe = useStripe();
   const elements = useElements();
 
-  useEffect(() => {
-    if (success) {
-      const redirectTimeout = setTimeout(() => {
-        window.location.href = "./ThankYou.js";
-      }, 3000);
+  console.log("fam mem name pay form: " + FamMemName);
+  // useEffect(() => {
+  //   if (success) {
+  //     const redirectTimeout = setTimeout(() => {
+  //       return <ThankYouCard />;
+  //     }, 3000);
 
-      return () => clearTimeout(redirectTimeout);
-    }
-  }, [success]);
+  //     return () => clearTimeout(redirectTimeout);
+  //   }
+  // }, [success]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,8 +71,9 @@ const PaymentForm = ({
 
     if (!error) {
       try {
+        console.log("trying");
         const { id } = paymentMethod;
-
+        console.log("id: " + id);
         const response = await axios.post(
           API_PATHS.cardPayment,
           {
@@ -70,90 +83,92 @@ const PaymentForm = ({
           },
           { headers: { Authorization } }
         );
+        console.log("here");
         if (response.data.success) {
-          if(Description==="Doctor's appointment"){
-          const response = await fetch(API_PATHS.addAppointment, {
-            method: "POST",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              DoctorId,
-              PatientUsername,
-              status,
-              Date
-            }),
-          });
-          const response2 = await fetch(API_PATHS.payDoctor, {
-            method: "POST",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              DoctorId,
-              Amount,
-            }),
-          });
+          console.log("attempting payment...");
+          if (Description === "Doctor's appointment") {
+            const response = await fetch(API_PATHS.createAppointment, {
+              method: "POST",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                DoctorId,
+                Date,
+                FamMemName,
+              }),
+            });
+            const response2 = await fetch(API_PATHS.payDoctor, {
+              method: "POST",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                DoctorId,
+                FamMemName,
+              }),
+            });
+          } else if (PackageName && !NationalId) {
+            const response = await fetch(API_PATHS.updateMySub, {
+              method: "PATCH",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ PackageName }),
+            });
+            const errorData = await response.json();
+            if (response.ok) {
+              console.log("Successful payment");
+              setSuccess(true);
+            } else {
+              toast({
+                title: "Failed to pay & subscribe!",
+                description: errorData.error,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              return;
+            }
+          }
+          // if (response.data.success) {
+          // console.log("Subscription payment completed successfully!");
+          // setSuccess(true);}
+          // else {
+          //   console.log(error.message);
+          // }
+          else if (PackageName && NationalId) {
+            const response = await fetch(API_PATHS.updateFamSub, {
+              method: "PATCH",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ PackageName, NationalId }),
+            });
+            const errorData = await response.json();
+            if (response.ok) {
+              console.log("Successful payment");
+              setSuccess(true);
+            } else {
+              toast({
+                title: "Failed to pay & subscribe!",
+                description: errorData.error,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              return;
+            }
           }
           console.log("Successful payment");
           setSuccess(true);
+          history.push(".../");
         }
-        if (PackageName && !NationalId) {
-          const response = await fetch(API_PATHS.updateMySub, {
-            method: "PATCH",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ PackageName }),
-          });
-          const errorData = await response.json();
-          if (response.ok) {
-            console.log("Successful payment");
-            setSuccess(true);
-          } else {
-            toast({
-              title: "Failed to pay & subscribe!",
-              description: errorData.error,
-              status: "error",
-              duration: 9000,
-              isClosable: true,
-            });
-            return;
-          }
-        }
-        // if (response.data.success) {
-        // console.log("Subscription payment completed successfully!");
-        // setSuccess(true);}
-        // else {
-        //   console.log(error.message);
-        // }
-        else if (PackageName && NationalId) {
-          const response = await fetch(API_PATHS.updateFamSub, {
-            method: "PATCH",
-            headers: {
-              Authorization,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ PackageName, NationalId }),
-          });
-          const errorData = await response.json();
-          if (response.ok) {
-            console.log("Successful payment");
-            setSuccess(true);
-          } else {
-            toast({
-              title: "Failed to pay & subscribe!",
-              description: errorData.error,
-              status: "error",
-              duration: 9000,
-              isClosable: true,
-            });
-            return;
-          }
-        }
+
         // if (response.data.success) {
         // console.log("Subscription payment completed for family member successfully!");
         // setSuccess(true);}

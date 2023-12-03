@@ -12,6 +12,8 @@ const {
   testAppointRef,
 } = require("../controllers/appointmentController");
 
+
+const {createAppointment} = require("../controllers/testController");
 const { checkDoctor, checkPatient } = require("../common/middleware/checkType");
 
 const router = express.Router();
@@ -69,5 +71,9 @@ router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDat
 
 
 router.get("/testAppRef", testAppointRef);
-  
+
+router.post("/createAppointment", createAppointment);
+
+
+
 module.exports = router;

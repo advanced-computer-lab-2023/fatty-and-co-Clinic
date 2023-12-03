@@ -9,6 +9,7 @@ import {
   Tr,
   useColorModeValue,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 // Custom components
 import Card from "components/Card/Card.js";
@@ -22,7 +23,13 @@ import { useAuthContext } from "hooks/useAuthContext";
 
 import { useHistory } from "react-router-dom";
 
-const SlotsTable = ({ title, captions, tableData, setTableData }) => {
+const SlotsTable = ({
+  title,
+  captions,
+  tableData,
+  setTableData,
+  isLoading,
+}) => {
   //const { id } = useParams();
 
   const { user } = useAuthContext();
@@ -37,7 +44,9 @@ const SlotsTable = ({ title, captions, tableData, setTableData }) => {
 
   const handleDelete = (row) => {
     const url = API_PATHS.deleteMySlotsDoc + row.SlotId;
-    axios.delete(url, { headers: { Authorization } });
+    axios
+      .delete(url, { headers: { Authorization } })
+      .catch((error) => console.log(error));
     setTableData(tableData.filter((element) => element.SlotId !== row.SlotId));
   };
 
@@ -57,10 +66,12 @@ const SlotsTable = ({ title, captions, tableData, setTableData }) => {
 
   const handleEditConfirm = (row) => {
     const url = API_PATHS.updateMySlotsDoc + row.SlotId;
-    axios.patch(url, null, {
-      params: { StartTimeToUpdate },
-      headers: { Authorization },
-    });
+    axios
+      .patch(url, null, {
+        params: { StartTimeToUpdate },
+        headers: { Authorization },
+      })
+      .catch((error) => console.log(error));
     // .then( () => fetchTableData());
     setTableData(
       tableData.map((item) =>
@@ -98,38 +109,48 @@ const SlotsTable = ({ title, captions, tableData, setTableData }) => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Table variant="simple" color={textColor}>
-          <Thead>
-            <Tr my=".8rem" pl="0px">
-              {captions.map((caption, idx) => {
-                return (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
-                );
-              })}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {tableData.map((row) => {
-              //console.log(row.Username);
-              return (
-                <DocSlotRow
-                  key={row.id}
-                  SlotId={row.SlotId}
-                  DayName={row.DayName}
-                  Hour={row.StartTime}
-                  // isSelected={selectedRow === row}
-                  timeValueChangeHandler={() =>
-                    handleEditTimeValueChange(event)
-                  }
-                  deleteClickHandler={() => handleDelete(row)}
-                  editConfirmHandler={() => handleEditConfirm(row)}
-                />
-              );
-            })}
-          </Tbody>
-        </Table>
+        {
+          <Table variant="simple" color={textColor}>
+            <Thead>
+              <Tr my=".8rem" pl="0px">
+                {captions.map((caption, idx) => {
+                  return (
+                    <Th
+                      color="gray.400"
+                      key={idx}
+                      ps={idx === 0 ? "0px" : null}
+                    >
+                      {caption}
+                    </Th>
+                  );
+                })}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                tableData.map((row) => {
+                  //console.log(row.Username);
+                  return (
+                    <DocSlotRow
+                      key={row.id}
+                      SlotId={row.SlotId}
+                      DayName={row.DayName}
+                      Hour={row.StartTime}
+                      // isSelected={selectedRow === row}
+                      timeValueChangeHandler={() =>
+                        handleEditTimeValueChange(event)
+                      }
+                      deleteClickHandler={() => handleDelete(row)}
+                      editConfirmHandler={() => handleEditConfirm(row)}
+                    />
+                  );
+                })
+              )}
+            </Tbody>
+          </Table>
+        }
       </CardBody>
     </Card>
   );

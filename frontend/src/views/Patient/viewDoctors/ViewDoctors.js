@@ -16,79 +16,34 @@ export function ViewDoctors() {
 
   const [filterParams, setFilterParams] = useState({
     speciality: "",
-    date: [],
-    hour: [],
-    id: "",
+    startDate: [],
+    endDate: [],
+    startHour: [],
+    startHour: [],
   });
-  const { id } = useParams();
-  const { user } = useAuthContext();
-  const Authorization = `Bearer ${user.token}`;
-  // TODO: change this to grab the specialities from the backend
-  const options = [
-    { label: "Cardiology", value: "Cardiology" },
-    { label: "Dermatology", value: "Dermatology" },
-    { label: "Endocrinology", value: "Endocrinology" },
-    { label: "Gastroenterology", value: "Gastroenterology" },
-    { label: "Hematology", value: "Hematology" },
-    { label: "Infectious Disease", value: "Infectious Disease" },
-    { label: "Nephrology", value: "Nephrology" },
-    { label: "Neurology", value: "Neurology" },
-    { label: "Oncology", value: "Oncology" },
-    { label: "Ophthalmology", value: "Ophthalmology" },
-    { label: "Orthopedics", value: "Orthopedics" },
-    { label: "Otolaryngology", value: "Otolaryngology" },
-    { label: "Pediatrics", value: "Pediatrics" },
-  ];
-  const initialRender = useRef(true);
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-    } else {
-      const url = API_PATHS.viewFilteredDoctors;
-      axios
-        .get(url, { params: filterParams, headers: { Authorization } })
-        .then((response) => {
-          setData(response.data);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [filterParams]);
 
   const [specialityFilterValue, setSpecialityFilterValue] = useState("");
   const [dayFilterValue, setDayFilterValue] = useState([]);
   const [hourFilterValue, setHourFilterValue] = useState([]);
   const [dayHourFilterValue, setDayHourFilterValue] = useState([]);
 
-  //add date and hour
-  const handleFilterOnChange = (value) => {
-    setFilterParams({
-      ...filterParams,
-      speciality: specialityFilterValue,
-      date: dayFilterValue,
-      hour: hourFilterValue,
-      id: id,
-    });
-  };
+  const [startDateFilterVal, setStartDateFilterVal] = useState([]);
+  const [endDateFilterVal, setEndDateFilterVal] = useState([]);
+  const [startHourFilterVal, setStartHourFilterVal] = useState([]);
+  const [endHourFilterVal, setEndHourFilterVal] = useState([]);
 
-  const handleSpecialityFilter = (event) => {
-    setSpecialityFilterValue(event.target.value);
-  };
+  const [nameSearchValue, setNameSearchValue] = useState("");
+  const [specialitySearchValue, setSpecialitySearchValue] = useState("");
 
-  const handleDateFilter = (event) => {
-    setDayFilterValue(event.target.value);
-  };
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
 
-  const handleHourFilter = (event) => {
-    setHourFilterValue(event.target.value);
-  };
-
-  const handleDateHourValue = (event) => {
-    setDayHourFilterValue(event.target.value);
-    const newDate = new Date(event.target.value);
-    const newHour = newDate.getHours() + newDate.getMinutes() / 100;
-    setDayFilterValue(newDate);
-    setHourFilterValue(newHour);
-  };
+  const options = data
+    .map((doctor) => ({
+      label: doctor.Speciality,
+      value: doctor.Speciality,
+    }))
+    .filter((v, i, a) => a.findIndex((t) => t.value === v.value) === i);
 
   useEffect(() => {
     const url = API_PATHS.viewDoctors;
@@ -100,8 +55,68 @@ export function ViewDoctors() {
       .catch((err) => console.log(err));
   }, [searchParams]);
 
-  const [nameSearchValue, setNameSearchValue] = useState("");
-  const [specialitySearchValue, setSpecialitySearchValue] = useState("");
+  const initialRender = useRef(true);
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      const url = API_PATHS.filterDoctorSlotEdition;
+      axios
+        .get(url, { params: filterParams, headers: { Authorization } })
+        .then((response) => {
+          setData(response.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [filterParams]);
+
+  //add date and hour
+  const handleFilterOnChange = (value) => {
+    setFilterParams({
+      ...filterParams,
+      speciality: specialityFilterValue,
+      startDate: startDateFilterVal,
+      endDate: endDateFilterVal,
+      startHour: startHourFilterVal,
+      endHour: endHourFilterVal,
+    });
+  };
+
+  const handleSpecialityFilter = (event) => {
+    setSpecialityFilterValue(event.target.value);
+  };
+
+  // const handleDateFilter = (event) => {
+  //   setDayFilterValue(event.target.value);
+  // };
+
+  // const handleHourFilter = (event) => {
+  //   setHourFilterValue(event.target.value);
+  // };
+
+  const handleStartDateFilterVal = (event) => {
+    setStartDateFilterVal(event.target.value);
+  };
+
+  const handleEndDateFilterVal = (event) => {
+    setEndDateFilterVal(event.target.value);
+  };
+
+  const handleStartHourFilterVal = (event) => {
+    setStartHourFilterVal(event.target.value);
+  };
+
+  const handleEndHourFilterVal = (event) => {
+    setEndHourFilterVal(event.target.value);
+  };
+
+  const handleDateHourValue = (event) => {
+    setDayHourFilterValue(event.target.value);
+    const newDate = new Date(event.target.value);
+    const newHour = newDate.getHours() + newDate.getMinutes() / 100;
+    setDayFilterValue(newDate);
+    setHourFilterValue(newHour);
+  };
 
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
@@ -117,9 +132,10 @@ export function ViewDoctors() {
     setHourFilterValue([]);
     setFilterParams({
       speciality: "",
-      date: [],
-      hour: [],
-      id: id,
+      startDate: [],
+      endDate: [],
+      startHour: [],
+      startHour: [],
     });
   };
 
@@ -165,32 +181,47 @@ export function ViewDoctors() {
           </select>
 
           {/* <Input
-            // placeholder="Select Date and Time"
-            size="ld"
-            type="date"
-            value={dayFilterValue}
-            onChange={handleDateFilter}
-          />
-
-          <Input
-            // placeholder="Select Date and Time"
-            size="ld"
-            // type="time"
-            placeholder="Time format: HH.MM"
-            type="number"
-            min="0"
-            max="23"
-            step="0.01"
-            value={hourFilterValue}
-            onChange={handleHourFilter}
-          /> */}
-
-          <Input
             placeholder="Select Date and Time"
             size="md"
             type="datetime-local"
             value={dayHourFilterValue}
             onChange={handleDateHourValue}
+          /> */}
+
+          {/* startDate */}
+          <Input
+            placeholder="Select Date and Time"
+            size="md"
+            type="date"
+            value={startDateFilterVal}
+            onChange={handleStartDateFilterVal}
+          />
+
+          {/* endDate */}
+          <Input
+            placeholder="Select Date and Time"
+            size="md"
+            type="date"
+            value={endDateFilterVal}
+            onChange={handleEndDateFilterVal}
+          />
+
+          {/* startHour */}
+          <Input
+            placeholder="Select Date and Time"
+            size="md"
+            type="time"
+            value={startHourFilterVal}
+            onChange={handleStartHourFilterVal}
+          />
+
+          {/* endHour */}
+          <Input
+            placeholder="Select Date and Time"
+            size="md"
+            type="time"
+            value={endHourFilterVal}
+            onChange={handleEndHourFilterVal}
           />
 
           <Button onClick={handleFilterOnChange} marginLeft={4}>

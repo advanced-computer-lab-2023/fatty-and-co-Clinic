@@ -33,11 +33,12 @@ const doctorSchema = new Schema(
     Speciality: {
       type: String,
       lowercase: true,
-      required: false,
+      required: true,
     },
     Wallet: {
       type: Number,
-      required: false,
+      required: true,
+      default: 0,
     },
     //Adding working days and working hours to doctor
     //to get available timings of sessions for patients.

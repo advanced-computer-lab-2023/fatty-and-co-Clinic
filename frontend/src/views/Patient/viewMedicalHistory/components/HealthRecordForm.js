@@ -24,7 +24,7 @@ import { useAuthContext } from "hooks/useAuthContext";
 function HealthRecordForm() {
   const { dispatch } = useMedicalHistoryContext();
   const { user } = useAuthContext();
-  const [ file, setFile ] = useState(null);
+  const [file, setFile] = useState(null);
   const Authorization = `Bearer ${user.token}`;
 
   const textColor = useColorModeValue("gray.700", "white");
@@ -50,13 +50,16 @@ function HealthRecordForm() {
               e.preventDefault();
               const formData = new FormData();
               formData.append("file", file);
-              const response = await fetch(API_PATHS.uploadFile+user.username, {
-                method: "POST",
-                headers: {
-                  Authorization: Authorization,
-                },
-                body: formData,
-              });
+              const response = await fetch(
+                API_PATHS.uploadFile + user.username,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: Authorization,
+                  },
+                  body: formData,
+                }
+              );
               const data = await response.json();
               if (response.ok) {
                 toast({
@@ -106,6 +109,12 @@ function HealthRecordForm() {
                 required
                 onChange={(e) => setFile(e.target.files[0])}
               />
+              {file && (
+                <Text fontSize="sm" color="gray.500" fontWeight="bold">
+                  {" "}
+                  {file.name}{" "}
+                </Text>
+              )}
 
               <Button
                 colorScheme="teal"
