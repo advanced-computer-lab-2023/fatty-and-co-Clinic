@@ -1,5 +1,8 @@
 const express = require("express");
 const {
+  cancelAppForFam,
+  cancelAppForSelf,
+  reschedulePatient,
   getAppointmentsDoc,
   getAppointmentsPat,
   findDoctorPatients,
@@ -10,6 +13,7 @@ const {
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
   testAppointRef,
+  rescheduleAppointmentPatient
 } = require("../controllers/appointmentController");
 
 
@@ -55,7 +59,7 @@ router.get("/searchpatient", checkDoctor, searchPatient);
  * @access Doctor
  */
 router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
-
+router.post("/rescheduleAppointmentPatient", checkPatient, rescheduleAppointmentPatient);
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient
@@ -67,13 +71,17 @@ router.get("/filterAppointmentsByStatusDoc", checkPatient, filterAppointmentsByS
 router.get("/filterAppointmentsByStatusPat", checkPatient, filterAppointmentsByStatusPat);
 router.get("/filterAppointmentsByDateDoc", checkPatient, filterAppointmentsByDateDoc);
 router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
-
+router.patch("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
 
 
 router.get("/testAppRef", testAppointRef);
 
-router.post("/createAppointment", createAppointment);
+router.post("/createAppointment",checkPatient, createAppointment);
+router.post("/rescheduleForPatient",checkPatient,reschedulePatient);
 
+// Cancel for family member + for myself
 
+router.patch("/cancelAppFam",checkPatient,cancelAppForFam)
+router.patch("/cancelAppointment",checkPatient,cancelAppForSelf)
 
 module.exports = router;
