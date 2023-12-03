@@ -9,6 +9,7 @@ import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
 import html2canvas from "html2canvas";
 import jsPdf from "jspdf";
+import logo from "assets/img/ShebeenElkom.png";
 import {
   Box,
   Grid,
@@ -209,7 +210,7 @@ function PrescriptionTable() {
                     </Td>
                     <Td>
                       {prescription && prescription.Date
-                        ? prescription.Date
+                        ?  new Date(prescription.Date).toLocaleDateString("en-GB")
                         : "N/A"}
                     </Td>
                     <Td>
@@ -242,7 +243,7 @@ function PrescriptionTable() {
 
             <ModalBody>
               <p>Doctor Name: {selectedPrescription.DoctorName}</p>
-              <p>Date: {selectedPrescription.Date}</p>
+              <p>Date: {new Date(selectedPrescription.Date).toLocaleDateString("en-GB")}</p>
               <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
               <p>Status: {selectedPrescription.Status}</p>
               <p>Medicines:</p>
@@ -253,26 +254,53 @@ function PrescriptionTable() {
               </ul>
               <Button
                 id="print-button"
+                style={{ marginTop: "20px" }}
                 onClick={(e) => {
                   const doc = new jsPdf();
                   //write the prescription details text with css
-                  doc.setTextColor('blue');
-                  doc.text("Prescription", 10 ,10);
-                  doc.setTextColor('black');
-                  doc.setFontSize(14);
-                  doc.text("Doctor Name: " + selectedPrescription.DoctorName, 15, 20);
-                  doc.text("Date: " + selectedPrescription.Date, 15, 30);
-                  doc.text("Diagnosis: " + selectedPrescription.Diagnosis, 15, 40);
-                  doc.text("Status: " + selectedPrescription.Status, 15, 50);
-                  doc.text("Medicines: ", 15, 60);
-                  
+                  let y = 23;
+                  doc.addImage(logo, 50, 10, 20, 20);
+                  doc.setTextColor("teal");
+                  doc.setFontSize(20);
+                  doc.text("SHEBEEN HEALTH ClINC", 75, y);
+                  doc.setTextColor("black");
+                  doc.setFontSize(16);
+                  y += 15;
+                  doc.text("Prescription", 15, y);
+                  doc.setFontSize(10);
+                  y += 8;
+                  doc.text(
+                    "Patient Name: " + selectedPrescription.PatientName,
+                    20,
+                    y
+                  );
+                  y += 8;
+                  doc.text("Date: " + new Date(selectedPrescription.Date).toLocaleDateString("en-GB"), 20, y);
+                  y += 8;
+                  doc.text(
+                    "Diagnosis: " + selectedPrescription.Diagnosis,
+                    20,
+                    y
+                  );
+                  y += 8;
+                  doc.text("Status: " + selectedPrescription.Status, 20, y);
+                  y += 8;
+                  doc.text("Medicines: ", 20, y);
                   doc.setFontSize(12);
+                  y += 8;
                   //write the medicines list with css
-                  let y = 70;
                   selectedPrescription.Medicine.forEach((medicine, index) => {
-                    doc.text("- "+medicine.Name, 20, y);
+                    doc.text(medicine.Name, 25, y);
                     y += 10;
                   });
+                  doc.setFontSize(10);
+                  doc.text(
+                    "Doctor Signature " ,
+                    150,
+                    y
+                  );
+                  y += 8;
+                  doc.text(selectedPrescription.DoctorName, 150, y);
 
                   doc.save("Prescription.pdf");
                 }}
