@@ -57,7 +57,11 @@ function PrescriptionTable() {
     // Fetch all prescriptions to get unique doctor names
 
     axios
-      .get(API_PATHS.viewPrescriptions)
+      .get(API_PATHS.viewPrescriptions, {
+        headers: {
+          Authorization: Authorization,
+        },
+      })
       .then((response) => {
         const uniqueNames = new Set();
         response.data.forEach((prescription) => {
