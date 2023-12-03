@@ -94,6 +94,17 @@ const getPatient = async (req, res) => {
   }
 };
 
+const getPatientInfo = async (req, res) => {
+  try{
+    var username = req.user.Username;
+    const patient = await patientModel.findOne({ Username: username });
+    const user = await systemUserModel.findOne({ Username: username });
+    res.status(200).send({patient, user});
+  }catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
 //find patient by username
 const getPatientUsername = async (req, res) => {
   try {
@@ -1622,6 +1633,7 @@ module.exports = {
   getAllPatients,
   deletePatient,
   getPatient,
+  getPatientInfo,
   updatePatient,
   selectPrescription,
   getEmergencyContact,
