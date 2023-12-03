@@ -38,6 +38,7 @@ import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
+import PatientProfile from "views/Patient/viewProfile";
 
 import {
   HomeIcon,
@@ -347,6 +348,13 @@ var dashRoutes = [
     rtlName: "لوحة القيادة",
     icon: <RocketIcon color="inherit" />,
     component: WalletPayment,
+    layout: "/patient",
+    show: false,
+  },
+  {
+    path: "/patient-profile",
+    name: "View patient profile",
+    component: PatientProfile,
     layout: "/patient",
     show: false,
   },
