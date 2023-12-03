@@ -269,12 +269,12 @@ function PrescriptionTable() {
                   doc.text("Prescription", 15, y);
                   doc.setFontSize(10);
                   y += 8;
-                  doc.text(
-                    "Patient Name: " + selectedPrescription.PatientName,
-                    20,
-                    y
-                  );
-                  y += 8;
+                  // doc.text(
+                  //   "Patient Name: " + ,
+                  //   20,
+                  //   y
+                  // );
+                  // y += 8;
                   doc.text("Date: " + new Date(selectedPrescription.Date).toLocaleDateString("en-GB"), 20, y);
                   y += 8;
                   doc.text(
