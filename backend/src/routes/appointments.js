@@ -13,11 +13,12 @@ const {
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
   testAppointRef,
-  rescheduleAppointmentPatient
+  rescheduleAppointmentPatient,reschedulefamilymember,
+  createAppointment
 } = require("../controllers/appointmentController");
 
 
-const {createAppointment} = require("../controllers/testController");
+//const {createAppointment} = require("../controllers/testController");
 const { checkDoctor, checkPatient } = require("../common/middleware/checkType");
 
 const router = express.Router();
@@ -60,6 +61,7 @@ router.get("/searchpatient", checkDoctor, searchPatient);
  */
 router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
 router.post("/rescheduleAppointmentPatient", checkPatient, rescheduleAppointmentPatient);
+router.post("/rescheduleAppointmentfamilymember", checkPatient, reschedulefamilymember);
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient

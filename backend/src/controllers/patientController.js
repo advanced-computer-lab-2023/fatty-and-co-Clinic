@@ -477,7 +477,7 @@ const getAmountSubscription = async (req, res) => {
     const patientRelatives = await familyMemberModel
       .find({
         $or: [
-          { Patient: patient, FamilyMem: { $ne: null } },
+          { Patient: patient},
           { FamilyMem: patient },
         ],
       })
@@ -712,12 +712,13 @@ const payForFamSubscription = async (req, res) => {
     const { PackageName, NationalId } = req.body;
     const Package = await packageModel.findOne({ Name: PackageName });
     const patient = await patientModel.findOne({ Username: curr_user });
+    const famMem= await patientModel.findOne({NationalId:NationalId})
     const relative = await familyMemberModel
-      .findOne({ Patient: patient, NationalId: NationalId })
+      .findOne({ Patient: patient, FamilyMem:famMem})
       .populate("Patient")
       .populate("FamilyMem");
     const subscription = await subscriptionModel
-      .findOne({ FamilyMem: relative })
+      .findOne({ Patient: relative.FamilyMem })
       .populate("Package")
       .populate("FamilyMem");
     const patSubscription = await subscriptionModel
@@ -730,12 +731,8 @@ const payForFamSubscription = async (req, res) => {
     }
     if (relative == null) {
       res.status(400).send({ error: "Wrong National Id or not relative!" });
-      return;
-    } else if (relative.FamilyMem != null) {
-      res
-        .status(400)
-        .send({ error: "Cannot subscribe for another system user!" });
-    } else {
+      return;} 
+    else{  
       const currentDate = new Date();
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
@@ -784,7 +781,7 @@ const payForFamSubscription = async (req, res) => {
       ) {
         if (patient.Wallet > amount) {
           const patient12 = await subscriptionModel.findOneAndUpdate(
-            { FamilyMem: relative },
+            { Patient: relative.FamilyMem },
             {
               Package: Package,
               Status: "Subscribed",
@@ -798,13 +795,13 @@ const payForFamSubscription = async (req, res) => {
             { Username: curr_user },
             { Wallet: patient.Wallet - amount }
           );
-          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
+          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ famMem.Name+"!"});
         } else {
           const updateRenewal = await subscriptionModel.findOneAndUpdate(
-            { FamilyMem: relative },
+            { Patient: relative.FamilyMem },
             { Status: "Cancelled", Enddate: formattedDate, Renewaldate: null }
           );
-          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
+          res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ famMem.Name+"!"});
 
         }
       } else if (
@@ -818,7 +815,7 @@ const payForFamSubscription = async (req, res) => {
           );
 
           const patient12 = await subscriptionModel.findOneAndUpdate(
-            { FamilyMem: relative },
+            { Patient: relative.FamilyMem },
             {
               Package: Package,
               Status: "Subscribed",
@@ -827,7 +824,7 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate1,
             }
           );
-      res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
+      res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ famMem.Name+"!"});
           
         } else {
           res.status(404).json({ error: "Not enough money" });
@@ -839,7 +836,7 @@ const payForFamSubscription = async (req, res) => {
         res.status(404).json({
           error:
             "If you want to subscribe " +
-            relative.Name +
+            relative.FamilyMem.Name +
             " to the " +
             PackageName +
             " package, make sure to cancel the " +
@@ -864,14 +861,16 @@ const getAmountFam = async (req, res) => {
   try {
     const curr_user = req.user.Username;
     const { PackageName, NationalId } = req.body;
+    console.log(PackageName)
     const Package = await packageModel.findOne({ Name: PackageName });
     const patient = await patientModel.findOne({ Username: curr_user });
+    const famMem= await patientModel.findOne({NationalId:NationalId});
     const relative = await familyMemberModel
-      .findOne({ Patient: patient, NationalId: NationalId })
+      .findOne({Patient:patient,FamilyMem:famMem })
       .populate("Patient")
       .populate("FamilyMem");
     const subscription = await subscriptionModel
-      .findOne({ FamilyMem: relative })
+      .findOne({ Patient: relative.FamilyMem })
       .populate("Package")
       .populate("FamilyMem");
     const patSubscription = await subscriptionModel
@@ -881,13 +880,12 @@ const getAmountFam = async (req, res) => {
 
     if (!Package) {
       res.status(404).send({ error: "Invalid package name!" });
+      return;
     }
     if (!relative) {
       res.status(400).send({ error: "Wrong National Id or not relative!" });
-    } else if (relative.FamilyMem) {
-      res
-        .status(400)
-        .send({ error: "Cannot subscribe for another system user!" });
+      return;
+   
     } else {
       const currentDate = new Date();
       const year = currentDate.getFullYear();
@@ -1632,30 +1630,15 @@ const createFamilymember = async (req, res) => {
       LinkedPatients: [],
       Wallet: Wallet,
     });
+    
    console.log("here is the family member ");
-  // console.log(familyMember);
-   /*
-     Username,
-  Name,
-  Password,
-  Email,
-  MobileNum,
-  NationalId,
-  DateOfBirth,
-  Gender,
-  relation,
-  EmergencyContactNumber,
-  EmergencyContactName,
-  Wallet,
-   {"Username":"Mariam300"}
-   */
-
+ 
    const Familymemberfound=await patientModel.findOne({Username:Username});
    console.log(Familymemberfound);
      const currentDate = new Date();
      const dob = new Date(DateOfBirth);
-  //   const patientObjectId = currentPatient[0]._id;
-    // console.log(patientObjectId);
+     const dob1=new Date(currentPatient.DateOfBirth);
+
    const newFamilymember = await familyMemberModel.create({
        Patient: currentPatient,
        FamilyMem:Familymemberfound,
@@ -1668,11 +1651,23 @@ const createFamilymember = async (req, res) => {
        Gender: Gender,
        Relation: relation,
      });
+     const newFamilymember2 = await familyMemberModel.create({
+      Patient: Familymemberfound,
+      FamilyMem:currentPatient,
+      FamilyMemberUsername: currentPatient.Username,
+      Name: currentPatient.Name,
+      NationalId: currentPatient.NationalId,
+      Age: Math.floor(
+        Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
+      ),
+      Gender: currentPatient.Gender,
+      Relation: currentPatient.relation,
+    });
    
-    //  const newUnsubscribed = await subscriptionModel.create({
-    //    Patient: familyMember,
-    //    Status: "Unsubscribed",
-    //  });
+      const newUnsubscribed = await subscriptionModel.create({
+        Patient: Familymemberfound,
+        Status: "Unsubscribed",
+      });
      res.status(200).json(newFamilymember);
    } catch (error) {
      res.status(500).json({ error: error.message });
