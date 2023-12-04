@@ -477,7 +477,7 @@ const getAmountSubscription = async (req, res) => {
     const patientRelatives = await familyMemberModel
       .find({
         $or: [
-          { Patient: patient, FamilyMem: { $ne: null } },
+          { Patient: patient},
           { FamilyMem: patient },
         ],
       })
@@ -717,7 +717,7 @@ const payForFamSubscription = async (req, res) => {
       .populate("Patient")
       .populate("FamilyMem");
     const subscription = await subscriptionModel
-      .findOne({ FamilyMem: relative })
+      .findOne({ Patient: relative })
       .populate("Package")
       .populate("FamilyMem");
     const patSubscription = await subscriptionModel
@@ -730,12 +730,8 @@ const payForFamSubscription = async (req, res) => {
     }
     if (relative == null) {
       res.status(400).send({ error: "Wrong National Id or not relative!" });
-      return;
-    } else if (relative.FamilyMem != null) {
-      res
-        .status(400)
-        .send({ error: "Cannot subscribe for another system user!" });
-    } else {
+      return;} 
+    else{  
       const currentDate = new Date();
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
@@ -784,7 +780,7 @@ const payForFamSubscription = async (req, res) => {
       ) {
         if (patient.Wallet > amount) {
           const patient12 = await subscriptionModel.findOneAndUpdate(
-            { FamilyMem: relative },
+            { Patient: relative },
             {
               Package: Package,
               Status: "Subscribed",
@@ -801,7 +797,7 @@ const payForFamSubscription = async (req, res) => {
           res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
         } else {
           const updateRenewal = await subscriptionModel.findOneAndUpdate(
-            { FamilyMem: relative },
+            { Patient: relative },
             { Status: "Cancelled", Enddate: formattedDate, Renewaldate: null }
           );
           res.status(200).json({success:"Amount paid "+amount +" after a discount of "+discount+"%"+ " for "+ relative.Name+"!"});
@@ -818,7 +814,7 @@ const payForFamSubscription = async (req, res) => {
           );
 
           const patient12 = await subscriptionModel.findOneAndUpdate(
-            { FamilyMem: relative },
+            { Patient: relative },
             {
               Package: Package,
               Status: "Subscribed",
@@ -867,7 +863,7 @@ const getAmountFam = async (req, res) => {
     const Package = await packageModel.findOne({ Name: PackageName });
     const patient = await patientModel.findOne({ Username: curr_user });
     const relative = await familyMemberModel
-      .findOne({ Patient: patient, NationalId: NationalId })
+      .findOne({ $or: [{ Patient: patient }, { FamilyMem: patient }], NationalId: NationalId })
       .populate("Patient")
       .populate("FamilyMem");
     const subscription = await subscriptionModel
