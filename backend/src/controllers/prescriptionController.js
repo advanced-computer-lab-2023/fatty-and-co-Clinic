@@ -32,5 +32,16 @@ const addPrescription = async (req, res) => {
   }
 };
 
+const updatePrescription = async (req, res) => {
+  try {
+    const { prescriptionId, medicines } = req.body;
+    const prescription = await prescriptionsModel.findById(prescriptionId);
+    prescription.Medicine = medicines;
+    await prescription.save();
+    res.status(200).json(prescription);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 
-module.exports = { addPrescription };
+module.exports = { addPrescription, updatePrescription };
