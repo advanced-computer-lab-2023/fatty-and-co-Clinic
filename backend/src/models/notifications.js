@@ -15,10 +15,6 @@ const notificationSchema = new Schema(
       type: String,
       required: true,
     },
-    Date: {
-      type: Date,
-      required: true,
-    },
   },
   { timestamps: true }
 );
