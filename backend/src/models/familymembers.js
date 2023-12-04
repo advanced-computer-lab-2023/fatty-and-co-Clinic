@@ -14,10 +14,6 @@ const familyMemberSchema = new Schema(
       ref: "Patient",
       required: false,
     },
-    FamilyMemberUsername: {
-      type: String,
-      required: false,
-    },
     Name: {
       type: String,
       required: true,
@@ -26,7 +22,7 @@ const familyMemberSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
+      unique: true,  //changed that false to test
     },
     Age: {
       type: Number,
@@ -40,7 +36,7 @@ const familyMemberSchema = new Schema(
     Relation: {
       type: String,
       enum: ["Spouse", "Child"],
-      required: true,
+      required: false,
     },
   },
   { timestamps: true }
