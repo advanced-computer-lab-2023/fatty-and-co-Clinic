@@ -602,8 +602,8 @@ const cancelAppForFam = async (req, res) => {
 
      const patientSignedIn= req.user.Username
      const {doctorUsername,patientUsername}=req.body
-     const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientSignedIn, Status:"Upcoming"})
-     const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientSignedIn})
+     const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername, Status:"Upcoming"})
+     const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername})
      const currDate= new Date()
      var refund=0
      if(!upcomingApp && existApp){
@@ -611,7 +611,7 @@ const cancelAppForFam = async (req, res) => {
       return;
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
-      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+      await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
       res.status(200).json("Appointment cancelled successfully!")
      }
      else{
@@ -621,8 +621,8 @@ const cancelAppForFam = async (req, res) => {
      const packDisc= package?package.Package.Family_Discount:0
      const refund= getSessionPrice(doctor.HourlyRate,packDisc).toFixed(2)
      await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
-     await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-  
+     await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+     res.status(200).json(`Appointment cancelled and an amount of ${refund} refund restored successfully!`)
   }
     
   } catch (error) {
@@ -659,6 +659,7 @@ const cancelAppForSelf = async (req, res) => {
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+     res.status(200).json("Appointment cancelled successfully!")
   
   }
     
