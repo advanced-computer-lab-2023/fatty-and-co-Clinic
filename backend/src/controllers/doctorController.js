@@ -8,19 +8,6 @@ const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 const subscriptionModel = require("../models/subscriptions");
 const { Int32 } = require("bson");
-const nodemailer = require("nodemailer");
-
-
-const transporter = nodemailer.createTransport({
-  //service: 'gmail',
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "shebeenhealthclinic@gmail.com",
-    pass: "xojm teqp otis nknr",
-  },
-});
 
 // I think this is useless?
 // create a doctor

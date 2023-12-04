@@ -7,7 +7,6 @@ const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
-const nodemailer = require("nodemailer");
 const prescriptionModel = require("../models/prescriptions");
 const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
@@ -31,17 +30,6 @@ const {
 
 } = require("../common/utils/generators");
 //hi Kholoud
-
-const transporter = nodemailer.createTransport({
-  //service: 'gmail',
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "shebeenhealthclinic@gmail.com",
-    pass: "xojm teqp otis nknr",
-  },
-});
 
 // const createPatient = async (req, res) => {
 //   const {

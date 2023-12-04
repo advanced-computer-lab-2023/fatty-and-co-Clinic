@@ -9,7 +9,19 @@ const docSlotsModel = require("../models/docSlots");
 const doctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
 
+const nodemailer = require("nodemailer");
 
+
+const transporter = nodemailer.createTransport({
+  //service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "shebeenhealthclinic@gmail.com",
+    pass: "xojm teqp otis nknr",
+  },
+});
 
 // //Filter by date mengheir time wala be time?
 // const getAppointments = async (req, res) => {
@@ -739,6 +751,9 @@ const rescheduleAppointmentPatient= async(req,res) =>{
     const hasappointment=await appointmentModel.findOne({DoctorUsername:doctorUsername,
     PatientUsername:PatientUser,Status:"Upcoming"});
     const Patient=await patientModel.findOne({Username:PatientUser});
+    const user = await User.findOne({Username: PatientUser});
+    const doc = await User.findOne({Username: doctorUsername});
+
   //  console.log("hhh"+hasappointment);
   //  console.log("1");
   let timeinhour=newDate.getUTCHours();
@@ -814,6 +829,18 @@ else if (!isSlotAvailable){
         Status:"Upcoming",Date:newDate
       }
      )
+
+     await transporter.sendMail({
+      to: user.Email,
+      subject: "Rescheduled Appointment",
+      text: `Your Appointment with Dr. ${Doctor.Name} has been rescheduled to ${newDate}`,
+    });
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "Rescheduled Appointment",
+      text: `Your Appointment with ${Patient.Name} has been rescheduled to ${newDate}`,
+    });
     res.status(200).json(newappointment);
   }
   } catch (error) {
@@ -825,6 +852,10 @@ const reschedulefamilymember = async (req, res) => {
   const { doctorUsername, Familymemberusername, date } = req.body;
   const newDate = new Date(date);
   try {
+
+    const familyMember = await User.findOne({Username: Familymemberusername});
+    const doc = await User.findOne({Username: doctorUsername});
+
     const rescheduledappointment=await appointmentModel.findOneAndUpdate(
       {DoctorUsername:doctorUsername,
         PatientUsername:Familymemberusername,Status:"Upcoming"},{Status:"Rescheduled"}
@@ -838,6 +869,19 @@ const reschedulefamilymember = async (req, res) => {
         BookedBy:currentuser,
       }
      )
+
+
+     await transporter.sendMail({
+      to: familyMember.Email,
+      subject: "Rescheduled Appointment",
+      text: `Your Appointment with Dr. ${Doctor.Name} has been rescheduled to ${newDate}`,
+    });
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "Rescheduled Appointment",
+      text: `Your Appointment with ${Patient.Name} has been rescheduled to ${newDate}`,
+    });
     res.status(200).json(newappointment);
     res.status(201).json(newApp);
   } catch (error) {
