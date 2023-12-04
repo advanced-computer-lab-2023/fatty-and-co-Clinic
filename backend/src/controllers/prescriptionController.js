@@ -32,13 +32,14 @@ const addPrescription = async (req, res) => {
   }
 };
 
-const updatePrescription = async (req, res) => {
+
+const addMedToPrescription = async (req, res) => {
   try {
     const { appointmentId, medicines } = req.body;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
-    prescription.Medicine = medicines;
+    prescription.Medicine.push(medicines);
     await prescription.save();
     res.status(200).json(prescription);
   } catch (error) {
@@ -46,4 +47,19 @@ const updatePrescription = async (req, res) => {
   }
 };
 
-module.exports = { addPrescription, updatePrescription };
+const deleteMedFromPrescription = async (req, res) => {
+    try {
+        const { appointmentId, medicines } = req.body;
+        const prescription = await prescriptionsModel.findOne({
+        AppointmentId: appointmentId,
+        });
+        prescription.Medicine.pull(medicines);
+        await prescription.save();
+        res.status(200).json(prescription);
+    } catch (error) {
+        res.status(400).send({ message: error.message });
+    }
+    };
+
+
+module.exports = { addPrescription, addMedToPrescription, deleteMedFromPrescription};
