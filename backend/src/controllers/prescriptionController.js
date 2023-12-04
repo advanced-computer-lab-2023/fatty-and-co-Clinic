@@ -34,8 +34,10 @@ const addPrescription = async (req, res) => {
 
 const updatePrescription = async (req, res) => {
   try {
-    const { prescriptionId, medicines } = req.body;
-    const prescription = await prescriptionsModel.findById(prescriptionId);
+    const { appointmentId, medicines } = req.body;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
     prescription.Medicine = medicines;
     await prescription.save();
     res.status(200).json(prescription);
