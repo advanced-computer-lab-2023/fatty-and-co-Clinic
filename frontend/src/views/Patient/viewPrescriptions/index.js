@@ -251,9 +251,9 @@ function PrescriptionTable() {
               <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
               <p>Status: {selectedPrescription.Status}</p>
               <p>Medicines:</p>
-              <ul style={{ listStyleType: "lower-alpha", marginLeft: "40px" }}>
+              <ul style={{  marginLeft: "40px" }}>
                 {selectedPrescription.Medicine.map((medicine, index) => (
-                  <li key={index}>{medicine.Name}</li>
+                  <li key={index}>{medicine.Name + ", " + medicine.Dosage+" mg"} </li>
                 ))}
               </ul>
               <Button
@@ -290,11 +290,16 @@ function PrescriptionTable() {
                   doc.text("Status: " + selectedPrescription.Status, 20, y);
                   y += 8;
                   doc.text("Medicines: ", 20, y);
+                  y += 8;
+                  
+                  doc.text("name", 25, y);
+                  doc.text("dosage", 75, y);
                   doc.setFontSize(12);
                   y += 8;
                   //write the medicines list with css
                   selectedPrescription.Medicine.forEach((medicine, index) => {
                     doc.text(medicine.Name, 25, y);
+                    doc.text(medicine.Dosage+" mg", 75, y);
                     y += 10;
                   });
                   doc.setFontSize(10);
