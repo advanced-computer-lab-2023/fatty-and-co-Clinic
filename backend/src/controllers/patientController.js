@@ -7,7 +7,9 @@ const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
+const nodemailer = require("nodemailer");
 const prescriptionModel = require("../models/prescriptions");
+const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
@@ -17,6 +19,16 @@ const {
   getFileByFilename,
 } = require("../common/middleware/upload");
 
+const transporter = nodemailer.createTransport({
+  //service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "shebeenhealthclinic@gmail.com",
+    pass: "xojm teqp otis nknr",
+  },
+});
 
 // const createPatient = async (req, res) => {
 //   const {
@@ -1583,6 +1595,40 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
+const followupAppointment = async (req, res) => {
+
+  try {
+    const doctorUsername = req.query.DoctorUsername;
+    const patientUsername = req.user.Username;
+    const date = new Date(req.query.date);
+    const today = new Date();
+    const patient = await patientModel.findOne({
+      Username: patientUsername,
+    });
+    const doctor = await doctorModel.findOne({
+      Username: doctorUsername,
+    });
+
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      const request = await requestModel.create({
+        DoctorUsername: doctorUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Pending",
+        FollowUp: true,
+        Date: date,
+      });
+      res.status(200).json(request);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 const getFamSessionCost = async (req,res) => {
   const username = req.user.Username;
@@ -1637,5 +1683,6 @@ module.exports = {
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
   getWalletAmount,
+  followupAppointment,
 };
 
