@@ -32,7 +32,6 @@ const addPrescription = async (req, res) => {
   }
 };
 
-
 const addMedToPrescription = async (req, res) => {
   try {
     const { appointmentId, medicines } = req.body;
@@ -47,19 +46,44 @@ const addMedToPrescription = async (req, res) => {
   }
 };
 
+// const deleteMedFromPrescription = async (req, res) => {
+//     try {
+//         const { appointmentId, medicines } = req.body;
+//         const prescription = await prescriptionsModel.findOne({
+//         AppointmentId: appointmentId,
+//         });
+//         prescription.Medicine.pull(medicines);
+//         await prescription.save();
+//         res.status(200).json(prescription);
+//     } catch (error) {
+//         res.status(400).send({ message: error.message });
+//     }
+//     };
+
 const deleteMedFromPrescription = async (req, res) => {
-    try {
-        const { appointmentId, medicines } = req.body;
-        const prescription = await prescriptionsModel.findOne({
-        AppointmentId: appointmentId,
-        });
-        prescription.Medicine.pull(medicines);
-        await prescription.save();
-        res.status(200).json(prescription);
-    } catch (error) {
-        res.status(400).send({ message: error.message });
+  const { appointmentId, medicineName } = req.body;
+  try {
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+    const medicineIndex = prescription.Medicine.findIndex(
+      (medicine) => medicine.Name === medicineName
+    );
+
+    if (medicineIndex === -1) {
+      return res
+        .status(404)
+        .json({ message: "Medicine not found in the prescription." });
     }
-    };
-
-
-module.exports = { addPrescription, addMedToPrescription, deleteMedFromPrescription};
+    prescription.Medicine.splice(medicineIndex, 1);
+    const updatedPrescription = await prescription.save();
+    res.status(200).json(updatedPrescription);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+module.exports = {
+  addPrescription,
+  addMedToPrescription,
+  deleteMedFromPrescription,
+};
