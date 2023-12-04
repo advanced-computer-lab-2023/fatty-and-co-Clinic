@@ -86,8 +86,44 @@ const deleteMedFromPrescription = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const updateDosage = async (req, res) => {
+      const AppointmentId = req.body.AppointmentId;
+      const medicineName = req.body.medicineName;
+      const newDosage  = req.body.dosage;
+      
+      
+          const prescription = await prescriptionsModel.findOne({
+            AppointmentId: AppointmentId,
+          });
+
+      if (!prescription) {
+        return res.status(404).json({ message: "Prescription not found." });
+      }
+
+      const medicineToUpdate = prescription.Medicine.find(
+        (medicine) => medicine.Name === medicineName
+      );
+
+     
+      if (!medicineToUpdate) {
+        return res
+          .status(404)
+          .json({ message: "Medicine not found in the prescription." });
+      }
+
+      
+      medicineToUpdate.Dosage = newDosage;
+
+      const updatedPrescription = await prescription.save();
+
+      res.status(200).json({
+        message: "Medicine dosage updated successfully.",
+        prescription: updatedPrescription,
+      });
+};
 module.exports = {
   addPrescription,
   addMedToPrescription,
   deleteMedFromPrescription,
+  updateDosage,
 };
