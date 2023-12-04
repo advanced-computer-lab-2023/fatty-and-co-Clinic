@@ -41,19 +41,7 @@ function PackageRow(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
 
-  // handle delete
-  const handleDelete = async () => {
-    const response = await fetch(API_PATHS.deletePackage + props._id, {
-      method: "DELETE",
-      headers: { Authorization },
-    });
-    const data = await response.json();
-    if (response.ok) {
-      dispatch({ type: "SET_PACKAGE", payload: props._id });
-    } else {
-      setMessage(data.message);
-    }
-  };
+ 
 
   // handle edit
   const { isOpen, onOpen, onClose } = useDisclosure();

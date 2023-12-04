@@ -6,7 +6,7 @@ const createPackage = async (req, res) => {
   //add a new Package to the database with
   const { Name, Price, Session_Discount, Medicine_Discount, Family_Discount } =
     req.body;
-  const newPackage = new packageModel({
+    const newPackage = new packageModel({
     Name: Name,
     Price: Price,
     Session_Discount: Session_Discount,
