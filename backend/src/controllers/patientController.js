@@ -1627,6 +1627,7 @@ const createFamilymember = async (req, res) => {
       LinkedPatients: [],
       Wallet: Wallet,
     });
+    
    console.log("here is the family member ");
   // console.log(familyMember);
    /*
@@ -1649,6 +1650,7 @@ const createFamilymember = async (req, res) => {
    console.log(Familymemberfound);
      const currentDate = new Date();
      const dob = new Date(DateOfBirth);
+     const dob1=new Date(currentPatient.DateOfBirth);
   //   const patientObjectId = currentPatient[0]._id;
     // console.log(patientObjectId);
    const newFamilymember = await familyMemberModel.create({
@@ -1663,6 +1665,18 @@ const createFamilymember = async (req, res) => {
        Gender: Gender,
        Relation: relation,
      });
+     const newFamilymember2 = await familyMemberModel.create({
+      Patient: Familymemberfound,
+      FamilyMem:currentPatient,
+      FamilyMemberUsername: currentPatient.Username,
+      Name: currentPatient.Name,
+      NationalId: currentPatient.NationalId,
+      Age: Math.floor(
+        Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
+      ),
+      Gender: currentPatient.Gender,
+      Relation: currentPatient.relation,
+    });
    
     //  const newUnsubscribed = await subscriptionModel.create({
     //    Patient: familyMember,
