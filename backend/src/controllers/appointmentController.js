@@ -693,7 +693,7 @@ const createAppointment = async (req, res) => {
   const username = req.user.Username;
   var patient;
   var patNameFinal;
-  var familyMember;
+  var familymember;
   patient = await patientModel.findOne({ Username: username });
 //const familymember=null;
   const { DoctorUsername, FamMemName, Date } = req.body;
