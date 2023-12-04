@@ -91,7 +91,7 @@ const acceptDoc = async (req, res) => {
 //Create a new appointment
 const createAppointment = async (req, res) => {
   console.log("creating appointment");
-  console.log(req.user.Username)
+  console.log(req.user.Username);
   const username = req.user.Username;
   var patient;
   var patNameFinal;
@@ -287,6 +287,7 @@ const createRandomAppointment = async (req, res) => {
       PatientName: patientName,
       Status: status,
       Date: date,
+      BookedBy: patientName,
     });
     res.status(201).json(newApp);
   } catch (error) {

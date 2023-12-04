@@ -41,6 +41,10 @@ const prescriptionSchema = new Schema({
         type: String,
         required: true,
       },
+      Dosage: {
+        type: Number,
+        required: true,
+      },
     },
   ],
 });
