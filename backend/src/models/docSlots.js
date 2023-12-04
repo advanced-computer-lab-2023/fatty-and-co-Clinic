@@ -17,7 +17,7 @@ const docSlotSchema = new Schema({
     required: true,
   },
   //if you know the unwind thing do it with an array of numbers
-  StartTime: {
+  StartTime:{ 
     type: Number,
     required: false,
   },

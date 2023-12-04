@@ -24,6 +24,8 @@
     "env": "^0.0.2",
     "formik": "^2.4.5",
     "framer-motion": "^4.1.17",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "match-sorter": "6.3.0",
     "moment": "2.29.1",
     "nouislider": "15.0.0",

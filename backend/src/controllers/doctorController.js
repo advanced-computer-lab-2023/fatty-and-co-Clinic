@@ -889,6 +889,68 @@ const validateBookingDate = async (req, res) => {
     res.status(500).send({ message: "Chosen Date does not match chosen Day" });
 };
 
+const rescheduleAppointmentPatient= async(req,res) =>{
+  try {
+    const PatientUser = req.user.Username;
+    const {doctorUsername,date}=req.body;
+   const newDate = newDate(date);
+   const tmpDate = new Date(DateFinal);
+    const Patient =await patientModel.findOne({Username:PatientUser});
+    const Doctor = await doctorModel.findOne({ Username: doctorUsername });
+    const hasappointment=await appointmentModel.findOne({DoctorUsername:doctorUsername,
+    PatientUsername:PatientUser,Status:"Upcoming" })
+  const Appointmentreserved =await appointmentModel.find({DoctorUsername:doctorUsername});
+  // Check is slot is avaliable 
+//  const isslotfordoctor =await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay()});
+  let isSlotAvailable = true;
+  for (const appointment of Appointmentreserved){
+    const existingDate = new Date(appointment.Date);
+    if (newDate.getHours() === existingDate.getHours()) {
+      isSlotAvailable = false;
+      break;
+    }
+  }
+  let patientavaliable = true;
+  const patientappointments= await appointmentModel.findOne({
+    PatientUsername:PatientUser,Status:"Upcoming" });
+  for (const appointmentPatient of patientappointments){
+    const existingDate = new Date(appointmentPatient.Date);
+    if (newDate.getHours() === existingDate.getHours()) {
+      patientavaliable = false;
+      break;
+    }
+  }
+  if (!Patient){
+    res.status(500).send({message:"Wrong Patient Username "});
+  }
+ else  if (!Doctor){
+    res.status(500).send({message:"No such a doctor with username "});
+  }
+else if (!patientavaliable){
+  res.status(500).send({message:"You already have an appointment  "});
+}
+  else if (isSlotAvailable){
+    res.status(500).send({message:" This slot is not avaliable for this dctor  "});
+  }
+  else if (!hasappointment){
+    res.status(500).send({message:"You don't have any appointments with this doctor to reschdule "});
+  }
+  else {
+     const rescheduledappointment=await appointmentModel.findOneAndUpdate(
+      {DoctorUsername:doctorUsername,
+        PatientUsername:PatientUser,Status:"Upcoming"},{Status:"Rescheduled",
+      Date:newDate}
+     )
+    res.status(200).json(rescheduledappointment);
+  }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
+
+
+
+
 const viewMySlotsDoc = async (req, res) => {
   const username = req.user.Username;
 
