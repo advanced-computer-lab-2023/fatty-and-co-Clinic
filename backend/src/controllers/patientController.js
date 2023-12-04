@@ -12,6 +12,8 @@ const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+const appointmentModel = require("../models/appointments");
+
 const {
   findFiles,
   findFileByFilename,
@@ -1757,12 +1759,10 @@ const followupAppointment = async (req, res) => {
 
   try {
     const doctorUsername = req.query.DoctorUsername;
+    const familyMemberUsername = req.body.FamilyMemberUsername;
     const patientUsername = req.user.Username;
     const date = new Date(req.query.date);
     const today = new Date();
-    const patient = await patientModel.findOne({
-      Username: patientUsername,
-    });
     const doctor = await doctorModel.findOne({
       Username: doctorUsername,
     });
@@ -1771,7 +1771,27 @@ const followupAppointment = async (req, res) => {
       res.status(400).json({ error: "invalid date" });
       return;
     } else {
-      const request = await requestModel.create({
+      if(familyMemberUsername){
+        const patient = await patientModel.findOne({
+          Username: familyMemberUsername,
+        });
+        const request = await requestModel.create({
+          DoctorUsername: doctorUsername,
+          DoctorName: doctor.Name,
+          PatientUsername: patientUsername,
+          PatientName: patient.Name,
+          Status: "Pending",
+          FollowUp: true,
+          Date: date,
+        });
+        res.status(200).json(request);
+
+      }
+      else {
+        const patient = await patientModel.findOne({
+          Username: patientUsername,
+        });
+        const request = await requestModel.create({
         DoctorUsername: doctorUsername,
         DoctorName: doctor.Name,
         PatientUsername: patientUsername,
@@ -1781,6 +1801,9 @@ const followupAppointment = async (req, res) => {
         Date: date,
       });
       res.status(200).json(request);
+
+      }
+      
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
