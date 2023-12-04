@@ -7,6 +7,7 @@ const User = require("../models/systemusers");
 const { isNull } = require("util");
 const docSlotsModel = require("../models/docSlots");
 const doctorModel = require("../models/doctors");
+const notificationModel = require("../models/notifications");
 const { MongoClient } = require("mongodb");
 
 const nodemailer = require("nodemailer");
@@ -617,6 +618,8 @@ const cancelAppForFam = async (req, res) => {
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername, Status:"Upcoming"})
      const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername})
      const currDate= new Date()
+     const user = await User.findOne({Username: patientUsername});
+     const doc = await User.findOne({Username: doctorUsername});
      var refund=0
      if(!upcomingApp && existApp){
       res.status(404).json({err:"Can't cancel an appointment that's rescheduled/cancelled/completed!"})
@@ -624,6 +627,35 @@ const cancelAppForFam = async (req, res) => {
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
       await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+      
+      const ndate = new Date();
+      const patient= await patientModel.findOne({Username:patientUsername})
+      const doctor= await doctorModel.findOne({Username:doctorUsername})
+      const n1 = await notificationModel.create({
+      Title: "Cancelled Appointment",
+      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + upcomingApp.Date,
+      Username: patientUsername,
+      Date: ndate,
+    })
+
+    const n2 = await notificationModel.create({
+      Title: "Cancelled Appointment",
+      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + upcomingApp.Date,
+      Username: doctorUsername,
+      Date: ndate,
+    })
+
+    await transporter.sendMail({
+      to: user.Email,
+      subject: "Cancelled Appointment",
+      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${upcomingApp.Date}`,
+    });
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "New Appointment",
+      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
+    });
       res.status(200).json("Appointment cancelled successfully!")
      }
      else{
@@ -634,6 +666,33 @@ const cancelAppForFam = async (req, res) => {
      const refund= getSessionPrice(doctor.HourlyRate,packDisc).toFixed(2)
      await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
      await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+     const ndate = new Date();
+     const patient1= await patientModel.findOne({Username:patientUsername})
+     const n1 = await notificationModel.create({
+     Title: "Cancelled Appointment",
+     Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + upcomingApp.Date,
+     Username: patientUsername,
+     Date: ndate,
+   })
+
+   const n2 = await notificationModel.create({
+     Title: "Cancelled Appointment",
+     Message: "Cancelled appointment with " + patient1.Name +" that was scheduled on " + upcomingApp.Date,
+     Username: doctorUsername,
+     Date: ndate,
+   })
+
+   await transporter.sendMail({
+     to: user.Email,
+     subject: "Cancelled Appointment",
+     text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${upcomingApp.Date}`,
+   });
+
+   await transporter.sendMail({
+     to: doc.Email,
+     subject: "New Appointment",
+     text: `Cancelled appointment with ${patient1.Name} that was scheduled on ${upcomingApp.Date}`,
+   });
      res.status(200).json(`Appointment cancelled and an amount of ${refund} refund restored successfully!`)
   }
     
@@ -648,6 +707,8 @@ const cancelAppForSelf = async (req, res) => {
 
      const patientUsername= req.user.Username
      const {doctorUsername}=req.body
+     const user = await User.findOne({Username: PatientUsernameFinal});
+     const doc = await User.findOne({Username: DoctorUsername});
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
      const currDate= new Date();
      var refund=0
@@ -661,6 +722,36 @@ const cancelAppForSelf = async (req, res) => {
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
       await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+      
+      const ndate = new Date();
+      const patient= await patientModel.findOne({Username:patientUsername})
+      const doctor= await doctorModel.findOne({Username:doctorUsername})
+      const n1 = await notificationModel.create({
+      Title: "Cancelled Appointment",
+      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + upcomingApp.Date,
+      Username: patientUsername,
+      Date: ndate,
+    })
+
+    const n2 = await notificationModel.create({
+      Title: "Cancelled Appointment",
+      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + upcomingApp.Date,
+      Username: doctorUsername,
+      Date: ndate,
+    })
+
+    await transporter.sendMail({
+      to: user.Email,
+      subject: "Cancelled Appointment",
+      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${upcomingApp.Date}`,
+    });
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "Cancelled Appointment",
+      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
+    });
+      
       res.status(200).json("Appointment cancelled successfully!")
      }
      else{
@@ -671,6 +762,33 @@ const cancelAppForSelf = async (req, res) => {
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+     const ndate = new Date();
+    const n1 = await notificationModel.create({
+      Title: "Cancelled Appointment",
+      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + upcomingApp.Date,
+      Username: patientUsername,
+      Date: ndate,
+    })
+
+    const n2 = await notificationModel.create({
+      Title: "Cancelled Appointment",
+      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + upcomingApp.Date,
+      Username: doctorUsername,
+      Date: ndate,
+    })
+
+    await transporter.sendMail({
+      to: user.Email,
+      subject: "Cancelled Appointment",
+      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${upcomingApp.Date}`,
+    });
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "Cancelled Appointment",
+      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
+    });
+     
      res.status(200).json("Appointment cancelled successfully!")
   
   }
@@ -726,6 +844,9 @@ const createAppointment = async (req, res) => {
   const PatientName=patNameFinal.Name;
   const DoctorName = doctor.Name;
   const Status = "Upcoming";
+  const user = await User.findOne({Username: PatientUsernameFinal});
+  const doc = await User.findOne({Username: DoctorUsername});
+
   try {
     const newApp = await appointmentModel.create({
       DoctorUsername,
@@ -735,6 +856,34 @@ const createAppointment = async (req, res) => {
       Status,
       Date,
       BookedBy:patient.Username
+    });
+
+    const ndate = new Date();
+
+    const n1 = await notificationModel.create({
+      Title: "New Appointment",
+      Message: "You have successfully booked an appointment with Dr. " + DoctorName +" scheduled on " + Date,
+      Username: PatientUsernameFinal,
+      Date: ndate,
+    })
+
+    const n2 = await notificationModel.create({
+      Title: "New Appointment",
+      Message: "New appointment with " + PatientName +" scheduled on " + Date,
+      Username: DoctorUsername,
+      Date: ndate,
+    })
+
+    await transporter.sendMail({
+      to: user.Email,
+      subject: "New Appointment",
+      text: `You have successfully booked an appointment with Dr. ${DoctorName} scheduled on ${Date}`,
+    });
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "New Appointment",
+      text: `New appointment with ${patient.Name} scheduled on ${Date}`,
     });
     console.log("created");
     res.status(201).json(newApp);
@@ -830,6 +979,22 @@ else if (!isSlotAvailable){
       }
      )
 
+     const ndate = new Date();
+
+    const n1 = await notificationModel.create({
+      Title: "Rescheduled Appointment",
+      Message: "Your Appointment with Dr. " + Doctor.Name +" has been rescheduled to " + newDate,
+      Username: PatientUser,
+      Date: ndate,
+    })
+
+    const n2 = await notificationModel.create({
+      Title: "Rescheduled Appointment",
+      Message: "Your Appointment with " + Patient.Name +" has been rescheduled to " + newDate,
+      Username: doctorUsername,
+      Date: ndate,
+    })
+
      await transporter.sendMail({
       to: user.Email,
       subject: "Rescheduled Appointment",
@@ -875,6 +1040,21 @@ const reschedulefamilymember = async (req, res) => {
       }
      )
 
+     const ndate = new Date();
+
+    const n1 = await notificationModel.create({
+      Title: "Rescheduled Appointment",
+      Message: "Your Appointment with Dr. " + Doctor.Name +" has been rescheduled to " + newDate,
+      Username: Familymemberusername,
+      Date: ndate,
+    })
+
+    const n2 = await notificationModel.create({
+      Title: "Rescheduled Appointment",
+      Message: "Your Appointment with " + Patient.Name +" has been rescheduled to " + newDate,
+      Username: doctorUsername,
+      Date: ndate,
+    })
 
      await transporter.sendMail({
       to: familyMember.Email,
