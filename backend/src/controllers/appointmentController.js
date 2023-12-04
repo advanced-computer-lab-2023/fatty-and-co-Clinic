@@ -9,6 +9,8 @@ const docSlotsModel = require("../models/docSlots");
 const doctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
 
+
+
 // //Filter by date mengheir time wala be time?
 // const getAppointments = async (req, res) => {
 //   const statusInput = req.body.Status; //khod input men el front end
@@ -691,22 +693,25 @@ const createAppointment = async (req, res) => {
   const username = req.user.Username;
   var patient;
   var patNameFinal;
-
-  const { DoctorId, FamMemName, Date } = req.body;
-  console.log("body: " + req.body.FamMemName);
+  var familyMember;
+  patient = await patientModel.findOne({ Username: username });
+//const familymember=null;
+  const { DoctorUsername, FamMemName, Date } = req.body;
+ // console.log("body: " + req.body.FamMemName);
   //this patient is technically fam member
-  if (!FamMemName) {
-    patient = await patientModel.findOne({ Username: username });
-    patNameFinal = patient.Name;
+  if (FamMemName) {
+   familymember=await patientModel.findOne({Username: FamMemName});
+    patNameFinal = familymember;
   } else {
-    patient = await patientModel.findOne({ Username: username });
-    patNameFinal = FamMemName;
+    patNameFinal = patient;
   }
-  const doctor = await doctorModel.findOne({ _id: DoctorId });
-  const PatientName = patNameFinal;
-  const PatientUsernameFinal = patient.Username;
+  console.log(DoctorUsername);
+  //console.log(doctor);
+  const doctor = await doctorModel.findOne({Username:DoctorUsername});
+  console.log(doctor);
+  const PatientUsernameFinal = patNameFinal.Username;
+  const PatientName=patNameFinal.Name;
   const DoctorName = doctor.Name;
-  const DoctorUsername = doctor.Username;
   const Status = "Upcoming";
   try {
     const newApp = await appointmentModel.create({
@@ -716,13 +721,14 @@ const createAppointment = async (req, res) => {
       PatientName,
       Status,
       Date,
+      BookedBy:patient.Username
     });
     console.log("created");
     res.status(201).json(newApp);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 const rescheduleAppointmentPatient= async(req,res) =>{
   try {
     const PatientUser = req.user.Username;
@@ -744,7 +750,7 @@ const rescheduleAppointmentPatient= async(req,res) =>{
   // you need to check minute
   let isdocslotavaliable=await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay()+1,
     StartTime:combined});
-    
+     
     //console.log(newDate.getDay());
     //console.log(newDate.getUTCHours());
   // Check is slot is avaliable  as doctor don't have appointment in this slot 
@@ -813,6 +819,30 @@ else if (!isSlotAvailable){
     res.status(500).json(error);
   }
 }
+const reschedulefamilymember = async (req, res) => {
+  const currentuser = req.user.Username;
+  const { doctorUsername, Familymemberusername, date } = req.body;
+  const newDate = new Date(date);
+  try {
+    const rescheduledappointment=await appointmentModel.findOneAndUpdate(
+      {DoctorUsername:doctorUsername,
+        PatientUsername:Familymemberusername,Status:"Upcoming"},{Status:"Rescheduled"}
+     )
+     const newappointment=await appointmentModel.create(
+      {DoctorUsername:doctorUsername,
+        DoctorName:Doctor.Name,
+        PatientUsername:Familymemberusername,
+        PatientName:Patient.Name,
+        Status:"Upcoming",Date:newDate,
+        BookedBy:currentuser,
+      }
+     )
+    res.status(200).json(newappointment);
+    res.status(201).json(newApp);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
   
 module.exports = {
@@ -830,6 +860,7 @@ module.exports = {
   searchPatient,
   getAppointmentsPat,
   testAppointRef,
-  rescheduleAppointmentPatient
+  rescheduleAppointmentPatient,
+  reschedulefamilymember
 
 };
