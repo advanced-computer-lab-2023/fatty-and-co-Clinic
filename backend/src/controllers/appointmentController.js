@@ -9,6 +9,8 @@ const docSlotsModel = require("../models/docSlots");
 const doctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
 
+
+
 // //Filter by date mengheir time wala be time?
 // const getAppointments = async (req, res) => {
 //   const statusInput = req.body.Status; //khod input men el front end
@@ -600,8 +602,8 @@ const cancelAppForFam = async (req, res) => {
 
      const patientSignedIn= req.user.Username
      const {doctorUsername,patientUsername}=req.body
-     const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientSignedIn, Status:"Upcoming"})
-     const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientSignedIn})
+     const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername, Status:"Upcoming"})
+     const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername})
      const currDate= new Date()
      var refund=0
      if(!upcomingApp && existApp){
@@ -609,7 +611,7 @@ const cancelAppForFam = async (req, res) => {
       return;
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
-      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+      await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
       res.status(200).json("Appointment cancelled successfully!")
      }
      else{
@@ -619,8 +621,8 @@ const cancelAppForFam = async (req, res) => {
      const packDisc= package?package.Package.Family_Discount:0
      const refund= getSessionPrice(doctor.HourlyRate,packDisc).toFixed(2)
      await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
-     await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-  
+     await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+     res.status(200).json(`Appointment cancelled and an amount of ${refund} refund restored successfully!`)
   }
     
   } catch (error) {
@@ -657,6 +659,7 @@ const cancelAppForSelf = async (req, res) => {
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
+     res.status(200).json("Appointment cancelled successfully!")
   
   }
     
@@ -691,22 +694,25 @@ const createAppointment = async (req, res) => {
   const username = req.user.Username;
   var patient;
   var patNameFinal;
-
-  const { DoctorId, FamMemName, Date } = req.body;
-  console.log("body: " + req.body.FamMemName);
+  var familymember;
+  patient = await patientModel.findOne({ Username: username });
+//const familymember=null;
+  const { DoctorUsername, FamMemName, Date } = req.body;
+ // console.log("body: " + req.body.FamMemName);
   //this patient is technically fam member
-  if (!FamMemName) {
-    patient = await patientModel.findOne({ Username: username });
-    patNameFinal = patient.Name;
+  if (FamMemName) {
+   familymember=await patientModel.findOne({Username: FamMemName});
+    patNameFinal = familymember;
   } else {
-    patient = await patientModel.findOne({ Username: username });
-    patNameFinal = FamMemName;
+    patNameFinal = patient;
   }
-  const doctor = await doctorModel.findOne({ _id: DoctorId });
-  const PatientName = patNameFinal;
-  const PatientUsernameFinal = patient.Username;
+  console.log(DoctorUsername);
+  //console.log(doctor);
+  const doctor = await doctorModel.findOne({Username:DoctorUsername});
+  console.log(doctor);
+  const PatientUsernameFinal = patNameFinal.Username;
+  const PatientName=patNameFinal.Name;
   const DoctorName = doctor.Name;
-  const DoctorUsername = doctor.Username;
   const Status = "Upcoming";
   try {
     const newApp = await appointmentModel.create({
@@ -716,13 +722,14 @@ const createAppointment = async (req, res) => {
       PatientName,
       Status,
       Date,
+      BookedBy:patient.Username
     });
     console.log("created");
     res.status(201).json(newApp);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 const rescheduleAppointmentPatient= async(req,res) =>{
   try {
     const PatientUser = req.user.Username;
@@ -744,7 +751,7 @@ const rescheduleAppointmentPatient= async(req,res) =>{
   // you need to check minute
   let isdocslotavaliable=await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay()+1,
     StartTime:combined});
-    
+     
     //console.log(newDate.getDay());
     //console.log(newDate.getUTCHours());
   // Check is slot is avaliable  as doctor don't have appointment in this slot 
@@ -813,6 +820,35 @@ else if (!isSlotAvailable){
     res.status(500).json(error);
   }
 }
+const reschedulefamilymember = async (req, res) => {
+  const currentuser = req.user.Username;
+  const { doctorUsername, Familymemberusername, date } = req.body;
+  const newDate = new Date(date);
+  const Doctor = await doctorModel.findOne({ Username: doctorUsername });
+  console.log("Doctor");
+  console.log(Doctor);
+  const Patient =await patientModel.findOne({Username:Familymemberusername});
+  try {
+    const rescheduledappointment=await appointmentModel.findOneAndUpdate(
+      {DoctorUsername:doctorUsername,
+        PatientUsername:Familymemberusername,Status:"Upcoming"},{Status:"Rescheduled"}
+     )
+     const newappointment=await appointmentModel.create(
+      {DoctorUsername:doctorUsername,
+        DoctorName:Doctor.Name,
+        PatientUsername:Familymemberusername,
+        PatientName:Patient.Name,
+        Status:"Upcoming",
+        Date:newDate,
+        BookedBy:currentuser,
+      }
+     )
+    res.status(200).json(newappointment);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
   
 module.exports = {
@@ -830,6 +866,7 @@ module.exports = {
   searchPatient,
   getAppointmentsPat,
   testAppointRef,
-  rescheduleAppointmentPatient
+  rescheduleAppointmentPatient,
+  reschedulefamilymember
 
 };
