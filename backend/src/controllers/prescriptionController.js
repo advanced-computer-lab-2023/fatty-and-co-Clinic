@@ -34,10 +34,14 @@ const addPrescription = async (req, res) => {
 
 const addMedToPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicines } = req.body;
+    const { appointmentId, medicine, dosage } = req.body;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
+    const medicines = {
+      Name: medicine,
+      Dosage: dosage,
+    };
     prescription.Medicine.push(medicines);
     await prescription.save();
     res.status(200).json(prescription);
