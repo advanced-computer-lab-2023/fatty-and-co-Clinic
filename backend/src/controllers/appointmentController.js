@@ -851,6 +851,10 @@ const reschedulefamilymember = async (req, res) => {
   const currentuser = req.user.Username;
   const { doctorUsername, Familymemberusername, date } = req.body;
   const newDate = new Date(date);
+  const Doctor = await doctorModel.findOne({ Username: doctorUsername });
+  console.log("Doctor");
+  console.log(Doctor);
+  const Patient =await patientModel.findOne({Username:Familymemberusername});
   try {
 
     const familyMember = await User.findOne({Username: Familymemberusername});
@@ -865,7 +869,8 @@ const reschedulefamilymember = async (req, res) => {
         DoctorName:Doctor.Name,
         PatientUsername:Familymemberusername,
         PatientName:Patient.Name,
-        Status:"Upcoming",Date:newDate,
+        Status:"Upcoming",
+        Date:newDate,
         BookedBy:currentuser,
       }
      )
@@ -883,7 +888,7 @@ const reschedulefamilymember = async (req, res) => {
       text: `Your Appointment with ${Patient.Name} has been rescheduled to ${newDate}`,
     });
     res.status(200).json(newappointment);
-    res.status(201).json(newApp);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
