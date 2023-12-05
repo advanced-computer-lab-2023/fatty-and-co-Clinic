@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-// import Appointments from "./components/AppointmentTest";
+import PrescriptionTable from "../viewPrescriptions/index.js"
 
 function PatientProfile() {
   // Chakra color mode
@@ -88,6 +88,7 @@ function PatientProfile() {
         <GridItem></GridItem>
       </Grid>
       <Appointments/>
+      <PrescriptionTable></PrescriptionTable>
     </Flex>
   );
 }

@@ -151,7 +151,7 @@ router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of par
  * @access Public
  */
 // TODO: add type check as middleware if needed
-router.get("/getPrescriptions", getPrescriptions);
+router.post("/getPrescriptions",checkPatient, getPrescriptions);
 
 /**
  * @route POST /patients/uploadFile
