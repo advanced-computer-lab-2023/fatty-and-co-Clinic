@@ -38,6 +38,7 @@ import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
+import home from "views/Patient/home";
 
 import {
   HomeIcon,
@@ -55,6 +56,13 @@ import {
 
 // TODO: organize routes by type of user
 var dashRoutes = [
+  {
+    path: "/home",
+    name: "Home",
+    rtlName: "البيت",
+    icon: <HomeIcon color="inherit" />,
+    layout: "/patient",
+  },
   {
     path: "/package",
     name: "Package",
@@ -245,7 +253,6 @@ var dashRoutes = [
     layout: "/patient",
     show: false, // Add this to hide route from sidebar
   },
-  
 
   {
     path: "/viewDoctors",
@@ -281,7 +288,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     component: linkPatient,
     layout: "/patient",
-    show: false
+    show: false,
   },
   {
     path: "/doctorPatients",
