@@ -240,6 +240,16 @@ function SignIn() {
                   Sign Up
                 </Link>
               </Text>
+              <Text color={textColor} fontWeight="medium">
+                <Link
+                  color={titleColor}
+                  ms="5px"
+                  fontWeight="bold"
+                  href="./docSignUp"
+                >
+                  Register as a Doctor
+                </Link>
+              </Text>
             </Flex>
           </Flex>
         </Flex>
