@@ -1,25 +1,29 @@
 // Chakra imports
-import { Flex, Icon, Link, Text, useColorModeValue, Heading, Button } from "@chakra-ui/react";
+import { Flex, Icon, Link, Text, useColorModeValue, Heading, Button, useToast } from "@chakra-ui/react";
 // Custom components
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
 import React from "react";
+import { API_PATHS } from "API/api_paths";
+import axios from "axios";
+import { useHistory } from 'react-router-dom';
+import { useAuthContext } from "hooks/useAuthContext";
 
-const Subscription = ({
-  subscription,
-  myPackage
-}) => {
+const Subscription = ({ subscription, myPackage, refresh }) => {
   // Chakra color mode
   const textColor = useColorModeValue("gray.700", "white");
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  const toast = useToast();
+  const history = useHistory();
 
   const isSubscriptionEmpty = () => {
     return (Array.isArray(subscription) && subscription.every(obj => Object.keys(obj).length === 0));
   };
 
-  const handleCancellationformyself = async (e) => {
+  const handleCancel = async (e) => {
     e.preventDefault();
-  
     try {
       const response = await fetch(API_PATHS.cancelSubscription, {
         method: "PATCH",
@@ -28,7 +32,6 @@ const Subscription = ({
           "Content-Type": "application/json",
         },
       });
-  
       console.log("Response", response.status);
       const errorData = await response.json();
       if (response.ok) {
@@ -38,7 +41,7 @@ const Subscription = ({
           duration: 9000,
           isClosable: true,
         });
-  
+        refresh();
         setPackage2("");
       } else {
         toast({
@@ -128,7 +131,7 @@ const Subscription = ({
               {new Date(subscription.Enddate).toLocaleDateString("en-GB")}
             </Text>
           </Flex>
-          <Button colorScheme="red" width="fit-content" onClick={()=>{handleCancellationformyself}}>
+          <Button colorScheme="red" width="fit-content" onClick={handleCancel}>
                 Cancel Subscription
           </Button>
         </Flex>

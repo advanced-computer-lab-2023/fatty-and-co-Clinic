@@ -6,6 +6,7 @@ import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
 import React , {useState} from "react";
 import ReactCardFlip from "react-card-flip";
+import ChangePassword from "./ChangePassword";
 
 const ProfileInformation = ({
   title,
@@ -93,10 +94,7 @@ const ProfileInformation = ({
         </Flex>
       </CardBody>
     </Card>
-    {/* </div> */}
 
-    {/* Back of the card */}
-    {/* <div> */}
       <Card p="16px" my={{ sm: "24px", xl: "0px" }}>
           <CardHeader p="12px 5px" mb="12px">
             <Text fontSize="lg" color={textColor} fontWeight="bold">
@@ -104,14 +102,12 @@ const ProfileInformation = ({
             </Text>
           </CardHeader>
           <CardBody px="5px">
-            <Flex direction="column">
-              <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px">
-                Password Change Form
-              </Text>
+            <Flex direction="column"  justify="center"  width="100%">
+              <ChangePassword/>
+              <Button colorScheme="red"  onClick={() => handlePasswordChange()}>
+                  Cancel
+              </Button>
             </Flex>
-            <Button colorScheme="red" width="fit-content" onClick={() => handlePasswordChange()}>
-                Cancel
-          </Button>
           </CardBody>
         </Card>
     </ReactCardFlip>

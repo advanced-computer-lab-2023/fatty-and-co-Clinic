@@ -177,7 +177,7 @@ export default function HeaderLinks(props) {
               )
             }
             // TODO: On click navigate to profile
-            onClick={()=>{history.push('./patient-profile')}}
+            onClick={()=>{history.push('./profile')}}
           >
           </Button>
           <Button

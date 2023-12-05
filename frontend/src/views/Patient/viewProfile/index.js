@@ -88,7 +88,7 @@ function PatientProfile() {
           gender={patient.Gender == "F"? "Female": patient.Gener == "M"? "Male": "Other"}
           nationalId={patient.NationalId}
         />
-        <Subscription subscription={subscription} myPackage={myPackage}></Subscription>
+        <Subscription subscription={subscription} myPackage={myPackage} refresh={getSubscriptionInfo}></Subscription>
       </Grid>
       <PrescriptionTable></PrescriptionTable>
     </Flex>

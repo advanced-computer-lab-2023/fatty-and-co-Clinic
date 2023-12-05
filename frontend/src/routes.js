@@ -352,7 +352,7 @@ var dashRoutes = [
     show: false,
   },
   {
-    path: "/patient-profile",
+    path: "/profile",
     name: "View patient profile",
     component: PatientProfile,
     layout: "/patient",
