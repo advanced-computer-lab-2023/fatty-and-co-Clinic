@@ -3,6 +3,8 @@ const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
 const patientModel = require("../models/patients");
 const subscriptionModel = require("../models/subscriptions");
+const medicineModel = require("../models/medicine");
+const orderModel = require("../models/orders");
 const User = require("../models/systemusers");
 const { isNull } = require("util");
 const docSlotsModel = require("../models/docSlots");
@@ -102,44 +104,100 @@ const deleteMedFromPrescription = async (req, res) => {
   }
 };
 const updateDosage = async (req, res) => {
-      const AppointmentId = req.query.AppointmentId;
-      const medicineName = req.quey.medicineName;
-      const newDosage  = req.query.dosage;
-      
-      
-          const prescription = await prescriptionsModel.findOne({
-            AppointmentId: AppointmentId,
-          });
+  const AppointmentId = req.query.AppointmentId;
+  const medicineName = req.quey.medicineName;
+  const newDosage = req.query.dosage;
 
-      if (!prescription) {
-        return res.status(404).json({ message: "Prescription not found." });
-      }
+  const prescription = await prescriptionsModel.findOne({
+    AppointmentId: AppointmentId,
+  });
 
-      const medicineToUpdate = prescription.Medicine.find(
-        (medicine) => medicine.Name === medicineName
-      );
+  if (!prescription) {
+    return res.status(404).json({ message: "Prescription not found." });
+  }
 
-     
-      if (!medicineToUpdate) {
-        return res
-          .status(404)
-          .json({ message: "Medicine not found in the prescription." });
-      }
+  const medicineToUpdate = prescription.Medicine.find(
+    (medicine) => medicine.Name === medicineName
+  );
 
-      
-      medicineToUpdate.Dosage = newDosage;
+  if (!medicineToUpdate) {
+    return res
+      .status(404)
+      .json({ message: "Medicine not found in the prescription." });
+  }
 
-      const updatedPrescription = await prescription.save();
+  medicineToUpdate.Dosage = newDosage;
 
-      res.status(200).json({
-        message: "Medicine dosage updated successfully.",
-        prescription: updatedPrescription,
-      });
+  const updatedPrescription = await prescription.save();
+
+  res.status(200).json({
+    message: "Medicine dosage updated successfully.",
+    prescription: updatedPrescription,
+  });
 };
+const calculatePrescriptionCost = async (req, res) => {
+  try {
+    const { appointmentId } = req.query;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+    const patient = await patientModel.findOne({
+      Username: prescription.PatientUsername,
+    });
+    const package = await subscriptionModel.findOne({
+      Patient: patient._id,
+    });
+    const packageId = package.Package;
+    const packageDiscount = packageId.Discount;
+    const med = await medicineModel.find({
+      Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
+    });
+    const priceNoDiscount = med.reduce(
+      (total, medicine) => total + medicine.Price,
+      0
+    );
+    const priceWithDiscount = priceNoDiscount * (1 - packageDiscount);
+    res.status(200).json({ priceWithDiscount });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+//place an order to the pharmacy using the medicine list
+const placeOrder = async (req, res) => {
+  try {
+    const { appointmentId, address, paymentType } = req.query;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+    const patient = await patientModel.findOne({
+      Username: prescription.PatientUsername,
+    });
+    const TotalCost = await calculatePrescriptionCost(req, res);
+    const med = await medicineModel.find({
+      Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
+    });
+    const order = await orderModel.create({
+      PatientUsername: patient.Username,
+      Date: new Date(),
+      Status: "In Progress",
+      Details: "Prescription",
+      TotalCost: TotalCost,
+      PaymentMethod: paymentType,
+      Medicine: med,
+      DeliveryAddress: address,
+    });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
 module.exports = {
   addPrescription,
   addMedToPrescription,
   deleteMedFromPrescription,
   updateDosage,
   checkForPrescription,
+  calculatePrescriptionCost,
+  placeOrder,
 };
