@@ -4,12 +4,14 @@ const {
   addMedToPrescription,
   deleteMedFromPrescription,
   updateDosage,
+  checkForPrescription,
 } = require("../controllers/prescriptionController");
 
 const router = express.Router();
 router.post("/addPrescription", addPrescription);
 router.post("/addMedToPrescription", addMedToPrescription);
 router.post("/deleteMedFromPrescription", deleteMedFromPrescription);
-updateDosage;
+
 router.post("/updateDosage", updateDosage);
+router.get("/checkForPrescription", checkForPrescription);
 module.exports = router;

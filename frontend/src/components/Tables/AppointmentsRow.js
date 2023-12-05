@@ -14,6 +14,8 @@ import {
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
+import AddPrescriptionButton from "views/Doctors/viewAppointments/components/addPrescriptionButton";
+
 
 function AppointmentsRow(props) {
   const {
@@ -23,7 +25,9 @@ function AppointmentsRow(props) {
     Status,
     Type,
     DateTime,
+    key,
   } = props;
+
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
@@ -93,8 +97,13 @@ function AppointmentsRow(props) {
         </Text>
       </Td>
       {PatientUsername && Status === "Completed" && (
-        <Td minWidth={{ sm: "150px" }}>
+        <Td minWidth={{ sm: "100px" }}>
           <CreateFollowUpButton patientUsername={PatientUsername} />
+        </Td>
+      )}
+      {Status === "Completed" && (
+        <Td minWidth={{ sm: "100px" }}>
+          <AddPrescriptionButton key={key} />
         </Td>
       )}
     </Tr>

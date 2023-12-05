@@ -12,7 +12,7 @@ const prescriptionsModel = require("../models/prescriptions");
 
 const addPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicines, diagnosis } = req.body;
+    const { appointmentId, medicines, diagnosis } = req.query;
 
     const appointment = await appointmentModel.findById(appointmentId);
 
@@ -31,10 +31,25 @@ const addPrescription = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const checkForPrescription = async (req, res) => {
+  try {
+    const { appointmentId } = req.query;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+
+    // Check if a prescription is found
+    const hasPrescription = Boolean(prescription);
+
+    res.status(200).json({ hasPrescription });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 
 const addMedToPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicine, dosage } = req.body;
+    const { appointmentId, medicine, dosage } = req.query;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
@@ -87,9 +102,9 @@ const deleteMedFromPrescription = async (req, res) => {
   }
 };
 const updateDosage = async (req, res) => {
-      const AppointmentId = req.body.AppointmentId;
-      const medicineName = req.body.medicineName;
-      const newDosage  = req.body.dosage;
+      const AppointmentId = req.query.AppointmentId;
+      const medicineName = req.quey.medicineName;
+      const newDosage  = req.query.dosage;
       
       
           const prescription = await prescriptionsModel.findOne({
@@ -126,4 +141,5 @@ module.exports = {
   addMedToPrescription,
   deleteMedFromPrescription,
   updateDosage,
+  checkForPrescription,
 };
