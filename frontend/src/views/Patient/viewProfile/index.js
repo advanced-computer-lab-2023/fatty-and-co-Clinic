@@ -51,30 +51,10 @@ function PatientProfile() {
       <Header
         backgroundHeader={ProfileBgImage}
         backgroundProfile={bgProfile}
-        // avatarImage={avatar4}
         name={patient.Name}
         email={systemUser.Email}
-        tabs={[
-          {
-            name: "OVERVIEW",
-            icon: <FaCube w='100%' h='100%' />,
-          },
-          {
-            name: "TEAMS",
-            icon: <IoDocumentsSharp w='100%' h='100%' />,
-          },
-          {
-            name: "PROJECTS",
-            icon: <FaPenFancy w='100%' h='100%' />,
-          },
-        ]}
       />
       <Grid templateColumns={{ sm: "1fr", xl: "repeat(3, 1fr)" }} gap='22px'>
-        {/* <PlatformSettings
-          title={"Platform Settings"}
-          subtitle1={"ACCOUNT"}
-          subtitle2={"APPLICATION"}
-        /> */}
         <GridItem></GridItem>
         <ProfileInformation
           title={"Profile Information"}
