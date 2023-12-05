@@ -55,7 +55,9 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
               {data.map((row) => {
                 return (
                   <AppointmentsRow
+                    DoctorName={row.DoctorName}
                     key={row._id}
+                    customkey={row._id}
                     PatientName={row.PatientName}
                     PatientUsername={row.PatientUsername}
                     Type={row.FollowUp ? "Follow Up" : "First Time"}
@@ -63,6 +65,7 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
                     DateTime={row.Date}
                   />
                 );
+                
               })}
             </Tbody>
           </Table>

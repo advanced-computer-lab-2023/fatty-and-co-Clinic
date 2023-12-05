@@ -23,13 +23,13 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 
-export default function AddPrescriptionButton({ key }) {
+export default function AddPrescriptionButton({ customkey }) {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
   const [diagnosis, setDiagnosis] = useState("");
   const [medicine, setMedicine] = useState("");
-  const [dosage, setDosage] = useState(""); 
+  const [dosage, setDosage] = useState("");
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -39,14 +39,14 @@ export default function AddPrescriptionButton({ key }) {
     setDiagnosis(event.target.value);
   };
   const handleMedicine = (event) => {
-      setMedicine(event.target.value);
-    };
+    setMedicine(event.target.value);
+  };
   const handleDosage = (event) => {
-      setDosage(event.target.value);
-    };
+    setDosage(event.target.value);
+  };
   const toast = useToast();
   const handleSubmit = () => {
-    const meds =  {
+    const meds = {
       Name: medicine,
       Dosage: dosage,
     };
@@ -54,7 +54,7 @@ export default function AddPrescriptionButton({ key }) {
     axios
       .post(url, null, {
         params: {
-          appointmentId: key,
+          appointmentId: customkey,
           medicines: meds,
           diagnosis: diagnosis,
         },
