@@ -50,12 +50,14 @@ export const API_PATHS = {
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
+  viewSubscription: PATIENT_BASE + "viewSubscription/",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-  viewPrescriptions: PATIENT_BASE + "getPrescriptions/", // add patient username as a param
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/", 
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
   getPatient: PATIENT_BASE + "selectPatient/", // get patient from req.params
+  getPatientInfo: PATIENT_BASE + "getPatientInfo",
   linkPatient: PATIENT_BASE + "linkPatient",
   uploadFile: PATIENT_BASE + "uploadFile", // upload file and note
   getMedicalHistory: PATIENT_BASE + "getMedicalHistory", // get getMedicalHistory for patient (by username if admin)
