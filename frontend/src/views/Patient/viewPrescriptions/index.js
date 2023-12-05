@@ -128,7 +128,7 @@ function PrescriptionTable() {
   }
 
   return (
-    <Box pt="80px">
+    <Box>
       <Flex
         direction="column"
         alignItems="flex-start"
@@ -136,7 +136,7 @@ function PrescriptionTable() {
         justifyContent="flex-start"
       >
         
-        <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+        <Card my="0px" overflowX={{ sm: "scroll", xl: "hidden" }}>
           <CardHeader p="6px 0px 22px 0px">
             <Flex direction="column">
               <Text

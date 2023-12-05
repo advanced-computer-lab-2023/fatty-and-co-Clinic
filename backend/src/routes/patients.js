@@ -13,6 +13,7 @@ const {
   cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
+  viewSubscribedPackage,
   subscribepackagefamilymem,
   getAllPatients,
   deletePatient,
@@ -210,6 +211,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/linkPatient", linkPatient);
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
+router.get("/viewSubscription",viewSubscribedPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);
 router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
   viewUpcomingAppointmentsPat(req, res);

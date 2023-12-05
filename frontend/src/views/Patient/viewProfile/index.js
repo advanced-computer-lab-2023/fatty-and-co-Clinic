@@ -27,6 +27,7 @@ function PatientProfile() {
   const [patient, setPatient] = useState([{}]);
   const [systemUser, setSystemUser] = useState([{}]);
   const [familyMembers, setFamilyMembers]= useState([{}]); 
+  const [subscription, setSubscription] = useState([{}]);
   const [myPackage, setMyPackage] = useState([{}]);
 
   const { user } = useAuthContext();
@@ -34,7 +35,7 @@ function PatientProfile() {
 
   useEffect(() => {
     getPatientInfo();
-    getPackageInfo();
+    getSubscriptionInfo();
   }, []);
 
   const getPatientInfo = () => {
@@ -53,8 +54,8 @@ function PatientProfile() {
       .catch((err) => console.log(err));
   }
 
-  const getPackageInfo = () => {
-    const url = API_PATHS.viewMyPackage;
+  const getSubscriptionInfo = () => {
+    const url = API_PATHS.viewSubscription;
     axios
       .get(url, {
         headers: {
@@ -62,10 +63,11 @@ function PatientProfile() {
         },
       })
       .then((response) => {
-        setMyPackage(response.data);
-        console.log("package: " + myPackage);
+        setMyPackage(response.data.package);
+        setSubscription(response.data.subscription);
+        console.log(response.data);
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -86,9 +88,8 @@ function PatientProfile() {
           gender={patient.Gender == "F"? "Female": patient.Gener == "M"? "Male": "Other"}
           nationalId={patient.NationalId}
         />
-        <Subscription myPackage={myPackage}></Subscription>
+        <Subscription subscription={subscription} myPackage={myPackage}></Subscription>
       </Grid>
-      <Appointments/>
       <PrescriptionTable></PrescriptionTable>
     </Flex>
   );
