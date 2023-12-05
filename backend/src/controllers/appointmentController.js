@@ -619,7 +619,8 @@ const cancelAppForFam = async (req, res) => {
      const bookedBy= await patientModel.findOne({Username:patientSignedIn})
      const doctor= await doctorModel.findOne({Username:doctorUsername})
      const package= await subscriptionModel.findOne({Patient:patient,Status:"Subscribed"}).populate("Package")
-     const packDisc= package?package.Package.Session_Discount:0
+     const packDisc= package? upcomingApp.createdAt.getTime() >= package.Startdate.getTime() &&
+     upcomingApp.createdAt.getTime() <= package.Enddate.getTime()?package.Package.Session_Discount:0:0
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      await patientModel.findOneAndUpdate({Username:patientSignedIn},{Wallet:bookedBy.Wallet+refund})
      await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
