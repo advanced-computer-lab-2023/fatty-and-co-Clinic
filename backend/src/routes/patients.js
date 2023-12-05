@@ -34,6 +34,7 @@ const {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
+  getChatDoctors,
 } = require("../controllers/patientController");
 
 const { constants } = require("buffer");
@@ -215,5 +216,8 @@ router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
 router.get("/viewPastAppoitmentsPat", checkPatient, (req, res) => {
   viewPastAppoitmentsPat(req, res);
 });
+
+
+router.get("/getChatDoctors", checkPatient, getChatDoctors);
 
 module.exports = router;

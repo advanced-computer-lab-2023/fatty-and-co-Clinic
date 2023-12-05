@@ -1,0 +1,33 @@
+const conversationModel = require("../models/conversations");
+const { default: mongoose } = require("mongoose");
+
+const createConversation = async (req, res) => {
+  const Sender = req.body.SenderUsername;
+  const Receiver = req.body.ReceiverUsername;
+
+  
+  try {
+    const newConversation = await conversationModel.create({
+      Members: [Sender, Receiver], // Fix: Assign Members array to the key 'Members'
+    });
+
+    res.status(200).json(newConversation);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getConversation = async (req, res) => {
+  //for testing only it should be req.user.username.
+  const username = req.params.Username;
+  try {
+    const conversations = await conversationModel.find({
+      Members: { $in: username },
+    });
+     res.status(200).json(conversations);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+module.exports = { createConversation , 
+    getConversation};

@@ -38,7 +38,7 @@ import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
-
+import chatWithDoc from "views/Patient/chatwithDoc";
 import {
   HomeIcon,
   StatsIcon,
@@ -220,6 +220,14 @@ var dashRoutes = [
     layout: "/admin",
   },
 
+  {
+    path: "/chatWithDoctor/",
+    name: "Chat With Doctor",
+    icon: <HomeIcon color="inherit" />,
+    component: chatWithDoc,
+    layout: "/patient",
+    
+  },
   {
     path: "/viewDoctorDetails/:username",
     name: "View Doctor Details",
