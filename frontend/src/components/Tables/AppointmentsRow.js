@@ -11,23 +11,59 @@ import {
   Link as ChakraLink,
   Button,
 } from "@chakra-ui/react";
-import React from "react";
+import { API_PATHS } from "API/api_paths";
+
+import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
 import AddPrescriptionButton from "views/Doctors/viewAppointments/components/addPrescriptionButton";
+import { useAuthContext } from "hooks/useAuthContext";
 
 
 function AppointmentsRow(props) {
   const {
+    customkey,
     DoctorName,
     PatientName,
     PatientUsername,
     Status,
     Type,
     DateTime,
-    key,
   } = props;
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  const [hasPrescription, setHasPrescription] = useState("");
 
+  useEffect(() => {
+    const checkPrescriptionStatus = async () => {
+      try {
+        const response = await fetch(
+          `${API_PATHS.checkForPrescription}?appointmentId=${customkey}`,
+          {
+            headers: {
+              Authorization: Authorization,
+              // Other headers if needed
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          setHasPrescription(result.hasPrescription);
+        } else {
+          console.error(
+            "Error checking prescription status:",
+            response.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Error checking prescription status:", error.message);
+      }
+    };
+
+    // Check prescription status when the component mounts
+    checkPrescriptionStatus();
+  }, [customkey]);
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
@@ -101,9 +137,9 @@ function AppointmentsRow(props) {
           <CreateFollowUpButton patientUsername={PatientUsername} />
         </Td>
       )}
-      {Status === "Completed" && (
+      {Status === "Completed" && !hasPrescription && (
         <Td minWidth={{ sm: "100px" }}>
-          <AddPrescriptionButton key={key} />
+          <AddPrescriptionButton customkey={customkey} />
         </Td>
       )}
     </Tr>
