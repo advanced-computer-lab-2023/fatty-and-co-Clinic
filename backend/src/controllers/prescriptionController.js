@@ -46,6 +46,21 @@ const checkForPrescription = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const getPrescriptionMeds = async (req, res) => {
+  try {
+    const { appointmentId } = req.query;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+    const meds = prescription.Medicine
+
+    // Check if a prescription is found
+
+    res.status(200).json({ meds });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 
 const addMedToPrescription = async (req, res) => {
   try {
@@ -142,4 +157,5 @@ module.exports = {
   deleteMedFromPrescription,
   updateDosage,
   checkForPrescription,
+  getPrescriptionMeds,
 };

@@ -21,14 +21,13 @@ import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
+import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 
-import { usePrescriptionContext } from "hooks/usePrescriptionContext";
-
-export default function AddPrescriptionButton({ customkey, setHasPrescription }) {
-  const { prescriptions, dispatch } = usePrescriptionContext();
+export default function AddMedButton({ customkey }, { setaddMed }) {
+  const { appointments, dispatch } = useDoctorAppointmentsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
-  const [diagnosis, setDiagnosis] = useState("");
+
   const [medicine, setMedicine] = useState("");
   const [dosage, setDosage] = useState("");
 
@@ -36,9 +35,6 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
   const Authorization = `Bearer ${user.token}`;
   console.log(user);
 
-  const handleDiagnosis = (event) => {
-    setDiagnosis(event.target.value);
-  };
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
@@ -47,18 +43,13 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
   };
   const toast = useToast();
   const handleSubmit = () => {
-    
-    const meds = {
-      Name: medicine,
-      Dosage: dosage,
-    };
-    const url = API_PATHS.addPrescription;
+    const url = API_PATHS.addMedToPrescription;
     axios
       .post(url, null, {
         params: {
           appointmentId: customkey,
-          medicines: meds,
-          diagnosis: diagnosis,
+          medicine: medicine,
+          dosage: dosage,
         },
         headers: { Authorization },
       })
@@ -71,7 +62,7 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
           duration: 9000,
           isClosable: true,
         });
-        setHasPrescription (true);
+        setaddMed(true);
       })
       .catch((err) =>
         toast({
@@ -87,13 +78,13 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
 
   return (
     <>
-      <Button colorScheme="blue" onClick={() => setIsModalOpen(true)}>
-        Add prescription
+      <Button colorScheme="blue" >
+        Add medicine to prescription
       </Button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add prescription</ModalHeader>
+          <ModalHeader>Add medicine</ModalHeader>
           <ModalCloseButton />
 
           <ModalBody>
@@ -110,13 +101,6 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
               bg="white"
               placeholder="Enter dosage"
               onChange={handleDosage}
-            />
-            <Text mb="8px">Diagnosis: {diagnosis}</Text>
-            <Input
-              diagnosis={diagnosis}
-              bg="white"
-              placeholder="Enter diagnosis"
-              onChange={handleDiagnosis}
             />
           </ModalBody>
           <ModalFooter>

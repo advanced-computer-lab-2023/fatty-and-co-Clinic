@@ -8,6 +8,7 @@ import {
   Text,
   Tr,
   useColorModeValue,
+  Stack,
   Link as ChakraLink,
   Button,
 } from "@chakra-ui/react";
@@ -17,8 +18,10 @@ import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
 import AddPrescriptionButton from "views/Doctors/viewAppointments/components/addPrescriptionButton";
+import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
+import UpdatePrescription from "views/Doctors/viewAppointments/components/UpdatePrescription";
 import { useAuthContext } from "hooks/useAuthContext";
-
+import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 function AppointmentsRow(props) {
   const {
@@ -33,7 +36,7 @@ function AppointmentsRow(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [hasPrescription, setHasPrescription] = useState("");
-
+   const { prescriptions, dispatch } = usePrescriptionContext();
   useEffect(() => {
     const checkPrescriptionStatus = async () => {
       try {
@@ -63,27 +66,13 @@ function AppointmentsRow(props) {
 
     // Check prescription status when the component mounts
     checkPrescriptionStatus();
-  }, [customkey]);
+  }, []);
+
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
-      {DoctorName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
-          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-            <Text
-              fontSize="md"
-              color={textColor}
-              fontWeight="bold"
-              minWidth="100%"
-            >
-              {DoctorName}
-            </Text>
-          </Flex>
-        </Td>
-      )}
-
       {PatientName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
+        <Td minWidth={{ sm: "150px" }} pl="0px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
               fontSize="md"
@@ -127,21 +116,32 @@ function AppointmentsRow(props) {
           {new Date(DateTime).toLocaleDateString("en-GB")}
         </Text>
       </Td>
-      <Td minWidth={{ sm: "150px" }}>
+      <Td minWidth={{ sm: "100px" }}>
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
           {new Date(DateTime).toLocaleTimeString("en-GB")}
         </Text>
       </Td>
-      {PatientUsername && Status === "Completed" && (
-        <Td minWidth={{ sm: "100px" }}>
-          <CreateFollowUpButton patientUsername={PatientUsername} />
-        </Td>
-      )}
-      {Status === "Completed" && !hasPrescription && (
-        <Td minWidth={{ sm: "100px" }}>
-          <AddPrescriptionButton customkey={customkey} />
-        </Td>
-      )}
+      <Stack spacing={0} direction="row" align="center">
+        {PatientUsername && Status === "Completed" && (
+          <Td minWidth={{ sm: "100px" }}>
+            <CreateFollowUpButton patientUsername={PatientUsername} />
+          </Td>
+        )}
+        {Status === "Completed" && !hasPrescription && (
+          <Td minWidth={{ sm: "100px" }}>
+            <AddPrescriptionButton
+              customkey={customkey}
+              setHasPrescription={setHasPrescription}
+            />
+          </Td>
+        )}
+
+        {Status === "Completed" && hasPrescription && (
+          <Td minWidth={{ sm: "100px" }}>
+            <UpdatePrescription customkey={customkey} />
+          </Td>
+        )}
+      </Stack>
     </Tr>
   );
 }

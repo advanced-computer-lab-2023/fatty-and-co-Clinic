@@ -5,6 +5,7 @@ const {
   deleteMedFromPrescription,
   updateDosage,
   checkForPrescription,
+  getPrescriptionMeds,
 } = require("../controllers/prescriptionController");
 
 const router = express.Router();
@@ -14,4 +15,5 @@ router.post("/deleteMedFromPrescription", deleteMedFromPrescription);
 
 router.post("/updateDosage", updateDosage);
 router.get("/checkForPrescription", checkForPrescription);
+router.get("/getPrescriptionMeds", getPrescriptionMeds);
 module.exports = router;

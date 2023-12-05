@@ -101,4 +101,5 @@ export const API_PATHS = {
   deleteMedFromPrescription: PRESCRIPTION_BASE + "deleteMedFromPrescription",
   updateDosage: PRESCRIPTION_BASE + "updateDosage",
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
+  getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
 };
