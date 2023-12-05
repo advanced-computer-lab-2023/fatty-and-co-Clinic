@@ -68,6 +68,14 @@ const Header = ({
             direction={{ sm: "column", md: "row" }}
             w={{ sm: "100%" }}
             textAlign={{ sm: "center", md: "start" }}>
+            <Avatar
+              me={{ md: "22px" }}
+              name={name}
+              src='https://bit.ly/broken-link'
+              w='80px'
+              h='80px'
+              borderRadius='15px'
+            />
             <Flex direction='column' maxWidth='100%' my={{ sm: "14px" }}>
               <Text
                 fontSize={{ sm: "lg", lg: "xl" }}

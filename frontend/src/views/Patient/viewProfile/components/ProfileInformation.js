@@ -19,16 +19,13 @@ const ProfileInformation = ({
 }) => {
   // Chakra color mode
   const textColor = useColorModeValue("gray.700", "white");
-  const [flipped, setFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const handlePasswordChange = () => {
-    // change password component
+    setIsFlipped(!isFlipped);
   };
 
   return (
-    <ReactCardFlip isFlipped={flipped} flipDirection="horizontal">
-    
-    {/* Front of the card */}
-    <div>
+    <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
     <Card p='16px' my={{ sm: "24px", xl: "0px" }} >
       <CardHeader p='12px 5px' mb='12px'>
         <Text fontSize='lg' color={textColor} fontWeight='bold'>
@@ -89,17 +86,17 @@ const ProfileInformation = ({
             </Text>
           </Flex>
         <Flex mb="24px">
-          <Button colorScheme="red" width="fit-content" onClick={() => setFlipped(true)}>
+          <Button colorScheme="red" width="fit-content" onClick={() => handlePasswordChange()}>
                 Change Password
           </Button>
         </Flex>
         </Flex>
       </CardBody>
     </Card>
-    </div>
+    {/* </div> */}
 
     {/* Back of the card */}
-    <div>
+    {/* <div> */}
       <Card p="16px" my={{ sm: "24px", xl: "0px" }}>
           <CardHeader p="12px 5px" mb="12px">
             <Text fontSize="lg" color={textColor} fontWeight="bold">
@@ -112,12 +109,11 @@ const ProfileInformation = ({
                 Password Change Form
               </Text>
             </Flex>
-            <Button colorScheme="red" width="fit-content" onClick={() => setFlipped(false)}>
+            <Button colorScheme="red" width="fit-content" onClick={() => handlePasswordChange()}>
                 Cancel
           </Button>
           </CardBody>
         </Card>
-    </div>
     </ReactCardFlip>
   );
 };
