@@ -606,18 +606,15 @@ const cancelAppForFam = async (req, res) => {
      var refund=0
      const currDate= new Date()
      if(!upcomingApp){
-      console.log("First IF")
       res.status(404).json({err:"No upcoming appointment!"})
       return;
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
-      console.log("No discount")
       await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
       res.status(200).json("Appointment cancelled successfully!")
 
      }
      else{
-      console.log("Else part")
      const patient= await patientModel.findOne({Username:patientUsername})
      const bookedBy= await patientModel.findOne({Username:patientSignedIn})
      const doctor= await doctorModel.findOne({Username:doctorUsername})
