@@ -643,23 +643,21 @@ const cancelAppForSelf = async (req, res) => {
       res.status(404).json({err:"Can't cancel an appointment that's rescheduled/cancelled/completed!"})
       return;
      }
-     else if(upcomingApp.BookedBy!=patientUsername){
-      res.status(404).json({err:"Can't cancel an appointment that wasn't booked by you!"})
-      return;
-     }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
       await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
       res.status(200).json("Appointment cancelled successfully!")
      }
      else{
-     const patient= await patientModel.findOne({Username:patientUsername})
+     const patient=await patientModel.findOne({Username:patientUsername})
+     const bookedBy=await patientModel.findOne({Username:upcomingApp.BookedBy}) 
      const doctor= await doctorModel.findOne({Username:doctorUsername})
      const package= await subscriptionModel.findOne({Patient:patient,Status:"Subscribed"}).populate("Package")
-     const packDisc= package?package.Package.Session_Discount:0
+     const packDisc= package? upcomingApp.createdAt.getTime() >= package.Startdate.getTime() &&
+     upcomingApp.createdAt.getTime() <= package.Enddate.getTime()?package.Package.Session_Discount:0:0
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
-     await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:refund})
+     upcomingApp.BookedBy==patientUsername? await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:patient.Wallet+refund}):await patientModel.findOneAndUpdate({Username:bookedBy.Username},{Wallet:bookedBy.Wallet+refund})
      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-     res.status(200).json("Appointment cancelled successfully!")
+     res.status(200).json(`Appointment cancelled and refund amount of $${refund} has been returned successfully!`)
   
   }
     
