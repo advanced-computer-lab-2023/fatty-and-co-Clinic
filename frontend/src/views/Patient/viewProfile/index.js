@@ -36,7 +36,7 @@ function PatientProfile() {
   useEffect(() => {
     getPatientInfo();
     getSubscriptionInfo();
-  }, []);
+  }, [subscription, myPackage]);
 
   const getPatientInfo = () => {
     const url = API_PATHS.getPatientInfo;
@@ -65,7 +65,6 @@ function PatientProfile() {
       .then((response) => {
         setMyPackage(response.data.package);
         setSubscription(response.data.subscription);
-        console.log(response.data);
       })
       .catch((err) => console.log(err));
   }

@@ -4,7 +4,7 @@ import { Flex, Icon, Link, Text, useColorModeValue, Heading, Button, useToast } 
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
-import React from "react";
+import React, {useEffect} from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useHistory } from 'react-router-dom';
@@ -17,6 +17,8 @@ const Subscription = ({ subscription, myPackage, refresh }) => {
   const Authorization = `Bearer ${user.token}`;
   const toast = useToast();
   const history = useHistory();
+  useEffect(() => {
+    }, [subscription, myPackage]);
 
   const isSubscriptionEmpty = () => {
     return (Array.isArray(subscription) && subscription.every(obj => Object.keys(obj).length === 0));
@@ -34,6 +36,7 @@ const Subscription = ({ subscription, myPackage, refresh }) => {
       });
       console.log("Response", response.status);
       const errorData = await response.json();
+      refresh();
       if (response.ok) {
         toast({
           title: "Cancelled successfully",
@@ -41,8 +44,6 @@ const Subscription = ({ subscription, myPackage, refresh }) => {
           duration: 9000,
           isClosable: true,
         });
-        refresh();
-        setPackage2("");
       } else {
         toast({
           title: "Failed to Cancel",
@@ -93,7 +94,7 @@ const Subscription = ({ subscription, myPackage, refresh }) => {
           </Flex>
           <Flex align='center' mb='18px'>
             <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              Medicine_Discount:{" "}
+              Medicine Discount:{" "}
             </Text>
             <Text fontSize='md' color='gray.500' fontWeight='400'>
               {myPackage.Medicine_Discount}%
