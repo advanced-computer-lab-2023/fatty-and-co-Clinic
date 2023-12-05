@@ -4,10 +4,13 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Button,
   Flex,
   Link,
+  Icon,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import AdminNavbarLinks from "./AdminNavbarLinks";
@@ -27,6 +30,7 @@ export default function AdminNavbar(props) {
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.200");
+  let navbarIcon = useColorModeValue("gray.500", "gray.200");
   let navbarPosition = "absolute";
   let navbarFilter = "none";
   let navbarBackdrop = "blur(21px)";
@@ -102,7 +106,7 @@ export default function AdminNavbar(props) {
       }}
       pt="8px"
       top="18px"
-      w={{ sm: "calc(100vw - 30px)", xl: "calc(100vw - 75px - 275px)" }}
+      w={{ sm: "calc(100vw - 30px)", xl: "calc(100vw - 75px - 15px)" }}
     >
       <Flex
         w="100%"
@@ -113,19 +117,20 @@ export default function AdminNavbar(props) {
         alignItems={{ xl: "center" }}
       >
         <Box mb={{ sm: "8px", md: "0px" }}>
-          <Breadcrumb>
-            <BreadcrumbItem color={mainText}>
-              <BreadcrumbLink href="#" color={secondaryText}>
-                Pages
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+          <Icon
+            as={ChevronLeftIcon}
+            _hover={{ color:"black" , 
+            cursor:"pointer" }}
+            color={navbarIcon}
+            style={{marginRight:"5px"}}
+            w="22px"
+            h="22px"
+            me="0px"
+            onClick={(e) => {
+              history.back();
+            }}
+          />
 
-            <BreadcrumbItem color={mainText}>
-              <BreadcrumbLink href="#" color={mainText}>
-                {brandText}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
           {/* Here we create navbar brand, based on route name */}
           <Link
             color={mainText}

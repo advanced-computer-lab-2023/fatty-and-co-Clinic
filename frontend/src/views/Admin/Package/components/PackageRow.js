@@ -59,6 +59,15 @@ function PackageRow(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  const closeModal = (e) => {
+    setName(props.Name);
+    setPrice(props.Price);
+    setSession_Discount(props.Session_Discount);
+    setMedicine_Discount(props.Medicine_Discount);
+    setFamily_Discount(props.Family_Discount);
+    onClose();
+  };
+
   return (
     <Box p="24px" bg={bgColor} my="22px" borderRadius="12px">
       <Flex justify="space-between" w="100%">
@@ -121,7 +130,7 @@ function PackageRow(props) {
         </Flex>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Edit {Name}</ModalHeader>
@@ -195,18 +204,7 @@ function PackageRow(props) {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              variant="ghost"
-              mr={3}
-              onClick={(e) => {
-                setName(props.Name);
-                setPrice(props.Price);
-                setSession_Discount(props.Session_Discount);
-                setMedicine_Discount(props.Medicine_Discount);
-                setFamily_Discount(props.Family_Discount);
-                onClose();
-              }}
-            >
+            <Button variant="ghost" mr={3} onClick={closeModal}>
               Close
             </Button>
             <Button
@@ -218,7 +216,7 @@ function PackageRow(props) {
                     method: "PATCH",
                     headers: {
                       "Content-Type": "application/json",
-                      Authorization
+                      Authorization,
                     },
                     body: JSON.stringify({
                       Name,

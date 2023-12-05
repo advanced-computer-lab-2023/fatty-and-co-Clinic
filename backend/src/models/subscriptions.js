@@ -49,13 +49,7 @@ subscriptionschema.statics.addEntry = async function (patient) {
   return unSubscribed;
 };
 
-subscriptionschema.statics.addEntry1 = async function (newFamilymember) {
-  const unSubscribed = await this.create({
-    FamilyMem: newFamilymember,
-    Status: "Unsubscribed",
-  });
-  return unSubscribed;
-};
+
 
 const Package = mongoose.model("subscription", subscriptionschema);
 module.exports = Package;
