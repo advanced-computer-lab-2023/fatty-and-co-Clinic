@@ -15,6 +15,7 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import PrescriptionTable from "../viewPrescriptions/index.js"
+import Subscription from "./components/Subscription";
 
 function PatientProfile() {
   // Chakra color mode
@@ -26,11 +27,17 @@ function PatientProfile() {
   const [patient, setPatient] = useState([{}]);
   const [systemUser, setSystemUser] = useState([{}]);
   const [familyMembers, setFamilyMembers]= useState([{}]); 
+  const [myPackage, setMyPackage] = useState([{}]);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
 
   useEffect(() => {
+    getPatientInfo();
+    getPackageInfo();
+  }, []);
+
+  const getPatientInfo = () => {
     const url = API_PATHS.getPatientInfo;
     axios
       .get(url, {
@@ -44,7 +51,22 @@ function PatientProfile() {
         setFamilyMembers(patient.LinkedPatients);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }
+
+  const getPackageInfo = () => {
+    const url = API_PATHS.viewMyPackage;
+    axios
+      .get(url, {
+        headers: {
+          Authorization: Authorization,
+        },
+      })
+      .then((response) => {
+        setMyPackage(response.data);
+        console.log("package: " + myPackage);
+      })
+      .catch((err) => console.log(err.response));
+  }
 
   return (
     <Flex direction='column'>
@@ -54,8 +76,7 @@ function PatientProfile() {
         name={patient.Name}
         email={systemUser.Email}
       />
-      <Grid templateColumns={{ sm: "1fr", xl: "repeat(3, 1fr)" }} gap='22px'>
-        <GridItem></GridItem>
+      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap='22px'>
         <ProfileInformation
           title={"Profile Information"}
           name={patient.Name}
@@ -65,7 +86,7 @@ function PatientProfile() {
           gender={patient.Gender == "F"? "Female": patient.Gener == "M"? "Male": "Other"}
           nationalId={patient.NationalId}
         />
-        <GridItem></GridItem>
+        <Subscription myPackage={myPackage}></Subscription>
       </Grid>
       <Appointments/>
       <PrescriptionTable></PrescriptionTable>
