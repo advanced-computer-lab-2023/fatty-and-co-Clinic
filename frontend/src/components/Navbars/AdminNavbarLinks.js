@@ -32,6 +32,7 @@ import { ItemContent } from "components/Menu/ItemContent";
 import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useLogout } from "hooks/useLogout";
+import { useHistory } from 'react-router-dom';
 import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -40,6 +41,7 @@ import axios from "axios";
 import { API_PATHS } from "API/api_paths";
 import { useState, useEffect } from "react";
 import { useWalletContext } from "hooks/useWalletContext";
+import PatientProfile from "views/Patient/viewProfile";
 
 const theme = extendTheme({
   icons: {
@@ -51,7 +53,7 @@ export default function HeaderLinks(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
-
+  const history = useHistory();
   const { Wallet, dispatch } = useWalletContext();
   // const [Wallet, setWallet] = useState(null);
   useEffect(() => {
@@ -175,7 +177,7 @@ export default function HeaderLinks(props) {
               )
             }
             // TODO: On click navigate to profile
-            // onClick={}
+            onClick={()=>{history.push('./profile')}}
           >
           </Button>
           <Button
