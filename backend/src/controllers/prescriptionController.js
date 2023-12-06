@@ -97,7 +97,7 @@ const addMedToPrescription = async (req, res) => {
 //     };
 
 const deleteMedFromPrescription = async (req, res) => {
-  const { appointmentId, medicineName } = req.body;
+  const { appointmentId, medicineName } = req.query;
   try {
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
@@ -113,6 +113,7 @@ const deleteMedFromPrescription = async (req, res) => {
     }
     prescription.Medicine.splice(medicineIndex, 1);
     const updatedPrescription = await prescription.save();
+    
     res.status(200).json(updatedPrescription);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -120,7 +121,7 @@ const deleteMedFromPrescription = async (req, res) => {
 };
 const updateDosage = async (req, res) => {
   const AppointmentId = req.query.AppointmentId;
-  const medicineName = req.quey.medicineName;
+  const medicineName = req.query.medicineName;
   const newDosage = req.query.dosage;
 
   const prescription = await prescriptionsModel.findOne({
@@ -145,10 +146,8 @@ const updateDosage = async (req, res) => {
 
   const updatedPrescription = await prescription.save();
 
-  res.status(200).json({
-    message: "Medicine dosage updated successfully.",
-    prescription: updatedPrescription,
-  });
+  res.status(200).json(updatedPrescription
+  );
 };
 const calculatePrescriptionCost = async (req, res) => {
   try {

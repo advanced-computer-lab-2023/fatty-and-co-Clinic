@@ -52,7 +52,7 @@ export const API_PATHS = {
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-  viewPrescriptions: PATIENT_BASE + "getPrescriptions/", 
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/",
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
