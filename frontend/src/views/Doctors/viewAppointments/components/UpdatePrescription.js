@@ -16,6 +16,11 @@ import {
   ModalHeader,
   Input,
   useToast,
+  Box,
+  Stack,
+  HStack,
+  VStack,
+  StackDivider,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
@@ -33,11 +38,41 @@ export default function UpdatePrescription({ customkey }) {
   const [medicine, setMedicine] = useState("");
   const [dosage, setDosage] = useState("");
   const [addMed, setaddMed] = useState(false);
+  const [meds, setMeds] = useState([]);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   console.log(user);
 
+  useEffect(() => {
+    const getMeds = async () => {
+      try {
+        const response = await fetch(
+          `${API_PATHS.getPrescriptionMeds}?appointmentId=${customkey}`,
+          {
+            headers: {
+              Authorization: Authorization,
+              // Other headers if needed
+            },
+          }
+        );
+        if (response.ok) {
+          const result = await response.json();
+          setMeds(result.meds);
+        } else {
+          console.error(
+            "Error getting prescription meds:",
+            response.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Error checking prescription status:", error.message);
+      }
+    };
+
+    // Check prescription status when the component mounts
+    getMeds();
+  }, []);
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
@@ -98,6 +133,26 @@ export default function UpdatePrescription({ customkey }) {
           <ModalCloseButton />
 
           <ModalBody>
+            {meds.map((med, index) => (
+              <div key={index}>
+                <Box
+                  bg="blue.400"
+                  borderRadius="lg"
+                  w="100%"
+                  p={2}
+                  color="white"
+                  borderBottom="4px solid white"
+                  borderTop="4px solid white"
+                >
+                  <Text color="white" mb="16px">
+                    Medicine: {med.Name}
+                  </Text>
+                  <Text color="white" mb="16px">
+                    Dosage: {med.Dosage}
+                  </Text>
+                </Box>
+              </div>
+            ))}
             {!addMed && (
               <Button
                 leftIcon={<AddIcon />}
