@@ -19,7 +19,7 @@ const {
 } = require("../common/middleware/upload");
 const {
   createConversation
-} = require("./")
+} = require("./conversationController")
 // const createPatient = async (req, res) => {
 //   const {
 //     Username,
@@ -1675,7 +1675,7 @@ const getFamSessionCost = async (req, res) => {
           if (!uniqueDoctorUsernames.has(doctor.Username)) {
             // If not, add it to the set and include the doctor in the result
             uniqueDoctorUsernames.add(doctor.Username);
-            await conversationModel.create
+            await createConversation()
             return doctor;
           }
   
