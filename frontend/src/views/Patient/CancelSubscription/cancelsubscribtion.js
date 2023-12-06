@@ -26,7 +26,6 @@ function CancelSubscription() {
   const [selectedOption, setSelectedOption] = useState('');
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
-
    const { user } = useAuthContext();
    const Authorization = `Bearer ${user.token}`;
    const handleCancellationformyself = async (e) => {
