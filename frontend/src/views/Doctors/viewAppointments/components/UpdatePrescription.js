@@ -194,70 +194,83 @@ const handleInc = async (medName,dosage) => {
 
           <ModalBody>
             {meds.map((med, index) => (
-              <HStack key={index}>
-                <Box
-                  bg="blue.400"
-                  borderRadius="lg"
-                  w="100%"
-                  p={2}
-                  color="white"
-                  borderBottom="4px solid white"
-                  borderTop="4px solid white"
-                >
-                  <Text color="white" mb="16px">
-                    Medicine: {med.Name}
-                  </Text>
-                  <Text color="white" mb="16px">
-                    Dosage: {med.Dosage}
-                  </Text>
-                </Box>
-                <VStack>
-                  <Button
-                    p="0px"
-                    bg="transparent"
-                    mb={{ sm: "10px", md: "0px" }}
-                    me={{ md: "12px" }}
-                    onClick={() => handleDelete(med.Name)}
+              <div>
+                <HStack key={index} spacing="48px">
+                  <Box
+                    bg="teal.400"
+                    borderRadius="lg"
+                    w="50%"
+                    p={2}
+                    color="white"
+                    borderBottom="4px solid white"
+                    borderTop="4px solid white"
                   >
-                    <Flex
-                      color="red.500"
-                      cursor="pointer"
-                      align="center"
-                      p="12px"
+                    <Text color="white" mb="2px" fontWeight="semibold">
+                      Medicine: {med.Name}
+                    </Text>
+                    <Text color="white" mb="2px" fontWeight="semibold">
+                      Dosage: {med.Dosage}
+                    </Text>
+                  </Box>
+
+                  <VStack>
+                    <Button
+                      p="0px"
+                      bg="transparent"
+                      mb={{ sm: "10px", md: "0px" }}
+                      me={{ md: "12px" }}
+                      onClick={() => handleDelete(med.Name)}
                     >
-                      <Icon as={FaTrashAlt} me="4px" />
-                      <Text fontSize="sm" fontWeight="semibold">
-                        DELETE
-                      </Text>
-                    </Flex>
-                  </Button>
-                  <ButtonGroup size="sm" isAttached variant="outline">
-                    <IconButton
-                      aria-label="Add to friends"
-                      icon={<MinusIcon />}
-                      onClick={() => handleInc(med.Name, med.Dosage - 1)}
-                    />
-                    <Button p="0px" bg="transparent" variant="no-hover">
                       <Flex
-                        color={"black"}
+                        color="red.500"
                         cursor="pointer"
                         align="center"
-                        p="12px"
+                        p="16px"
                       >
-                        <Text fontSize="sm" fontWeight="semibold">
-                          DOSAGE
+                        <Icon as={FaTrashAlt} me="4px" />
+                        <Text fontSize="xs" fontWeight="semibold">
+                          DELETE
                         </Text>
                       </Flex>
                     </Button>
-                    <IconButton
-                      aria-label="Add to friends"
-                      icon={<AddIcon />}
-                      onClick={() => handleInc(med.Name, med.Dosage + 1)}
-                    />
-                  </ButtonGroup>
-                </VStack>
-              </HStack>
+
+                    <ButtonGroup size="sm" isAttached variant="outline">
+                      <IconButton
+                        aria-label="Add to friends"
+                        size="xs"
+                        icon={<MinusIcon />}
+                        onClick={() => handleInc(med.Name, med.Dosage - 1)}
+                      />
+                      <Button
+                        p="0px"
+                        bg="transparent"
+                        variant="no-hover"
+                        mt="-1"
+                      >
+                        <Flex
+                          color={"black"}
+                          cursor="pointer"
+                          align="center"
+                          p="12px"
+                        >
+                          <Text fontSize="xs" fontWeight="semibold">
+                            DOSAGE
+                          </Text>
+                        </Flex>
+                      </Button>
+                      <IconButton
+                        aria-label="Add to friends"
+                        size="xs"
+                        icon={<AddIcon />}
+                        onClick={() => handleInc(med.Name, med.Dosage + 1)}
+                      />
+                    </ButtonGroup>
+                  </VStack>
+                </HStack>
+                <hr width="100%" color="gray" />
+              </div>
             ))}
+
             {!addMed && (
               <Button
                 leftIcon={<AddIcon />}
