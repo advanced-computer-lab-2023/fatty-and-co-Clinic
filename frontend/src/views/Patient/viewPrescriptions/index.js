@@ -15,6 +15,7 @@ import {
   Grid,
   Input,
   Flex,
+  Heading,
   FormControl,
   Table,
   Thead,
@@ -32,7 +33,10 @@ import {
   useColorModeValue,
   Select,
   Text,
+  VStack,
+  StackDivider,
 } from "@chakra-ui/react";
+import { BsPrescription2 } from "react-icons/bs";
 
 function PrescriptionTable() {
   const { patientUsername } = useParams();
@@ -43,56 +47,44 @@ function PrescriptionTable() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [doctorNames, setDoctorNames] = useState(new Set());
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const textColor = useColorModeValue("gray.700", "white");
 
   useEffect(() => {
-    fetchUniqueDoctorNames();
     fetchPrescriptions();
-  }, [patientUsername]);
+  }, [patientUsername, doctorName, status, date]);
 
-  const fetchUniqueDoctorNames = () => {
-    // Fetch all prescriptions to get unique doctor names
-
+  const fetchPrescriptions = () => {
+    // Construct the URL based on filters and patient username
+    let url = API_PATHS.viewPrescriptions;
+    setIsLoading(true);
     axios
-      .get(API_PATHS.viewPrescriptions, {
+      .post(url, {
+            DoctorName: doctorName,
+            Date: date,
+            Status: status,
+        },{
         headers: {
           Authorization: Authorization,
         },
       })
       .then((response) => {
+        // get unique doctor names for filtering using doctor name
         const uniqueNames = new Set();
         response.data.forEach((prescription) => {
           uniqueNames.add(prescription.DoctorName);
         });
         setDoctorNames(uniqueNames);
-      })
-      .catch((error) => {
-        console.error("Error fetching unique doctor names:", error);
-      });
-  };
-
-  const fetchPrescriptions = () => {
-    // Construct the URL based on filters and patient username
-    let url = API_PATHS.viewPrescriptions;
-
-    if (doctorName) url += `&DoctorName=${doctorName}`;
-    if (date) url += `&Date=${date}`;
-    if (status) url += `&Status=${status}`;
-
-    axios
-      .get(url, {
-        headers: {
-          Authorization: Authorization,
-        },
-      })
-      .then((response) => {
+        console.log(response.data);
         setPrescriptions(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching prescriptions:", error);
+        setIsLoading(false);
       });
   };
 
@@ -122,24 +114,43 @@ function PrescriptionTable() {
   };
 
   const handleStatusChange = (event) => {
-    console.log(event);
     setStatus(event.target.value);
   };
   const handleDateChange = (event) => {
-    console.log(event);
     setDate(event.target.value);
   };
+  
+  const clearSearch = () => {
+    setDoctorName("");
+    setStatus("");
+    setDate("");
+    fetchPrescriptions();
+  }
 
   return (
-    <Box pt="80px">
+    <Box>
       <Flex
         direction="column"
         alignItems="flex-start"
         pt="50px"
         justifyContent="flex-start"
       >
-        <Flex direction="row" alignItems="flex-start">
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+        
+        <Card my="0px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+          <CardHeader p="6px 0px 22px 0px">
+            <Flex direction="column">
+              <Text
+                fontSize="lg"
+                color={textColor}
+                fontWeight="bold"
+                pb=".5rem"
+                marginLeft={6}
+              >
+                Prescriptions
+              </Text>
+            </Flex>
+            <Flex direction="row" alignItems="flex-start">
+          <Grid templateColumns="repeat(5, 1fr)" gap={6} marginLeft={4}>
             <FormControl>
               <Select
                 bg="white"
@@ -176,50 +187,42 @@ function PrescriptionTable() {
             <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
               Search
             </Button>
+            <Button w="100%" h="10" onClick={clearSearch} marginLeft={4}>
+              Clear
+            </Button>
           </Grid>
         </Flex>
-        <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
-          <CardHeader p="6px 0px 22px 0px">
-            <Flex direction="column">
-              <Text
-                fontSize="lg"
-                color={textColor}
-                fontWeight="bold"
-                pb=".5rem"
-              >
-                Prescriptions
-              </Text>
-            </Flex>
           </CardHeader>
           <CardBody>
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th>Doctor Name</Th>
-                  <Th>Date</Th>
                   <Th>Diagnosis</Th>
+                  <Th>Doctor Name</Th>
                   <Th>Status</Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {prescriptions.map((prescription) => (
                   <Tr
                     key={prescription._id}
-                    onClick={() => openModal(prescription._id)}
                   >
+                    <Td>
+                        <Heading as="h4" size="md" color="teal">
+                            {prescription && prescription.Diagnosis
+                        ? prescription.Diagnosis
+                        : "N/A"}
+                        </Heading>
+                        <Text fontSize="s" color="gray.500">
+                            Diagnosed on {" "} {prescription && prescription.Date
+                        ?  new Date(prescription.Date).toLocaleDateString("en-GB")
+                        : "N/A"}
+                        </Text>
+                    </Td>
                     <Td>
                       {prescription && prescription.DoctorName
                         ? prescription.DoctorName
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Date
-                        ?  new Date(prescription.Date).toLocaleDateString("en-GB")
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Diagnosis
-                        ? prescription.Diagnosis
                         : "N/A"}
                     </Td>
                     <Td>
@@ -227,11 +230,17 @@ function PrescriptionTable() {
                         ? prescription.Status
                         : "N/A"}
                     </Td>
+                    <Td>
+                        <Button colorScheme="teal" variant="solid" 
+                            rightIcon={<BsPrescription2 />} onClick={() => openModal(prescription._id)}>
+                            View Prescribed Medicines
+                        </Button>
+                    </Td>
                   </Tr>
                 ))}
-              </Tbody>
+                </Tbody>
             </Table>
-          </CardBody>
+            </CardBody>
         </Card>
       </Flex>
       {selectedPrescription && (
@@ -242,16 +251,10 @@ function PrescriptionTable() {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Prescription Details</ModalHeader>
+            <ModalHeader>Medicine Prescribed</ModalHeader>
             <ModalCloseButton />
-
             <ModalBody>
-              <p>Doctor Name: {selectedPrescription.DoctorName}</p>
-              <p>Date: {new Date(selectedPrescription.Date).toLocaleDateString("en-GB")}</p>
-              <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
-              <p>Status: {selectedPrescription.Status}</p>
-              <p>Medicines:</p>
-              <ul style={{  marginLeft: "40px" }}>
+              <ul style={{ listStyleType: "number", marginLeft: "40px" }}>
                 {selectedPrescription.Medicine.map((medicine, index) => (
                   <li key={index}>{medicine.Name + ", " + medicine.Dosage+" mg"} </li>
                 ))}
