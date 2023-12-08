@@ -294,6 +294,7 @@ function generateMedicine() {
     const randomMedicine = meds[randomIndex];
     const medicineObject = {
       Name: randomMedicine,
+      Dosage: randomIndex,
     };
     medicineList.push(medicineObject);
   }
