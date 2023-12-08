@@ -38,7 +38,7 @@ export const PatientAppTable = ({ title, captions, data, isLoading }) => {
         ) : (
           <Table variant="simple" color={textColor}>
             <Thead>
-              <Tr my=".8rem" pl="0px">
+              <Tr my=".6rem" pl="0px">
                 {captions.map((caption, idx) => {
                   return (
                     <Th

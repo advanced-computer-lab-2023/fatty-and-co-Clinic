@@ -39,6 +39,7 @@ import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 
+
 import {
   HomeIcon,
   StatsIcon,
