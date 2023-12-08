@@ -106,6 +106,17 @@ const getPatient = async (req, res) => {
   }
 };
 
+const getPatientInfo = async (req, res) => {
+  try{
+    var username = req.user.Username;
+    const patient = await patientModel.findOne({ Username: username });
+    const user = await systemUserModel.findOne({ Username: username });
+    res.status(200).send({patient, user});
+  }catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
 //find patient by username
 const getPatientUsername = async (req, res) => {
   try {
@@ -997,6 +1008,27 @@ const viewHealthPackage = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+// returns whole subscription with package
+const viewSubscribedPackage = async (req, res) => {
+  try {
+    const current_user = req.user.Username; //changed this
+    const patient = await patientModel.findOne({ Username: current_user });
+    const subscription = await subscriptionModel
+      .findOne({ Patient: patient, Status: "Subscribed" })
+      .populate("Patient")
+      .populate("Package");
+    if (subscription) {
+      const package = subscription.Package;
+      res.status(200).send({subscription, package});
+    } else {
+      res.status(404).send({ Error: "Cannot find any current subscriptions!" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
 const viewHealthPackagewithstatus = async (req, res) => {
   try {
     const current_user = req.user.Username;
@@ -1317,10 +1349,10 @@ const selectPatient = async (req, res) => {
 // Get prescriptions of a given patient. Can also be filtered
 // using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
-  const query = req.query;
+  const query = req.body;
   // console.log(query);
   const patientUsername = req.user.Username; // Extract patientUsername
-  // console.log(req.params.patientUsername);
+  // console.log(patientUsername);
 
   try {
     const baseQuery = { PatientUsername: patientUsername };
@@ -1818,6 +1850,7 @@ module.exports = {
   viewHealthFam,
   viewOptionPackages,
   viewHealthPackage,
+  viewSubscribedPackage,
   session_index,
   createFamilymember,
   getFamilymembers,
@@ -1827,6 +1860,7 @@ module.exports = {
   getAllPatients,
   deletePatient,
   getPatient,
+  getPatientInfo,
   updatePatient,
   selectPrescription,
   getEmergencyContact,
