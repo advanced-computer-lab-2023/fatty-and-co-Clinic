@@ -22,7 +22,6 @@ export function ItemContent(props) {
         </Text>
       </Flex>
       <Flex alignItems="flex-end" >
-      <BsCircleFill color={"teal"} w="3px" h="3px" me="3`px" />
       </Flex>
 
       {/* <Avatar

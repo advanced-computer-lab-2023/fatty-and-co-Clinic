@@ -49,6 +49,7 @@ const theme = extendTheme({
   },
 });
 
+
 export default function HeaderLinks(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -69,6 +70,21 @@ export default function HeaderLinks(props) {
       }
     };
     fetchWalletAmount();
+  }, [Authorization]);
+
+  useEffect(() => {
+  const fetchNotifications = async () => {
+    try {
+      const notifs = await axios.get(API_PATHS.getNotifs, {
+        headers: { Authorization },
+      });
+      console.log(response.data);
+      //dispatch({ type: "GET_WALLET", payload: response.data.Wallet });
+    } catch (error) {
+      console.error("Error fetching notifications", error);
+    }
+  };
+  fetchNotifications();
   }, [Authorization]);
 
   // Chakra Color Mode
@@ -97,15 +113,24 @@ export default function HeaderLinks(props) {
         </MenuButton>
         <MenuList p="16px 8px">
           <Flex flexDirection="column">
-            <MenuItem borderRadius="8px" mb="10px">
+            
+            {/* {Array.isArray(notifs) && data.map((row) => {
+              return (
+              <MenuItem borderRadius="8px" mb="10px">
+                <a href= {(user.userType === "Patient"? "/patient/viewAppointPat" : "/doctor/viewAppointments")}>
               <ItemContent
                 time="13 minutes ago"
-                info="from Alicia"
+                info="from Alicia ===================================="
                 boldInfo="New Message"
                 aName="Alicia"
                 aSrc={avatar1}
               />
+            </a>
             </MenuItem>
+              );
+            })}             */}
+            
+            
             <MenuItem borderRadius="8px" mb="10px">
               <ItemContent
                 time="2 days ago"

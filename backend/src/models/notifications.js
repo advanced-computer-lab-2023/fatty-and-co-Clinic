@@ -15,6 +15,11 @@ const notificationSchema = new Schema(
       type: String,
       required: true,
     },
+    Clicked: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true }
 );
