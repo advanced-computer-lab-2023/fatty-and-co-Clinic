@@ -43,6 +43,7 @@ export default function UpdatePrescription({ customkey }) {
   const [dosage, setDosage] = useState("");
   const [addMed, setaddMed] = useState(false);
   const [meds, setMeds] = useState([]);
+  
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -320,12 +321,12 @@ const handleInc = async (medName,dosage) => {
               </div>
             )}
             <Button
-              colorScheme="blue"
+              colorScheme="teal.400"
               marginLeft={4}
               mr={4}
               onClick={handleCloseModal}
             >
-              Close
+              Submit
             </Button>
           </ModalFooter>
         </ModalContent>
