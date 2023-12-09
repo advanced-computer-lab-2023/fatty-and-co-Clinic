@@ -225,7 +225,7 @@ export default function HeaderLinks(props) {
         h="18px"
       /> */}
   
-      {/* {user.userType !== "Admin" && (
+      {user.userType !== "Admin" && (
       <ChakraProvider theme={theme}>
         <Icon
           as={MdAttachMoney}
@@ -235,9 +235,6 @@ export default function HeaderLinks(props) {
           h="18px"
           mb="2px"
         />
-      </ChakraProvider>
-      )}
-      <ChakraProvider theme={theme}>
         <Text
           fontSize="sm"
           fontWeight="bold"
@@ -247,7 +244,8 @@ export default function HeaderLinks(props) {
         >
           {Wallet !== null ? `${Wallet}` : ""}
         </Text>
-      </ChakraProvider> */}
+      </ChakraProvider>
+      )}
     </Flex>
   );
 }
