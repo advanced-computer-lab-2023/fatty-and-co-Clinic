@@ -36,7 +36,7 @@ function PatientProfile() {
   useEffect(() => {
     getPatientInfo();
     getSubscriptionInfo();
-  }, [subscription, myPackage]);
+  }, []);
 
   const getPatientInfo = () => {
     const url = API_PATHS.getPatientInfo;
@@ -87,7 +87,7 @@ function PatientProfile() {
           gender={patient.Gender == "F"? "Female": patient.Gener == "M"? "Male": "Other"}
           nationalId={patient.NationalId}
         />
-        <Subscription subscription={subscription} myPackage={myPackage} refresh={getSubscriptionInfo}></Subscription>
+        <Subscription subscription={subscription} myPackage={myPackage}></Subscription>
       </Grid>
       <PrescriptionTable></PrescriptionTable>
     </Flex>

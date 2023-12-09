@@ -1,5 +1,5 @@
 // Chakra imports
-import { Flex, Button, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Button, Text, useColorModeValue, Stack, StackDivider, Box, Heading } from "@chakra-ui/react";
 // Custom components
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
@@ -7,6 +7,7 @@ import CardHeader from "components/Card/CardHeader";
 import React , {useState} from "react";
 import ReactCardFlip from "react-card-flip";
 import ChangePassword from "./ChangePassword";
+import ChangeEmail from "./ChangeEmail";
 
 const ProfileInformation = ({
   title,
@@ -21,7 +22,12 @@ const ProfileInformation = ({
   // Chakra color mode
   const textColor = useColorModeValue("gray.700", "white");
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
   const handlePasswordChange = () => {
+    setIsPassword(!isPassword);
+    setIsFlipped(!isFlipped);
+  };
+  const handleEmailChange = () => {
     setIsFlipped(!isFlipped);
   };
 
@@ -34,64 +40,50 @@ const ProfileInformation = ({
         </Text>
       </CardHeader>
       <CardBody px='5px'>
-        <Flex direction='column'>
-          <Text fontSize='md' color='gray.500' fontWeight='400' mb='30px'>
-            {description}
-          </Text>
-          <Flex align='center' mb='18px'>
-            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              Full Name:{" "}
-            </Text>
-            <Text fontSize='md' color='gray.500' fontWeight='400'>
-              {name}
-            </Text>
-          </Flex>
-          <Flex align='center' mb='18px'>
-            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              Mobile:{" "}
-            </Text>
-            <Text fontSize='md' color='gray.500' fontWeight='400'>
+        <Flex direction='column' w='100%' >
+        <Stack divider={<StackDivider />} spacing='3' flex='1' align='center' flexDirection='column'>
+          <Box align='center'>
+            <Heading size='xs' textTransform='uppercase'>
+              Mobile Number
+            </Heading>
+            <Text pt='2' fontSize='sm'>
               {mobile}
             </Text>
-          </Flex>
-          <Flex align='center' mb='18px'>
-            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              Email:{" "}
-            </Text>
-            <Text fontSize='md' color='gray.500' fontWeight='400'>
-              {email}
-            </Text>
-          </Flex>
-          <Flex align='center' mb='18px'>
-            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              Date of Birth:{" "}
-            </Text>
-            <Text fontSize='md' color='gray.500' fontWeight='400'>
+          </Box>
+          <Box align='center'>
+            <Heading size='xs' textTransform='uppercase'>
+              Date Of Birth
+            </Heading>
+            <Text pt='2' fontSize='sm'>
               {dateOfBirth}
             </Text>
-          </Flex>
-          <Flex align='center' mb='18px'>
-            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              Gender:{" "}
+          </Box>
+          <Box align='center'>
+            <Heading size='xs' textTransform='uppercase'>
+              Gender
+            </Heading>
+            <Text pt='2' fontSize='sm'>
+            {gender}
             </Text>
-            <Text fontSize='md' color='gray.500' fontWeight='400'>
-              {gender}
-            </Text>
-          </Flex>
-          <Flex align='center' mb='50px'>
-            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
-              National ID:{" "}
-            </Text>
-            <Text fontSize='md' color='gray.500' fontWeight='400'>
+          </Box>
+          <Box align='center'>
+            <Heading size='xs' textTransform='uppercase'>
+              National ID
+            </Heading>
+            <Text pt='2' fontSize='sm'>
               {nationalId}
             </Text>
+          </Box>
+          <Flex>
+            <Button colorScheme="red" flex="1" mr="4" onClick={() => handlePasswordChange()}>
+              Change Password
+            </Button>
+            <Button colorScheme="red" flex="1" ml="4" onClick={() => handleEmailChange()}>
+               Change Email
+            </Button>
           </Flex>
-        <Flex mb="24px">
-          <Button colorScheme="red" width="fit-content" onClick={() => handlePasswordChange()}>
-                Change Password
-          </Button>
-        </Flex>
-        </Flex>
+       </Stack>
+       </Flex>
       </CardBody>
     </Card>
 
@@ -103,10 +95,21 @@ const ProfileInformation = ({
           </CardHeader>
           <CardBody px="5px">
             <Flex direction="column"  justify="center"  width="100%">
-              <ChangePassword/>
-              <Button colorScheme="red"  onClick={() => handlePasswordChange()}>
+              {isPassword?(
+                <>
+                <ChangePassword/>
+                <Button colorScheme="red"  onClick={() => handlePasswordChange()}>
                   Cancel
-              </Button>
+                </Button>
+                </>
+              ):(
+                <>
+                <ChangeEmail/>
+                <Button colorScheme="red"  onClick={() => handleEmailChange()}>
+                  Cancel
+                </Button>
+                </>
+              )}
             </Flex>
           </CardBody>
         </Card>
