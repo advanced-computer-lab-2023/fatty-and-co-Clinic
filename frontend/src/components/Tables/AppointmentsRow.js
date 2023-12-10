@@ -28,8 +28,8 @@ function AppointmentsRow(props) {
   return (
     <Tr>
       {DoctorName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
-          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+        <Td minWidth={{ sm: "150px" }} pl="0px">
+          <Flex align="center" py=".8rem" minWidth="40%" flexWrap="nowrap">
             <Text
               fontSize="md"
               color={textColor}
@@ -43,7 +43,7 @@ function AppointmentsRow(props) {
       )}
 
       {PatientName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
+        <Td minWidth={{ sm: "150px" }} pl="20px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
               fontSize="md"
@@ -96,7 +96,21 @@ function AppointmentsRow(props) {
         <Td minWidth={{ sm: "150px" }}>
           <CreateFollowUpButton patientUsername={PatientUsername} />
         </Td>
+
+   
       )}
+  <Td minWidth={{ sm: "150px" }}>
+  {(Status === "Upcoming" ||Status === "Rescheduled" ) && ( // Render the cancel button only if status is "Upcoming"
+       <Button
+       colorScheme="red"
+       onClick={() => props.handleCancelAppointment(props.appointmentId)}
+     >
+       Cancel
+     </Button>
+  )}
+</Td>
+     
+
     </Tr>
   );
 }

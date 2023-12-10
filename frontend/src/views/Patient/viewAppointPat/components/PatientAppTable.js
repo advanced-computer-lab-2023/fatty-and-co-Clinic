@@ -19,7 +19,7 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export const PatientAppTable = ({ title, captions, data, isLoading }) => {
+export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancelAppointment }) => {
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -62,6 +62,10 @@ export const PatientAppTable = ({ title, captions, data, isLoading }) => {
                     Status={row.Status}
                     Type={row.FollowUp ? "Follow Up" : "First Time"}
                     DateTime={row.Date}
+                    data={data}
+                    isLoading={isLoading}
+                    appointmentId={row._id} // Assuming the appointment ID is in the data row as _id
+                    onCancelAppointment={handleCancelAppointment} // Pass the function to the row component// Pass the cancellation function as a prop
                   />
                 );
               })}

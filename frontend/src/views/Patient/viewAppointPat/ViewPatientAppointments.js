@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Button, Box, Input, Select } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Select,useToast } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import PatientAppTable from "./components/PatientAppTable";
@@ -40,7 +40,99 @@ export function ViewPatientAppointments() {
         setIsLoading(false);
       });
   }, [searchParams]);
+  const toast = useToast();
+  // const handleCancelAppointment = async (appointmentId) => {
+  //   try {
+  //     const link = API_PATHS.cancellappointment;
+  //     // Replace with your cancel API endpoint
+  //     console.log(link);
+  //     const response = await axios.patch(link, {
+  //       headers: {
+  //         Authorization: `Bearer ${user.token}`, // Assuming user.token exists
+  //       },
+  //     });
+  
+  //     if (response.status === 200) {
+  //       // Display success message using toast
+  //       toast({
+  //         title: "Appointment Cancelled",
+  //         status: "success",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //       // Reload appointments after cancellation (optional)
+  //       setSearchParams({ ...searchParams });
+  //     } else {
+  //       // Display error message using toast if cancellation fails
+  //       toast({
+  //         title: "Error Cancelling Appointment",
+  //         description: "Please try again later.",
+  //         status: "error",
+  //         duration: 3000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error cancelling appointment: ", error);
+  //     // Display error message using toast if cancellation fails
+  //     toast({
+  //       title: "Error Cancelling Appointment",
+  //       description: "Please try again later.",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
+  const handleCancelAppointment = async (e) => {
+    e.preventDefault();
+  
+    try {
+      // if (Package2 === "") {
+      //   toast({
+      //     title: "Please fill the Package field!",
+      //     status: "error",
+      //     duration: 9000,
+      //     isClosable: true,
+      //   });
+      //   return; // Don't proceed further
+      // } 
+  
+      const response = await fetch(API_PATHS.cancellappointment, {
+        method: "PATCH",
+        headers: {
+          Authorization,
+          "Content-Type": "application/json",
+        },
+      // body: JSON.stringify({Package2}),
+      });
+  
+      console.log("Response", response.status);
+      const errorData = await response.json();
+      if (response.ok) {
+        toast({
+          title: "Cancelled successfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+  
+     
+       // setNationalId(""); // Clear the input fields
+      } else {
+        toast({
+          title: "Failed to Cancel",
+          description: errorData.error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
     setSearchParams({
@@ -108,6 +200,7 @@ export function ViewPatientAppointments() {
           captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
           data={data}
           isLoading={isLoading}
+          handleCancelAppointment={handleCancelAppointment}
         />
         {/* )) || (
                 <Text fontSize="3xl" fontWeight="bold">
