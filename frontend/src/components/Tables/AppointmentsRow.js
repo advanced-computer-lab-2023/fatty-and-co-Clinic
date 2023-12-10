@@ -18,11 +18,13 @@ import CreateFollowUpButton from "views/Doctors/viewAppointments/components/Crea
 function AppointmentsRow(props) {
   const {
     DoctorName,
+    DoctorUsername,
     PatientName,
     PatientUsername,
     Status,
     Type,
     DateTime,
+ 
   } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -41,7 +43,7 @@ function AppointmentsRow(props) {
           </Flex>
         </Td>
       )}
-
+ 
       {PatientName && (
         <Td minWidth={{ sm: "150px" }} pl="20px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
@@ -103,7 +105,7 @@ function AppointmentsRow(props) {
   {(Status === "Upcoming" ||Status === "Rescheduled" ) && ( // Render the cancel button only if status is "Upcoming"
        <Button
        colorScheme="red"
-       onClick={() => props.handleCancelAppointment(props.appointmentId)}
+       onClick={() => props.handleCancelAppointment(DoctorUsername)}
      >
        Cancel
      </Button>

@@ -6,6 +6,7 @@ import PatientAppTable from "./components/PatientAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
 
 export function ViewPatientAppointments() {
+  const [DoctorUsername, setDoctorUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -85,26 +86,21 @@ export function ViewPatientAppointments() {
   //   }
   // };
 
-  const handleCancelAppointment = async (e) => {
-    e.preventDefault();
-  
+  const handleCancelAppointment = async (DoctorUsername) => {
+   // e.preventDefault();
+   //console.log("DoctorUsername:", DoctorUsername);
+   setDoctorUsername(DoctorUsername);
+
     try {
-      // if (Package2 === "") {
-      //   toast({
-      //     title: "Please fill the Package field!",
-      //     status: "error",
-      //     duration: 9000,
-      //     isClosable: true,
-      //   });
-      //   return; // Don't proceed further
-      // } 
-  
+   
       const response = await fetch(API_PATHS.cancellappointment, {
         method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
+    
+        body: JSON.stringify({doctorUsername:DoctorUsername})
       // body: JSON.stringify({Package2}),
       });
   
@@ -119,7 +115,7 @@ export function ViewPatientAppointments() {
         });
   
      
-       // setNationalId(""); // Clear the input fields
+   
       } else {
         toast({
           title: "Failed to Cancel",

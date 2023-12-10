@@ -91,7 +91,7 @@ export const API_PATHS = {
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
-  cancellappointment:APPOINTMENT_BASE+"/cancelAppointment",
+  cancellappointment:APPOINTMENT_BASE+"cancelAppointment",
 
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",

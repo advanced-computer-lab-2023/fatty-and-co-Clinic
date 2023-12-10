@@ -638,6 +638,7 @@ const cancelAppForSelf = async (req, res) => {
 
      const patientUsername= req.user.Username
      const {doctorUsername}=req.body
+     console.log("DoctorUsername :",doctorUsername);
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
      const currDate= new Date();
      var refund=0
