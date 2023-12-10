@@ -28,6 +28,7 @@ import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
+import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
@@ -116,7 +117,13 @@ var dashRoutes = [
     component: PatientAppointments,
     layout: "/patient",
   },
-
+  {
+    path: "/viewfamAppoint",
+    name: "View family Appointments ",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamilyApp,
+    layout: "/patient",
+  },
   {
     path: "/Subscribtions/",
     name: " Cancel Subscriptions",

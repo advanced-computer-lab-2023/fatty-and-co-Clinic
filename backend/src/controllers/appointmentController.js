@@ -445,7 +445,88 @@ const getAppointmentsDoc = async (req, res) => {
     res.status(200).json(appointments);
   }
 };
+const getAppointmentsfamilymembers = async (req, res) => {
+  const PatientUser = req.user.Username;
+  const query = req.query;
+  const Status = query.Status;
+  const dateValue = new Date(query.Date);
+  const newDate = dateValue.addDays(1);
 
+  // const dateValue = new global.Date(Date);
+  // const newDate = new global.Date(Date);
+  // newDate.setDate(dateValue.getDate() + 1);
+
+  const hasDate = isNaN(dateValue) ? "n" : "y";
+
+  // Check if the 'id' parameter is a valid MongoDB ObjectID
+  if (!appointmentModel.findOne({ PatientUsername: PatientUser })) {
+    res.status(404).json({ error: "Invalid Username" });
+    return;
+  }
+
+  const appointments =
+    Status != "Rescheduled" &&
+    Status != "Completed" &&
+    Status != "Cancelled" &&
+    Status != "Upcoming" &&
+    hasDate == "n"
+      ? await appointmentModel.find(  {
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser // Filter for appointments booked by the current user
+      })
+      : (Status == "Rescheduled" ||
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
+        hasDate == "y" &&
+        dateValue.getUTCHours() === 0
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : (Status == "Rescheduled" ||
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
+        hasDate == "n"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+        })
+      : Status == "Rescheduled" ||
+        Status == "Completed" ||
+        Status == "Cancelled" ||
+        Status == "Upcoming"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+        })
+      : hasDate == "y" && dateValue.getUTCHours() == 0
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : hasDate == "y"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Date: dateValue,
+        })
+      : "Bad request";
+
+  // Return a 200 success response with a JSON object that contains the 'mySessions' array
+  console.log("length",appointments.length);
+  if (appointments == "bad requests") {
+    res.status(404).json("No Appointments Found");
+  } else {
+    res.status(200).json(appointments);
+  }
+};
 const getAppointmentsPat = async (req, res) => {
   const PatientUser = req.user.Username;
   const query = req.query;
@@ -555,7 +636,6 @@ const testAppointRef = async (req, res) => {
 const reschedulePatient = async (req, res) => {
  
   try {
-
      const docUsername= req.user.Username
      const {patientUsername,date}=req.body
      const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, Status:"Upcoming"})
@@ -639,6 +719,7 @@ const cancelAppForSelf = async (req, res) => {
      const patientUsername= req.user.Username
      const {doctorUsername}=req.body
      console.log("DoctorUsername :",doctorUsername);
+     console.log("Hi");
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
      const currDate= new Date();
      var refund=0
@@ -866,6 +947,7 @@ module.exports = {
   upcomingAppforDoc,
   searchPatient,
   getAppointmentsPat,
+  getAppointmentsfamilymembers,
   testAppointRef,
   rescheduleAppointmentPatient,
   reschedulefamilymember

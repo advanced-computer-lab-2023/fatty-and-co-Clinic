@@ -23,8 +23,8 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
-      <CardHeader p="6px 0px 22px 0px">
+    <Card my="12px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+      <CardHeader p="6px 0px 12px 0px">
         <Flex direction="column">
           <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
             {/* title will be All doctors  */}
@@ -66,7 +66,6 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
                     data={data}
                     isLoading={isLoading}
                     appointmentId={row._id} // Assuming the appointment ID is in the data row as _id
-                  
                     handleCancelAppointment={handleCancelAppointment} // Pass the function to the row component// Pass the cancellation function as a prop
                   />
                 );
