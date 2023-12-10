@@ -1317,7 +1317,7 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
+      .find({  $and: [{ Patient: patient }, { FamilyMem: { $ne: patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
     res.status(200).send(fam);

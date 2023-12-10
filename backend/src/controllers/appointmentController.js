@@ -455,11 +455,11 @@ const getAppointmentsfamilymembers = async (req, res) => {
   // const dateValue = new global.Date(Date);
   // const newDate = new global.Date(Date);
   // newDate.setDate(dateValue.getDate() + 1);
-
+console.log("here is the user ",PatientUser);
   const hasDate = isNaN(dateValue) ? "n" : "y";
 
   // Check if the 'id' parameter is a valid MongoDB ObjectID
-  if (!appointmentModel.findOne({ PatientUsername: PatientUser })) {
+  if (!appointmentModel.findOne({ BookedBy: PatientUser })) {
     res.status(404).json({ error: "Invalid Username" });
     return;
   }
