@@ -37,6 +37,7 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
+import { DownloadIcon } from '@chakra-ui/icons'
 
 function PrescriptionTable() {
   const { patientUsername } = useParams();
@@ -254,11 +255,29 @@ function PrescriptionTable() {
             <ModalHeader>Medicine Prescribed</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <ul style={{ listStyleType: "number", marginLeft: "40px" }}>
+              <ul className="myList" style={{ listStyleType: "number", marginLeft: "40px" }}>
                 {selectedPrescription.Medicine.map((medicine, index) => (
-                  <li key={index}>{medicine.Name + ", " + medicine.Dosage+" mg"} </li>
+                  <li key={index}><span className="medicine-name">{medicine.Name}</span>
+                  <span className="medicine-dosage">{", " + medicine.Dosage + " mg"}</span> </li>
                 ))}
               </ul>
+              <style>
+                {
+                  //css for the prescription details
+                  `
+                  .myList li .medicine-name {
+                    font-weight: bold;
+                    color: #2c3e50;
+                  }
+                  
+                  .myList li .medicine-dosage {
+                    font-style: italic;
+                    color: #7f8c8d;
+                  }
+                  `
+
+                }
+              </style>
               <Button
                 id="print-button"
                 style={{ marginTop: "20px" }}
@@ -318,6 +337,7 @@ function PrescriptionTable() {
                 }}
               >
                 Download
+                <DownloadIcon ml={2} />
               </Button>
             </ModalBody>
           </ModalContent>
