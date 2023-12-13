@@ -7,7 +7,6 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
-import html2canvas from "html2canvas";
 import jsPdf from "jspdf";
 import logo from "assets/img/ShebeenElkom.png";
 import {

@@ -39,6 +39,7 @@ import {
   Progress,
 } from "@chakra-ui/react";
 import { AttachmentIcon } from "@chakra-ui/icons";
+import { IoMdCloudUpload } from "react-icons/io";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
@@ -485,7 +486,9 @@ function docSignUp() {
                   )}
                 </Field>
                 {/* //////// Upload files ///////// */}
-
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Upload Files <span style={{ color: "red" }}>*</span>
+                </FormLabel>
                 <Field name="IdFile">
                   {({ field }) => (
                     <FormControl
@@ -494,13 +497,15 @@ function docSignUp() {
                     >
                       <FormLabel
                         htmlFor="IdFile"
+                        className="custom-file-upload"
                         ms="4px"
-                        fontSize="sm"
+                        fontSize="12px"
                         bg="teal.300"
                         color="white"
-                        fontWeight="xsmall"
                         w="60%"
                         h="45"
+                        fontWeight={"bold"}
+                        _hover={{ bg: "teal.200" }}
                         // mb="24px"
                         borderRadius="15px"
                         style={{
@@ -509,8 +514,8 @@ function docSignUp() {
                           paddingTop: "10px",
                         }}
                       >
-                        Upload Id <span style={{ color: "red" }}>*</span>{" "}
-                        <AttachmentIcon boxSize={3} />
+                        Id <span style={{ color: "red" }}>*</span>{" "}
+                        <Icon as={IoMdCloudUpload} boxSize={4} />
                       </FormLabel>
                       <Input
                         type="file"
@@ -538,24 +543,25 @@ function docSignUp() {
                     >
                       <FormLabel
                         htmlFor="MedicalLicense"
+                        className="custom-file-upload"
                         ms="4px"
-                        fontSize="sm"
+                        fontSize="12px"
                         bg="teal.300"
                         color="white"
-                        fontWeight="xsmall"
+                        fontWeight={"bold"}
                         w="60%"
                         h="45"
                         // mb="24px"
                         borderRadius="15px"
+                        _hover={{ bg: "teal.200" }}
                         style={{
                           cursor: "pointer",
                           textAlign: "center",
                           paddingTop: "10px",
                         }}
                       >
-                        Upload Medical License{" "}
-                        <span style={{ color: "red" }}>*</span>{" "}
-                        <AttachmentIcon boxSize={3} />{" "}
+                        Medical License <span style={{ color: "red" }}>*</span>{" "}
+                        <Icon as={IoMdCloudUpload} boxSize={4}  />{" "}
                       </FormLabel>
                       <Input
                         type="file"
@@ -586,24 +592,25 @@ function docSignUp() {
                     >
                       <FormLabel
                         htmlFor="MedicalDegree"
+                        className="custom-file-upload"
                         ms="4px"
-                        fontSize="sm"
+                        fontSize="12px"
                         bg="teal.300"
                         color="white"
-                        fontWeight="xsmall"
+                        fontWeight={"bold"}
                         w="60%"
                         h="45"
                         // mb="24px"
                         borderRadius="15px"
+                        _hover={{ bg: "teal.200" }}
                         style={{
                           cursor: "pointer",
                           textAlign: "center",
                           paddingTop: "10px",
                         }}
                       >
-                        Upload Medical Degree{" "}
-                        <span style={{ color: "red" }}>*</span>{" "}
-                        <AttachmentIcon boxSize={3} />{" "}
+                        Medical Degree <span style={{ color: "red" }}>*</span>{" "}
+                        <Icon as={IoMdCloudUpload}  boxSize={4} />{" "}
                       </FormLabel>
                       <Input
                         type="file"
@@ -624,6 +631,7 @@ function docSignUp() {
                     </FormControl>
                   )}
                 </Field>
+                
                 {uploadProgress > 0 && (
                   <Progress
                     colorScheme="teal"
@@ -635,7 +643,7 @@ function docSignUp() {
                 <Button
                   type="submit"
                   bg="teal.300"
-                  fontSize="10px"
+                  fontSize="11px"
                   color="white"
                   fontWeight="bold"
                   w="100%"
