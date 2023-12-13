@@ -254,7 +254,7 @@ function PrescriptionTable() {
             <ModalHeader>Medicine Prescribed</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <ul className="myList" style={{ listStyleType: "number", marginLeft: "40px" }}>
+              <ul className="myList" style={{  marginLeft: "40px" }}>
                 {selectedPrescription.Medicine.map((medicine, index) => (
                   <li key={index}><span className="medicine-name">{medicine.Name}</span>
                   <span className="medicine-dosage">{", " + medicine.Dosage + " mg"}</span> </li>
