@@ -52,6 +52,7 @@ function PackageI() {
         {packages && (
           <PackageInformation title={"Available Packages"} data={packages} />
         )}
+        <PackageForm />
       </Grid>
     </Flex>
   );

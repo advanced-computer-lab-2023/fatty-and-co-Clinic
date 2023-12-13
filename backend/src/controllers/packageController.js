@@ -18,8 +18,13 @@ const createPackage = async (req, res) => {
     await newPackage.save();
     res.status(200).json(newPackage);
   } catch (err) {
+    if (err.code === 11000 && err.keyPattern && err.keyPattern.Name) {
+      res.status(500).json({ message:"This name is already used. Please use a different name." });
+    } else {
     res.status(500).json({ message: err.message });
+    }
   }
+
 };
 
 const getPackages = async (req, res) => {

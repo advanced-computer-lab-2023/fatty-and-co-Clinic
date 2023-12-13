@@ -251,7 +251,7 @@ function docSignUp() {
                       isInvalid={errors.Username && touched.Username}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Username <span style={{ color: "red" }}>*</span>
+                        Username <span style={{ color: "red" }}>* </span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -560,7 +560,7 @@ function docSignUp() {
                           paddingTop: "10px",
                         }}
                       >
-                        Medical License <span style={{ color: "red" }}>*</span>{" "}
+                        Medical License <span style={{ color: "red" }}>* </span>{" "}
                         <Icon as={IoMdCloudUpload} boxSize={4}  />{" "}
                       </FormLabel>
                       <Input
@@ -609,7 +609,7 @@ function docSignUp() {
                           paddingTop: "10px",
                         }}
                       >
-                        Medical Degree <span style={{ color: "red" }}>*</span>{" "}
+                        Medical Degree <span style={{ color: "red" }}>* </span>{" "}
                         <Icon as={IoMdCloudUpload}  boxSize={4} />{" "}
                       </FormLabel>
                       <Input
