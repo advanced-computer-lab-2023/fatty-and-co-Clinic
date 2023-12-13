@@ -37,6 +37,8 @@ import {
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
 import { DownloadIcon } from '@chakra-ui/icons'
+import { jsPDF } from "jspdf";
+import { FaSignature } from "react-icons/fa";
 
 function PrescriptionTable() {
   const { patientUsername } = useParams();
@@ -280,57 +282,63 @@ function PrescriptionTable() {
               <Button
                 id="print-button"
                 style={{ marginTop: "20px" }}
+                // ...
+
                 onClick={(e) => {
-                  const doc = new jsPdf();
+                  const doc = new jsPDF();
                   //write the prescription details text with css
                   let y = 23;
                   doc.addImage(logo, 50, 10, 20, 20);
+                  
                   doc.setTextColor("teal");
                   doc.setFontSize(20);
                   doc.text("SHEBEEN HEALTH ClINC", 75, y);
+                  doc.setFont("Arial", "normal"); // Set font family and style
                   doc.setTextColor("black");
                   doc.setFontSize(16);
                   y += 15;
                   doc.text("Prescription", 15, y);
                   doc.setFontSize(10);
                   y += 8;
-                  // doc.text(
-                  //   "Patient Name: " + ,
-                  //   20,
-                  //   y
-                  // );
-                  // y += 8;
                   doc.text("Date: " + new Date(selectedPrescription.Date).toLocaleDateString("en-GB"), 20, y);
                   y += 8;
-                  doc.text(
-                    "Diagnosis: " + selectedPrescription.Diagnosis,
-                    20,
-                    y
-                  );
+                  doc.text("Diagnosis: " + selectedPrescription.Diagnosis, 20, y);
                   y += 8;
                   doc.text("Status: " + selectedPrescription.Status, 20, y);
                   y += 8;
-                  doc.text("Medicines: ", 20, y);
-                  y += 8;
-                  
-                  doc.text("name", 25, y);
-                  doc.text("dosage", 75, y);
+
+                  // Table headers
+                  doc.setFont("Arial", "bold");
                   doc.setFontSize(12);
-                  y += 8;
-                  //write the medicines list with css
+                  doc.setTextColor("white");
+                  doc.setFillColor(0, 128, 128); // Set table header background color to teal
+                  doc.rect(20, y, 80, 10, "F");
+                  doc.text("Medicine", 25, y + 8);
+                  doc.text("Dosage", 75, y + 8);
+                  y += 18;
+
+                  doc.setFont("Arial", "normal");
+                  doc.setFontSize(12);
+                  doc.setTextColor("black");
+
+                  // Table rows
                   selectedPrescription.Medicine.forEach((medicine, index) => {
                     doc.text(medicine.Name, 25, y);
-                    doc.text(medicine.Dosage+" mg", 75, y);
+                    doc.text(medicine.Dosage + " mg", 77, y);
                     y += 10;
                   });
+
                   doc.setFontSize(10);
-                  doc.text(
-                    "Doctor Signature " ,
-                    150,
-                    y
-                  );
+                  doc.setFont("Arial", "normal"); // Set font family and style for doctor name
+                  doc.text("Doctor Signature ", 150, y);
                   y += 8;
+                  
+                  doc.setFont("Arial", "italic"); // Set font family and style for doctor signature
                   doc.text(selectedPrescription.DoctorName, 150, y);
+
+                  // Add signature icon
+                  // const signatureIcon = doc.splitTextToSize(FaSignature({ size: 20 }), 20);
+                  // doc.addImage(signatureIcon, 150, y + 10, 20, 20);
 
                   doc.save("Prescription.pdf");
                 }}
