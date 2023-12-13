@@ -21,6 +21,7 @@ const adminRoutes = require("./routes/admins");
 const testRoutes = require("./routes/tests");
 const packageRoutes = require("./routes/package");
 const paymentRoutes = require("./routes/payments");
+const prescriptionsRoutes = require("./routes/prescriptions");
 const messageRoutes = require("./routes/messages");
 const conversationRoutes = require ("./routes/conversations")
 // Middleware Variables
@@ -74,9 +75,6 @@ io.on('connection', (socket) => {
     });
   });
 
-
-
-
   //upon disconnection
   socket.on('disconnect', () => {
     console.log('Client disconnected');
@@ -106,8 +104,7 @@ app.use((req, res, next) => {
 app.use("/guest", guestRoutes);
 app.use("/test", testRoutes);
 
-//TODO: Change it to the require auth route
-//app.use("/message", messageRoutes);
+
 
 
 // Middleware (not applied on test or guest routes)
@@ -122,6 +119,7 @@ app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/package", packageRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/prescription", prescriptionsRoutes);
 app.use("/message", messageRoutes);
 app.use("/convo", conversationRoutes);
 

@@ -1,8 +1,6 @@
 /*eslint-disable*/
 // chakra imports
-import {
-  Box, useColorModeValue
-} from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import SidebarContent from "./SidebarContent";
 
@@ -29,16 +27,16 @@ function Sidebar(props) {
   // SIDEBAR
   return (
     <Box ref={mainPanel}>
-      <Box  display={{ sm: "none", xl: "block" }} position = "fixed" >
+      <Box display={{ sm: "none", xl: "block" }} position="fixed">
         <Box
-          overflowY= "auto"
+          overflowY="auto"
           position="sticky"
           bg={sidebarBg}
           transition={variantChange}
-          w="260px"
-          maxW="260px"
+          w="325px"
+          maxW="325px"
           ms={{
-            sm: "16px",
+            sm: "-30px",
           }}
           my={{
             sm: "16px",
@@ -49,18 +47,15 @@ function Sidebar(props) {
           m={sidebarMargins}
           borderRadius={sidebarRadius}
         >
-          <SidebarContent routes={routes}
-        logoText={"SHEBEEN HEALTH CLINIC"}
-        display="none"
-        sidebarVariant={sidebarVariant}
-        />
+          <SidebarContent
+            routes={routes}
+            logoText={"SHEBEEN HEALTH CLINIC"}
+            sidebarVariant={sidebarVariant}
+          />
         </Box>
       </Box>
     </Box>
   );
 }
-
-
-
 
 export default Sidebar;

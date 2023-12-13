@@ -13,10 +13,12 @@ const {
   cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
+  viewSubscribedPackage,
   subscribepackagefamilymem,
   getAllPatients,
   deletePatient,
   getPatient,
+  getPatientInfo,
   updatePatient,
   getPatientUsername,
   viewOptionPackages,
@@ -81,6 +83,7 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
+router.get("/getPatientInfo", getPatientInfo)
 router.get("/getOptionPackages", viewOptionPackages);
 router.patch("/getAmountCredit", getAmountSubscription); //gets amount to be paid for self
 router.patch("/getAmountCreditFam", getAmountFam); //gets amount to be paid for fam
@@ -151,7 +154,7 @@ router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of par
  * @access Public
  */
 // TODO: add type check as middleware if needed
-router.get("/getPrescriptions", getPrescriptions);
+router.post("/getPrescriptions",checkPatient, getPrescriptions);
 
 /**
  * @route POST /patients/uploadFile
@@ -210,6 +213,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/linkPatient", linkPatient);
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
+router.get("/viewSubscription",viewSubscribedPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);
 router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
   viewUpcomingAppointmentsPat(req, res);
