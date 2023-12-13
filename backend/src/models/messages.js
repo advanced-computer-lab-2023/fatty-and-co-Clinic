@@ -6,8 +6,8 @@ const messageSchema = new mongoose.Schema({
   // user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   //   timestamp: { type: Date, default: Date.now },
 
-  conversationId:{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Conversation'
+  receiverUsername:{
+    type: String,
   },
   senderUsername:{
     type: String,

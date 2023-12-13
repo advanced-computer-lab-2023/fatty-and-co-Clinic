@@ -21,12 +21,14 @@ import {
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
-
+import socketIOClient from "socket.io-client";
 // Assets
 import signInImage from "assets/img/signInImage.png";
 import { useLogin } from "hooks/useLogin";
 import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
+
+const ENDPOINT = 'http://localhost:8000'; // replace with your server's address and port
 
 const SignInSchema = Yup.object().shape({
   Username: Yup.string().required("Required"),
@@ -45,12 +47,38 @@ function SignIn() {
   const { login, error, loading } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
 
+  // const handleSubmit = async (values, { setSubmitting }) => {
+  //   console.log(values);
+  //   try {
+  //     const { Username, Password } = values;
+  //     await login(Username, Password);
+  //     setSubmitting(false);
+  //   } catch (error) {
+  //     toast({
+  //       title: "An error occurred.",
+  //       description: error,
+  //       status: "error",
+  //       duration: 9000,
+  //       isClosable: true,
+  //     });
+  //     setSubmitting(false);
+  //     console.log(error);
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
+
+
   const handleSubmit = async (values, { setSubmitting }) => {
     console.log(values);
     try {
       const { Username, Password } = values;
       await login(Username, Password);
       setSubmitting(false);
+  
+      // After successful login, connect to the Socket.IO server
+      
+  
     } catch (error) {
       toast({
         title: "An error occurred.",
@@ -65,7 +93,6 @@ function SignIn() {
       setSubmitting(false);
     }
   };
-
   const handleShowClick = () => setShowPassword(!showPassword);
 
   // Chakra color mode

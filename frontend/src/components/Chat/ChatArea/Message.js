@@ -3,6 +3,7 @@ import React from "react";
 import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
 
 const Message = ({ message }) => {
+
   return (
     <Flex 
       flexDirection={message.isCurrentUser ? "row-reverse" : "row"}
@@ -29,7 +30,7 @@ const Message = ({ message }) => {
               {message.content} 
             </Text>
             <Text textAlign={message.isCurrentUser ? "right" : "left"} fontSize="sm" color="gray.500" mt={1}>
-          {message.timestamp}
+          {/* {message.timestamp} */}
         </Text>
           </Box>
 

@@ -48,6 +48,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
@@ -226,6 +227,14 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: chatWithDoc,
     layout: "/patient",
+    
+  },
+  {
+    path: "/chatWithPatient/",
+    name: "Chat With Patient",
+    icon: <HomeIcon color="inherit" />,
+    component: ChatWithPatient,
+    layout: "/doctor",
     
   },
   {

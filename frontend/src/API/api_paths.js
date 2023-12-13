@@ -6,6 +6,7 @@ const ADMIN_BASE = "http://localhost:8000/admin/";
 const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
+const MESSAGE_BASE = "http://localhost:8000/message/";
 
 
 // Add comments that indicate if the path needs a param and what that param is
@@ -46,7 +47,8 @@ export const API_PATHS = {
   validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
   filterDoctorSlotEdition : DOCTOR_BASE + "filterDoctorSlotEdition/",
   getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
-
+  getChatPatients: DOCTOR_BASE + "getChatPatients/",
+  getDocUsernameSocket: DOCTOR_BASE + "getDocUsernameSocket/",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
@@ -77,6 +79,8 @@ export const API_PATHS = {
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
   getChatDoctors: PATIENT_BASE + "getChatDoctors/",
+  getPatientUsernameSocket: PATIENT_BASE + "getPatientUsernameSocket/",
+  
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
@@ -93,4 +97,8 @@ export const API_PATHS = {
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
   walletPayment: PAYEMENT_BASE + "walletPayment",
+
+  //Message
+  getMessages: MESSAGE_BASE + "getMessages",
+  createMessage: MESSAGE_BASE + "createMessage",
 };

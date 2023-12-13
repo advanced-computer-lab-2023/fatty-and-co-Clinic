@@ -5,6 +5,7 @@ const {
 } = require("../controllers/messageController");
 
 const { requireAuth } = require("../common/middleware/requireAuth");
+const { checkPatient, checkUser } = require("../common/middleware/checkType");
 
 
 const router = express.Router();
@@ -17,7 +18,7 @@ const router = express.Router();
  * TODO: Add it later and test it for easier testing for now
  * @param none
  */
-router.get("/getMessages/:conversationId", getMessages);
+router.get("/getMessages", checkUser, getMessages);
 
 
 /**

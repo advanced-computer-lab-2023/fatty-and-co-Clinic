@@ -1011,6 +1011,52 @@ const getPaymentAmount = async (req, res) => {
   }
 };
 
+const getChatPatients = async (req, res) => {
+  try {
+    // Find all appointments associated with the current doctor
+    const docAppointments = await appointmentModel.find({ DoctorUsername: req.user.Username , Status : {$in: ["Upcoming" , "Completed"]}});
+    // console.log(docAppointments);
+    // console.log(req.user.Username);
+    // Create a set to store unique doctor usernames
+    const uniquePatientUsernames = new Set();
+  
+    const chatPatients = await Promise.all(
+      docAppointments.map(async (appointment) => {
+        const patient = await patientModel.findOne({
+          Username: appointment.PatientUsername,
+        });
+
+        
+        // Check if the patient username is already in the set
+        if (!uniquePatientUsernames.has(patient.Username)) {
+          // If not, add it to the set and include the patient in the result
+          uniquePatientUsernames.add(patient.Username);
+      
+          return patient;
+        }
+
+        return null; // If the patient is already in the set, return null
+      })
+    );
+
+    // Filter out null values (those are the duplicates)
+    const filteredChatPatients = chatPatients.filter((patient) => patient !== null);
+
+
+    res.status(200).json(filteredChatPatients);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+const getDocUsernameSocket = async (req, res) => { 
+  try{ const username = req.user.Username;
+   res.status(200).json(username);}
+    catch (error) {
+     res.status(500).send({ message: error.message });
+    };
+   };
+
+
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
 module.exports = {
@@ -1035,4 +1081,6 @@ module.exports = {
   payDoctor,
   validateBookingDate,
   getPaymentAmount,
+  getChatPatients,
+  getDocUsernameSocket,
 };

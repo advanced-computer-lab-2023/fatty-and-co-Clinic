@@ -3,23 +3,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-//const socketIo = require("socket.io");
-// const {  getAllMessages,
-//   createMessage,
-  
-// } = require ("../controllers/messageController");
-//const messageModel = require("../models/messages.js");
+
+const http = require('http');
+const socketIo = require('socket.io');
 
 // file upload
 // but seems that express has a better way
 //const bodyParser = require("body-parser");
 //const methodOverride = require("method-override"); // to delete files
-
-
-
-
-
-
 
 // Route Variables
 const guestRoutes = require("./routes/guests");
@@ -42,6 +33,60 @@ const mongoURI = process.env.MONGO_URI;
 // App Variables
 const app = express();
 
+
+
+//socket io stuff
+let users = [];
+
+const addUsers = (username, socketId) => {
+  !users.some((user) => user.username === username) &&
+    users.push({ username, socketId });
+};
+
+const removeUser = (socketId) => {  
+  users = users.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (username) => {
+  return users.find((user) => user.username === username);
+};
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: { origin:`http://localhost:3000` }});
+
+io.on('connection', (socket) => {
+
+  //upon connection
+  console.log('New client connected');
+  //take username and socket id from client
+  socket.on('addUser', (username) => {
+    addUsers(username, socket.id);
+    console.log(users); 
+  });
+
+
+  //upon sending message
+  socket.on('sendMessage', ({sendUsername, recUsername, text}) => {
+    const user = getUser(recUsername);
+    io.to(user.socketId).emit('getMessage',{
+      sendUsername,
+      text,
+    });
+  });
+
+
+
+
+  //upon disconnection
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+    removeUser(socket.id);
+    console.log(users);
+
+  });
+});
+
+
 // Middleware (applied on all routes)
 app.use(cors());
 app.use(express.json());
@@ -63,8 +108,7 @@ app.use("/test", testRoutes);
 
 //TODO: Change it to the require auth route
 //app.use("/message", messageRoutes);
-app.use("/convo", conversationRoutes);
-app.use("/message", messageRoutes);
+
 
 // Middleware (not applied on test or guest routes)
 // all routes require user to be logged in except for guest routes
@@ -78,6 +122,8 @@ app.use("/patient", patientRoutes);
 app.use("/admin", adminRoutes);
 app.use("/package", packageRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/message", messageRoutes);
+app.use("/convo", conversationRoutes);
 
 // Server
 mongoose
@@ -85,7 +131,7 @@ mongoose
   .then(() => {
     console.log("MongoDB Connected");
     // Listen for requests
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Listening to requests on http://localhost:${port}`);
     });
   })
@@ -93,33 +139,3 @@ mongoose
     console.log(err);
   });
 
-
-// const io = socketIo(server);
-
-// // Set up WebSocket connection
-// io.on('connection', (socket) => {
-//   console.log('A user connected');
-
-//   // Send chat history to the connected client
-//   Message.find().exec((err, messages) => {
-//     if (err) throw err;
-//     socket.emit('chatHistory', messages);
-//   });
-
-//   // Listen for new messages from clients
-//   socket.on('sendMessage', async (data) => {
-//     try {
-//       const message = await createMessage(data);
-//       // Broadcast the new message to all connected clients
-//       io.emit('newMessage', message);
-//     } catch (err) {
-//       console.error(err);
-//       // Handle the error (e.g., emit an error event to the client)
-//     }
-//   });
-
-//   // Handle disconnect
-//   socket.on('disconnect', () => {
-//     console.log('A user disconnected');
-//   });
-// });

@@ -1671,11 +1671,12 @@ const getFamSessionCost = async (req, res) => {
             Username: appointment.DoctorUsername,
           });
   
+         // console.log(username);
           // Check if the doctor username is already in the set
           if (!uniqueDoctorUsernames.has(doctor.Username)) {
             // If not, add it to the set and include the doctor in the result
             uniqueDoctorUsernames.add(doctor.Username);
-            await createConversation()
+            //await createConversation()
             return doctor;
           }
   
@@ -1692,8 +1693,14 @@ const getFamSessionCost = async (req, res) => {
       res.status(500).send({ message: error.message });
     }
   };
-  
 
+  const getPatientUsernameSocket = async (req, res) => { 
+   try{ const username = req.user.Username;
+    res.status(200).json(username);}
+     catch (error) {
+      res.status(500).send({ message: error.message });
+     };
+    };
 
 module.exports = {
   uploadFile,
@@ -1733,4 +1740,5 @@ module.exports = {
   viewPastAppoitmentsPat,
   getWalletAmount,
   getChatDoctors,
+  getPatientUsernameSocket,
 };
