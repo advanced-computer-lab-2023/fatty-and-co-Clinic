@@ -117,7 +117,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/Subscribtions/",
+    path: "/Subscribtions",
     name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -263,7 +263,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/medicalhistory/:patientUsername",
+    path: "/medicalhistory",
     name: "Medical History",
     icon: <HomeIcon color="inherit" />,
     component: MedicalHistoryPatient,
