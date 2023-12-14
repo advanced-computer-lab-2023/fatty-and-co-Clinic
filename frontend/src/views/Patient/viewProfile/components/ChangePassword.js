@@ -125,7 +125,7 @@ function ChangePassword() {
                         ms="4px"
                         borderRadius="15px"
                         type={showOldPassword ? "text" : "password"}
-                        placeholder="Your Password"
+                        placeholder="Current Password"
                         size="lg"
                       />
                       <InputRightElement>
@@ -161,7 +161,7 @@ function ChangePassword() {
                         ms="4px"
                         borderRadius="15px"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Your New Password"
+                        placeholder="New Password"
                         size="lg"
                       />
                       <InputRightElement>
@@ -178,23 +178,13 @@ function ChangePassword() {
               </Field>
 
               <Button
-                fontSize="10px"
                 isLoading={isSubmitting}
+                colorScheme="teal"
                 type="submit"
-                bg="teal"
                 w="100%"
-                h="45"
-                mb="20px"
-                color="white"
-                mt="20px"
-                _hover={{
-                  bg: "teal.400",
-                }}
-                _active={{
-                  bg: "teal.400",
-                }}
+                mb="35px"
               >
-                SAVE
+                Save
               </Button>
             </Form>
           )}
