@@ -16,6 +16,7 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import PrescriptionTable from "../viewPrescriptions/index.js"
 import Subscription from "./components/Subscription";
+import MedicalHistory from "../viewMedicalHistory/medicalHistory";
 
 function PatientProfile() {
   // Chakra color mode
@@ -90,6 +91,7 @@ function PatientProfile() {
         <Subscription subscription={subscription} myPackage={myPackage}></Subscription>
       </Grid>
       <PrescriptionTable></PrescriptionTable>
+      <MedicalHistory></MedicalHistory>
     </Flex>
   );
 }
