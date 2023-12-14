@@ -58,14 +58,28 @@ const Subscription = ({ subscription, myPackage }) => {
       console.error("An error occurred", error);
     }
   };
+
+   const packageColors = {
+    silver: "gray.400",
+    platinum: "blue.200",
+    premium: "blue.200",
+    gold: "yellow.400",
+  };
+
+  // Get the color based on the package name, default to teal.500 if not found
+  const packageColor = packageColors[myPackage.Name?.toLowerCase()] || "teal.500";
   
   return (
     <Card p='16px' my={{ sm: "24px", xl: "0px" }} w="100%">
       {!isSubscriptionEmpty()?(
         <>
       <CardHeader p='12px 5px' mb='12px'>
-        <Text fontSize='lg' color={textColor} fontWeight='bold'>
-          Subscribed to {myPackage.Name} package
+        <Text fontSize="lg" fontWeight="bold">
+          Subscribed to{" "}
+          <Text as="span" color={packageColor}>
+            {myPackage.Name}
+          </Text>{" "}
+            package
         </Text>
       </CardHeader>
       <CardBody px='5px'>
@@ -116,10 +130,9 @@ const Subscription = ({ subscription, myPackage }) => {
             <Divider />
             <Box align='center' mt='4'>
             <Heading size='xs' textTransform='uppercase'>
-                Start - End dates
+                End date
             </Heading>
             <Text pt='2' fontSize='sm'>
-                {new Date(subscription.Startdate).toLocaleDateString("en-GB")} {" - "}
                 {new Date(subscription.Enddate).toLocaleDateString("en-GB")}
             </Text>
             </Box>
