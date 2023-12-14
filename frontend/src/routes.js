@@ -49,6 +49,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+import DoctorProfile from "views/Doctors/viewProfile";
 
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
@@ -356,6 +357,13 @@ var dashRoutes = [
     name: "View patient profile",
     component: PatientProfile,
     layout: "/patient",
+    show: false,
+  },
+  {
+    path: "/profile",
+    name: "View doctor profile",
+    component: DoctorProfile,
+    layout: "/doctor",
     show: false,
   },
 
