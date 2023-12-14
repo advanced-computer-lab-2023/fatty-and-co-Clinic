@@ -8,7 +8,6 @@ const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
 const PRESCRIPTION_BASE = "http://localhost:8000/prescription/";
 
-
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
   // Guest
@@ -104,4 +103,5 @@ export const API_PATHS = {
   updateDosage: PRESCRIPTION_BASE + "updateDosage",
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
+  placeOrder: PRESCRIPTION_BASE + "placeOrder",
 };

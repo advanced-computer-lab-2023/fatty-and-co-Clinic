@@ -10,6 +10,7 @@ const { isNull } = require("util");
 const docSlotsModel = require("../models/docSlots");
 const doctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
+const axios = require("axios");
 const prescriptionsModel = require("../models/prescriptions");
 
 const addPrescription = async (req, res) => {
@@ -54,7 +55,7 @@ const getPrescriptionMeds = async (req, res) => {
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
-    const meds = prescription.Medicine
+    const meds = prescription.Medicine;
 
     // Check if a prescription is found
 
@@ -113,7 +114,7 @@ const deleteMedFromPrescription = async (req, res) => {
     }
     prescription.Medicine.splice(medicineIndex, 1);
     const updatedPrescription = await prescription.save();
-    
+
     res.status(200).json(updatedPrescription);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -146,10 +147,38 @@ const updateDosage = async (req, res) => {
 
   const updatedPrescription = await prescription.save();
 
-  res.status(200).json(updatedPrescription
-  );
+  res.status(200).json(updatedPrescription);
 };
-const calculatePrescriptionCost = async (req, res) => {
+// const calculatePrescriptionCost = async (req, res) => {
+//   try {
+//     const { appointmentId } = req.query;
+//     const prescription = await prescriptionsModel.findOne({
+//       AppointmentId: appointmentId,
+//     });
+//     const patient = await patientModel.findOne({
+//       Username: prescription.PatientUsername,
+//     });
+//     const package = await subscriptionModel.findOne({
+//       Patient: patient._id,
+//     });
+//     const packageId = package.Package;
+//     const packageDiscount = packageId.Discount;
+//     const med = await medicineModel.find({
+//       Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
+//     });
+//     const priceNoDiscount = med.reduce(
+//       (total, medicine) => total + medicine.Price,
+//       0
+//     );
+//     const priceWithDiscount = priceNoDiscount * (1 - packageDiscount);
+//     res.status(200).json({ priceWithDiscount });
+//   } catch (error) {
+//     res.status(400).send({ message: error.message });
+//   }
+// };
+
+//place an order to the pharmacy using the medicine list
+const placeOrder = async (req, res) => {
   try {
     const { appointmentId } = req.query;
     const prescription = await prescriptionsModel.findOne({
@@ -158,49 +187,16 @@ const calculatePrescriptionCost = async (req, res) => {
     const patient = await patientModel.findOne({
       Username: prescription.PatientUsername,
     });
-    const package = await subscriptionModel.findOne({
-      Patient: patient._id,
-    });
-    const packageId = package.Package;
-    const packageDiscount = packageId.Discount;
+    // const TotalCost = await calculatePrescriptionCost(req, res);
     const med = await medicineModel.find({
       Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
     });
-    const priceNoDiscount = med.reduce(
-      (total, medicine) => total + medicine.Price,
-      0
-    );
-    const priceWithDiscount = priceNoDiscount * (1 - packageDiscount);
-    res.status(200).json({ priceWithDiscount });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
-
-//place an order to the pharmacy using the medicine list
-const placeOrder = async (req, res) => {
-  try {
-    const { appointmentId, address, paymentType } = req.query;
-    const prescription = await prescriptionsModel.findOne({
-      AppointmentId: appointmentId,
-    });
-    const patient = await patientModel.findOne({
-      Username: prescription.PatientUsername,
-    });
-    const TotalCost = await calculatePrescriptionCost(req, res);
-    const med = await medicineModel.find({
-      Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
-    });
-    const order = await orderModel.create({
-      PatientUsername: patient.Username,
-      Date: new Date(),
-      Status: "In Progress",
-      Details: "Prescription",
-      TotalCost: TotalCost,
-      PaymentMethod: paymentType,
-      Medicine: med,
-      DeliveryAddress: address,
-    });
+    for (const medicine of med) {
+      await axios.post("http://localhost:7000/cart/addToCart", {
+        Medicine: medicine, // Pass a single medicine in an array
+      });
+    }
+    res.status(200).json({ message: "Medicines added to cart successfully." });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
@@ -212,7 +208,7 @@ module.exports = {
   deleteMedFromPrescription,
   updateDosage,
   checkForPrescription,
-  calculatePrescriptionCost,
+  // calculatePrescriptionCost,
   placeOrder,
   getPrescriptionMeds,
 };
