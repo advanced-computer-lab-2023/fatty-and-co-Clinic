@@ -335,7 +335,7 @@ const handleEdit = async (medName,index) => {
                       bg="transparent"
                       mb={{ sm: "10px", md: "0px" }}
                       me={{ md: "12px" }}
-                      onClick={() => handleEdit(med.Name,index)}
+                      onClick={() => handleEdit(med.Name, index)}
                     >
                       <Flex
                         color="black"
@@ -343,6 +343,9 @@ const handleEdit = async (medName,index) => {
                         align="center"
                         p="16px"
                       >
+                        <Text fontSize="xs" fontWeight="semibold">
+                          EDIT
+                        </Text>
                         <Icon as={FaPencilAlt} me="4px" />
                       </Flex>
                     </Button>
