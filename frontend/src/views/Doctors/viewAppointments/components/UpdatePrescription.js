@@ -343,10 +343,10 @@ const handleEdit = async (medName,index) => {
                         align="center"
                         p="16px"
                       >
+                        <Icon as={FaPencilAlt} me="4px" />
                         <Text fontSize="xs" fontWeight="semibold">
                           EDIT
                         </Text>
-                        <Icon as={FaPencilAlt} me="4px" />
                       </Flex>
                     </Button>
                   </VStack>
