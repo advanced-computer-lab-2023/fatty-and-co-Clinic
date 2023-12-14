@@ -47,6 +47,7 @@ export const API_PATHS = {
   validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
   filterDoctorSlotEdition: DOCTOR_BASE + "filterDoctorSlotEdition/",
   getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
+  getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
