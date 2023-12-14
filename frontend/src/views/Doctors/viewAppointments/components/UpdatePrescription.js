@@ -24,6 +24,8 @@ import {
   VStack,
   StackDivider,
   Icon,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
@@ -32,7 +34,7 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
-import { MinusIcon, AddIcon } from "@chakra-ui/icons";
+import { MinusIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
 
 export default function UpdatePrescription({ customkey }) {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
@@ -41,11 +43,13 @@ export default function UpdatePrescription({ customkey }) {
 
   const [medicine, setMedicine] = useState("");
   const [dosage, setDosage] = useState("");
-  const [description, setDescription] = useState("");
+
   const [descriptionAdd, setDescriptionAdd] = useState("");
   const [addMed, setaddMed] = useState(false);
   const [meds, setMeds] = useState([]);
-  
+   const [descriptions, setDescriptions] = useState(
+   []
+   );
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -80,12 +84,18 @@ export default function UpdatePrescription({ customkey }) {
     // Check prescription status when the component mounts
     getMeds();
   }, []);
+  useEffect(() => {
+    setDescriptions(meds.map((med) => med.Description || ""));
+  }, [meds]);
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
- const handleDescription = (event) => {
-   setDescription(event.target.value);
- };
+const handleDescription = (event, index,medicineName) => {
+  const newDescriptions = [...descriptions];
+  newDescriptions[index] = event.target.value;
+  setDescriptions(newDescriptions);
+  
+};
   const handleDescriptionAdd = (event) => {
     setDescriptionAdd(event.target.value);
   };
@@ -186,10 +196,10 @@ const handleInc = async (medName,dosage) => {
   }
 };
 
-const handleEdit = async (medName) => {
+const handleEdit = async (medName,index) => {
   try {
     const response = await fetch(
-      `${API_PATHS.updateDescription}?AppointmentId=${customkey}&medicineName=${medName}&description=${description}`,
+      `${API_PATHS.updateDescription}?AppointmentId=${customkey}&medicineName=${medName}&description=${descriptions[index]}`,
       {
         method: "POST",
         headers: {
@@ -215,6 +225,7 @@ const handleEdit = async (medName) => {
     setaddMed(false);
     // ...
     setIsModalOpen(false);
+    setDescriptions(meds.map((med) => med.Description || ""));
   };
   return (
     <>
@@ -253,20 +264,17 @@ const handleEdit = async (medName) => {
                       >
                         Description:
                       </label>
-                      <input
-                        type="text"
-                        id="description"
-                        value={description || med.Description}
-                        onChange={handleDescription}
-                        style={{
-                          color: "",
-                          marginBottom: "2px",
-                          fontWeight: "semibold",
-                          backgroundColor: "rgba(0, 0, 0, 0.2)", // Adjust the alpha value as needed
-                          border: "none",
-                          width: "150px",
-                        }}
-                      />
+                      <InputGroup>
+                        <InputLeftElement
+                          children={<EditIcon color="gray.300" />}
+                        />
+                        <Input
+                          value={descriptions[index]}
+                          onChange={(event) =>
+                            handleDescription(event, index, med.Name)
+                          }
+                        />
+                      </InputGroup>
                     </div>
                   </Box>
 
@@ -325,13 +333,15 @@ const handleEdit = async (medName) => {
                     <Button
                       p="0px"
                       bg="transparent"
-                      onClick={() => handleEdit(med.Name)}
+                      mb={{ sm: "10px", md: "0px" }}
+                      me={{ md: "12px" }}
+                      onClick={() => handleEdit(med.Name,index)}
                     >
                       <Flex
                         color="black"
                         cursor="pointer"
                         align="center"
-                        p="12px"
+                        p="16px"
                       >
                         <Icon as={FaPencilAlt} me="4px" />
                       </Flex>
@@ -371,7 +381,7 @@ const handleEdit = async (medName) => {
                 />
                 <Text mb="8px">Description: </Text>
                 <Input
-                  description={description}
+                  description={descriptionAdd}
                   bg="white"
                   placeholder="Enter description"
                   onChange={handleDescriptionAdd}
