@@ -40,6 +40,7 @@ function PackageForm() {
       h="fit-content"
       my={{ sm: "24px", lg: "0px" }}
       ms={{ sm: "0px", lg: "24px" }}
+      style= {{marginTop: "24px"}}
     >
       <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
