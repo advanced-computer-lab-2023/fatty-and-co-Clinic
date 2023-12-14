@@ -41,6 +41,8 @@ export default function UpdatePrescription({ customkey }) {
 
   const [medicine, setMedicine] = useState("");
   const [dosage, setDosage] = useState("");
+  const [description, setDescription] = useState("");
+  const [descriptionAdd, setDescriptionAdd] = useState("");
   const [addMed, setaddMed] = useState(false);
   const [meds, setMeds] = useState([]);
   
@@ -81,7 +83,12 @@ export default function UpdatePrescription({ customkey }) {
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
-
+ const handleDescription = (event) => {
+   setDescription(event.target.value);
+ };
+  const handleDescriptionAdd = (event) => {
+    setDescriptionAdd(event.target.value);
+  };
   const handleDosage = (event) => {
     setDosage(event.target.value);
   };
@@ -90,7 +97,7 @@ const handleSubmit = async () => {
   
   try {
 const response = await fetch(
-  `${API_PATHS.addMedToPrescription}?appointmentId=${customkey}&medicine=${medicine}&dosage=${dosage}`,
+  `${API_PATHS.addMedToPrescription}?appointmentId=${customkey}&medicine=${medicine}&dosage=${dosage}&description=${descriptionAdd}`,
   {
     method: "POST",
     headers: {
@@ -165,6 +172,7 @@ const handleInc = async (medName,dosage) => {
         },
       }
     );
+    
 
     if (response.ok) {
       const result = await response.json();
@@ -177,6 +185,32 @@ const handleInc = async (medName,dosage) => {
     console.error("Error deleting medicine:", error.message);
   }
 };
+
+const handleEdit = async (medName) => {
+  try {
+    const response = await fetch(
+      `${API_PATHS.updateDescription}?AppointmentId=${customkey}&medicineName=${medName}&description=${description}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization,
+          // Other headers if needed
+        },
+      }
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+
+      setMeds(result.Medicine);
+    } else {
+      console.error("Error deleting medicine:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error deleting medicine:", error.message);
+  }
+};
+
   const handleCloseModal = () => {
     setaddMed(false);
     // ...
@@ -212,6 +246,28 @@ const handleInc = async (medName,dosage) => {
                     <Text color="white" mb="2px" fontWeight="semibold">
                       Dosage: {med.Dosage}
                     </Text>
+                    <div>
+                      <label
+                        htmlFor="description"
+                        style={{ color: "white", fontWeight: "semibold" }}
+                      >
+                        Description:
+                      </label>
+                      <input
+                        type="text"
+                        id="description"
+                        value={description || med.Description}
+                        onChange={handleDescription}
+                        style={{
+                          color: "",
+                          marginBottom: "2px",
+                          fontWeight: "semibold",
+                          backgroundColor: "rgba(0, 0, 0, 0.2)", // Adjust the alpha value as needed
+                          border: "none",
+                          width: "150px",
+                        }}
+                      />
+                    </div>
                   </Box>
 
                   <VStack>
@@ -266,6 +322,20 @@ const handleInc = async (medName,dosage) => {
                         onClick={() => handleInc(med.Name, med.Dosage + 1)}
                       />
                     </ButtonGroup>
+                    <Button
+                      p="0px"
+                      bg="transparent"
+                      onClick={() => handleEdit(med.Name)}
+                    >
+                      <Flex
+                        color="black"
+                        cursor="pointer"
+                        align="center"
+                        p="12px"
+                      >
+                        <Icon as={FaPencilAlt} me="4px" />
+                      </Flex>
+                    </Button>
                   </VStack>
                 </HStack>
                 <hr width="100%" color="gray" />
@@ -298,6 +368,13 @@ const handleInc = async (medName,dosage) => {
                   bg="white"
                   placeholder="Enter dosage"
                   onChange={handleDosage}
+                />
+                <Text mb="8px">Description: </Text>
+                <Input
+                  description={description}
+                  bg="white"
+                  placeholder="Enter description"
+                  onChange={handleDescriptionAdd}
                 />
               </div>
             )}

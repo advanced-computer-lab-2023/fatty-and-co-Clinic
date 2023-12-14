@@ -66,13 +66,14 @@ const getPrescriptionMeds = async (req, res) => {
 
 const addMedToPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicine, dosage } = req.query;
+    const { appointmentId, medicine, dosage,description } = req.query;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
     const medicines = {
       Name: medicine,
       Dosage: dosage,
+      Description: description,
     };
     prescription.Medicine.push(medicines);
     await prescription.save();
@@ -149,6 +150,35 @@ const updateDosage = async (req, res) => {
   res.status(200).json(updatedPrescription
   );
 };
+const updateDescription = async (req, res) => {
+  const AppointmentId = req.query.AppointmentId;
+  const medicineName = req.query.medicineName;
+  const newDescription = req.query.description;
+
+  const prescription = await prescriptionsModel.findOne({
+    AppointmentId: AppointmentId,
+  });
+
+  if (!prescription) {
+    return res.status(404).json({ message: "Prescription not found." });
+  }
+
+  const medicineToUpdate = prescription.Medicine.find(
+    (medicine) => medicine.Name === medicineName
+  );
+
+  if (!medicineToUpdate) {
+    return res
+      .status(404)
+      .json({ message: "Medicine not found in the prescription." });
+  }
+
+  medicineToUpdate.Description = newDescription;
+
+  const updatedPrescription = await prescription.save();
+
+  res.status(200).json(updatedPrescription);
+};
 const calculatePrescriptionCost = async (req, res) => {
   try {
     const { appointmentId } = req.query;
@@ -215,4 +245,5 @@ module.exports = {
   calculatePrescriptionCost,
   placeOrder,
   getPrescriptionMeds,
+  updateDescription,
 };
