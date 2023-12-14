@@ -1,18 +1,10 @@
 import {
-  Avatar,
-  AvatarGroup,
   Flex,
-  Icon,
-  Progress,
   Td,
   Text,
-  Tr,
-  useColorModeValue,
-  Link as ChakraLink,
   Button,
 } from "@chakra-ui/react";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
 
 function AppointmentsRow(props) {
@@ -24,17 +16,18 @@ function AppointmentsRow(props) {
     Status,
     Type,
     DateTime,
- 
   } = props;
-  const textColor = useColorModeValue("gray.700", "white");
+
+  const textColor = "gray.700"; // You may change this according to your color scheme
+
   return (
-    <Tr>
+    <tr style={{ borderBottom: '2px solid #ddd', background:"#f4f4f4" }}>
       {DoctorName && (
-        <Td minWidth={{ sm: "150px" }} pl="0px">
-          <Flex align="center" py=".8rem" minWidth="40%" flexWrap="nowrap">
+        <Td minWidth={{ sm: "160px" }} pl="10px" padding="10px">
+          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
               fontSize="md"
-              color={textColor}
+              color="black"
               fontWeight="bold"
               minWidth="100%"
             >
@@ -43,22 +36,7 @@ function AppointmentsRow(props) {
           </Flex>
         </Td>
       )}
- 
-      {PatientName && (
-        <Td minWidth={{ sm: "150px" }} pl="20px">
-          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-            <Text
-              fontSize="md"
-              color={textColor}
-              fontWeight="bold"
-              minWidth="100%"
-            >
-              {PatientName}
-            </Text>
-          </Flex>
-        </Td>
-      )}
-      <Td minWidth={{ sm: "150px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px" padding="10px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -71,7 +49,7 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "150px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px" padding="10px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -84,36 +62,33 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "150px" }}>
+      <Td minWidth={{ sm: "190px" }} padding="10px">
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
           {new Date(DateTime).toLocaleDateString("en-GB")}
         </Text>
       </Td>
-      <Td minWidth={{ sm: "150px" }}>
+      <Td minWidth={{ sm: "190px" }} padding="10px">
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
           {new Date(DateTime).toLocaleTimeString("en-GB")}
         </Text>
       </Td>
       {PatientUsername && Status === "Completed" && (
-        <Td minWidth={{ sm: "150px" }}>
+        <Td minWidth={{ sm: "150px" }} padding="10px">
           <CreateFollowUpButton patientUsername={PatientUsername} />
         </Td>
-
-   
       )}
-  <Td minWidth={{ sm: "150px" }}>
-  {(Status === "Upcoming" ||Status === "Rescheduled" ) && ( // Render the cancel button only if status is "Upcoming"
-       <Button
-       colorScheme="red"
-       onClick={() => props.handleCancelAppointment(DoctorUsername)}
-     >
-       Cancel
-     </Button>
-  )}
-</Td>
-     
 
-    </Tr>
+      <Td minWidth={{ sm: "150px" }} padding="10px">
+        {Status === "Upcoming" || Status === "Rescheduled" ? (
+          <Button
+            colorScheme="red"
+            onClick={() => props.handleCancelAppointment(DoctorUsername)}
+          >
+            Cancel
+          </Button>
+        ) : null}
+      </Td>
+    </tr>
   );
 }
 

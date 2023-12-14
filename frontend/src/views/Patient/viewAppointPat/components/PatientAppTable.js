@@ -26,7 +26,7 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
     <Card my="12px" overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader p="6px 0px 12px 0px">
         <Flex direction="column">
-          <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+          <Text fontSize="lg" color="teal" fontWeight="bold" pb=".1rem" borderBottom='3px solid #ddd' borderRadius="4px" justifyContent="center" alignItems="center">
             {/* title will be All doctors  */}
             {title}
           </Text>
@@ -36,15 +36,20 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
         {isLoading ? (
           <Spinner></Spinner>
         ) : (
-          <Table variant="simple" color={textColor}>
+          <Table variant="simple" color="teal">
             <Thead>
               <Tr my=".6rem" pl="0px">
                 {captions.map((caption, idx) => {
                   return (
                     <Th
-                      color="gray.400"
-                      key={idx}
-                      ps={idx === 0 ? "0px" : null}
+                    color="#f0f0f0"
+                    key={idx}
+                    ps={idx === 0 ? "0px" : null}
+                    padding="12px"
+                    textAlign="left"
+                    borderBottom="1px solid #ddd"
+                    backgroundColor="teal"
+                    fontWeight="bold"
                     >
                       {caption}
                     </Th>

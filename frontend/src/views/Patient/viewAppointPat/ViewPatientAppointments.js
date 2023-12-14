@@ -165,17 +165,13 @@ export function ViewPatientAppointments() {
 
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <PatientAppTable
-          title={"Available Appointments"}
-          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
+          title={"Your Appointments"}
+          captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
           data={data}
           isLoading={isLoading}
           handleCancelAppointment={handleCancelAppointment}
         />
-        {/* )) || (
-                <Text fontSize="3xl" fontWeight="bold">
-                  Username not found
-                </Text>
-              )} */}
+      
       </Flex>
     </Box>
   );
