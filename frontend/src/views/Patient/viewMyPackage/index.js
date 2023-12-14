@@ -1,3 +1,5 @@
+// TODO Delete this file
+
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { Flex, Button, Box, Input, Text, Select } from "@chakra-ui/react";

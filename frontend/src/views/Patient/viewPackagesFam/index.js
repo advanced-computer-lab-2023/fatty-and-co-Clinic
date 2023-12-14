@@ -1,3 +1,5 @@
+// TODO Delete this file
+
 // Chakra imports
 import { Box, Flex, Grid, Icon } from "@chakra-ui/react";
 // Assets

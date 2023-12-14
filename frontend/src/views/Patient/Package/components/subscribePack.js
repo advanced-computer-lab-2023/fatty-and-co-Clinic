@@ -1,5 +1,3 @@
-// TODO Delete this file
-
 import {
   Box,
   Button,
@@ -21,9 +19,9 @@ import CardHeader from "components/Card/CardHeader.js";
 
 import { useHistory } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
-import MakePayment from "../makePayment";
-import { PackageContextProvider } from "../viewPackagesFam/components/Context";
-import PackageI from "../viewPackagesFam";
+import MakePayment from "../../makePayment";
+import { PackageContextProvider } from "../../viewPackagesFam/components/Context";
+import PackageI from "../../viewPackagesFam";
 import { useWalletContext } from "hooks/useWalletContext";
 
 import axios from "axios";
@@ -285,9 +283,6 @@ function SubscribePackage() {
           </Flex>
         </CardBody>
       </Card>
-      <PackageContextProvider>
-        <PackageI />
-      </PackageContextProvider>
     </Flex>
   );
 }

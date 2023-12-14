@@ -39,6 +39,7 @@ import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
+import PackageAll from "views/Patient/Package";
 
 import {
   HomeIcon,
@@ -56,6 +57,13 @@ import {
 
 // TODO: organize routes by type of user
 var dashRoutes = [
+  {
+    path: "/package_all",
+    name: "Package",
+    icon: <HomeIcon color="inherit" />,
+    component: PackageAll,
+    layout: "/patient",
+  },
   {
     path: "/package",
     name: "Package",
