@@ -23,7 +23,6 @@ const ProfileInformation = (props) => {
   // Chakra color mode
   const textColor = useColorModeValue("gray.700", "white");
   const [isFlipped, setIsFlipped] = useState(false);
-  const [isPassword, setIsPassword] = useState(false);
   const [email, setEmail] = useState(props.email);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -36,7 +35,6 @@ const ProfileInformation = (props) => {
   }, [props.email]);
 
   const handlePasswordChange = () => {
-    setIsPassword(!isPassword);
     setIsFlipped(!isFlipped);
   };
 
@@ -147,7 +145,7 @@ const ProfileInformation = (props) => {
             </Editable>
             </Flex>
           </Box>
-          <Box pl="40">
+          <Box pl="40" pt="2">
             <Button colorScheme="red" flex="1" mr="4" onClick={() => handlePasswordChange()}>
               Change Password
             </Button>
@@ -165,21 +163,12 @@ const ProfileInformation = (props) => {
           </CardHeader>
           <CardBody px="5px">
             <Flex direction="column"  justify="center"  width="100%">
-              {isPassword?(
                 <>
                 <ChangePassword/>
                 <Button colorScheme="red"  onClick={() => handlePasswordChange()}>
                   Cancel
                 </Button>
                 </>
-              ):(
-                <>
-                <ChangeEmail/>
-                <Button colorScheme="red"  onClick={() => handleEmailChange()}>
-                  Cancel
-                </Button>
-                </>
-              )}
             </Flex>
           </CardBody>
         </Card>
