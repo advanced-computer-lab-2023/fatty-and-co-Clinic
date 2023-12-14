@@ -37,6 +37,7 @@ function PackageForm() {
   return (
     <Card
       p="22px"
+      h="fit-content"
       my={{ sm: "24px", lg: "0px" }}
       ms={{ sm: "0px", lg: "24px" }}
     >
@@ -148,12 +149,12 @@ function PackageForm() {
               <Button
                 colorScheme="teal"
                 borderColor="teal.300"
-                color="teal.300"
+                color="white"
                 fontSize="xs"
                 p="8px 32px"
                 type="submit"
               >
-                add
+                Add
               </Button>
               {/* <input type="submit" value="Submit" /> */}
             </Stack>
