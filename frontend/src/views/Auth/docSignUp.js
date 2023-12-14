@@ -500,12 +500,14 @@ function docSignUp() {
                         className="custom-file-upload"
                         ms="4px"
                         fontSize="12px"
-                        bg="teal.300"
-                        color="white"
-                        w="60%"
+                        bg="white"
+                        color="teal.300"
+                        borderWidth={1}
+                        borderColor="teal.300"
+                        _hover={{ bg:"teal.50" }}
+                        // w="60%"
                         h="45"
                         fontWeight={"bold"}
-                        _hover={{ bg: "teal.200" }}
                         // mb="24px"
                         borderRadius="15px"
                         style={{
@@ -546,14 +548,16 @@ function docSignUp() {
                         className="custom-file-upload"
                         ms="4px"
                         fontSize="12px"
-                        bg="teal.300"
-                        color="white"
+                        bg="white"
+                        color="teal.300"
+                        borderWidth={1}
+                        borderColor="teal.300"
+                        _hover={{ bg:"teal.50" }}
                         fontWeight={"bold"}
-                        w="60%"
+                        // w="60%"
                         h="45"
                         // mb="24px"
                         borderRadius="15px"
-                        _hover={{ bg: "teal.200" }}
                         style={{
                           cursor: "pointer",
                           textAlign: "center",
@@ -595,14 +599,16 @@ function docSignUp() {
                         className="custom-file-upload"
                         ms="4px"
                         fontSize="12px"
-                        bg="teal.300"
-                        color="white"
+                        bg="white"
+                        color="teal.300"
+                        borderWidth={1}
+                        borderColor="teal.300"
+                        _hover={{ bg:"teal.50" }}
                         fontWeight={"bold"}
-                        w="60%"
+                        // w="60%"
                         h="45"
                         // mb="24px"
                         borderRadius="15px"
-                        _hover={{ bg: "teal.200" }}
                         style={{
                           cursor: "pointer",
                           textAlign: "center",
