@@ -22,10 +22,10 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 
-import { usePrescriptionContext } from "hooks/usePrescriptionContext";
+// import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 export default function AddPrescriptionButton({ customkey, setHasPrescription }) {
-  const { prescriptions, dispatch } = usePrescriptionContext();
+  // const { prescriptions, dispatch } = usePrescriptionContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
   const [diagnosis, setDiagnosis] = useState("");
