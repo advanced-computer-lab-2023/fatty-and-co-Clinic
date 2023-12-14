@@ -632,10 +632,10 @@ const testAppointRef = async (req, res) => {
     });
 };
 
-
 const reschedulePatient = async (req, res) => {
  
   try {
+
      const docUsername= req.user.Username
      const {patientUsername,date}=req.body
      const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, Status:"Upcoming"})
@@ -718,8 +718,6 @@ const cancelAppForSelf = async (req, res) => {
 
      const patientUsername= req.user.Username
      const {doctorUsername}=req.body
-     console.log("DoctorUsername :",doctorUsername);
-     console.log("Hi");
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
      const currDate= new Date();
      var refund=0
