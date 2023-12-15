@@ -64,51 +64,6 @@ function UpdateHourly() {
           isClosable: true,
         });
       });
-
-    // try {
-    //   const response = await fetch(API_PATHS.updateHourly + DoctorUsername, {
-    //     method: "PATCH",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ HourlyRate }),
-    //   });
-    //   if (HourlyRate == "") {
-    //     toast({
-    //       title: "Please fill the new hourly rate field!",
-    //       status: "error",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //   } else if (HourlyRate.length > 5) {
-    //     toast({
-    //       title: "Maximum hourly rate is 99999 !",
-    //       status: "error",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //   } else if (response.ok) {
-    //     // Handle success or provide feedback to the user
-    //     toast({
-    //       title: "Hourly rate updated successfully",
-    //       status: "success",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //     setHourlyRate(""); // Clear the input field
-    //   } else {
-    //     // Handle errors or provide feedback to the user
-    //     toast({
-    //       title: "Failed to update hourly rate",
-    //       description: "An error occurred while updating the hourly rate.",
-    //       status: "error",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error("An error occurred", error);
-    // }
   };
 
   return (

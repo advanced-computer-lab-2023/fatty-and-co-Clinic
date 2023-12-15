@@ -14,11 +14,12 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import AppointmentsRow from "components/Tables/AppointmentsRow";
+import AppointmentsDocRow from "components/Tables/AppointmentsDocRow";
 
 import React from "react";
 
-export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
+export const AppointmentsTable = ({ title, captions, data, isLoading, handleRescheduleAppoinmtent }) => {
+ 
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -54,19 +55,22 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
             <Tbody>
               {data.map((row) => {
                 return (
-                  <AppointmentsRow
-                    DoctorName={row.DoctorName}
+                  <AppointmentsDocRow
                     key={row._id}
                     customkey={row._id}
+                    DoctorName={row.DoctorName}
+                    DoctorUsername={row.DoctorUsername}
                     PatientName={row.PatientName}
                     PatientUsername={row.PatientUsername}
                     Type={row.FollowUp ? "Follow Up" : "First Time"}
                     Status={row.Status}
                     DateTime={row.Date}
+                    handleRescheduleAppoinmtent={handleRescheduleAppoinmtent}
                   />
                 );
                 
               })}
+              
             </Tbody>
           </Table>
         )}

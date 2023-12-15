@@ -953,5 +953,4 @@ module.exports = {
   testAppointRef,
   rescheduleAppointmentPatient,
   reschedulefamilymember
-
-};
+}

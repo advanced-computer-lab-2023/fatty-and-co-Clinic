@@ -47,6 +47,7 @@ export const API_PATHS = {
   validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
   filterDoctorSlotEdition: DOCTOR_BASE + "filterDoctorSlotEdition/",
   getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
+  getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -94,6 +95,8 @@ export const API_PATHS = {
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
   cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
+  rescheduleForPatient: APPOINTMENT_BASE+ "rescheduleForPatient/",
+
   ///cancelAppFam
   cancellappointmentfam:APPOINTMENT_BASE+"cancelAppFam/",
   // Payment
