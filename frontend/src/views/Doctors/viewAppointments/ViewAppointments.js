@@ -118,6 +118,7 @@ export default function ViewAppointmentsInner() {
           captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}
+          handleRescheduleAppoinmtent={handleRescheduleAppoinmtent}
         />
       </Flex>
     </Box>
