@@ -69,13 +69,14 @@ export function ViewPatientAppointments() {
         toast({
           title: "Cancelled successfully",
           status: "success",
+      //    description:response.data,
           duration: 9000,
           isClosable: true,
         });
-        const timer = setTimeout(() => {
-          location.reload();
-        }, 500); // 1000ms delay
-        window.location.reload();
+        // const timer = setTimeout(() => {
+        //   location.reload();
+        // }, 1000); // 1000ms delay
+        // window.location.reload();
      
    
       } else {

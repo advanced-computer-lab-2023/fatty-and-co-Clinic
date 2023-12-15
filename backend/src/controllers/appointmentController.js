@@ -720,6 +720,7 @@ const cancelAppForSelf = async (req, res) => {
 
      const patientUsername= req.user.Username
      const {doctorUsername}=req.body
+     console.log(doctorUsername);
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
      const currDate= new Date();
      var refund=0
@@ -738,10 +739,10 @@ const cancelAppForSelf = async (req, res) => {
      const package= await subscriptionModel.findOne({Patient:patient,Status:"Subscribed"}).populate("Package")
      const packDisc= package? upcomingApp.createdAt.getTime() >= package.Startdate.getTime() &&
      upcomingApp.createdAt.getTime() <= package.Enddate.getTime()?package.Package.Session_Discount:0:0
-     const refund= getSessionPrice(doctor.HourlyRate,packDisc).toFixed(2)
+     const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      upcomingApp.BookedBy==patientUsername? await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:patient.Wallet+refund}):await patientModel.findOneAndUpdate({Username:bookedBy.Username},{Wallet:bookedBy.Wallet+refund})
      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-     res.status(200).json(`Appointment cancelled and refund amount of $${refund} has been returned successfully!`)
+     res.status(200).json(`Appointment cancelled and refund amount of ${refund} has been returned successfully`)
   
   }
     
