@@ -90,9 +90,11 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
+  viewFamAppoint:APPOINTMENT_BASE+"getAppointmentsfamilymembers/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
+  cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
 
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
