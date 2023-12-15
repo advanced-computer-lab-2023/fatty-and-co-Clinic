@@ -71,6 +71,7 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
                     data={data}
                     isLoading={isLoading}
                     appointmentId={row._id} // Assuming the appointment ID is in the data row as _id
+                    //editess
                     handlereschdule={handlereschdule}
                     handleCancelAppointment={handleCancelAppointment} // Pass the function to the row component// Pass the cancellation function as a prop
                   />

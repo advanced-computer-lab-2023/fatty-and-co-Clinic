@@ -94,6 +94,7 @@ export function ViewPatientAppointments() {
       console.error("An error occurred", error);
     }
   };
+  //edites
   const handlereschdule = async (DoctorUsername) => {
     const redirectUrl = `/patient/viewDoctorDetails/${DoctorUsername}`;
     history.push({

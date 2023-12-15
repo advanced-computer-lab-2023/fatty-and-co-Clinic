@@ -19,9 +19,10 @@ import {
 import React from "react";
 
 function DocSlotRowApt(props) {
-  const { DayName, StartTime, bookClickHandler,cameFromReschedule} = props;
+  const { DayName, StartTime, bookClickHandler,cameFromReschedule,cameFromRescheduleFam} = props;
   const textColor = useColorModeValue("gray.700", "white");
-  const buttonText = cameFromReschedule ? "Reschedule" : "Book"; // Change button text based on cameFromReschedule
+  const buttonText = cameFromReschedule ||cameFromRescheduleFam ? "Reschedule" : "Book"; // Change button text based on cameFromReschedule
+
   return (
     <Tr
     >

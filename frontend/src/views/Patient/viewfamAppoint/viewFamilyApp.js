@@ -3,9 +3,12 @@ import { Flex, Button, Box, Input, Select,useToast , Text,useColorModeValue} fro
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import FamAppTable from "./components/FamAppTable";
+import { useHistory } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
 // window . location . reload 
+//const history = useHistory();
 export function ViewFamilyApp() {
+  // const history = useHistory();
   const [DoctorUsername, setDoctorUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
@@ -26,7 +29,7 @@ export function ViewFamilyApp() {
     { label: "Completed", value: "Completed" },
     { label: "Rescheduled", value: "Rescheduled" },
   ];
-
+  const history = useHistory();
   useEffect(() => {
     const url = API_PATHS.viewFamAppoint;
     setIsLoading(true);
@@ -76,7 +79,7 @@ export function ViewFamilyApp() {
         const timer = setTimeout(() => {
           location.reload();
         }, 500); // 1000ms delay
-        window.location.reload();
+      //  window.location.reload();
      
    
       } else {
@@ -91,6 +94,28 @@ export function ViewFamilyApp() {
     } catch (error) {
       console.error("An error occurred", error);
     }
+  };
+  // const handlereschdule = async (DoctorUsername,PatientUsername) => {
+  //   const redirectUrl = `/patient/viewDoctorDetails/${DoctorUsername}`;
+  //   history.push({
+  //     pathname: redirectUrl,
+  //     state: {
+  //       Username: DoctorUsername,
+  //       PatientUsername:PatientUsername,
+  //       cameFromRescheduleFam: true // Indicate that the redirection is from Reschedule
+  //     }
+  //   });
+  // };
+  const handlereschdule = async (DoctorUsername,PatientUsername) => {
+    const redirectUrl = `/patient/viewDoctorDetails/${DoctorUsername}`;
+    history.push({
+      pathname: redirectUrl,
+      state: {
+        Username: DoctorUsername,
+               PatientUsername:PatientUsername,
+              cameFromRescheduleFam: true // Indicate that the redirection is from Reschedule
+      }
+    });
   };
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
@@ -182,10 +207,11 @@ export function ViewFamilyApp() {
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <FamAppTable
         //  title={"Available Appointments"}
-          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
+          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time","Cancell","reschdule"]}
           data={data}
           isLoading={isLoading}
           handleCancelAppointment={handleCancelAppointment}
+          handlereschdule={handlereschdule}
         />
         {/* )) || (
                 <Text fontSize="3xl" fontWeight="bold">

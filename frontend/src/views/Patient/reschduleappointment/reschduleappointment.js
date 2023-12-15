@@ -46,8 +46,9 @@ export function reschduleappointment () {
   let DoctorId = state.DoctorId;
   let Cost = state.Cost;
   let CostFam = state.CostFam;
-
-
+  let PatientUsername=state.PatientUsername;
+console.log("DoctorId",DoctorId);
+console.log("heree",PatientUsername);
 
   console.log(state);
   //const username = user.Username;
@@ -116,7 +117,7 @@ const dateConfirmHandler = async() => {
               },
               body: JSON.stringify({
                 DoctorId: DoctorId,
-                FamMemName: FamMemName,
+                FamMemName: PatientUsername,
                 Date: DateFinal,
               }),
             });
@@ -132,9 +133,6 @@ const dateConfirmHandler = async() => {
                 isClosable: true,
               });
     
-            //   const timer = setTimeout(() => {
-            //     location.reload();
-            //   }, 500); // Reload after successful cancellation
             } else {
               toast({
                 title: "Failed to Rescedule",
@@ -160,23 +158,23 @@ const dateConfirmHandler = async() => {
       }
   };
   
-  const checkOutHandler = () => {
-    let newUrl = `../AppointmentConfirmation`;
-    let newState = {
-      DoctorId: DoctorId,
-      Date: DateFinal,
-      FamMemName: FamMemName,
-      Cost: Cost,
-      CostFam: CostFam,
-    };
+//   const checkOutHandler = () => {
+//     let newUrl = `../AppointmentConfirmation`;
+//     let newState = {
+//       DoctorId: DoctorId,
+//       Date: DateFinal,
+//       FamMemName: FamMemName,
+//       Cost: Cost,
+//       CostFam: CostFam,
+//     };
 
-    console.log(user.username);
-    console.log(user.Username);
-    console.log(user);
-    // console.log("hellostate");
-    console.log(newState);
-    history.push(newUrl, newState);
-  };
+//     console.log(user.username);
+//     console.log(user.Username);
+//     console.log(user);
+//     // console.log("hellostate");
+//     console.log(newState);
+//     history.push(newUrl, newState);
+//   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
@@ -206,7 +204,7 @@ const dateConfirmHandler = async() => {
           </Box>
         </Collapse>
       </Box>
-
+{/* 
       <Button
         onClick={() => setIsOpen2(!isOpen2)}
         mt="70px"
@@ -214,7 +212,7 @@ const dateConfirmHandler = async() => {
         colorScheme="blue"
       >
         reschdule for fam member
-      </Button>
+      </Button> */}
 
       <Box>
         <Collapse
@@ -237,9 +235,9 @@ const dateConfirmHandler = async() => {
         </Collapse>
       </Box>
       <Box mt="90px">
-        <Button onClick={checkOutHandler} colorScheme="red">
+        {/* <Button onClick={checkOutHandler} colorScheme="red">
           Proceed to checkout
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );

@@ -16,6 +16,7 @@ export const ViewDoctorDetails = () => {
   });
   const [tableData, setTableData] = useState([{}]);
   const [cameFromReschedule, setCameFromReschedule] = useState(false);
+  const [cameFromRescheduleFam, setcameFromRescheduleFam] = useState(false);
   const location = useLocation();
   const { state } = location;
   //const { username } = useParams();
@@ -48,7 +49,12 @@ export const ViewDoctorDetails = () => {
       setCameFromReschedule(true);
     }
   }, [state]);
-  
+  useEffect(() => {
+    // Check if the state indicates coming from the reschedule button
+    if (state && state.cameFromRescheduleFam) {
+      setcameFromRescheduleFam(true);
+    }
+  }, [state]);
   useEffect(() => {
     axios
       .get(API_PATHS.viewAllAvailableSlots + username, {
@@ -85,7 +91,9 @@ export const ViewDoctorDetails = () => {
               title={"Doctor's Working Slots"}
               captions={["Day", "Hour", "Book"]}
               data={tableData}
-              cameFromReschedule={cameFromReschedule} // Pass the prop to indicate the source of redirection
+              cameFromReschedule={cameFromReschedule} 
+              cameFromRescheduleFam={cameFromRescheduleFam} 
+              // Pass the prop to indicate the source of redirection
               //setTableData={setTableData}
             />
           </Box>

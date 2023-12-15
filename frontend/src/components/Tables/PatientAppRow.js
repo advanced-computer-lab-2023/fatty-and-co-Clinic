@@ -41,21 +41,7 @@ import {
             </Flex>
           </Td>
         )}
-  {/*  
-        {PatientName && (
-          <Td minWidth={{ sm: "150px" }} pl="20px">
-            <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-              <Text
-                fontSize="md"
-                color={textColor}
-                fontWeight="bold"
-                minWidth="100%"
-              >
-                {PatientName}
-              </Text>
-            </Flex>
-          </Td>
-        )} */}
+
         <Td minWidth={{ sm: "150px" }} pl="0px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
@@ -116,7 +102,9 @@ import {
     )}
   </Td>
   <Td minWidth={{ sm: "150px" }}>
+
     {(Status === "Upcoming" ) && ( // Render the cancel button only if status is "Upcoming"
+    //edites
          <Button
          colorScheme="teal"
         onClick={() => props.handlereschdule(DoctorUsername)}
