@@ -5,6 +5,7 @@ import axios from "axios";
 import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
+import { useHistory } from "react-router-dom";
 
 export default function ViewAppointmentsInner() {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
@@ -20,7 +21,7 @@ export default function ViewAppointmentsInner() {
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-
+  const history = useHistory();
   // const { DoctorUsername } = useParams();
   const options = [
     { label: "Cancelled", value: "Cancelled" },
