@@ -19,9 +19,7 @@ import AppointmentsDocRow from "components/Tables/AppointmentsDocRow";
 import React from "react";
 
 export const AppointmentsTable = ({ title, captions, data, isLoading, handleRescheduleAppoinmtent }) => {
-  const isUpcomingAppointment = (status) => {
-    return status === "Upcoming";
-  };
+ 
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -58,9 +56,10 @@ export const AppointmentsTable = ({ title, captions, data, isLoading, handleResc
               {data.map((row) => {
                 return (
                   <AppointmentsDocRow
-                    DoctorName={row.DoctorName}
                     key={row._id}
                     customkey={row._id}
+                    DoctorName={row.DoctorName}
+                    DoctorUsername={row.DoctorUsername}
                     PatientName={row.PatientName}
                     PatientUsername={row.PatientUsername}
                     Type={row.FollowUp ? "Follow Up" : "First Time"}

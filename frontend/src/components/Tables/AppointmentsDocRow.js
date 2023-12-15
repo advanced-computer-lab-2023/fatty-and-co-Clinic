@@ -35,7 +35,7 @@ import {
     return (
       <Tr>
         {DoctorName && (
-          <Td minWidth={{ sm: "250px" }} pl="0px">
+          <Td minWidth={{ sm: "150px" }} pl="0px">
             <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
               <Text
                 fontSize="md"
@@ -50,7 +50,7 @@ import {
         )}
   
         {PatientName && (
-          <Td minWidth={{ sm: "250px" }} pl="0px">
+          <Td minWidth={{ sm: "150px" }} pl="10px">
             <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
               <Text
                 fontSize="md"
@@ -63,7 +63,7 @@ import {
             </Flex>
           </Td>
         )}
-        <Td minWidth={{ sm: "150px" }} pl="0px">
+        <Td minWidth={{ sm: "150px" }} pl="15px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
               fontSize="md"
@@ -76,7 +76,7 @@ import {
           </Flex>
         </Td>
   
-        <Td minWidth={{ sm: "150px" }} pl="0px" padding="10px">
+        <Td minWidth={{ sm: "150px" }} >
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
               fontSize="md"
@@ -89,7 +89,7 @@ import {
           </Flex>
         </Td>
   
-        <Td minWidth={{ sm: "190px" }} padding="10px">
+        <Td minWidth={{ sm: "150px" }} pr="20px" >
           <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
             {new Date(DateTime).toLocaleDateString("en-GB")}
           </Text>
