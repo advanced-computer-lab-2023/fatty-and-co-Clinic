@@ -30,12 +30,16 @@ import {
   Thead,
   Th,
   Tbody,
+  Grid,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { BsPrescription2 } from "react-icons/bs";
 import { API_PATHS } from "API/api_paths";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
+import CardHeader from "components/Card/CardHeader.js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
@@ -44,6 +48,7 @@ export default function PatientAppointmentsDoc() {
   const Authorization = `Bearer ${user.token}`;
   const searchParams = new URLSearchParams(location.search);
   const [appointments, setAppointments] = useState([]);
+  const patientUserName = searchParams.get("username");
   const patientName = searchParams.get("name");
   const [meds, setMeds] = useState([]);
   const [status, setStatus] = useState("");
@@ -54,7 +59,7 @@ export default function PatientAppointmentsDoc() {
     const getAppointments = async () => {
       try {
         const response = await fetch(
-          `${API_PATHS.getAllAppointmentsPat}?patientUsername=${patientName}`,
+          `${API_PATHS.getAllAppointmentsPat}?patientUsername=${patientUserName}`,
           {
             headers: {
               Authorization: Authorization,
@@ -155,40 +160,55 @@ export default function PatientAppointmentsDoc() {
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-      <Box pt="80px">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Doctor name</Th>
-              <Th>Status</Th>
-              <Th>Date</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {appointments.map((appointment, index) => (
-              <Tr>
-                <Td minWidth={{ sm: "100px" }} fontWeight="semibold">
-                  {appointment.DoctorName}
-                </Td>
-                <Td fontWeight="semibold">{appointment.Status}</Td>
-                <Td minWidth={{ sm: "90px" }} fontWeight="semibold">
-                  {appointment.Date}
-                </Td>
-                <Td minWidth={{ sm: "100px" }}>
-                  <Button
-                    rightIcon={<BsPrescription2 />}
-                    bg="teal.400"
-                    color="white"
-                    onClick={() => fetchPrescription(appointment._id)}
-                  >
-                    View prescription
-                  </Button>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
+      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap="22px">
+        <Card my={{ lg: "24px" }} me={{ lg: "24px" }}>
+          <Flex direction="column">
+            <CardHeader py="12px">
+              <Text  fontSize="lg" fontWeight="bold">
+                {patientName}'s Appointments
+              </Text>
+            </CardHeader>
+            <CardBody>
+              <Flex direction="column" w="100%">
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>Doctor name</Th>
+                      <Th>Status</Th>
+                      <Th>Date</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {appointments.map((appointment, index) => (
+                      <Tr>
+                        <Td minWidth={{ sm: "100px" }} fontWeight="semibold">
+                          {appointment.DoctorName}
+                        </Td>
+                        <Td fontWeight="semibold">{appointment.Status}</Td>
+                        <Td minWidth={{ sm: "90px" }} fontWeight="semibold">
+                          {appointment.Date}
+                        </Td>
+                        <Td minWidth={{ sm: "100px" }}>
+                          <Button
+                            rightIcon={<BsPrescription2 />}
+                            bg="teal.400"
+                            color="white"
+                            onClick={() => fetchPrescription(appointment._id)}
+                          >
+                            View prescription
+                          </Button>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Flex>
+            </CardBody>
+          </Flex>
+        </Card>
+        <Card></Card>
+      </Grid>
+      {/* <Box pt="80px"></Box> */}
     </>
   );
 }

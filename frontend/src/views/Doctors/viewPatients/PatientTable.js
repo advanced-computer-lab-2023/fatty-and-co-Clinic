@@ -132,7 +132,7 @@ export function PatientTable() {
   };
 
       const handleViewRecords = async () => {
-          const redirectUrl = `/doctor/patientRecords/?name=${selectedPatient.Username}`;
+          const redirectUrl = `/doctor/patientRecords/?username=${selectedPatient.Username}&name=${selectedPatient.Name}`;
           history.replace(redirectUrl);
       };
 
@@ -277,7 +277,7 @@ export function PatientTable() {
             </ModalBody>
             <ModalFooter>
               <Button onClick={handleViewRecords}>
-                View Information and Health records.
+                View appointments and Health records.
               </Button>
             </ModalFooter>
           </ModalContent>
