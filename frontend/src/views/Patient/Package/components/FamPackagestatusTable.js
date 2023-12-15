@@ -24,7 +24,7 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
   
 
   return (
-    <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+    <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}  w="100%"  boxShadow="lg">
       <CardHeader p="6px 0px 22px 0px">
         <Flex direction="column">
           <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">

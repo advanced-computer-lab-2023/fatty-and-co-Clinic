@@ -1,5 +1,5 @@
 // Chakra imports
-import { Box, Flex, Grid, Icon } from "@chakra-ui/react";
+import { Box, Flex, Grid, Icon, VStack } from "@chakra-ui/react";
 // Assets
 import React from "react";
 import { useEffect } from "react";
@@ -74,9 +74,9 @@ function Package() {
   };
 
   return (
-    <Flex direction="column" pt={{ base: "120px", md: "75px" }} >
+    <Flex direction="column" pt={{ base: "120px", md: "75px" }} mt="30px" ml="40px" >
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }} >
-        <Box>
+        <VStack spacing="3">
           <Subscription subscription={subscription} myPackage={myPackage} packages={packages}  familyPackages={familyPackages}/>
           <SubscribePackage packages={packages} familyPackages={familyPackages} />
           <FamPackagestatusTable
@@ -91,7 +91,7 @@ function Package() {
             ]}
             data={familyPackages}
           ></FamPackagestatusTable>
-          </Box>
+          </VStack>
           <PackageI data={packages} title={"Avilable Packages"} />
           
           

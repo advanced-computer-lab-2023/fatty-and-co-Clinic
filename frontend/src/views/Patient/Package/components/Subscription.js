@@ -85,7 +85,7 @@ const Subscription = ({ subscription, myPackage }) => {
     packageColors[myPackage.Name?.toLowerCase()] || "teal.500";
 
   return (
-    <Card p="16px" my={{ sm: "24px", xl: "0px" }} w="90%">
+    <Card p="16px" my={{ sm: "24px", xl: "0px" }} w="100%"  boxShadow="lg" > 
       {!isSubscriptionEmpty() ? (
         <>
           <CardHeader p="12px 5px" mb="12px">

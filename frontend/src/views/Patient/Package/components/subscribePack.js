@@ -116,7 +116,7 @@ function SubscribePackage({ packages, familyPackages }) {
   };
   const handleSubscribe = async (e) => {
     e.preventDefault();
-    
+
     try {
       if (!PackageName) {
         toast({
@@ -210,6 +210,7 @@ function SubscribePackage({ packages, familyPackages }) {
   };
 
   return (
+    <Card w="100%"  boxShadow="lg" >
     <Flex>
       <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
@@ -235,7 +236,7 @@ function SubscribePackage({ packages, familyPackages }) {
                     padding: "8px 12px",
                     borderRadius: "4px",
                     border: "1px solid #319795", // Mint blue border color
-                    width: "50%",
+                    width: "70%",
                   }}
                 >
                   <option value="">Package</option>
@@ -255,7 +256,7 @@ function SubscribePackage({ packages, familyPackages }) {
                     padding: "8px 12px",
                     borderRadius: "4px",
                     border: "1px solid #319795", // Mint blue border color
-                    width: "50%",
+                    width: "70%",
                   }}
                 >
                   <option value="">Myself</option>
@@ -283,7 +284,7 @@ function SubscribePackage({ packages, familyPackages }) {
                     padding: "8px 12px",
                     borderRadius: "4px",
                     border: "1px solid #319795", // Mint blue border color
-                    width: "50%",
+                    width: "70%",
                   }}
                 >
                   {" "}
@@ -297,9 +298,10 @@ function SubscribePackage({ packages, familyPackages }) {
                 borderColor="teal.300"
                 color="teal.300"
                 fontSize="xs"
-                p="8px 32px"
+                p="8px 10px"
                 type="submit"
                 textColor="white"
+                w="60%"
                 onClick={
                   selectedOption === "Wallet"
                     ? handleSubscribe
@@ -317,6 +319,7 @@ function SubscribePackage({ packages, familyPackages }) {
         </Flex>
       </CardBody>
     </Flex>
+    </Card>
   );
 }
 
