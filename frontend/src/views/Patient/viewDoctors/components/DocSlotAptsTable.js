@@ -21,7 +21,7 @@ import DocSlotRowApt from "components/Tables/DocSlotRowApt";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useParams , useLocation} from "react-router-dom";
 
-const DocSlotAptsTable = ({ title, captions, data }) => {
+const DocSlotAptsTable = ({ title, captions, data,cameFromReschedule }) => {
   const history = useHistory();
   const textColor = useColorModeValue("gray.700", "white");
 
@@ -34,16 +34,20 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
   let CostFam = state.CostFam;
   
   const handleBookClick = (row) => {
-    let newUrl = `../bookAptDetails/${row}`;
-    let newState = {
-      DayName: row.DayName,
-      StartTime: row.StartTime,
-      DoctorId: row.DoctorId,
-      Cost: Cost,
-      CostFam: CostFam,
-    };
+    if (cameFromReschedule) {
+      console.log("Handling Reschedule..."); // Log if came from Reschedule
+    } else {
+      let newUrl = `../bookAptDetails/${row}`;
+      let newState = {
+        DayName: row.DayName,
+        StartTime: row.StartTime,
+        DoctorId: row.DoctorId,
+        Cost: Cost,
+        CostFam: CostFam,
+      };
 
-    history.push(newUrl, newState);
+      history.push(newUrl, newState);
+    }
   };
 
   return (
@@ -77,6 +81,7 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
                   DayName={row.DayName}
                   StartTime={row.StartTime}
                   bookClickHandler={() => handleBookClick(row)}
+                  cameFromReschedule={cameFromReschedule} 
                 />
               );
             })}

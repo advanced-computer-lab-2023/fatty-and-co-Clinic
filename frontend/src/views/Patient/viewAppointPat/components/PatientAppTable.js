@@ -15,11 +15,11 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import PatientAppRow from "components/Tables/PatientAppRow";
-import AppointmentsRow from "components/Tables/AppointmentsRow";
+//import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancelAppointment, }) => {
+export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancelAppointment, handlereschdule}) => {
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -60,7 +60,7 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
             <Tbody>
               {data?.map((row) => {
                 return (
-                  <AppointmentsRow
+                  <PatientAppRow
                     key={row._id}
                     PatientName = {row.PatientName}
                     DoctorName={row.DoctorName}
@@ -71,6 +71,7 @@ export const PatientAppTable = ({ title, captions, data, isLoading ,handleCancel
                     data={data}
                     isLoading={isLoading}
                     appointmentId={row._id} // Assuming the appointment ID is in the data row as _id
+                    handlereschdule={handlereschdule}
                     handleCancelAppointment={handleCancelAppointment} // Pass the function to the row component// Pass the cancellation function as a prop
                   />
                 );
