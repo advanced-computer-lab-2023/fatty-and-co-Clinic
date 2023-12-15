@@ -51,6 +51,21 @@ const checkForPrescription = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+const getPrescriptionAPP = async (req, res) => {
+  try {
+    const { appointmentId } = req.query;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+
+    // Check if a prescription is found
+    
+
+    res.status(200).json({ prescription });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 const getPrescriptionMeds = async (req, res) => {
   try {
     const { appointmentId } = req.query;
@@ -269,4 +284,5 @@ module.exports = {
   placeOrder,
   getPrescriptionMeds,
   updateDescription,
+  getPrescriptionAPP,
 };

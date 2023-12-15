@@ -259,6 +259,7 @@ function PrescriptionTable() {
                         appointmentId={prescription.AppointmentId}
                       ></OrderPrescription>
                     </Td>
+                    
                   </Tr>
                 ))}
               </Tbody>
