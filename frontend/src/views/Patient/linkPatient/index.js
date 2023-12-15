@@ -30,23 +30,19 @@ export function linkPatient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (
-        Id == "" ||
-        Relation == ""
-      ) {
+      if (Id == "" || Relation == "") {
         toast({
           title: "Please fill all the inputs",
           status: "error",
           duration: 9000,
           isClosable: true,
         });
-      }
-      else {
+      } else {
         const response = await axios.patch(
           API_PATHS.linkPatient,
           {
             Id,
-            Relation
+            Relation,
           },
           { headers: { Authorization, "Content-Type": "application/json" } },
           { body: JSON.stringify({ Id, Relation }) }
@@ -58,34 +54,29 @@ export function linkPatient() {
             duration: 9000,
             isClosable: true,
           });
-          setId(""),
-          setRelation("");
-        }
-        else if (response.status == 202) {
+          setId(""), setRelation("");
+        } else if (response.status == 202) {
           toast({
             title: "Patient already linked to you",
             status: "error",
             duration: 9000,
             isClosable: true,
           });
-        }
-        else if (response.status == 204) {
+        } else if (response.status == 204) {
           toast({
             title: "Can't link yourself",
             status: "error",
             duration: 9000,
             isClosable: true,
           });
-        }
-        else if (response.status == 206) {
+        } else if (response.status == 206) {
           toast({
             title: "Patient already linked to another user",
             status: "error",
             duration: 9000,
             isClosable: true,
           });
-        }
-        else {
+        } else {
           toast({
             title: "Failed to link patient",
             status: "error",

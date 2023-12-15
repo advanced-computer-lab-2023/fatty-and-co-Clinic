@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Button, Box, Input, Select,useToast } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Select, useToast } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import FamAppTable from "./components/FamAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
+import FamAppTable from "./components/FamAppTable";
 
 export function ViewFamilyApp() {
   const [DoctorUsername, setDoctorUsername] = useState("");
@@ -43,26 +43,23 @@ export function ViewFamilyApp() {
   }, [searchParams]);
   const toast = useToast();
 
- 
-
   const handleCancelAppointment = async (DoctorUsername) => {
-   // e.preventDefault();
-   //console.log("DoctorUsername:", DoctorUsername);
-   setDoctorUsername(DoctorUsername);
+    // e.preventDefault();
+    // console.log("DoctorUsername:", DoctorUsername);
+    setDoctorUsername(DoctorUsername);
 
     try {
-   
       const response = await fetch(API_PATHS.cancellappointment, {
         method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
-    
-        body: JSON.stringify({doctorUsername:DoctorUsername})
-      // body: JSON.stringify({Package2}),
+
+        body: JSON.stringify({ doctorUsername: DoctorUsername }),
+        // body: JSON.stringify({Package2}),
       });
-  
+
       console.log("Response", response.status);
       const errorData = await response.json();
       if (response.ok) {
@@ -72,9 +69,6 @@ export function ViewFamilyApp() {
           duration: 9000,
           isClosable: true,
         });
-  
-     
-   
       } else {
         toast({
           title: "Failed to Cancel",
@@ -146,27 +140,38 @@ export function ViewFamilyApp() {
             color="teal.300"
             fontSize="xs"
             p="8px 32px"
-           textColor="white"
-           onClick={handleSearchButtonClick} marginLeft={4}>
+            textColor="white"
+            onClick={handleSearchButtonClick}
+            marginLeft={4}
+          >
             Search
           </Button>
 
           <Button
-           colorScheme="teal"
+            colorScheme="teal"
             borderColor="teal.500"
             color="teal.500"
             fontSize="xs"
             p="8px 32px"
-           textColor="white"
-           onClick={handleClrButtonClick} marginLeft={4}>
+            textColor="white"
+            onClick={handleClrButtonClick}
+            marginLeft={4}
+          >
             Clear
           </Button>
         </Flex>
 
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <FamAppTable
-          title={"Available Appointments"}
-          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
+          title="Available Appointments"
+          captions={[
+            "Doctor Name",
+            "Patient Name",
+            "Status",
+            "Type",
+            "Date",
+            "Time",
+          ]}
           data={data}
           isLoading={isLoading}
           handleCancelAppointment={handleCancelAppointment}

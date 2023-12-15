@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
-import { FamilymemberTable } from "./components/FamilymemberTable.js";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-//import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
+import { FamilymemberTable } from "./components/FamilymemberTable.js";
 
 function Viewmembers() {
   const { user } = useAuthContext();
@@ -17,7 +17,7 @@ function Viewmembers() {
     axios
       .get(URL1, {
         headers: {
-          Authorization: Authorization,
+          Authorization,
         },
       })
       .then((response) => {
@@ -36,7 +36,7 @@ function Viewmembers() {
         justifyContent="flex-start"
       >
         <FamilymemberTable
-          title={"Registered Family Memebers"}
+          title="Registered Family Memebers"
           captions={["Name", "NationalId", "Age", "Gender", "Relation"]}
           data={data}
         />

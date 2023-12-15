@@ -12,13 +12,13 @@ export const prescriptionReducer = (state, action) => {
       return {
         prescriptions: [...state.prescriptions, action.payload],
       };
-  
+
     default:
       return state;
   }
 };
 
-export const PrescriptionContextProvider = ({ children }) => {
+export function PrescriptionContextProvider({ children }) {
   const [state, dispatch] = useReducer(prescriptionReducer, {
     prescriptions: [],
   });
@@ -28,4 +28,4 @@ export const PrescriptionContextProvider = ({ children }) => {
       {children}
     </PrescriptionContext.Provider>
   );
-};
+}

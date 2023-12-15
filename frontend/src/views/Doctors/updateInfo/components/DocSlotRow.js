@@ -34,11 +34,7 @@ function DocSlotRow(props) {
     <Tr>
       <Td minWidth={{ sm: "250px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Text
-            fontSize="md"
-            color={textColor}
-            minWidth="100%"
-          >
+          <Text fontSize="md" color={textColor} minWidth="100%">
             {Hour}
           </Text>
         </Flex>
@@ -52,15 +48,11 @@ function DocSlotRow(props) {
             transition={{ exit: { delay: 0.3 }, enter: { duration: 0.5 } }}
           >
             <Flex>
-              <Input
-                bg="white"
-                type="time"
-                onChange={timeValueChangeHandler}
-              />
-              <Button onClick={editConfirmHandler} colorScheme="teal">Confirm</Button>
-
+              <Input bg="white" type="time" onChange={timeValueChangeHandler} />
+              <Button onClick={editConfirmHandler} colorScheme="teal">
+                Confirm
+              </Button>
             </Flex>
-
           </Collapse>
         </Flex>
       </Td>

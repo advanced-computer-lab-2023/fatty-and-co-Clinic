@@ -12,12 +12,12 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { usePackageContext } from "../hooks/usePackageContext";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
+import { usePackageContext } from "../hooks/usePackageContext";
 
 function PackageForm() {
   const { dispatch } = usePackageContext();
@@ -40,7 +40,7 @@ function PackageForm() {
       h="fit-content"
       my={{ sm: "24px", lg: "0px" }}
       ms={{ sm: "0px", lg: "24px" }}
-      style= {{marginTop: "24px"}}
+      style={{ marginTop: "24px" }}
     >
       <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
@@ -67,7 +67,7 @@ function PackageForm() {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  'Authorization': Authorization
+                  Authorization,
                 },
                 body: JSON.stringify(Package),
               });
@@ -92,7 +92,7 @@ function PackageForm() {
                 setMessage(data.message);
                 toast({
                   title: "failed Package Add.",
-                  description: "Error: " + data.message,
+                  description: `Error: ${data.message}`,
                   status: "error",
                   duration: 9000,
                   isClosable: true,

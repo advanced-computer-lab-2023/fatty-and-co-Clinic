@@ -18,11 +18,11 @@ export const requestsReducer = (state, action) => {
   }
 };
 
-export const RequestsContextProvider = ({ children }) => {
+export function RequestsContextProvider({ children }) {
   const [state, dispatch] = useReducer(requestsReducer, { requests: [] });
   return (
     <RequestsContext.Provider value={{ ...state, dispatch }}>
       {children}
     </RequestsContext.Provider>
   );
-};
+}

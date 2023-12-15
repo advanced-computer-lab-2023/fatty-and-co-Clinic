@@ -17,13 +17,12 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
-import { DownloadIcon } from '@chakra-ui/icons'
-import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
+import { DownloadIcon } from "@chakra-ui/icons";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
-import { useEffect } from "react";
+import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
 
 function HealthRecordRow(props) {
   const { dispatch } = useMedicalHistoryContext();
@@ -51,7 +50,7 @@ function HealthRecordRow(props) {
   useEffect(() => {
     downloadFile();
   }, []);
-  //handle clickDownload
+  // handle clickDownload
   const handleClickDownload = () => {
     const link = document.createElement("a");
     link.href = file;
@@ -72,7 +71,7 @@ function HealthRecordRow(props) {
     const data = await response.json();
     if (response.ok) {
       location.reload();
-      //dispatch({ type: "DELETE_PACKAGE", payload: props._id });
+      // dispatch({ type: "DELETE_PACKAGE", payload: props._id });
     } else {
       setMessage(data.message);
     }
@@ -89,8 +88,8 @@ function HealthRecordRow(props) {
           {(props.filename.includes(".png") ||
             props.filename.includes(".jpeg") ||
             props.filename.includes(".jpg")) && (
-              <img src={file} width="100%" height="500px"></img>
-            )}
+            <img src={file} width="100%" height="500px" />
+          )}
 
           {/* {props.filename.includes(".pdf") && (
             // <iframe
@@ -100,48 +99,47 @@ function HealthRecordRow(props) {
             // ></iframe>
           )} */}
           <Text color="gray.400" fontSize="sm" fontWeight="semibold">
-            {props.note && "Doctor note : "}&nbsp;
+            {props.note && "Doctor note : "}
+            &nbsp;
             <Text as="span" color="gray.500">
               {props.note}
             </Text>
           </Text>
           <Flex
-          direction={{ sm: "column", md: "row" }}
-          align="flex-start"
-          p={{ md: "24px" }}
-        >
-
-          <Button
-            p="0px"
-            bg="transparent"
-            mb={{ sm: "10px", md: "0px" }}
-            me={{ md: "12px" }}
-            onClick={handleClickDownload}
+            direction={{ sm: "column", md: "row" }}
+            align="flex-start"
+            p={{ md: "24px" }}
           >
-            <Flex color="green.500" cursor="pointer" align="center" p="12px">
-              <Icon as={DownloadIcon} me="4px" />
-              <Text fontSize="sm" fontWeight="semibold">
-                DOWNLOAD
-              </Text>
-            </Flex>
-          </Button>
-          <Button
-            p="0px"
-            bg="transparent"
-            mb={{ sm: "10px", md: "0px" }}
-            me={{ md: "12px" }}
-            onClick={handleDelete}
-          >
-            <Flex color="red.500" cursor="pointer" align="center" p="12px">
-              <Icon as={FaTrashAlt} me="4px" />
-              <Text fontSize="sm" fontWeight="semibold">
-                DELETE
-              </Text>
-            </Flex>
-          </Button>
+            <Button
+              p="0px"
+              bg="transparent"
+              mb={{ sm: "10px", md: "0px" }}
+              me={{ md: "12px" }}
+              onClick={handleClickDownload}
+            >
+              <Flex color="green.500" cursor="pointer" align="center" p="12px">
+                <Icon as={DownloadIcon} me="4px" />
+                <Text fontSize="sm" fontWeight="semibold">
+                  DOWNLOAD
+                </Text>
+              </Flex>
+            </Button>
+            <Button
+              p="0px"
+              bg="transparent"
+              mb={{ sm: "10px", md: "0px" }}
+              me={{ md: "12px" }}
+              onClick={handleDelete}
+            >
+              <Flex color="red.500" cursor="pointer" align="center" p="12px">
+                <Icon as={FaTrashAlt} me="4px" />
+                <Text fontSize="sm" fontWeight="semibold">
+                  DELETE
+                </Text>
+              </Flex>
+            </Button>
+          </Flex>
         </Flex>
-        </Flex>
-       
       </Flex>
     </Box>
   );

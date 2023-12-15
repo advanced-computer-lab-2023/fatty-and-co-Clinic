@@ -21,11 +21,11 @@ export const walletReducer = (state, action) => {
   }
 };
 
-export const WalletContextProvider = ({ children }) => {
+export function WalletContextProvider({ children }) {
   const [state, dispatch] = useReducer(walletReducer, { Wallet: null });
   return (
     <WalletContext.Provider value={{ ...state, dispatch }}>
       {children}
     </WalletContext.Provider>
   );
-};
+}

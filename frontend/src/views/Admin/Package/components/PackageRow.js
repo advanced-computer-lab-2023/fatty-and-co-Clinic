@@ -19,9 +19,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { usePackageContext } from "../hooks/usePackageContext";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
+import { usePackageContext } from "../hooks/usePackageContext";
 
 function PackageRow(props) {
   const { dispatch } = usePackageContext();
@@ -133,7 +133,10 @@ function PackageRow(props) {
       <Modal isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit {Name}</ModalHeader>
+          <ModalHeader>
+            Edit
+            {Name}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={3}>
@@ -248,7 +251,7 @@ function PackageRow(props) {
                   onClose();
                   return toast({
                     title: "failed Package Update. try again.",
-                    description: "Error: " + data.message,
+                    description: `Error: ${data.message}`,
                     status: "error",
                     duration: 9000,
                     isClosable: true,

@@ -27,11 +27,10 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  Heading
+  Heading,
 } from "@chakra-ui/react";
 
-
-const AppointmentConfirmation = () => {
+function AppointmentConfirmation() {
   const [selectedPayment, setSelectedPayment] = useState("");
   const history = useHistory();
 
@@ -87,6 +86,6 @@ const AppointmentConfirmation = () => {
       </Flex>
     </Box>
   );
-};
+}
 
 export default AppointmentConfirmation;

@@ -24,7 +24,6 @@ function Famappointmentrow(props) {
     Status,
     Type,
     DateTime,
- 
   } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -43,7 +42,7 @@ function Famappointmentrow(props) {
           </Flex>
         </Td>
       )}
- 
+
       {PatientName && (
         <Td minWidth={{ sm: "150px" }} pl="20px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
@@ -98,24 +97,20 @@ function Famappointmentrow(props) {
         <Td minWidth={{ sm: "150px" }}>
           <CreateFollowUpButton patientUsername={PatientUsername} />
         </Td>
-
-   
       )}
-  <Td minWidth={{ sm: "150px" }}>
-  {(Status === "Upcoming" ||Status === "Rescheduled" ) && ( // Render the cancel button only if status is "Upcoming"
-       <Button
-       colorScheme="red"
-       onClick={() => props.handleCancelAppointment(DoctorUsername)}
-     >
-       Cancel
-     </Button>
-  )}
-</Td>
-     
-
+      <Td minWidth={{ sm: "150px" }}>
+        {(Status === "Upcoming" || Status === "Rescheduled") && ( // Render the cancel button only if status is "Upcoming"
+          <Button
+            colorScheme="red"
+            onClick={() => props.handleCancelAppointment(DoctorUsername)}
+          >
+            Cancel
+          </Button>
+        )}
+      </Td>
     </Tr>
   );
 }
 
 export default Famappointmentrow;
-//components
+// components

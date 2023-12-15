@@ -1,13 +1,13 @@
 // Chakra imports
 import { Flex, Grid, useColorModeValue } from "@chakra-ui/react";
 import ProfileBgImage from "assets/img/ProfileBackground.png";
-import React from "react";
-import Header from "./components/Header";
-import ProfileInformation from "./components/ProfileInformation";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
+import ProfileInformation from "./components/ProfileInformation";
+import Header from "./components/Header";
 import UpdateAffil from "../updateInfo/UpdateAffil";
 import UpdateSlots from "../updateInfo/UpdateSlots";
 import UpdateHourly from "../updateInfo/UpdateHourly";
@@ -34,7 +34,7 @@ function DoctorProfile() {
     axios
       .get(url, {
         headers: {
-          Authorization: Authorization,
+          Authorization,
         },
       })
       .then((response) => {
@@ -43,21 +43,19 @@ function DoctorProfile() {
         setSystemUser(response.data.user);
       })
       .catch((err) => console.log(err));
-  }
-
-
+  };
 
   return (
-    <Flex direction='column'>
+    <Flex direction="column">
       <Header
         backgroundHeader={ProfileBgImage}
         backgroundProfile={bgProfile}
         name={doctor.Name}
         email={systemUser.Email}
       />
-      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap='22px'>
+      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap="22px">
         <ProfileInformation
-          title={"Profile Information"}
+          title="Profile Information"
           name={doctor.Name}
           email={systemUser.Email}
           dateOfBirth={new Date(doctor.DateOfBirth).toLocaleDateString("en-GB")}
@@ -67,7 +65,7 @@ function DoctorProfile() {
           affiliation={doctor.Affiliation}
         />
         <Flex direction="column" gap="10px">
-            <UpdateSlots></UpdateSlots>
+          <UpdateSlots />
         </Flex>
       </Grid>
     </Flex>

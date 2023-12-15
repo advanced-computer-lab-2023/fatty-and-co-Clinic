@@ -32,7 +32,7 @@ export const doctorsReducer = (state, action) => {
   }
 };
 
-export const DoctorsContextProvider = () => {
+export function DoctorsContextProvider() {
   const [state, dispatch] = useReducer(doctorsReducer, { doctors: [] });
 
   // dispatch({ type: "GET_DOCTORS", payload: {} });S
@@ -42,4 +42,4 @@ export const DoctorsContextProvider = () => {
       {children}
     </DoctorsContext.Provider>
   );
-};
+}

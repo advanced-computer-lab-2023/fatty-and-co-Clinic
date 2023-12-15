@@ -61,7 +61,7 @@ function HealthRecordForm({ PatientUsername }) {
                 {
                   method: "POST",
                   headers: {
-                    Authorization: Authorization,
+                    Authorization,
                   },
                   body: formData,
                 }
@@ -74,8 +74,8 @@ function HealthRecordForm({ PatientUsername }) {
                   duration: 3000,
                   isClosable: true,
                 });
-                //location.reload();
-                //dispatch({ type: "ADD_PACKAGE", payload: data });
+                // location.reload();
+                // dispatch({ type: "ADD_PACKAGE", payload: data });
               } else {
                 toast({
                   title: "File upload failed",

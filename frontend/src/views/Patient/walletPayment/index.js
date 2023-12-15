@@ -8,7 +8,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "views/Patient/makePayment/components/PaymentForm";
 import { useHistory, useLocation } from "react-router-dom";
 import { useWalletContext } from "hooks/useWalletContext";
-//import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import {
   Button,
   Box,
@@ -18,7 +18,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
+function WalletPayment({ amount, doctorId, patientUsername, date }) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
 
@@ -34,14 +34,14 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
   // const searchParams = new URLSearchParams(location.search);
   //   const amount2 = searchParams.get("amount");
   const Amount = state.Cost;
-  const DoctorId = state.DoctorId;
-  const FamMemName = state.FamMemName;
-  const Date = state.Date;
+  const { DoctorId } = state;
+  const { FamMemName } = state;
+  const { Date } = state;
   // console.log("hello stripe");
   // console.log(searchParams);
   console.log(Amount);
-  console.log("doctor's id:" + DoctorId);
-  console.log("FamMemName" + FamMemName);
+  console.log(`doctor's id:${DoctorId}`);
+  console.log(`FamMemName${FamMemName}`);
   console.log(Date);
 
   //   const handleWalletPayment = async () => {
@@ -122,7 +122,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
       const response = await axios.post(
         API_PATHS.walletPayment,
         {
-          Amount: Amount,
+          Amount,
         },
         {
           headers: {
@@ -145,9 +145,9 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            DoctorId: DoctorId,
-            FamMemName: FamMemName,
-            Date: Date,
+            DoctorId,
+            FamMemName,
+            Date,
           }),
         });
 
@@ -159,7 +159,7 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            DoctorId: DoctorId,
+            DoctorId,
           }),
         });
 
@@ -222,6 +222,6 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
       {/* <ToastContainer /> */}
     </Box>
   );
-};
+}
 
 export default WalletPayment;

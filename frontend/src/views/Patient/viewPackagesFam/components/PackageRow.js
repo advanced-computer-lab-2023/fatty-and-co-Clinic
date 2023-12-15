@@ -19,9 +19,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { usePackageContext } from "../hooks/usePackageContext";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
+import { usePackageContext } from "../hooks/usePackageContext";
 
 function PackageRow(props) {
   const { dispatch } = usePackageContext();
@@ -40,8 +40,6 @@ function PackageRow(props) {
   const [message, setMessage] = useState("");
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-
- 
 
   // handle edit
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -79,33 +77,30 @@ function PackageRow(props) {
             </Text>
           </Text>
         </Flex>
-         <Flex
+        <Flex
           direction={{ sm: "column", md: "row" }}
           align="flex-start"
           p={{ md: "24px" }}
-        >
-        </Flex>
-      </Flex> 
+        />
+      </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit {Name}</ModalHeader>
+          <ModalHeader>
+            Edit
+            {Name}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={3}>
               <Text fontSize="sm" fontWeight="semibold">
                 just add the diffrent values
               </Text>
-         
-          
             </Stack>
           </ModalBody>
 
-          <ModalFooter>
-         
-            
-          </ModalFooter>
+          <ModalFooter />
         </ModalContent>
       </Modal>
     </Box>

@@ -17,50 +17,45 @@ import CardHeader from "components/Card/CardHeader.js";
 import FamilymemberRow from "components/Tables/FamilymemberRow";
 import React from "react";
 
-export const FamilymemberTable = ({ title, captions, data }) => {
+export function FamilymemberTable({ title, captions, data }) {
   const textColor = useColorModeValue("gray.700", "white");
   console.log(data);
   return (
-    <Card my='22px' overflowX={{ sm: "scroll", xl: "hidden" }}>
-      <CardHeader p='6px 0px 22px 0px'>
-        <Flex direction='column'>
-          <Text fontSize='lg' color={textColor} fontWeight='bold' pb='.5rem'>
-              {/* title will be All doctors  */}
+    <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+      <CardHeader p="6px 0px 22px 0px">
+        <Flex direction="column">
+          <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+            {/* title will be All doctors  */}
             {title}
           </Text>
         </Flex>
       </CardHeader>
       <CardBody>
-        <Table variant='simple' color={textColor}>
+        <Table variant="simple" color={textColor}>
           <Thead>
-            <Tr my='.8rem' pl='0px'>
-              {captions.map((caption, idx) => {
-                return (
-                  <Th color='gray.400' key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
-                );
-              })}
+            <Tr my=".8rem" pl="0px">
+              {captions.map((caption, idx) => (
+                <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
+                  {caption}
+                </Th>
+              ))}
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => {
-              return (
-                <FamilymemberRow
-                  Name={row.Name}
-                  NationalId={row.NationalId}
-                  Age={row.Age}
-                  Gender={row.Gender}
-                  Relation={row.Relation}
-                />
-              );
-            })}
+            {data.map((row) => (
+              <FamilymemberRow
+                Name={row.Name}
+                NationalId={row.NationalId}
+                Age={row.Age}
+                Gender={row.Gender}
+                Relation={row.Relation}
+              />
+            ))}
           </Tbody>
         </Table>
       </CardBody>
     </Card>
-   
   );
-};
- 
-export  default FamilymemberTable;
+}
+
+export default FamilymemberTable;

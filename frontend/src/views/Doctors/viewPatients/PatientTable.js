@@ -51,7 +51,7 @@ export function PatientTable() {
 
   const fetchPatient = () => {
     // Construct the URL based on filters and user ID
-    let url = filters.upcoming
+    const url = filters.upcoming
       ? API_PATHS.viewUpcomingAppointments
       : API_PATHS.viewDoctorPatients;
 
@@ -104,7 +104,7 @@ export function PatientTable() {
         API_PATHS.getMedicalHistory + patientUsername,
         {
           headers: {
-            Authorization: Authorization,
+            Authorization,
           },
         }
       );
@@ -250,8 +250,8 @@ export function PatientTable() {
               <Heading as="h5" size="sm">
                 Health Records :
               </Heading>
-               {/* start of health records  TODO: make it a component */}
-               <Flex
+              {/* start of health records  TODO: make it a component */}
+              <Flex
                 direction={{ sm: "column", md: "row" }}
                 align="flex-start"
                 p={{ md: "5px" }}
@@ -262,7 +262,7 @@ export function PatientTable() {
                       <VStack spacing={1}>
                         <button
                           onClick={async () => {
-                            const filename = healthRecord.filename;
+                            const { filename } = healthRecord;
                             const response = await fetch(
                               API_PATHS.downloadFile + filename,
                               {
@@ -287,7 +287,7 @@ export function PatientTable() {
                           <Icon as={DownloadIcon} me="3px" />
                         </button>
                         <div>
-                          {healthRecord.note && healthRecord.note!="null" && (
+                          {healthRecord.note && healthRecord.note != "null" && (
                             <p>note: {healthRecord.note}</p>
                           )}
                         </div>
@@ -295,8 +295,10 @@ export function PatientTable() {
                       </VStack>
                     ))}
                 </Flex>
-                <Flex direction="column" align="flex-start" >
-                <HealthRecordForm PatientUsername={selectedPatient.Username}/>
+                <Flex direction="column" align="flex-start">
+                  <HealthRecordForm
+                    PatientUsername={selectedPatient.Username}
+                  />
                 </Flex>
               </Flex>
               {/* end of health records */}

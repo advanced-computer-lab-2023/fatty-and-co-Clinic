@@ -14,12 +14,12 @@ import {
 import { AttachmentIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
+import { useMedicalHistoryContext } from "../hooks/useMedicalHistoryContext";
 
 function HealthRecordForm() {
   const { dispatch } = useMedicalHistoryContext();
@@ -55,7 +55,7 @@ function HealthRecordForm() {
                 {
                   method: "POST",
                   headers: {
-                    Authorization: Authorization,
+                    Authorization,
                   },
                   body: formData,
                 }
@@ -69,7 +69,7 @@ function HealthRecordForm() {
                   isClosable: true,
                 });
                 location.reload();
-                //dispatch({ type: "ADD_PACKAGE", payload: data });
+                // dispatch({ type: "ADD_PACKAGE", payload: data });
               } else {
                 toast({
                   title: "File upload failed",

@@ -48,8 +48,8 @@ export default function AddMedButton({ customkey }, { setaddMed }) {
       .post(url, null, {
         params: {
           appointmentId: customkey,
-          medicine: medicine,
-          dosage: dosage,
+          medicine,
+          dosage,
         },
         headers: { Authorization },
       })
@@ -78,9 +78,7 @@ export default function AddMedButton({ customkey }, { setaddMed }) {
 
   return (
     <>
-      <Button colorScheme="blue" >
-        Add medicine to prescription
-      </Button>
+      <Button colorScheme="blue">Add medicine to prescription</Button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
@@ -88,14 +86,20 @@ export default function AddMedButton({ customkey }, { setaddMed }) {
           <ModalCloseButton />
 
           <ModalBody>
-            <Text mb="8px">medicine: {medicine}</Text>
+            <Text mb="8px">
+              medicine:
+              {medicine}
+            </Text>
             <Input
               medicine={medicine}
               bg="white"
               placeholder="Enter medicine"
               onChange={handleMedicine}
             />
-            <Text mb="8px">Dosage: {dosage}</Text>
+            <Text mb="8px">
+              Dosage:
+              {dosage}
+            </Text>
             <Input
               dosage={dosage}
               bg="white"

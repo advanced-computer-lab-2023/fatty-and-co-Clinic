@@ -17,6 +17,7 @@ import { useAuthContext } from "hooks/useAuthContext";
 import { API_PATHS } from "API/api_paths";
 import { useLocation } from "react-router-dom";
 import ThankYouCard from "../ThankYou";
+
 const CARD_OPTIONS = {
   iconStyle: "solid",
   style: {
@@ -36,7 +37,7 @@ const CARD_OPTIONS = {
   },
 };
 
-const PaymentForm = ({
+function PaymentForm({
   Amount,
   Description,
   PackageName,
@@ -44,14 +45,14 @@ const PaymentForm = ({
   DoctorId,
   FamMemName,
   Date,
-}) => {
+}) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [success, setSuccess] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
 
-  console.log("fam mem name pay form: " + FamMemName);
+  console.log(`fam mem name pay form: ${FamMemName}`);
   // useEffect(() => {
   //   if (success) {
   //     const redirectTimeout = setTimeout(() => {
@@ -73,7 +74,7 @@ const PaymentForm = ({
       try {
         console.log("trying");
         const { id } = paymentMethod;
-        console.log("id: " + id);
+        console.log(`id: ${id}`);
         const response = await axios.post(
           API_PATHS.cardPayment,
           {
@@ -244,6 +245,6 @@ const PaymentForm = ({
       {/* <Input type="number" onChange={(e) => setAmount(e.target.value)}></Input> */}
     </div>
   );
-};
+}
 
 export default PaymentForm;

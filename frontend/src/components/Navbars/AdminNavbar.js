@@ -30,7 +30,7 @@ export default function AdminNavbar(props) {
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
   let mainText = useColorModeValue("gray.700", "gray.200");
   let secondaryText = useColorModeValue("gray.400", "gray.200");
-  let navbarIcon = useColorModeValue("gray.500", "gray.200");
+  const navbarIcon = useColorModeValue("gray.500", "gray.200");
   let navbarPosition = "absolute";
   let navbarFilter = "none";
   let navbarBackdrop = "blur(21px)";
@@ -39,7 +39,7 @@ export default function AdminNavbar(props) {
   let navbarBorder = "transparent";
   let secondaryMargin = "0px";
   let paddingX = "15px";
-  if (props.fixed === true)
+  if (props.fixed === true) {
     if (scrolled === true) {
       navbarPosition = "fixed";
       navbarShadow = useColorModeValue(
@@ -56,6 +56,7 @@ export default function AdminNavbar(props) {
         "drop-shadow(0px 7px 23px rgba(0, 0, 0, 0.05))"
       );
     }
+  }
   if (props.secondary) {
     navbarBackdrop = "none";
     navbarPosition = "absolute";
@@ -119,10 +120,12 @@ export default function AdminNavbar(props) {
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Icon
             as={ChevronLeftIcon}
-            _hover={{ color:"black" , 
-            cursor:"pointer" }}
+            _hover={{
+              color: "black",
+              cursor: "pointer",
+            }}
             color={navbarIcon}
-            style={{marginRight:"5px"}}
+            style={{ marginRight: "5px" }}
             w="22px"
             h="22px"
             me="0px"

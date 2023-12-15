@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useAuthContext } from "./useAuthContext";
 import { API_PATHS } from "API/api_paths";
 import { cookieStorageManager } from "@chakra-ui/system";
 import { useState } from "react";
+import { useAuthContext } from "./useAuthContext";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);

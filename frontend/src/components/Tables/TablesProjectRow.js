@@ -18,7 +18,7 @@ function DashboardTableRow(props) {
     <Tr>
       <Td minWidth={{ sm: "250px" }} pl="0px">
         <Flex alignItems="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Icon as={logo} h={"24px"} w={"24px"} me="18px" />
+          <Icon as={logo} h="24px" w="24px" me="18px" />
           <Text
             fontSize="md"
             color={textColor}
@@ -41,12 +41,9 @@ function DashboardTableRow(props) {
       </Td>
       <Td>
         <Flex direction="column">
-          <Text
-            fontSize="md"
-            color="teal.300"
-            fontWeight="bold"
-            pb=".2rem"
-          >{`${progression}%`}</Text>
+          <Text fontSize="md" color="teal.300" fontWeight="bold" pb=".2rem">
+            {`${progression}%`}
+          </Text>
           <Progress
             colorScheme={progression === 100 ? "teal" : "cyan"}
             size="xs"

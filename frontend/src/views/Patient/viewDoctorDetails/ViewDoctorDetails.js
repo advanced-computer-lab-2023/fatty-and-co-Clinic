@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Box, Text, Flex } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useParams , useLocation} from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
 import DocSlotAptsTable from "../viewDoctors/components/DocSlotAptsTable";
 
-export const ViewDoctorDetails = () => {
+export function ViewDoctorDetails() {
   const [formData, setFormData] = useState({
     name: "",
     speciality: "",
@@ -18,8 +18,8 @@ export const ViewDoctorDetails = () => {
 
   const location = useLocation();
   const { state } = location;
-  //const { username } = useParams();
-  let username = state.Username;
+  // const { username } = useParams();
+  const username = state.Username;
   console.log(username);
   console.log(state);
 
@@ -52,7 +52,7 @@ export const ViewDoctorDetails = () => {
       .catch((error) => {
         console.log(error);
       });
-  } ,[]);
+  }, []);
 
   return (
     <Box pt="80px">
@@ -80,7 +80,7 @@ export const ViewDoctorDetails = () => {
               captions={["Day", "Hour", "Book"]}
               data={tableData}
 
-              //setTableData={setTableData}
+              // setTableData={setTableData}
             />
           </Box>
         </Flex>
@@ -91,4 +91,4 @@ export const ViewDoctorDetails = () => {
       )}
     </Box>
   );
-};
+}

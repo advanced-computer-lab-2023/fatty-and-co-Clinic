@@ -18,23 +18,24 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import { formatISO, set } from "date-fns";
 import CardHeader from "components/Card/CardHeader.js";
-//import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
+
 export function CreateFamilyMember() {
   const [Name, setName] = useState("");
   const [NationalId, setNationalId] = useState("");
   const [Gender, setGender] = useState("");
   const [relation, setRelation] = useState("");
-  // new additions because all family membrs will be signed up 
-  const [Username,setUsername]=useState("");
-  const [Password,setPassword]=useState("");
-  const [Email,setEmail]=useState("");
-  const [MobileNum,setMobileNum]=useState("");
+  // new additions because all family membrs will be signed up
+  const [Username, setUsername] = useState("");
+  const [Password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
+  const [MobileNum, setMobileNum] = useState("");
   const [selectedDate, setSelectedDate] = useState(null); // New state for Date of Birth
-  const [EmergencyContactNumber,setEmergencyContactNumber]=useState("");
-  const [EmergencyContactName,setEmergencyContactName]=useState("");
-  const [Wallet,setWallet]=useState("");
+  const [EmergencyContactNumber, setEmergencyContactNumber] = useState("");
+  const [EmergencyContactName, setEmergencyContactName] = useState("");
+  const [Wallet, setWallet] = useState("");
   /*
   Username/,
   Name -,
@@ -56,7 +57,7 @@ export function CreateFamilyMember() {
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.700", "white");
   // const { Createparameter } = useParams();
-  
+
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
   };
@@ -65,7 +66,9 @@ export function CreateFamilyMember() {
 
     // Send the username to the backend for deletion
     try {
-      const formattedDate = selectedDate ? formatISO(new Date(selectedDate)) : null;
+      const formattedDate = selectedDate
+        ? formatISO(new Date(selectedDate))
+        : null;
       const response = await fetch(API_PATHS.createFamilyMember, {
         method: "POST",
         headers: {
@@ -83,11 +86,10 @@ export function CreateFamilyMember() {
           Gender,
           relation,
           Wallet,
-
         }),
       });
       const errorData = await response.json();
-       if (response.ok) {
+      if (response.ok) {
         // Handle success or provide feedback to the user
         console.log("Hi");
         toast({
@@ -98,17 +100,21 @@ export function CreateFamilyMember() {
         });
 
         setName(""),
-        setNationalId(""),
-        setGender(""),
-        setRelation(""),
-        setUsername(""),
-        setPassword(""),setMobileNum(""),setSelectedDate(null),setEmergencyContactName(""),setEmergencyContactNumber("")
+          setNationalId(""),
+          setGender(""),
+          setRelation(""),
+          setUsername(""),
+          setPassword(""),
+          setMobileNum(""),
+          setSelectedDate(null),
+          setEmergencyContactName(""),
+          setEmergencyContactNumber("");
         setEmail("");
       } else {
         // Handle errors or provide feedback to the user
         toast({
           title: "Failed to create Familymember",
-          description:  errorData.error,
+          description: errorData.error,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -143,16 +149,15 @@ export function CreateFamilyMember() {
             <Flex direction="column" w="100%">
               <form onSubmit={handleSubmit}>
                 <Stack spacing={3}>
-                <Input
+                  <Input
                     variant="filled"
                     type="text"
                     placeholder="Username"
                     value={Username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-            
                   />
-                      <Input
+                  <Input
                     variant="filled"
                     type="text"
                     placeholder="Email"
@@ -160,16 +165,15 @@ export function CreateFamilyMember() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
-                    <Input
+                  <Input
                     variant="filled"
                     type="passowrd"
                     placeholder="Password"
                     value={Password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                
                   />
-                  
+
                   <Input
                     variant="filled"
                     type="text"
@@ -177,7 +181,6 @@ export function CreateFamilyMember() {
                     value={Name}
                     onChange={(e) => setName(e.target.value)}
                     required
-               
                   />
                   <Input
                     variant="filled"
@@ -186,25 +189,22 @@ export function CreateFamilyMember() {
                     value={NationalId}
                     onChange={(e) => setNationalId(e.target.value)}
                     required
-               
                   />
-                     <Input
+                  <Input
                     variant="filled"
                     type="date"
                     value={selectedDate}
                     onChange={handleDateChange}
                     required
-                   
                   />
-                 
-                       <Input
+
+                  <Input
                     variant="filled"
                     type="number"
                     placeholder="Mobile Number "
                     value={MobileNum}
                     onChange={(e) => setMobileNum(e.target.value)}
                     required
-                
                   />
                   <Select
                     variant="filled"
@@ -226,8 +226,7 @@ export function CreateFamilyMember() {
                     <option value="Child">Child</option>
                     <option value="Spouse">Spouse</option>
                   </Select>
-             
-                
+
                   <Button
                     colorScheme="teal"
                     borderColor="teal.300"

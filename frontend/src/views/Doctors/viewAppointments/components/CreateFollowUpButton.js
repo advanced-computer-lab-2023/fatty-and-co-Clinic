@@ -40,7 +40,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
     const url = API_PATHS.followupAppointment;
     axios
       .post(url, null, {
-        params: { date: date, PatientUsername: patientUsername },
+        params: { date, PatientUsername: patientUsername },
         headers: { Authorization },
       })
       .then((response) => {

@@ -9,7 +9,7 @@ import {
   Stack,
   Select,
   useToast,
-  FormLabel
+  FormLabel,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
@@ -19,18 +19,19 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
+
 function CancelSubscription() {
   const [Package, setPackage] = useState("");
   const [Package2, setPackage2] = useState("");
   const [NationalId, setNationalId] = useState("");
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
-   const { user } = useAuthContext();
-   const Authorization = `Bearer ${user.token}`;
-   const handleCancellationformyself = async (e) => {
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  const handleCancellationformyself = async (e) => {
     e.preventDefault();
-  
+
     try {
       // if (Package2 === "") {
       //   toast({
@@ -40,17 +41,17 @@ function CancelSubscription() {
       //     isClosable: true,
       //   });
       //   return; // Don't proceed further
-      // } 
-  
+      // }
+
       const response = await fetch(API_PATHS.cancelSubscription, {
         method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
-      // body: JSON.stringify({Package2}),
+        // body: JSON.stringify({Package2}),
       });
-  
+
       console.log("Response", response.status);
       const errorData = await response.json();
       if (response.ok) {
@@ -60,9 +61,9 @@ function CancelSubscription() {
           duration: 9000,
           isClosable: true,
         });
-  
+
         setPackage2("");
-       // setNationalId(""); // Clear the input fields
+        // setNationalId(""); // Clear the input fields
       } else {
         toast({
           title: "Failed to Cancel",
@@ -78,7 +79,7 @@ function CancelSubscription() {
   };
   const handleCancellation = async (e) => {
     e.preventDefault();
-  
+
     try {
       // if (Package === "") {
       //   toast({
@@ -97,19 +98,19 @@ function CancelSubscription() {
         });
         return; // Don't proceed further
       }
-  
+
       const response = await fetch(API_PATHS.CancelFamilysubscribtion, {
         method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({NationalId }),
+        body: JSON.stringify({ NationalId }),
       });
-  
-      //console.log("Response", response.status);
+
+      // console.log("Response", response.status);
       const errorData = await response.json();
-  
+
       if (response.ok) {
         toast({
           title: "Cancelled successfully",
@@ -117,7 +118,7 @@ function CancelSubscription() {
           duration: 9000,
           isClosable: true,
         });
-  
+
         setPackage("");
         setNationalId(""); // Clear the input fields
       } else {
@@ -133,7 +134,6 @@ function CancelSubscription() {
       console.error("An error occurred", error);
     }
   };
-  
 
   return (
     <Card
@@ -143,90 +143,98 @@ function CancelSubscription() {
     >
       <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
-        
           <Box>
-          <select
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-            style={{
-              backgroundColor: "teal.300", // Mint blue background color
-              color: '#319795', // Mint blue text color
-              padding: '8px 12px',
-              borderRadius: '4px',
-              border: '1px solid #319795', // Mint blue border color
-            }}
-          >   <option value="">Choose Who to cancel</option>
-            <option value="cancelFamily">Cancel Family Member Subscription</option>
-            <option value="cancelMyself">Cancel My Subscription</option>
-          </select>
-        </Box>
-        
+            <select
+              value={selectedOption}
+              onChange={(e) => setSelectedOption(e.target.value)}
+              style={{
+                backgroundColor: "teal.300", // Mint blue background color
+                color: "#319795", // Mint blue text color
+                padding: "8px 12px",
+                borderRadius: "4px",
+                border: "1px solid #319795", // Mint blue border color
+              }}
+            >
+              {" "}
+              <option value="">Choose Who to cancel</option>
+              <option value="cancelFamily">
+                Cancel Family Member Subscription
+              </option>
+              <option value="cancelMyself">Cancel My Subscription</option>
+            </select>
+          </Box>
         </Flex>
       </CardHeader>
       <CardBody>
         <Flex direction="column" w="100%">
-      
-        <br></br>
-        {selectedOption === 'cancelFamily' &&<form >
-          <FormLabel> Cancel For family member</FormLabel>
-            <Stack spacing={3}>
-              {/* <Input
+          <br />
+          {selectedOption === "cancelFamily" && (
+            <form>
+              <FormLabel> Cancel For family member</FormLabel>
+              <Stack spacing={3}>
+                {/* <Input
                 variant="filled"
                 type="text"
                 placeholder="Package"
                 value={Package}
                 onChange={(e) => setPackage(e.target.value)}
               /> */}
-                 <Input
-                variant="filled"
-                type="NationalId"
-                placeholder="NationalId"
-                value={NationalId}
-                onChange={(e) => setNationalId(e.target.value)}
-              />
-            
-              <Button
-             colorScheme="red"  // Change to red color scheme
-             borderColor="red.300"  // Change to red border color
-             color="red.300"  // Change to red text color
-                fontSize="xs"
-                p="8px 32px"
-                type="submit"
-                textColor="white"
-                onClick={handleCancellation}
-              >
-                <Icon as={FaUserPlus} mr={2} />
-                Cancel subscribtion for a Family member 
-              </Button>
-            </Stack>
-          </form>}
-          
-          {selectedOption === 'cancelMyself' && <form >
-          <FormLabel> Just cancel for yourself by clicking the button</FormLabel>
-            <Stack spacing={3}>
-              {/* <Input
+                <Input
+                  variant="filled"
+                  type="NationalId"
+                  placeholder="NationalId"
+                  value={NationalId}
+                  onChange={(e) => setNationalId(e.target.value)}
+                />
+
+                <Button
+                  colorScheme="red" // Change to red color scheme
+                  borderColor="red.300" // Change to red border color
+                  color="red.300" // Change to red text color
+                  fontSize="xs"
+                  p="8px 32px"
+                  type="submit"
+                  textColor="white"
+                  onClick={handleCancellation}
+                >
+                  <Icon as={FaUserPlus} mr={2} />
+                  Cancel subscribtion for a Family member
+                </Button>
+              </Stack>
+            </form>
+          )}
+
+          {selectedOption === "cancelMyself" && (
+            <form>
+              <FormLabel>
+                {" "}
+                Just cancel for yourself by clicking the button
+              </FormLabel>
+              <Stack spacing={3}>
+                {/* <Input
                 variant="filled"
                 type="text"
                 placeholder="Package"
                 value={Package2}
                 onChange={(e) => setPackage2(e.target.value)}
               /> */}
-           
-              <Button
-             colorScheme="red"  // Change to red color scheme
-             borderColor="red.300"  // Change to red border color
-             color="red.300"  // Change to red text color
-                fontSize="xs"
-                p="8px 32px"
-                type="submit"
-                textColor="white"
-                onClick={handleCancellationformyself}
-              >
-                <Icon as={FaUserPlus} mr={2} />
-                Cancel My subscribtion 
-              </Button>
-            </Stack>
-          </form>}
+
+                <Button
+                  colorScheme="red" // Change to red color scheme
+                  borderColor="red.300" // Change to red border color
+                  color="red.300" // Change to red text color
+                  fontSize="xs"
+                  p="8px 32px"
+                  type="submit"
+                  textColor="white"
+                  onClick={handleCancellationformyself}
+                >
+                  <Icon as={FaUserPlus} mr={2} />
+                  Cancel My subscribtion
+                </Button>
+              </Stack>
+            </form>
+          )}
         </Flex>
       </CardBody>
     </Card>

@@ -18,7 +18,7 @@ import DoctorsRow from "components/Tables/DoctorsRow";
 import { useHistory } from "react-router-dom";
 import React, { useState } from "react";
 
-const DoctorsTable = ({ title, captions, data }) => {
+function DoctorsTable({ title, captions, data }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const history = useHistory();
   const textColor = useColorModeValue("gray.700", "white");
@@ -26,14 +26,14 @@ const DoctorsTable = ({ title, captions, data }) => {
   const handleRowClick = (row) => {
     setSelectedRow(row);
 
-    let newUrl = `./viewDoctorDetails/${row}`;
-    let newState = {
+    const newUrl = `./viewDoctorDetails/${row}`;
+    const newState = {
       Username: row.Username,
       Cost: row.Cost,
       CostFam: row.CostFam,
-    }
+    };
 
-    history.push(newUrl,newState );
+    history.push(newUrl, newState);
   };
 
   return (
@@ -50,33 +50,29 @@ const DoctorsTable = ({ title, captions, data }) => {
         <Table variant="simple" color={textColor}>
           <Thead>
             <Tr my=".8rem" pl="0px">
-              {captions.map((caption, idx) => {
-                return (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
-                );
-              })}
+              {captions.map((caption, idx) => (
+                <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
+                  {caption}
+                </Th>
+              ))}
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => {
-              return (
-                <DoctorsRow
-                  key={row.Username}
-                  Name={row.Name}
-                  Speciality={row.Speciality}
-                  Cost={row.Cost}
-                  isSelected={selectedRow === row}
-                  onClick={() => handleRowClick(row)}
-                />
-              );
-            })}
+            {data.map((row) => (
+              <DoctorsRow
+                key={row.Username}
+                Name={row.Name}
+                Speciality={row.Speciality}
+                Cost={row.Cost}
+                isSelected={selectedRow === row}
+                onClick={() => handleRowClick(row)}
+              />
+            ))}
           </Tbody>
         </Table>
       </CardBody>
     </Card>
   );
-};
+}
 
 export default DoctorsTable;

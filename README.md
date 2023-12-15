@@ -1,19 +1,20 @@
+# Shebeen Health Clinic
 
-# Project Title
+This project is a virtual clinic website for remotely booking and holding medical appointments.
 
-A brief description of what this project does and who it's for
-
-
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
-
+![Logo](https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Menoufia_Governorate.PNG)
 
 ## Motivation
+
+The motivation behind the Shebeen Health Clinic project is to provide a seamless and efficient way for patients to book and attend medical appointments remotely. In the era of digital transformation, healthcare should not be left behind. This project aims to bring convenience to patients, allowing them to consult with healthcare professionals without the need to travel. This is especially beneficial in the current global situation where social distancing is crucial. Furthermore, it provides a streamlined platform for healthcare providers to manage appointments and consult with patients, making healthcare more accessible and efficient.
+
 ## Build Status
+
 ## Code Style
+
 ## Screenshots
 
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
 
 ## Tech Stack
 
@@ -23,7 +24,6 @@ A brief description of what this project does and who it's for
 
 **Server:** MongoDB
 
-
 ## Features
 
 - Light/dark mode toggle
@@ -31,17 +31,15 @@ A brief description of what this project does and who it's for
 - Fullscreen mode
 - Cross platform
 
-
 ## Code Examples
 
 ```javascript
-import Component from 'my-project'
+import Component from "my-project";
 
 function App() {
-  return <Component />
+  return <Component />;
 }
 ```
-
 
 ## Installation
 
@@ -51,7 +49,7 @@ Install my-project with npm
   npm install my-project
   cd my-project
 ```
-    
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
@@ -59,7 +57,6 @@ To run this project, you will need to add the following environment variables to
 `API_KEY`
 
 `ANOTHER_API_KEY`
-
 
 ## API Reference
 
@@ -87,7 +84,6 @@ To run this project, you will need to add the following environment variables to
 
 Takes two numbers and returns the sum.
 
-
 ## Tests
 
 To run tests, run the following command
@@ -95,7 +91,6 @@ To run tests, run the following command
 ```bash
   npm run test
 ```
-
 
 ## How To Use
 
@@ -123,7 +118,6 @@ Start the server
   npm run start
 ```
 
-
 ## Contributing
 
 Contributions are always welcome!
@@ -132,18 +126,15 @@ See `contributing.md` for ways to get started.
 
 Please adhere to this project's `code of conduct`.
 
-
 ## Credits
 
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
-
+- [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
+- [Awesome README](https://github.com/matiassingers/awesome-readme)
+- [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
 
 ## Authors
 
 - [@octokatherine](https://www.github.com/octokatherine)
-
 
 ## License
 
@@ -174,4 +165,3 @@ SOFTWARE.
 ## Appendix
 
 Any additional information goes here
-

@@ -12,8 +12,8 @@ import {
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
+import AppointmentsTable from "./components/AppointmentsTable";
 
 export function createFollowUp({ patientUsername }) {
   const [date, setDate] = useState("");

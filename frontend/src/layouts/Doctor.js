@@ -37,55 +37,49 @@ export default function Dashboard(props) {
   const [sidebarVariant, setSidebarVariant] = useState("transparent");
   const [fixed, setFixed] = useState(false);
   // functions for changing the states from components
-  const getRoute = () => {
-    return window.location.pathname !== "/admin/full-screen-maps";
-  };
+  const getRoute = () => window.location.pathname !== "/admin/full-screen-maps";
   const getActiveRoute = (routes) => {
-    let activeRoute = "Default Brand Text";
+    const activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
-        let collapseActiveRoute = getActiveRoute(routes[i].views);
+        const collapseActiveRoute = getActiveRoute(routes[i].views);
         if (collapseActiveRoute !== activeRoute) {
           return collapseActiveRoute;
         }
       } else if (routes[i].category) {
-        let categoryActiveRoute = getActiveRoute(routes[i].views);
+        const categoryActiveRoute = getActiveRoute(routes[i].views);
         if (categoryActiveRoute !== activeRoute) {
           return categoryActiveRoute;
         }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          return routes[i].name;
-        }
+      } else if (
+        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+      ) {
+        return routes[i].name;
       }
     }
     return activeRoute;
   };
   // This changes navbar state(fixed or not)
   const getActiveNavbar = (routes) => {
-    let activeNavbar = false;
+    const activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].category) {
-        let categoryActiveNavbar = getActiveNavbar(routes[i].views);
+        const categoryActiveNavbar = getActiveNavbar(routes[i].views);
         if (categoryActiveNavbar !== activeNavbar) {
           return categoryActiveNavbar;
         }
-      } else {
-        if (
-          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-        ) {
-          if (routes[i].secondaryNavbar) {
-            return routes[i].secondaryNavbar;
-          }
+      } else if (
+        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+      ) {
+        if (routes[i].secondaryNavbar) {
+          return routes[i].secondaryNavbar;
         }
       }
     }
     return activeNavbar;
   };
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+  const getRoutes = (routes) =>
+    routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
@@ -100,11 +94,9 @@ export default function Dashboard(props) {
             key={key}
           />
         );
-      } else {
-        return null;
       }
+      return null;
     });
-  };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrolling, setScrolling] = useState(false);
   const [scrollTop, setScrollTop] = useState(0);
@@ -135,12 +127,12 @@ export default function Dashboard(props) {
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader fontSize="sm" px="2" py="2"></DrawerHeader>
+            <DrawerHeader fontSize="sm" px="2" py="2" />
             <DrawerBody>
               {/* Content for the drawer */}
               <Sidebar
                 routes={routes}
-                logoText={"PURITY UI DASHBOARD"}
+                logoText="PURITY UI DASHBOARD"
                 display="none"
                 sidebarVariant={sidebarVariant}
                 {...rest}
@@ -169,7 +161,7 @@ export default function Dashboard(props) {
         </Button>
 
         <Portal>
-          {/* TODO: Make navbar appear when scrolling up.*/}
+          {/* TODO: Make navbar appear when scrolling up. */}
           {/* <Box
             position="fixed"
             top={scrolling ? "-100px" : "0"}
@@ -183,7 +175,7 @@ export default function Dashboard(props) {
           > */}
           <AdminNavbar
             onOpen={onOpen}
-            logoText={"PURITY UI DASHBOARD"}
+            logoText="PURITY UI DASHBOARD"
             brandText={getActiveRoute(routes)}
             secondary={getActiveNavbar(routes)}
             fixed={fixed}

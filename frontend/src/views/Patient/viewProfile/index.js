@@ -2,19 +2,19 @@
 import { Flex, Grid, GridItem, useColorModeValue } from "@chakra-ui/react";
 import avatar4 from "assets/img/avatars/avatar4.png";
 import ProfileBgImage from "assets/img/ProfileBackground.png";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaCube, FaPenFancy } from "react-icons/fa";
 import { IoDocumentsSharp } from "react-icons/io5";
+import { API_PATHS } from "API/api_paths";
+import axios from "axios";
+import { useAuthContext } from "hooks/useAuthContext";
 import Conversations from "./components/Conversations";
 import Header from "./components/Header";
 import PlatformSettings from "./components/PlatformSettings";
 import ProfileInformation from "./components/ProfileInformation";
 import Appointments from "./components/Appointments";
-import { useState, useEffect } from "react";
-import { API_PATHS } from "API/api_paths";
-import axios from "axios";
-import { useAuthContext } from "hooks/useAuthContext";
-import PrescriptionTable from "../viewPrescriptions/index.js"
+
+import PrescriptionTable from "../viewPrescriptions/index.js";
 import Subscription from "./components/Subscription";
 import MedicalHistory from "../viewMedicalHistory/medicalHistory";
 
@@ -27,7 +27,7 @@ function PatientProfile() {
   );
   const [patient, setPatient] = useState([{}]);
   const [systemUser, setSystemUser] = useState([{}]);
-  const [familyMembers, setFamilyMembers]= useState([{}]); 
+  const [familyMembers, setFamilyMembers] = useState([{}]);
   const [subscription, setSubscription] = useState([{}]);
   const [myPackage, setMyPackage] = useState([{}]);
 
@@ -44,7 +44,7 @@ function PatientProfile() {
     axios
       .get(url, {
         headers: {
-          Authorization: Authorization,
+          Authorization,
         },
       })
       .then((response) => {
@@ -53,14 +53,14 @@ function PatientProfile() {
         setFamilyMembers(patient.LinkedPatients);
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   const getSubscriptionInfo = () => {
     const url = API_PATHS.viewSubscription;
     axios
       .get(url, {
         headers: {
-          Authorization: Authorization,
+          Authorization,
         },
       })
       .then((response) => {
@@ -68,30 +68,38 @@ function PatientProfile() {
         setSubscription(response.data.subscription);
       })
       .catch((err) => console.log(err));
-  }
+  };
 
   return (
-    <Flex direction='column'>
+    <Flex direction="column">
       <Header
         backgroundHeader={ProfileBgImage}
         backgroundProfile={bgProfile}
         name={patient.Name}
         email={systemUser.Email}
       />
-      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap='22px'>
+      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap="22px">
         <ProfileInformation
-          title={"Profile Information"}
+          title="Profile Information"
           name={patient.Name}
           mobile={patient.MobileNum}
           email={systemUser.Email}
-          dateOfBirth={new Date(patient.DateOfBirth).toLocaleDateString("en-GB")}
-          gender={patient.Gender == "F"? "Female": patient.Gener == "M"? "Male": "Other"}
+          dateOfBirth={new Date(patient.DateOfBirth).toLocaleDateString(
+            "en-GB"
+          )}
+          gender={
+            patient.Gender == "F"
+              ? "Female"
+              : patient.Gener == "M"
+              ? "Male"
+              : "Other"
+          }
           nationalId={patient.NationalId}
         />
-        <Subscription subscription={subscription} myPackage={myPackage}></Subscription>
+        <Subscription subscription={subscription} myPackage={myPackage} />
       </Grid>
-      <PrescriptionTable></PrescriptionTable>
-      <MedicalHistory></MedicalHistory>
+      <PrescriptionTable />
+      <MedicalHistory />
     </Flex>
   );
 }

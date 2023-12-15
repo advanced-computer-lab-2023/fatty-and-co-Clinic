@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import routes from "routes.js";
+
 export default function AuthNavbar(props) {
   const [open, setOpen] = React.useState(false);
   const handleDrawerToggle = () => {
@@ -27,9 +28,8 @@ export default function AuthNavbar(props) {
   };
   const { logo, logoText, secondary, ...rest } = props;
   // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
-  };
+  const activeRoute = (routeName) =>
+    window.location.href.indexOf(routeName) > -1;
   // Chakra color mode
   let navbarIcon = useColorModeValue("gray.700", "gray.200");
   let mainText = useColorModeValue("gray.700", "gray.200");
@@ -68,7 +68,7 @@ export default function AuthNavbar(props) {
     mainText = "white";
     navbarPosition = "absolute";
   }
-  var brand = (
+  const brand = (
     <Link
       href={`${process.env.PUBLIC_URL}/#/`}
       target="_blank"
@@ -85,7 +85,7 @@ export default function AuthNavbar(props) {
       </Text>
     </Link>
   );
-  var linksAuth = (
+  const linksAuth = (
     <HStack display={{ sm: "none", lg: "flex" }}>
       <NavLink to="/admin/dashboard">
         <Button

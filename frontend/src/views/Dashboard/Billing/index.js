@@ -35,8 +35,8 @@ function Billing() {
           >
             <CreditCard
               backgroundImage={BackgroundCard1}
-              title={"Purity UI"}
-              number={"7812 2139 0823 XXXX"}
+              title="Purity UI"
+              number="7812 2139 0823 XXXX"
               validity={{
                 name: "VALID THRU",
                 data: "05/24",
@@ -55,20 +55,20 @@ function Billing() {
               }
             />
             <PaymentStatistics
-              icon={<Icon h={"24px"} w={"24px"} color="white" as={FaWallet} />}
-              title={"Salary"}
-              description={"Belong interactive"}
+              icon={<Icon h="24px" w="24px" color="white" as={FaWallet} />}
+              title="Salary"
+              description="Belong interactive"
               amount={2000}
             />
             <PaymentStatistics
-              icon={<Icon h={"24px"} w={"24px"} color="white" as={FaPaypal} />}
-              title={"Paypal"}
-              description={"Freelance Payment"}
+              icon={<Icon h="24px" w="24px" color="white" as={FaPaypal} />}
+              title="Paypal"
+              description="Freelance Payment"
               amount={4550}
             />
           </Grid>
           <PaymentMethod
-            title={"Payment Method"}
+            title="Payment Method"
             mastercard={{
               icon: <MastercardIcon w="100%" h="100%" />,
               number: "7812 2139 0823 XXXX",
@@ -79,13 +79,13 @@ function Billing() {
             }}
           />
         </Box>
-        <Invoices title={"Invoices"} data={invoicesData} />
+        <Invoices title="Invoices" data={invoicesData} />
       </Grid>
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
-        <BillingInformation title={"Billing Information"} data={billingData} />
+        <BillingInformation title="Billing Information" data={billingData} />
         <Transactions
-          title={"Your Transactions"}
-          date={"23 - 30 March"}
+          title="Your Transactions"
+          date="23 - 30 March"
           newestTransactions={newestTransactions}
           olderTransactions={olderTransactions}
         />

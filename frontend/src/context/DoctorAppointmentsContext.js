@@ -29,7 +29,7 @@ export const doctorAppointmentsReducer = (state, action) => {
   }
 };
 
-export const DoctorAppointmentsContextProvider = ({ children }) => {
+export function DoctorAppointmentsContextProvider({ children }) {
   const [state, dispatch] = useReducer(doctorAppointmentsReducer, {
     appointments: [{}],
   });
@@ -39,4 +39,4 @@ export const DoctorAppointmentsContextProvider = ({ children }) => {
       {children}
     </DoctorAppointmentsContext.Provider>
   );
-};
+}

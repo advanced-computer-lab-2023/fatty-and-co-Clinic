@@ -15,9 +15,10 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import Statuspackagerow from "components/Tables/statuspackagerow";
 import MyPackageSubRow from "components/Tables/MyPackageSubRow";
-//console.log(statuspackagerow)
+// console.log(statuspackagerow)
 import React from "react";
-export const FamPackagestatusTable = ({ title, captions, data }) => {
+
+export function FamPackagestatusTable({ title, captions, data }) {
   const textColor = useColorModeValue("gray.700", "white");
 
   return (
@@ -45,7 +46,9 @@ export const FamPackagestatusTable = ({ title, captions, data }) => {
               data.map((row) => {
                 if (row) {
                   const id = row.Patient ? row.Patient._id : row.FamilyMem._id;
-                  const name = row.Patient ? row.Patient.Name : row.FamilyMem.Name;
+                  const name = row.Patient
+                    ? row.Patient.Name
+                    : row.FamilyMem.Name;
 
                   return (
                     <Statuspackagerow
@@ -55,7 +58,11 @@ export const FamPackagestatusTable = ({ title, captions, data }) => {
                       Package={row.Package ? row.Package.Name : ""}
                       Enddate={row.Enddate ? row.Enddate : ""}
                       Startdate={row.Startdate ? row.Startdate : ""}
-                      Renewaldate={!row.Renewaldate || row.Status === "Cancelled" ? "" : row.Renewaldate}
+                      Renewaldate={
+                        !row.Renewaldate || row.Status === "Cancelled"
+                          ? ""
+                          : row.Renewaldate
+                      }
                     />
                   );
                 }
@@ -69,7 +76,11 @@ export const FamPackagestatusTable = ({ title, captions, data }) => {
                 Package={data.Package ? data.Package.Name : ""}
                 Enddate={data.Enddate ? data.Enddate : ""}
                 Startdate={data.Startdate ? data.Startdate : ""}
-                Renewaldate={!data.Renewaldate || data.Status === "Cancelled" ? "" : data.Renewaldate}
+                Renewaldate={
+                  !data.Renewaldate || data.Status === "Cancelled"
+                    ? ""
+                    : data.Renewaldate
+                }
               />
             )}
           </Tbody>
@@ -77,4 +88,4 @@ export const FamPackagestatusTable = ({ title, captions, data }) => {
       </CardBody>
     </Card>
   );
-};
+}
