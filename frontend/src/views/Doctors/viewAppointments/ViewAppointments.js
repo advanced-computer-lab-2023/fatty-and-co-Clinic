@@ -105,7 +105,7 @@ export default function ViewAppointmentsInner() {
         </Flex>
         <AppointmentsTable
           title={"Available Appointments"}
-          captions={["Patient Name", "Status", "Type", "Date", "Time"]}
+          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}
         />

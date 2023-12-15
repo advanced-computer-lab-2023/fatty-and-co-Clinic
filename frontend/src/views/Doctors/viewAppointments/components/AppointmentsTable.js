@@ -19,6 +19,9 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 import React from "react";
 
 export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
+  const isUpcomingAppointment = (status) => {
+    return status === "Upcoming";
+  };
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -67,6 +70,7 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
                 );
                 
               })}
+              
             </Tbody>
           </Table>
         )}
