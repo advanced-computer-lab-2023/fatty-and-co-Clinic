@@ -49,6 +49,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+import DoctorProfile from "views/Doctors/viewProfile";
 
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
@@ -117,7 +118,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/Subscribtions/",
+    path: "/Subscribtions",
     name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -263,7 +264,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/medicalhistory/:patientUsername",
+    path: "/medicalhistory",
     name: "Medical History",
     icon: <HomeIcon color="inherit" />,
     component: MedicalHistoryPatient,
@@ -356,6 +357,13 @@ var dashRoutes = [
     name: "View patient profile",
     component: PatientProfile,
     layout: "/patient",
+    show: false,
+  },
+  {
+    path: "/profile",
+    name: "View doctor profile",
+    component: DoctorProfile,
+    layout: "/doctor",
     show: false,
   },
 

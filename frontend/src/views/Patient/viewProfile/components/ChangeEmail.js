@@ -4,6 +4,7 @@ import {
   Flex,
   Icon,
   Text,
+  Heading,
   useColorModeValue,
   Input,
   Stack,
@@ -19,8 +20,8 @@ import { useParams } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
 
-function UpdateHourly() {
-  const [HourlyRate, setHourlyRate] = useState("");
+function ChangeEmail() {
+  const [Email, setEmail] = useState("");
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
   // const { DoctorUsername } = useParams();
@@ -31,9 +32,9 @@ function UpdateHourly() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (HourlyRate == "") {
+    if (Email == "") {
       toast({
-        title: "Please fill the HourlyRate field",
+        title: "Please fill the email field",
         status: "error",
         duration: 9000,
         isClosable: true,
@@ -41,24 +42,21 @@ function UpdateHourly() {
       return;
     }
     axios
-      .patch(
-        API_PATHS.updateHourly,
-        { HourlyRate },
-        { headers: { Authorization } }
-      )
+      .patch(API_PATHS.updateEmail, { Email }, { headers: { Authorization } })
       .then((response) => {
         toast({
-          title: "HourlyRate updated successfully",
+          title: "Email updated successfully",
           status: "success",
           duration: 9000,
           isClosable: true,
         });
-        setHourlyRate(""); // Clear the input field
+        setEmail(""); // Clear the input field
       })
       .catch((err) => {
+        console.log(err);
         toast({
-          title: "Failed to update HourlyRate",
-          description: "An error occurred while updating the HourlyRate.",
+          title: "Failed to update Email",
+          description: err.response.data.error,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -67,49 +65,38 @@ function UpdateHourly() {
   };
 
   return (
-    <Card
-      p="80px"
-      marginTop="50px"
-      my={{ sm: "24px", lg: "0px" }}
-      ms={{ sm: "0px", lg: "24px" }}
-    >
-      <CardHeader>
-        <Flex justify="space-between" align="center" mb="1rem" w="100%">
-          <Text fontSize="lg" color={textColor} fontWeight="bold">
-            Change your hourly rate!
-          </Text>
-        </Flex>
-      </CardHeader>
+
       <CardBody>
         <Flex direction="column" w="100%">
           <form onSubmit={handleSubmit}>
-            <Stack spacing={3}>
+            <Stack spacing={20} mb="20px">
+                <Heading as='h4' size='md'>
+                    New Email
+                </Heading>
               <Input
                 variant="filled"
-                type="number"
-                maxLength={5}
-                placeholder="Hourly rate"
-                value={HourlyRate}
-                onChange={(e) => setHourlyRate(e.target.value)}
+                type="email"
+                placeholder="New Email"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Button
                 colorScheme="teal"
                 borderColor="teal.300"
                 color="teal.300"
-                fontSize="xs"
                 p="8px 32px"
                 type="submit"
                 textColor="white"
+                w="100%"
+                mb="10"
               >
-                <Icon as={FaUserPlus} mr={2} />
                 Save
               </Button>
             </Stack>
           </form>
         </Flex>
       </CardBody>
-    </Card>
   );
 }
 
-export default UpdateHourly;
+export default ChangeEmail;
