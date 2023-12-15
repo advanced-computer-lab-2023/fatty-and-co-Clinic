@@ -19,9 +19,9 @@ import {
 import React from "react";
 
 function DocSlotRowApt(props) {
-  const { DayName, StartTime, bookClickHandler} = props;
+  const { DayName, StartTime, bookClickHandler,cameFromReschedule} = props;
   const textColor = useColorModeValue("gray.700", "white");
-
+  const buttonText = cameFromReschedule ? "Reschedule" : "Book"; // Change button text based on cameFromReschedule
   return (
     <Tr
     >
@@ -52,8 +52,8 @@ function DocSlotRowApt(props) {
       </Td>
 
       <Td>
-        <Button onClick={bookClickHandler} colorScheme="blue">
-          Book
+      <Button onClick={bookClickHandler} colorScheme="teal">
+      {buttonText}
         </Button>
       </Td>
     </Tr>

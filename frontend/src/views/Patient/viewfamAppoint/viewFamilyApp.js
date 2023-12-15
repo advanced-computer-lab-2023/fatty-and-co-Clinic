@@ -69,6 +69,7 @@ export function ViewFamilyApp() {
         toast({
           title: "Cancelled successfully",
           status: "success",
+          description:errorData.success,
           duration: 9000,
           isClosable: true,
         });

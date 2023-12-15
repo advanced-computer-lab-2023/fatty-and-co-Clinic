@@ -40,9 +40,11 @@ import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
+import reschduleappointment from "views/Patient/reschduleappointment/reschduleappointment";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
+
 
 
 import {
@@ -262,6 +264,14 @@ var dashRoutes = [
     name: "Book Appointment Details",
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
+    layout: "/patient",
+   show: false, // Add this to hide route from sidebar
+  },
+  {
+    path: "/reschdule/:row",
+    name: "reschdule appointment",
+    icon: <HomeIcon color="inherit" />,
+    component: reschduleappointment,
     layout: "/patient",
    show: false, // Add this to hide route from sidebar
   },

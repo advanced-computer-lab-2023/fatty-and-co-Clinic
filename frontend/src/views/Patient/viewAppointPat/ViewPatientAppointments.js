@@ -4,8 +4,9 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import PatientAppTable from "./components/PatientAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
-
+import { useHistory } from "react-router-dom";
 export function ViewPatientAppointments() {
+  const history = useHistory();
   const [DoctorUsername, setDoctorUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
@@ -69,13 +70,15 @@ export function ViewPatientAppointments() {
         toast({
           title: "Cancelled successfully",
           status: "success",
+          description:errorData.success,
           duration: 9000,
           isClosable: true,
         });
         const timer = setTimeout(() => {
           location.reload();
-        }, 500); // 1000ms delay
-        window.location.reload();
+        //  window.location.reload();
+        }, 700); // 1000ms delay
+      //  window.location.reload();
      
    
       } else {
@@ -90,6 +93,16 @@ export function ViewPatientAppointments() {
     } catch (error) {
       console.error("An error occurred", error);
     }
+  };
+  const handlereschdule = async (DoctorUsername) => {
+    const redirectUrl = `/patient/viewDoctorDetails/${DoctorUsername}`;
+    history.push({
+      pathname: redirectUrl,
+      state: {
+        Username: DoctorUsername,
+        cameFromReschedule: true // Indicate that the redirection is from Reschedule
+      }
+    });
   };
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
@@ -182,10 +195,11 @@ export function ViewPatientAppointments() {
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <PatientAppTable
           // title={"Your Appointments"}
-          captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
+          captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell","reschdule"]}
           data={data}
           isLoading={isLoading}
           handleCancelAppointment={handleCancelAppointment}
+          handlereschdule={handlereschdule}
         />
       
       </Flex>

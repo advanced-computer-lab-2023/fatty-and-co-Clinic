@@ -101,6 +101,7 @@ getNotifs: GUEST_BASE + "getNotifs/",
   cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
   rescheduleForDoctor: APPOINTMENT_BASE+ "rescheduleForPatient/",
   getDoctorId: APPOINTMENT_BASE+ "getDoctorId/",
+  rescheduleForPatient: APPOINTMENT_BASE+ "/rescheduleAppointmentPatient/",
 
   ///cancelAppFam
   cancellappointmentfam:APPOINTMENT_BASE+"cancelAppFam/",

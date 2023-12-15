@@ -38,7 +38,7 @@ const {
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
   viewfamilymembersappointments,
-  resch
+  
 } = require("../controllers/patientController");
 
 const { constants } = require("buffer");
