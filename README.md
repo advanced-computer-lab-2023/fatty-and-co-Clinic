@@ -4,7 +4,7 @@
 This project is a virtual clinic website for remotely booking and holding medical appointments.
 
 
-![Logo](./frontend/src/assets/img/ShebeenElkom.png)
+![Logo]<img src="./frontend/src/assets/img/ShebeenElkom.png" width="200">
 
 
 ## Motivation
