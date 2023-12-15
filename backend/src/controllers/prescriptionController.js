@@ -210,7 +210,7 @@ const updateDescription = async (req, res) => {
 };
 const placeOrder = async (req, res) => {
   try {
-    const { appointmentId } = req.query;
+    const { appointmentId, pharmacyUsername, pharmacyPassword } = req.query;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
@@ -223,16 +223,15 @@ const placeOrder = async (req, res) => {
     });
     for (const medicine of med) {
       if (medicine.Quantity < 1) {
-        return res
-          .status(404)
-          .json({ message: "Medicine not available in the pharmacy." });
+        med.pull(medicine);
+        console.log(medicine.Name + " is out of stock");
       }
     }
-    for (const medicine of med) {
-      await axios.post("http://localhost:7000/cart/addToCart", {
-        Medicine: medicine, // Pass a single medicine in an array
-      });
-    }
+    await axios.post("http://localhost:7000/guest/cartLogin", {
+      Username: pharmacyUsername,
+      Password: pharmacyPassword,
+      Medicines: med,
+    });
     res.status(200).json({ message: "Medicines added to cart successfully." });
   } catch (error) {
     res.status(400).send({ message: error.message });
