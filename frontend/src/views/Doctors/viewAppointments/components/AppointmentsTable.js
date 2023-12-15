@@ -14,7 +14,7 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import AppointmentsRow from "components/Tables/AppointmentsRow";
+import AppointmentsDocRow from "components/Tables/AppointmentsDocRow";
 
 import React from "react";
 
@@ -57,7 +57,7 @@ export const AppointmentsTable = ({ title, captions, data, isLoading, handleResc
             <Tbody>
               {data.map((row) => {
                 return (
-                  <AppointmentsRow
+                  <AppointmentsDocRow
                     DoctorName={row.DoctorName}
                     key={row._id}
                     customkey={row._id}
