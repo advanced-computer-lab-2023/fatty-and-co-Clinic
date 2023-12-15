@@ -10,7 +10,7 @@ import React, { useState } from "react";
 const PackageInformation = ({ title, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Card my={{ lg: "24px" }} me={{ lg: "24px" }}>
+    <Card   bg="gray.100" w="350px" ml="80px">
       <Flex direction="column">
         <CardHeader py="12px">
           <Text color={textColor} fontSize="lg" fontWeight="bold">

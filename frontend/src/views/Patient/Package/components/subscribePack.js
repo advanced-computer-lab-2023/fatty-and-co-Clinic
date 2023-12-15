@@ -205,24 +205,16 @@ function SubscribePackage() {
 
   return (
     <Flex>
-      <Card
-        p="80px"
-        my={{ sm: "24px", lg: "0px" }}
-        ms={{ sm: "0px", lg: "24px" }}
-      >
         <CardHeader>
           <Flex justify="space-between" align="center" mb="1rem" w="100%">
-            <Text fontSize="lg" color={textColor} fontWeight="bold">
-              Subscribe For Yourself/Family Member
+            <Text fontSize="xl" color="teal.400" fontWeight="bold">
+              Subscribe Now
             </Text>
           </Flex>
         </CardHeader>
         <CardBody>
           <Flex direction="column" w="100%">
             <form>
-              <Text>Steps To Subscribe:</Text>
-              <Text>1.Enter package name for yourself</Text>
-              <Text>2. Enter package name & national ID of family member</Text>
 
               <br />
               <Stack spacing={3}>
@@ -282,7 +274,6 @@ function SubscribePackage() {
             </form>
           </Flex>
         </CardBody>
-      </Card>
     </Flex>
   );
 }

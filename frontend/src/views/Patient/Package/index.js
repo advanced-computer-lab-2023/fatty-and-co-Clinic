@@ -10,8 +10,7 @@ import axios from "axios";
 import { useState } from "react";
 
 // Custom components
-import Subscription from "../viewProfile/components/Subscription";
-import SubscribePackage from "./components/subscribePack";
+import Subscription from "./components/Subscription";
 import PackageI from "./components/PackageInformation";
 import FamPackagestatusTable from "./components/FamPackagestatusTable";
 
@@ -74,12 +73,10 @@ function Package() {
   };
 
   return (
-    <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
-      <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
+    <Flex direction="column" pt={{ base: "120px", md: "75px" }} >
+      <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }} >
         <Box>
           <Subscription subscription={subscription} myPackage={myPackage} />
-          <SubscribePackage />
-          <PackageI data={packages} />
           <FamPackagestatusTable
             title={"My Package"}
             captions={[
@@ -92,7 +89,11 @@ function Package() {
             ]}
             data={familyPackages}
           ></FamPackagestatusTable>
-        </Box>
+          </Box>
+          <PackageI data={packages} title={"Avilable Packages"} />
+          
+          
+          
       </Grid>
     </Flex>
   );
