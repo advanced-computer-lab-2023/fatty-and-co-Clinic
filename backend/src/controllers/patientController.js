@@ -1567,9 +1567,7 @@ const linkPatient = async (req, res) => {
         });
       } else {
         if (formerlyLinked.Patient.MobileNum === currentUser.MobileNum) {
-          currentUser.LinkedPatients.push(familyMember._id);
-          await currentUser.save();
-          res.status(200).json({ formerlyLinked });
+          res.status(202).send({ message: "Patient already linked to you" });
         } else {
           res
             .status(206)
@@ -1707,7 +1705,8 @@ const createFamilymember = async (req, res) => {
       LinkedPatients: [],
       Wallet: Wallet,
     });
-
+    currentuser.LinkedPatients.push(familyMember._id);
+    await currentuser.save();
    const newFamilymember = await familyMemberModel.create({
        Patient: currentPatient,
        FamilyMem:Familymemberfound,
