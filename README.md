@@ -1,15 +1,34 @@
 
-# Project Title
+# Shebeen Health Clinic
 
-A brief description of what this project does and who it's for
+This project is a virtual clinic website for remotely booking and holding medical appointments.
 
 
 ![Logo](https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Menoufia_Governorate.PNG)
 
 
 ## Motivation
+
+The motivation behind the Shebeen Health Clinic project is to provide a seamless and efficient way for patients to book and attend medical appointments remotely. In the era of digital transformation, healthcare should not be left behind. This project aims to bring convenience to patients, allowing them to consult with healthcare professionals without the need to travel. This would be especially beneficial in case the global situation requires social distancing once again. Furthermore, it provides a streamlined platform for healthcare providers to manage appointments and consult with patients, making healthcare more accessible and efficient.
+
 ## Build Status
+
+[include all missing or broken requirements here]
+
 ## Code Style
+
+This project adheres to certain coding conventions for consistency and readability. Here are some of the key points:
+
+- **Indentation:** We use 2 spaces for indentation. No tabs are allowed.
+- **Semicolons:** Every statement should be ended with a semicolon.
+- **Quotes:** Use single quotes for strings except to avoid escaping.
+- **Naming Convention:** We use camelCase for variable and function names, and PascalCase for component/class names.
+- **Braces:** Opening braces go on the same line as the statement.
+- **Variable Declaration:** Always use `let` or `const` to declare variables. Don't use `var`.
+
+We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to make sure formatting is proper so make sure to run it to fix any formaating issues
+
+
 ## Screenshots
 
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
@@ -142,7 +161,8 @@ Please adhere to this project's `code of conduct`.
 
 ## Authors
 
-- [@octokatherine](https://www.github.com/octokatherine)
+- [@ZeyadHabash](https://github.com/ZeyadHabash)
+- rest of authors here
 
 
 ## License
