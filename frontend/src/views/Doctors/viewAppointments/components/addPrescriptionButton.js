@@ -22,16 +22,15 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 
-// import { usePrescriptionContext } from "hooks/usePrescriptionContext";
+import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 export default function AddPrescriptionButton({ customkey, setHasPrescription }) {
-  // const { prescriptions, dispatch } = usePrescriptionContext();
+  const { prescriptions, dispatch } = usePrescriptionContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
   const [diagnosis, setDiagnosis] = useState("");
   const [medicine, setMedicine] = useState("");
   const [dosage, setDosage] = useState("");
-  const [description, setDescription] = useState("");
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -40,9 +39,6 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
   const handleDiagnosis = (event) => {
     setDiagnosis(event.target.value);
   };
-  const handleDescription = (event)=>{
-    setDescription(event.target.value);
-  }
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
@@ -55,7 +51,6 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
     const meds = {
       Name: medicine,
       Dosage: dosage,
-      Description: description,
     };
     const url = API_PATHS.addPrescription;
     axios
@@ -102,26 +97,19 @@ export default function AddPrescriptionButton({ customkey, setHasPrescription })
           <ModalCloseButton />
 
           <ModalBody>
-            <Text mb="8px">medicine: </Text>
+            <Text mb="8px">medicine: {medicine}</Text>
             <Input
               medicine={medicine}
               bg="white"
               placeholder="Enter medicine"
               onChange={handleMedicine}
             />
-            <Text mb="8px">Dosage:</Text>
+            <Text mb="8px">Dosage: {dosage}</Text>
             <Input
               dosage={dosage}
               bg="white"
               placeholder="Enter dosage"
               onChange={handleDosage}
-            />
-            <Text mb="8px">description: </Text>
-            <Input
-              description={description}
-              bg="white"
-              placeholder="Enter medicine"
-              onChange={handleDescription}
             />
             <Text mb="8px">Diagnosis: {diagnosis}</Text>
             <Input

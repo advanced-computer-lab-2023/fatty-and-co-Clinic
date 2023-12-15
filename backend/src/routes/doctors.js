@@ -194,8 +194,6 @@ router.get("/getPaymentAmount", checkPatient, (req, res) => {
   getPaymentAmount(req, res);
 });
 
-router.get("/getDoctorInfo", checkDoctor, getDoctorInfo);
-
 router.get("/getChatPatients", checkDoctor, (req, res) => {
   getChatPatients(req, res);
 });

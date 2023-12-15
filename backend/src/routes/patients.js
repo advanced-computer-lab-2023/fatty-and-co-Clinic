@@ -36,8 +36,6 @@ const {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
-  viewfamilymembersappointments,
-  // resch
   getChatDoctors,
   getPatientUsernameSocket,
 } = require("../controllers/patientController");
@@ -129,14 +127,6 @@ router.get("/getPatientUsername/:Username", getPatientUsername);
  * @prop {string} Speciality - The speciality of the doctor to search for
  */
 router.get("/view/doctors/", checkPatient, session_index);
-/**
- * @route GET familymembers appointments 
- * @desc Returns appoiments 
- * @access Public
-
- */
-router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
-
 
 /**
  * @route POST /patients/createFamilymember

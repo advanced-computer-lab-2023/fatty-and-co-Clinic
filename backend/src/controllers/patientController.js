@@ -7,7 +7,6 @@ const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
-const appointmentModel=require("../models/appointments");
 const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
@@ -1323,7 +1322,7 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({  $and: [{ Patient: patient }, { FamilyMem: { $ne: patient } }] })
+      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
       .populate("Patient")
       .populate("FamilyMem");
     res.status(200).send(fam);
@@ -1627,19 +1626,6 @@ const uploadFile = async (req, res) => {
   }
 };
  */
-/*{
-  "Username":"Alaa1000",
-  "Name":"ALaa",
-  "Password":"Alaa1000!",
-  "Email":"Hany123@yahoo.com",
-  "MobileNum":"01288998877",
-  "NationalId":"0000000000000099",
-  "DateOfBirth":"2012-11-07T08:00:00.010+00:00",
-  "Gender":"M",
-  "relation":"Child",
-  "EmergencyContactNumber":"01299999999",
-  "EmergencyContactName":"HANA"
-} */
 const createFamilymember = async (req, res) => {
   const  currentuser=req.user.Username;
  const  currentPatient=await patientModel.findOne({Username:currentuser});
@@ -1655,10 +1641,12 @@ const createFamilymember = async (req, res) => {
   DateOfBirth,
   Gender,
   relation,
+  EmergencyContactNumber,
+  EmergencyContactName,
   Wallet,
 } = req.body;
  
- //taste test
+ 
    try {
     const user = await systemUserModel.addEntry(
       Username,
@@ -1675,9 +1663,8 @@ const createFamilymember = async (req, res) => {
       DateOfBirth: DateOfBirth,
       Gender: Gender,
       EmergencyContact: {
-        FullName: currentuser.Name,
-        PhoneNumber: currentuser.PhoneNumber,
-        Relation:(relation === "Child") ? "Father" : "Spouse"
+        FullName: EmergencyContactName,
+        PhoneNumber: EmergencyContactNumber,
       },
       LinkedPatients: [],
       Wallet: Wallet,
@@ -1701,7 +1688,7 @@ const createFamilymember = async (req, res) => {
          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
        ),
        Gender: Gender,
-       Relation: relation
+       Relation: relation,
      });
      const newFamilymember2 = await familyMemberModel.create({
       Patient: Familymemberfound,
@@ -1713,7 +1700,7 @@ const createFamilymember = async (req, res) => {
         Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
       ),
       Gender: currentPatient.Gender,
- 
+      Relation: currentPatient.relation,
     });
    
       const newUnsubscribed = await subscriptionModel.create({
@@ -1746,7 +1733,7 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       NationalId: NationalId,
     });
     if (famrelated == null) {
-      res.status(400).send({ Error: "Family member not related to you " });
+      res.status(400).send({ error: "Family member not related to you " });
     } 
    else if (subscribed) {
       if (subscribed.Status === "Cancelled") {
@@ -1782,30 +1769,6 @@ const viewUpcomingAppointmentsPat = async (req, res) => {
     res.status(500).json(error);
   }
 };
-const viewfamilymembersappointments = async (req, res) => {
-  const username = req.user.Username;
-  const {Status}=req.body;
-  try {
-    const appointments = await appointmentModel.find(
-      {
-        PatientUsername: { $ne: username }, // Filter for PatientUsername not equal to username
-        Status: Status, // Assuming 'Status' field is for filtering upcoming appointments
-        BookedBy: username // Filter for appointments booked by the current user
-      }
-    );
-
-    if (appointments.length === 0) {
-      return res.status(404).json({ message: "No appointments found." });
-    }
-
-    res.status(200).json(appointments);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-
-
 
 //make sure from the ta that past appointments is completed bas
 const viewPastAppoitmentsPat = async (req, res) => {
@@ -1953,7 +1916,6 @@ module.exports = {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
-  viewfamilymembersappointments,
   getWalletAmount,
   getChatDoctors,
   getPatientUsernameSocket,

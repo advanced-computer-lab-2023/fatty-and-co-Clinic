@@ -35,12 +35,12 @@ function PackageForm() {
   const textColor = useColorModeValue("gray.700", "white");
   const toast = useToast();
   return (
-    <Card
-      p="22px"
-      my={{ sm: "24px", lg: "0px" }}
-      ms={{ sm: "0px", lg: "24px" }}
+    <Text
+      // p="0px"
+      // my={{ sm: "0px", lg: "0px" }}
+      // ms={{ sm: "0px", lg: "0px" }}
     >
-      <CardHeader>
+      {/* <CardHeader>
         <Flex justify="space-between" align="center" mb="1rem" w="100%">
           <Text fontSize="lg" color={textColor} fontWeight="bold">
             Add New Package
@@ -48,7 +48,7 @@ function PackageForm() {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Flex direction="column" w="100%">
+        <Flex direction="column" w="100%"> 
           <form
             id="myForm"
             onSubmit={async (e) => {
@@ -61,14 +61,7 @@ function PackageForm() {
                 Family_Discount,
               };
 
-              const response = await fetch(API_PATHS.addPackage, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  'Authorization': Authorization
-                },
-                body: JSON.stringify(Package),
-              });
+              
               const data = await response.json();
               if (response.status === 200) {
                 dispatch({ type: "ADD_PACKAGE", payload: data });
@@ -155,12 +148,12 @@ function PackageForm() {
               >
                 add
               </Button>
-              {/* <input type="submit" value="Submit" /> */}
+              <input type="submit" value="Submit" /> 
             </Stack>
-          </form>
-        </Flex>
-      </CardBody>
-    </Card>
+          </form> 
+       </Flex> 
+      </CardBody> */}
+    </Text>
   );
 }
 

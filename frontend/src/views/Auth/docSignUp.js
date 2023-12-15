@@ -39,7 +39,6 @@ import {
   Progress,
 } from "@chakra-ui/react";
 import { AttachmentIcon } from "@chakra-ui/icons";
-import { IoMdCloudUpload } from "react-icons/io";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
@@ -251,7 +250,7 @@ function docSignUp() {
                       isInvalid={errors.Username && touched.Username}
                     >
                       <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Username <span style={{ color: "red" }}>* </span>
+                        Username <span style={{ color: "red" }}>*</span>
                       </FormLabel>
                       <Input
                         {...field}
@@ -486,9 +485,7 @@ function docSignUp() {
                   )}
                 </Field>
                 {/* //////// Upload files ///////// */}
-                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                  Upload Files <span style={{ color: "red" }}>*</span>
-                </FormLabel>
+
                 <Field name="IdFile">
                   {({ field }) => (
                     <FormControl
@@ -497,17 +494,13 @@ function docSignUp() {
                     >
                       <FormLabel
                         htmlFor="IdFile"
-                        className="custom-file-upload"
                         ms="4px"
-                        fontSize="12px"
-                        bg="white"
-                        color="teal.300"
-                        borderWidth={1}
-                        borderColor="teal.300"
-                        _hover={{ bg:"teal.50" }}
-                        // w="60%"
+                        fontSize="sm"
+                        bg="teal.300"
+                        color="white"
+                        fontWeight="xsmall"
+                        w="60%"
                         h="45"
-                        fontWeight={"bold"}
                         // mb="24px"
                         borderRadius="15px"
                         style={{
@@ -516,8 +509,8 @@ function docSignUp() {
                           paddingTop: "10px",
                         }}
                       >
-                        Id <span style={{ color: "red" }}>*</span>{" "}
-                        <Icon as={IoMdCloudUpload} boxSize={4} />
+                        Upload Id <span style={{ color: "red" }}>*</span>{" "}
+                        <AttachmentIcon boxSize={3} />
                       </FormLabel>
                       <Input
                         type="file"
@@ -545,16 +538,12 @@ function docSignUp() {
                     >
                       <FormLabel
                         htmlFor="MedicalLicense"
-                        className="custom-file-upload"
                         ms="4px"
-                        fontSize="12px"
-                        bg="white"
-                        color="teal.300"
-                        borderWidth={1}
-                        borderColor="teal.300"
-                        _hover={{ bg:"teal.50" }}
-                        fontWeight={"bold"}
-                        // w="60%"
+                        fontSize="sm"
+                        bg="teal.300"
+                        color="white"
+                        fontWeight="xsmall"
+                        w="60%"
                         h="45"
                         // mb="24px"
                         borderRadius="15px"
@@ -564,8 +553,9 @@ function docSignUp() {
                           paddingTop: "10px",
                         }}
                       >
-                        Medical License <span style={{ color: "red" }}>* </span>{" "}
-                        <Icon as={IoMdCloudUpload} boxSize={4}  />{" "}
+                        Upload Medical License{" "}
+                        <span style={{ color: "red" }}>*</span>{" "}
+                        <AttachmentIcon boxSize={3} />{" "}
                       </FormLabel>
                       <Input
                         type="file"
@@ -596,16 +586,12 @@ function docSignUp() {
                     >
                       <FormLabel
                         htmlFor="MedicalDegree"
-                        className="custom-file-upload"
                         ms="4px"
-                        fontSize="12px"
-                        bg="white"
-                        color="teal.300"
-                        borderWidth={1}
-                        borderColor="teal.300"
-                        _hover={{ bg:"teal.50" }}
-                        fontWeight={"bold"}
-                        // w="60%"
+                        fontSize="sm"
+                        bg="teal.300"
+                        color="white"
+                        fontWeight="xsmall"
+                        w="60%"
                         h="45"
                         // mb="24px"
                         borderRadius="15px"
@@ -615,8 +601,9 @@ function docSignUp() {
                           paddingTop: "10px",
                         }}
                       >
-                        Medical Degree <span style={{ color: "red" }}>* </span>{" "}
-                        <Icon as={IoMdCloudUpload}  boxSize={4} />{" "}
+                        Upload Medical Degree{" "}
+                        <span style={{ color: "red" }}>*</span>{" "}
+                        <AttachmentIcon boxSize={3} />{" "}
                       </FormLabel>
                       <Input
                         type="file"
@@ -637,7 +624,6 @@ function docSignUp() {
                     </FormControl>
                   )}
                 </Field>
-                
                 {uploadProgress > 0 && (
                   <Progress
                     colorScheme="teal"
@@ -649,7 +635,7 @@ function docSignUp() {
                 <Button
                   type="submit"
                   bg="teal.300"
-                  fontSize="11px"
+                  fontSize="10px"
                   color="white"
                   fontWeight="bold"
                   w="100%"

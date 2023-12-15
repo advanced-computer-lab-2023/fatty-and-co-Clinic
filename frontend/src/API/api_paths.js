@@ -49,8 +49,7 @@ export const API_PATHS = {
   filterDoctorSlotEdition: DOCTOR_BASE + "filterDoctorSlotEdition/",
   getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
   getChatPatients: DOCTOR_BASE + "getChatPatients/",
-  getDocUsernameSocket: DOCTOR_BASE + "getDocUsernameSocket/",  getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
-
+  getDocUsernameSocket: DOCTOR_BASE + "getDocUsernameSocket/",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",
@@ -94,11 +93,9 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
-  viewFamAppoint:APPOINTMENT_BASE+"getAppointmentsfamilymembers/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
-  cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
 
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
@@ -111,8 +108,6 @@ export const API_PATHS = {
   updateDosage: PRESCRIPTION_BASE + "updateDosage",
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
-  updateDescription: PRESCRIPTION_BASE + "updateDescription",
-
 
   //Message
   getMessages: MESSAGE_BASE + "getMessages",

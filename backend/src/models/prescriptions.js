@@ -45,10 +45,6 @@ const prescriptionSchema = new Schema({
         type: Number,
         required: true,
       },
-      Description: {
-        type: String,
-        required: true,
-      },
     },
   ],
 });
