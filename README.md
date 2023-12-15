@@ -26,8 +26,13 @@ This project adheres to certain coding conventions for consistency and readabili
 - **Braces:** Opening braces go on the same line as the statement.
 - **Variable Declaration:** Always use `let` or `const` to declare variables. Don't use `var`.
 
-We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to make sure formatting is proper so make sure to run it to fix any formaating issues
+We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to make sure formatting is proper and [ESLint](https://eslint.org/) with the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) to enforce these conventions. Before committing any code, make sure to run ESLint to check for and fix any style issues.
 
+To run ESLint, use the following command:
+
+```bash
+npm run lint
+```
 
 ## Screenshots
 
