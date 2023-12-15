@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Formik, Form, Field } from "formik";
+import { Formik, Field } from "formik";
 import {
   Box,
   Heading,
@@ -23,8 +23,14 @@ import {
   Icon,
   VStack,
   Flex,
+  Grid,
+  useColorModeValue,
+  Text,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
+import CardHeader from "components/Card/CardHeader.js";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import HealthRecordForm from "./components/HealthRecordForm";
@@ -32,7 +38,7 @@ import HealthRecordForm from "./components/HealthRecordForm";
 export function PatientTable() {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-
+  const textColor = useColorModeValue("gray.700", "white");
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -54,7 +60,6 @@ export function PatientTable() {
     let url = filters.upcoming
       ? API_PATHS.viewUpcomingAppointments
       : API_PATHS.viewDoctorPatients;
-
     const params = {};
     if (filters.patientName) params.PatientName = filters.patientName;
     console.log(params);
@@ -135,75 +140,94 @@ export function PatientTable() {
         }}
       >
         {(props) => (
-          <Form>
-            <Field name="patientName">
-              {({ field }) => (
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="text"
-                    placeholder="Enter Patient name"
-                  />
-                </FormControl>
-              )}
-            </Field>
-            <Field name="upcoming" type="checkbox">
-              {({ field }) => (
-                <FormControl>
-                  <Checkbox
-                    {...field}
-                    onChange={(e) => {
-                      setFilters({ ...filters, upcoming: e.target.checked });
-                    }}
-                  >
-                    Filter for upcoming appointments?
-                  </Checkbox>
-                </FormControl>
-              )}
-            </Field>
-            <Button
-              mt={4}
-              colorScheme="teal"
-              isLoading={props.isSubmitting}
-              type="submit"
-            >
-              search
-            </Button>
-          </Form>
+          <Flex
+            direction="row"
+            alignItems="flex-start"
+            pt="50px"
+            justifyContent="flex-start"
+          >
+            <Grid templateColumns="repeat(3, 170px)" gap={6}>
+              <Field name="patientName">
+                {({ field }) => (
+                  <FormControl w="100%" h="10">
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Enter Patient name"
+                    />
+                  </FormControl>
+                )}
+              </Field>
+              <Button
+                w="100%"
+                h="10"
+                isLoading={props.isSubmitting}
+                type="submit"
+              >
+                Search
+              </Button>
+              <Field name="upcoming" type="checkbox">
+                {({ field }) => (
+                  <FormControl w="200%" marginTop="6px">
+                    <Checkbox
+                      {...field}
+                      onChange={(e) => {
+                        setFilters({ ...filters, upcoming: e.target.checked });
+                      }}
+                    >
+                      Filter for upcoming appointments?
+                    </Checkbox>
+                  </FormControl>
+                )}
+              </Field>
+            </Grid>
+          </Flex>
         )}
       </Formik>
-
-      <Table variant="simple">
-        <Thead>
-          <Tr>
-            <Th>Patient name</Th>
-            <Th>Mobile Number</Th>
-            <Th>Date of birth</Th>
-            <Th>Gender</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {patients?.map((patient) => (
-            <Tr
-              _hover={{ backgroundColor: "gray.200" }}
-              cursor="pointer"
-              key={patient._id}
-              onClick={() => openModal(patient._id)}
-            >
-              <Td>{patient && patient.Name ? patient.Name : "N/A"}</Td>
-              <Td>
-                {patient && patient.MobileNum ? patient.MobileNum : "N/A"}
-              </Td>
-              <Td>
-                {patient && patient.DateOfBirth
-                  ? new Date(patient.DateOfBirth).toLocaleDateString("en-GB")
-                  : "N/A"}
-              </Td>
-              <Td>{patient && patient.Gender ? patient.Gender : "N/A"}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+      <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+        <CardHeader p="6px 0px 22px 0px">
+          <Flex direction="column">
+            <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+              Patients
+            </Text>
+          </Flex>
+        </CardHeader>
+        <CardBody>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Patient name</Th>
+                <Th>Mobile Number</Th>
+                <Th>Date of birth</Th>
+                <Th>Gender</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {patients?.map((patient) => (
+                <Tr
+                  _hover={{ backgroundColor: "gray.200" }}
+                  cursor="pointer"
+                  key={patient._id}
+                  onClick={() => openModal(patient._id)}
+                >
+                  <Td>{patient && patient.Name ? patient.Name : "N/A"}</Td>
+                  <Td>
+                    {patient && patient.MobileNum ? patient.MobileNum : "N/A"}
+                  </Td>
+                  <Td>
+                    {patient && patient.DateOfBirth
+                      ? new Date(patient.DateOfBirth).toLocaleDateString(
+                          "en-GB"
+                        )
+                      : "N/A"}
+                  </Td>
+                  <Td>{patient && patient.Gender ? patient.Gender : "N/A"}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </CardBody>
+      </Card>
       {selectedPatient && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalOverlay />
@@ -211,10 +235,10 @@ export function PatientTable() {
             <ModalHeader>Patient Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <p>patient name: {selectedPatient.Name}</p>
+              <p>patient Name: {selectedPatient.Name}</p>
               <p>Mobile Number: {selectedPatient.MobileNum}</p>
               <p>
-                Date of birth:{" "}
+                Date of Birth:{" "}
                 {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
                   "en-GB"
                 )}
@@ -226,21 +250,21 @@ export function PatientTable() {
                 {selectedPatient.EmergencyContact.FullName}
               </p>
               <p>
-                Emergency Contact phone number:
+                Emergency Contact Phone Number:
                 {selectedPatient.EmergencyContact.PhoneNumber}
               </p>
               <Button
-                onClick={() => {
-                  openInfoModal(selectedPatient.Username);
-                }}
+                // onClick={() => {
+                //   openInfoModal(selectedPatient.Username);
+                // }}
               >
-                View Information and Health records.
+                View Information & Health Records
               </Button>
             </ModalBody>
           </ModalContent>
         </Modal>
       )}
-      {selectedPatientViewInfo && (
+      {/* {selectedPatientViewInfo && (
         <Modal isOpen={isInfoModalOpen} onClose={closeInfoModal}>
           <ModalOverlay />
           <ModalContent>
@@ -250,8 +274,8 @@ export function PatientTable() {
               <Heading as="h5" size="sm">
                 Health Records :
               </Heading>
-               {/* start of health records  TODO: make it a component */}
-               <Flex
+              { start of health records  TODO: make it a component }
+              <Flex
                 direction={{ sm: "column", md: "row" }}
                 align="flex-start"
                 p={{ md: "5px" }}
@@ -287,7 +311,7 @@ export function PatientTable() {
                           <Icon as={DownloadIcon} me="3px" />
                         </button>
                         <div>
-                          {healthRecord.note && healthRecord.note!="null" && (
+                          {healthRecord.note && healthRecord.note != "null" && (
                             <p>note: {healthRecord.note}</p>
                           )}
                         </div>
@@ -295,11 +319,13 @@ export function PatientTable() {
                       </VStack>
                     ))}
                 </Flex>
-                <Flex direction="column" align="flex-start" >
-                <HealthRecordForm PatientUsername={selectedPatient.Username}/>
+                <Flex direction="column" align="flex-start">
+                  <HealthRecordForm
+                    PatientUsername={selectedPatient.Username}
+                  />
                 </Flex>
               </Flex>
-              {/* end of health records */}
+              { end of health records }
               <hr />
               <Heading as="h5" size="sm">
                 Appointments:
@@ -350,7 +376,7 @@ export function PatientTable() {
             </ModalBody>
           </ModalContent>
         </Modal>
-      )}
+      )} */}
     </Box>
   );
 }
