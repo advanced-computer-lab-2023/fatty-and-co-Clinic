@@ -21,7 +21,7 @@ function RequestsRow(props) {
 
   return (
     <Tr>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Flex direction="column">
             <Text
@@ -36,7 +36,7 @@ function RequestsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "250px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Flex direction="column">
             <Text
@@ -51,7 +51,7 @@ function RequestsRow(props) {
         </Flex>
       </Td>
 
-      <Td>
+      <Td minWidth={{ sm: "150px" }} pl="0px">     
         <Badge
           bg={
             Status === "Accepted"
@@ -75,7 +75,7 @@ function RequestsRow(props) {
         </Badge>
       </Td>
 
-      <Td>
+      <Td minWidth={{ sm: "50px" }} pr="0px">
         <RequestButton Username = {Username} Status = {Status} ></RequestButton>
         
       </Td>

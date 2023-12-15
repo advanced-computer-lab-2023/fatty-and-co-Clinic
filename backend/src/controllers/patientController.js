@@ -9,9 +9,11 @@ const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
 const appointmentModel=require("../models/appointments");
 const prescriptionModel = require("../models/prescriptions");
+const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+
 const {
   findFiles,
   findFileByFilename,
@@ -30,6 +32,7 @@ const {
 
 } = require("../common/utils/generators");
 //hi Kholoud
+
 // const createPatient = async (req, res) => {
 //   const {
 //     Username,
@@ -1820,6 +1823,61 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
+const followupAppointment = async (req, res) => {
+
+  try {
+    const doctorUsername = req.query.DoctorUsername;
+    const familyMemberUsername = req.body.FamilyMemberUsername;
+    const patientUsername = req.user.Username;
+    const date = new Date(req.query.date);
+    const today = new Date();
+    const doctor = await doctorModel.findOne({
+      Username: doctorUsername,
+    });
+
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      if(familyMemberUsername){
+        const patient = await patientModel.findOne({
+          Username: familyMemberUsername,
+        });
+        const request = await requestModel.create({
+          DoctorUsername: doctorUsername,
+          DoctorName: doctor.Name,
+          PatientUsername: patientUsername,
+          PatientName: patient.Name,
+          Status: "Pending",
+          FollowUp: true,
+          Date: date,
+        });
+        res.status(200).json(request);
+
+      }
+      else {
+        const patient = await patientModel.findOne({
+          Username: patientUsername,
+        });
+        const request = await requestModel.create({
+        DoctorUsername: doctorUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Pending",
+        FollowUp: true,
+        Date: date,
+      });
+      res.status(200).json(request);
+
+      }
+      
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 const getFamSessionCost = async (req,res) => {
   const username = req.user.Username;
@@ -1877,5 +1935,6 @@ module.exports = {
   viewPastAppoitmentsPat,
   viewfamilymembersappointments,
   getWalletAmount,
+  followupAppointment,
 };
 

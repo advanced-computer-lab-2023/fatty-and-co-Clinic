@@ -7,6 +7,8 @@ const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const prescriptionModel = require("../models/prescriptions");
 const docSlotsModel = require("../models/docSlots");
+const notifsModel = require("../models/notifications");
+
 
 const { default: mongoose } = require("mongoose");
 const {
@@ -502,6 +504,18 @@ const getDocSlot = async (req, res) => {
   }
 };
 
+const createNotif = async (req, res) => {
+  try {
+    const {Title, Message, Username} = req.body;
+    const notif = await notifsModel.create({
+      Title, Message, Username, Date: new Date()
+    });
+    res.status(201).json(notif);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -518,4 +532,5 @@ module.exports = {
   createDocSlot,
   getDocSlot,
   acceptDoc,
+  createNotif,
 };
