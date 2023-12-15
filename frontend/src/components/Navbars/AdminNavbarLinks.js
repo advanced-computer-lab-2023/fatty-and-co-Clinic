@@ -42,6 +42,7 @@ import axios from "axios";
 import { API_PATHS } from "API/api_paths";
 import { useState, useEffect } from "react";
 import { useWalletContext } from "hooks/useWalletContext";
+import { useNotificationsContext } from "hooks/useNotificationsContext";
 import PatientProfile from "views/Patient/viewProfile";
 
 const theme = extendTheme({
@@ -57,6 +58,7 @@ export default function HeaderLinks(props) {
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
   const history = useHistory();
   const { Wallet, dispatch } = useWalletContext();
+  const { notifications, Dispatch } = useNotificationsContext();
   // const [Wallet, setWallet] = useState(null);
   useEffect(() => {
     const fetchWalletAmount = async () => {
@@ -70,22 +72,21 @@ export default function HeaderLinks(props) {
         console.error("Error fetching wallet amount", error);
       }
     };
+    const fetchNotifications = async () => {
+      try {
+        const notifs = await axios.get(API_PATHS.getNotifs ,{
+          headers: { Authorization },
+        });
+        console.log(notifs.data.notifs);
+        Dispatch({ type: "GET_NOTIFICATIONS", payload: notifs.data.notifs });
+      } catch (error) {
+        console.error("Error fetching notifications", error);
+      }
+    };
     fetchWalletAmount();
-  }, [Authorization]);
+    fetchNotifications();
 
-  useEffect(() => {
-  const fetchNotifications = async () => {
-    try {
-      const notifs = await axios.get(API_PATHS.getNotifs, {
-        headers: { Authorization },
-      });
-      console.log(response.data);
-      //dispatch({ type: "GET_WALLET", payload: response.data.Wallet });
-    } catch (error) {
-      console.error("Error fetching notifications", error);
-    }
-  };
-  fetchNotifications();
+    console.log(notifications);
   }, [Authorization]);
 
   // Chakra Color Mode
@@ -213,47 +214,26 @@ export default function HeaderLinks(props) {
       </ChakraProvider> 
       )}
       <Menu>
+      <Tooltip label="Notifications" fontSize='md'> 
         <MenuButton>
           <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
         </MenuButton>
+      </Tooltip>
         <MenuList p="16px 8px">
           <Flex flexDirection="column">
             
-            {/* {Array.isArray(notifs) && data.map((row) => {
+            {Array.isArray(notifications) && notifications.map((row) => {
               return (
               <MenuItem borderRadius="8px" mb="10px">
                 <a href= {(user.userType === "Patient"? "/patient/viewAppointPat" : "/doctor/viewAppointments")}>
               <ItemContent
-                time="13 minutes ago"
-                info="from Alicia ===================================="
-                boldInfo="New Message"
-                aName="Alicia"
-                aSrc={avatar1}
+                info= {row.Message}
+                boldInfo={row.Title}
               />
             </a>
             </MenuItem>
               );
-            })}             */}
-            
-            
-            <MenuItem borderRadius="8px" mb="10px">
-              <ItemContent
-                time="2 days ago"
-                info="by Josh Henry"
-                boldInfo="New Album"
-                aName="Josh Henry"
-                aSrc={avatar2}
-              />
-            </MenuItem>
-            <MenuItem borderRadius="8px">
-              <ItemContent
-                time="3 days ago"
-                info="Payment succesfully completed!"
-                boldInfo=""
-                aName="Kara"
-                aSrc={avatar3}
-              />
-            </MenuItem>
+            })}            
           </Flex>
         </MenuList>
       </Menu>

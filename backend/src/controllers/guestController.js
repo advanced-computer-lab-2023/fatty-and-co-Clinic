@@ -309,9 +309,8 @@ const createPatient = async (req, res) => {
 };
 
 const getNotifs = async (req, res) => {
-  const {Username} = req.user.Username;
   try {
-    const notifs = await notificationsModel.find({Username: Username});
+    const notifs = await notificationsModel.find({Username: req.user.Username});
     const count = notifs.length;
     res.status(200).send({ notifs, count });
   } catch (error) {
