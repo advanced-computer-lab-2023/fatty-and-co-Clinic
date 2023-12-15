@@ -800,8 +800,8 @@ const createAppointment = async (req, res) => {
   const Status = "Upcoming";
   try {
     const newApp = await appointmentModel.create({
-     DoctorUsername: doctor.DoctorUsername,
-      DoctorName:doctor.DoctorName,
+     DoctorUsername: doctor.Username,
+      DoctorName:doctor.Name,
       PatientUsername: PatientUsernameFinal,
       PatientName,
       Status,
