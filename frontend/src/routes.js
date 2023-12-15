@@ -233,7 +233,7 @@ var dashRoutes = [
     layout: "/admin",
   },
   {
-    path: "/viewMySlots/:username",
+    path: "/viewMySlots/",
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,
     component: ViewMySlots,
@@ -250,7 +250,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/rescheduleApp/:row",
+    path: "/rescheduleApp/",
     name: "Reschedule",
     icon: <HomeIcon color="inherit" />,
     component: rescheduleApp,
@@ -273,6 +273,7 @@ var dashRoutes = [
     layout: "/patient",
    show: false, // Add this to hide route from sidebar
   },
+  
 
   {
     path: "/viewDoctors",
@@ -317,7 +318,7 @@ var dashRoutes = [
     component: ViewDoctorsPatients,
     layout: "/doctor",
   },
-  {
+{
     path: "/patientRecords",
     name: "view patient records",
     icon: <CreditIcon color="inherit" />,

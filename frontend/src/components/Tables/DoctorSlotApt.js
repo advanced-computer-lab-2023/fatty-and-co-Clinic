@@ -19,7 +19,7 @@ import {
 import React from "react";
 
 function DoctorSlotApt(props) {
-  const { DayName, StartTime, bookClickHandler} = props;
+  const { DayName, StartTime, bookRescheduleClick} = props;
   const textColor = useColorModeValue("gray.700", "white");
 
   return (
@@ -52,7 +52,9 @@ function DoctorSlotApt(props) {
       </Td>
 
       <Td>
-        <Button onClick={bookRescheduleClick} colorScheme="teal">
+        <Button   
+          onClick={() => props.bookRescheduleClick(DayName,StartTime)}
+         colorScheme="teal">
           Reschedule
         </Button>
       </Td>

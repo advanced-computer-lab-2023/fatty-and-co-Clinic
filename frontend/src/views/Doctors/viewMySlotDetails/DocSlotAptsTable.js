@@ -13,11 +13,11 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import DoctorsRow from "components/Tables/DoctorsRow";
-
 import { useHistory } from "react-router-dom";
-import React, { useState } from "react";
-import DoctorSlotApt from "components/Tables/DocSlotRowApt";
+import {useState, useEffect } from "react";
+import { API_PATHS } from "API/api_paths";
+import axios from "axios";
+import DoctorSlotApt from "components/Tables/DoctorSlotApt";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useParams , useLocation} from "react-router-dom";
 
@@ -29,22 +29,49 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
   const Authorization = `Bearer ${user.token}`;
 
   const location = useLocation();
-  const { state } = location;
-  let Cost = state.Cost;
-  let CostFam = state.CostFam;
-  
-  const handleRescheduleClick = (row) => {
-    let newUrl = `../bookAptDetails/${row}`;
-    let newState = {
-      DayName: row.DayName,
-      StartTime: row.StartTime,
-      DoctorId: row.DoctorId,
-      // Cost: Cost,
-      // CostFam: CostFam,
-    };
 
-    history.push(newUrl, newState);
+  const searchParams = new URLSearchParams(location.search);
+  const patientUsername = searchParams.get("username");
+  const doctor= searchParams.get("doctor");
+
+  var id="";
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(API_PATHS.getDoctorByUser, {
+  //         headers: { Authorization },
+  //       });
+  //       id=response.data;
+  //       console.log(id)
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [Authorization]);
+  const handleRescheduleClick = async (DayName, StartTime) => {
+    try {
+      const response = await axios.get(API_PATHS.getDoctorId, {
+        headers: { Authorization },
+      });
+      
+      const id = response.data
+      
+      // Only redirect when id is truthy
+      if (id) {
+      
+        const newUrl = `/doctor/rescheduleApp/?username=${patientUsername}&day=${DayName}&startTime=${StartTime}&id=${id}`;
+        history.replace(newUrl);
+      } else {
+        console.error("Error: id is falsy.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
 
   return (
     <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
@@ -76,7 +103,7 @@ const DocSlotAptsTable = ({ title, captions, data }) => {
                   key={row.id}
                   DayName={row.DayName}
                   StartTime={row.StartTime}
-                  bookRescheduleClick={() => handleRescheduleClick(row)}
+                  bookRescheduleClick={() => handleRescheduleClick(row.DayName,row.StartTime)}
                 />
               );
             })}

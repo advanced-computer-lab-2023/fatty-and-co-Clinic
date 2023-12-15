@@ -26,6 +26,7 @@ import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 function AppointmentsRow(props) {
   const {
     customkey,
+    DoctorUsername,
     DoctorName,
     PatientName,
     PatientUsername,
@@ -37,7 +38,6 @@ function AppointmentsRow(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [hasPrescription, setHasPrescription] = useState("");
-  const [patientUsername,setPatientUsername]=useState("");
   const { prescriptions, dispatch } = usePrescriptionContext();
   useEffect(() => {
     const checkPrescriptionStatus = async () => {
@@ -147,7 +147,7 @@ function AppointmentsRow(props) {
       {(Status === "Upcoming" ) && ( // Render the reschedule button only if status is "Upcoming"
        <Button
        colorScheme="teal"
-       onClick={() => props.handleRescheduleAppointment(PatientUsername)}
+       onClick={() => props.handleRescheduleAppointment(DoctorUsername,PatientUsername)}
      >
        Reschedule
      </Button>
