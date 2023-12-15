@@ -46,18 +46,20 @@ export function AppointmentsTable({ title, captions, data, isLoading }) {
               </Tr>
             </Thead>
             <Tbody>
-              {data.map((row) => (
-                <AppointmentsRow
-                  DoctorName={row.DoctorName}
-                  key={row._id}
-                  customkey={row._id}
-                  PatientName={row.PatientName}
-                  PatientUsername={row.PatientUsername}
-                  Type={row.FollowUp ? "Follow Up" : "First Time"}
-                  Status={row.Status}
-                  DateTime={row.Date}
-                />
-              ))}
+              {data.map((row) => {
+                return (
+                  <AppointmentsRow
+                    DoctorName={row.DoctorName}
+                    key={row._id}
+                    customkey={row._id}
+                    PatientName={row.PatientName}
+                    PatientUsername={row.PatientUsername}
+                    Type={row.FollowUp ? "Follow Up" : "First Time"}
+                    Status={row.Status}
+                    DateTime={row.Date}
+                  />
+                );
+              })}
             </Tbody>
           </Table>
         )}

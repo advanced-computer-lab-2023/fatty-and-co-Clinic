@@ -37,12 +37,16 @@ export function bookAptDetails() {
   //   const { row } = useParams();
   //   console.log(useParams());
   const location = useLocation();
+  console.log(location);
   const { state } = location;
-  const { StartTime } = state;
-  const { DayName } = state;
-  const { DoctorId } = state;
-  const { Cost } = state;
-  const { CostFam } = state;
+  console.log(state);
+  let StartTime = state.StartTime;
+  let DayName = state.DayName;
+  let DoctorId = state.DoctorId;
+  let Cost = state.Cost;
+  let CostFam = state.CostFam;
+
+
 
   console.log(state);
   // const username = user.Username;
@@ -82,13 +86,66 @@ export function bookAptDetails() {
     console.log(`dateCheck${dateToCheck}`);
     DateFinal = formatISO(dateToCheck);
 
-    console.log(`dateCheckF${DateFinal}`);
-
+    console.log("dateCheckF" + DateFinal);
+/*
+    try {
+   
+      const response = await fetch(API_PATHS.cancellappointment, {
+        method: "PATCH",
+        headers: {
+          Authorization,
+          "Content-Type": "application/json",
+        },
+    
+        body: JSON.stringify({doctorUsername:DoctorUsername})
+      // body: JSON.stringify({Package2}),
+      });
+  
+      console.log("Response", response.status);
+      const errorData = await response.json();
+      if (response.ok) {
+        toast({
+          title: "Cancelled successfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        const timer = setTimeout(() => {
+          location.reload();
+        }, 500); // 1000ms delay
+        window.location.reload();
+     
+   
+      } else {
+        toast({
+          title: "Failed to Cancel",
+          description: errorData.error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  }; */
     const url = API_PATHS.validateBookingDate;
     axios
       .get(url, {
         params: { DayName, DateFinal, DoctorId },
         headers: { Authorization },
+      })
+      .then((response) => {
+        // If the response is successful (status 2xx), display a toast or perform any action here
+        // For example, assuming you want to display a success toast:
+        toast({
+          title: "Success",
+          description: "Valid date proceed",
+          status: "success",
+          duration: 5000, // Adjust duration as needed
+          isClosable: true,
+        });
+        // You can also handle the response data if needed: response.data
       })
       .catch((error) => {
         console.log(error);

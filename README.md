@@ -2,15 +2,34 @@
 
 This project is a virtual clinic website for remotely booking and holding medical appointments.
 
-![Logo](./frontend/src/assets/img/ShebeenElkom.png)
+<img src="./frontend/src/assets/img/ShebeenElkom.png" width="200">
 
 ## Motivation
 
-The motivation behind the Shebeen Health Clinic project is to provide a seamless and efficient way for patients to book and attend medical appointments remotely. In the era of digital transformation, healthcare should not be left behind. This project aims to bring convenience to patients, allowing them to consult with healthcare professionals without the need to travel. This is especially beneficial in the current global situation where social distancing is crucial. Furthermore, it provides a streamlined platform for healthcare providers to manage appointments and consult with patients, making healthcare more accessible and efficient.
+The motivation behind the Shebeen Health Clinic project is to provide a seamless and efficient way for patients to book and attend medical appointments remotely. In the era of digital transformation, healthcare should not be left behind. This project aims to bring convenience to patients, allowing them to consult with healthcare professionals without the need to travel. This would be especially beneficial in case the global situation requires social distancing once again. Furthermore, it provides a streamlined platform for healthcare providers to manage appointments and consult with patients, making healthcare more accessible and efficient.
 
 ## Build Status
 
+[include all missing or broken requirements here]
+
 ## Code Style
+
+This project adheres to certain coding conventions for consistency and readability. Here are some of the key points:
+
+- **Indentation:** We use 2 spaces for indentation. No tabs are allowed.
+- **Semicolons:** Every statement should be ended with a semicolon.
+- **Quotes:** Use single quotes for strings except to avoid escaping.
+- **Naming Convention:** We use camelCase for variable and function names, and PascalCase for component/class names.
+- **Braces:** Opening braces go on the same line as the statement.
+- **Variable Declaration:** Always use `let` or `const` to declare variables. Don't use `var`.
+
+We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to make sure formatting is proper and [ESLint](https://eslint.org/) with the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) to enforce these conventions. Before committing any code, make sure to run ESLint to check for and fix any style issues.
+
+To run ESLint, use the following command:
+
+```bash
+npm run lint
+```
 
 ## Screenshots
 
@@ -126,11 +145,9 @@ const reschedulePatient = async (req, res) => {
       prevApp.Date.getDate() + 1 == reqDate.getDate() + 1 &&
       prevApp.Date.getUTCHours() == reqDate.getUTCHours()
     ) {
-      res
-        .status(404)
-        .json({
-          err: "You're rescheduling appointment on the same date it's scheduled on!",
-        });
+      res.status(404).json({
+        err: "You're rescheduling appointment on the same date it's scheduled on!",
+      });
     } else {
       const patientApp = await appointmentModel.find({
         $or: [
@@ -279,7 +296,8 @@ Please adhere to this project's `code of conduct`.
 
 ## Authors
 
-- [@octokatherine](https://www.github.com/octokatherine)
+- [@ZeyadHabash](https://github.com/ZeyadHabash)
+- rest of authors here
 
 ## License
 
