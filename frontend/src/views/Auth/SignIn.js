@@ -182,7 +182,7 @@ function SignIn() {
                       </FormControl>
                     )}
                   </Field>
-                  <FormControl display="flex" alignItems="center">
+                  {/* <FormControl display="flex" alignItems="center">
                     <Switch id="remember-login" colorScheme="teal" me="10px" />
                     <FormLabel
                       htmlFor="remember-login"
@@ -191,9 +191,9 @@ function SignIn() {
                       fontWeight="normal"
                     >
                       Remember me
-                      {/* TODO: Handle remember me later */}
+                      {/* TODO: Handle remember me later 
                     </FormLabel>
-                  </FormControl>
+                  </FormControl> */}
                   <Button
                     fontSize="10px"
                     isLoading={isSubmitting || loading}

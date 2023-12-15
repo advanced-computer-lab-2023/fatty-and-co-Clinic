@@ -149,7 +149,8 @@ function generateMobileNum() {
 }
 
 function generateNationalId() {
-  const nationalId = Math.floor(Math.random() * 9000000000000000) + 1000000000000000;
+  const nationalId =
+    Math.floor(Math.random() * 9000000000000000) + 1000000000000000;
   return nationalId;
 }
 
@@ -223,12 +224,10 @@ function generateStartTime() {
   return { startTime };
 }
 
-
 function generateOneWorkingDay() {
   const workingDay = Math.floor(Math.random() * 7);
   return { workingDay };
 }
-
 
 function generateAppointmentStatus() {
   const status = ["Upcoming", "Completed", "Rescheduled", "Cancelled"];
@@ -276,18 +275,19 @@ function generateUserType() {
 function generateMedicine() {
   const meds = [
     "Aspirin",
-    "Panadol",
-    "Ibuprofen",
-    "Paracetamol",
-    "Penicillin",
-    "Amoxicillin",
-    "Ciprofloxacin",
-    "Omeprazole",
-    "Ranitidine",
-    "Prednisone",
-    "Albuterol",
+    // "Panadol",
+    // "Ibuprofen",
+    // "Paracetamol",
+    // "Penicillin",
+    // "Amoxicillin",
+    // "Ciprofloxacin",
+    // "Omeprazole",
+    // "Ranitidine",
+    // "Prednisone",
+    // "Albuterol",
+    "Alprazolam",
   ];
-  const numberOfMedicinesToGenerate = 5; // Change this number to generate a different list length
+  const numberOfMedicinesToGenerate = 1; // Change this number to generate a different list length
   const medicineList = [];
   for (let i = 0; i < numberOfMedicinesToGenerate; i++) {
     const randomIndex = Math.floor(Math.random() * meds.length);
@@ -295,6 +295,7 @@ function generateMedicine() {
     const medicineObject = {
       Name: randomMedicine,
       Dosage: randomIndex,
+      Description: "Take 1 tablet by mouth every 4 hours as needed for pain",
     };
     medicineList.push(medicineObject);
   }
