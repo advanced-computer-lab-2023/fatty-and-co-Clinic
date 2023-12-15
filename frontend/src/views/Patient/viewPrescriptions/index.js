@@ -37,7 +37,6 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
-import { IoAddCircleSharp } from "react-icons/io5";
 import { DownloadIcon } from "@chakra-ui/icons";
 import { jsPDF } from "jspdf";
 import { FaSignature } from "react-icons/fa";
@@ -50,6 +49,7 @@ function PrescriptionTable() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [doctorNames, setDoctorNames] = useState(new Set());
+  const [addedToCart, setaddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuthContext();
@@ -245,21 +245,27 @@ function PrescriptionTable() {
                         : "N/A"}
                     </Td>
                     <Td>
-                      <Button
-                        colorScheme="teal"
-                        variant="solid"
-                        rightIcon={<BsPrescription2 />}
-                        onClick={() => openModal(prescription._id)}
-                      >
-                        View Prescribed Medicines
-                      </Button>
+                      <Flex justifyContent="center">
+                        <Button
+                          colorScheme="teal"
+                          variant="solid"
+                          rightIcon={<BsPrescription2 />}
+                          onClick={() => openModal(prescription._id)}
+                        >
+                          View Prescribed Medicines
+                        </Button>
+                      </Flex>
                     </Td>
+                    {/* {!setaddedToCart && ( */}
                     <Td>
-                      <OrderPrescription
-                        appointmentId={prescription.AppointmentId}
-                      ></OrderPrescription>
+                      <Flex justifyContent="center">
+                        <OrderPrescription
+                          appointmentId={prescription.AppointmentId}
+                          onClick={() => setaddedToCart(true)}
+                        ></OrderPrescription>
+                      </Flex>
                     </Td>
-                    
+                    {/* )} */}
                   </Tr>
                 ))}
               </Tbody>
