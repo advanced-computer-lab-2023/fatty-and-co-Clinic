@@ -7,6 +7,7 @@ const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 const subscriptionModel = require("../models/subscriptions");
+const requestModel = require("../models/appointmentrequests");
 const { Int32 } = require("bson");
 
 // I think this is useless?
@@ -1080,6 +1081,60 @@ const getDoctorInfo = async (req, res) => {
   }
 }
 
+const acceptFollowUp = async (req, res) => {
+  const { Username } = req.body;
+  const docUsername = req.user.Username;
+  console.log(Username, docUsername);
+  try {
+    const request = await requestModel.findOne({
+      PatientUsername: Username, DoctorUsername: docUsername,
+      Status: { $ne: "Accepted" },
+    });
+    console.log(request);
+    const patient = await patientModel.findOne({Username });
+    const doctor = await doctorModel.findOne({
+      Username: docUsername,
+    });
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      const appointment = await appointmentModel.create({
+        DoctorUsername: docUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Upcoming",
+        FollowUp: true,
+        Date: date,
+      });
+    }
+
+    request.Status = "Accepted";
+    await request.save();
+    res.status(200).json(request);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const rejectFollowUp = async (req, res) => {
+  const { Username } = req.body;
+  const docUsername = req.user.Username;
+  try {
+    const request = await requestModel.findOneAndUpdate(
+      { PatientUsername: Username, DoctorUsername: docUsername, Status: { $ne: "Rejected" } },
+      { $set: { Status: "Rejected" } },
+      { new: true }
+    );
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
 module.exports = {
@@ -1105,4 +1160,6 @@ module.exports = {
   validateBookingDate,
   getPaymentAmount,
   getDoctorInfo,
+  acceptFollowUp,
+  rejectFollowUp,
 };
