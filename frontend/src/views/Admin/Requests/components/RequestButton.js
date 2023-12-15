@@ -219,22 +219,9 @@ function RequestButton({ Username, Status }) {
                 <Button colorScheme="red" mr={3} onClick={handleReject}>
                   Reject
                 </Button>
-                <Button
-                  colorScheme="blue"
-                  mr={3}
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  Close
-                </Button>
               </div>
             ) : (
-              <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={() => setIsModalOpen(false)}
-              >
-                Close
-              </Button>
+              <div></div>
             )}
           </ModalFooter>
         </ModalContent>

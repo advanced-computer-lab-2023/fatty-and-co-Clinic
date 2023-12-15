@@ -10,6 +10,7 @@ const {
   updateFamCredit,
   updateSubscription,
   payForFamSubscription,
+  followupAppointment,
   cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
@@ -202,6 +203,8 @@ router.delete("/removeHealthRecord/:filename", removeHealthRecord);
  * @access Public
  */
 router.get("/selectPatient", selectPatient);
+
+router.post("/requestfollowupAppointment", checkPatient, followupAppointment);
 
 /**
  * @route GET /patients/selectPrescription
