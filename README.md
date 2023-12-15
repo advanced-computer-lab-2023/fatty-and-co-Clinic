@@ -2,7 +2,7 @@
 
 This project is a virtual clinic website for remotely booking and holding medical appointments.
 
-![Logo](https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Menoufia_Governorate.PNG)
+![Logo](./frontend/src/assets/img/ShebeenElkom.png)
 
 ## Motivation
 
@@ -14,7 +14,7 @@ The motivation behind the Shebeen Health Clinic project is to provide a seamless
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](./screenshots/your-image-name.png)
 
 ## Tech Stack
 
@@ -26,19 +26,164 @@ The motivation behind the Shebeen Health Clinic project is to provide a seamless
 
 ## Features
 
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
+- **Patient Management:** Allows for the management of patient data, including personal information, medical history, and appointment scheduling.
+- **Doctor Management:** Enables doctors to manage their profiles, set their availability, and view their upcoming appointments.
+- **Appointment Scheduling:** Patients can book appointments with available doctors. Appointments can be easily rescheduled or cancelled.
+- **Real-Time Video Consultations:** Patients can have virtual consultations with doctors through a secure and reliable video call feature.
+- **Prescription Management:** Doctors can create, update, and delete prescriptions for patients. Patients can view their prescriptions anytime.
+- **Health Records:** Patients can upload their health records which can be accessed by their doctors. This ensures doctors have all the necessary information to provide appropriate care.
+- **Notifications:** Users receive notifications for important events such as upcoming appointments or prescription updates.
+- **Payment System:** A secure payment system for patients to pay for their appointments or subscriptions.
 
 ## Code Examples
 
-```javascript
-import Component from "my-project";
+1. **Starting the server (backend/src/server.js):**
 
-function App() {
-  return <Component />;
-}
+```javascript
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+```
+
+2. **API Paths (frontend/src/API/api_paths.js):**
+
+```javascript
+const API_BASE = "http://localhost:8000/";
+const PACKAGE_BASE = "http://localhost:8000/package/";
+const DOCTOR_BASE = "http://localhost:8000/doctor/";
+// ... more paths ...
+
+export const API_PATHS = {
+  // Guest
+  docSignUp: `${GUEST_BASE}addRequest/`,
+  updateEmail: `${GUEST_BASE}updateEmail/`,
+  // ... more paths ...
+};
+```
+
+3. **Custom Login Hook:**
+
+```javascript
+import axios from "axios";
+import { API_PATHS } from "API/api_paths";
+import { useState } from "react";
+import { useAuthContext } from "./useAuthContext";
+
+export const useLogin = () => {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { dispatch } = useAuthContext();
+
+  const login = async (username, password) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.post(API_PATHS.login, {
+        Username: username,
+        Password: password,
+      });
+      const json = JSON.stringify(res.data);
+      localStorage.setItem("LocalStorageItemNameHere", json);
+      dispatch({ type: "LOGIN", payload: res.data });
+      setLoading(false);
+      return res;
+    } catch (err) {
+      setLoading(false);
+      setError(err.response.data.message);
+      return err.response;
+    }
+  };
+
+  return { login, error, loading };
+};
+```
+
+4. **Rescheduling a doctor's appointment**
+
+```javascript
+const reschedulePatient = async (req, res) => {
+  try {
+    const docUsername = req.user.Username;
+    const { patientUsername, date } = req.body;
+    const prevApp = await appointmentModel.findOne({
+      DoctorUsername: docUsername,
+      PatientUsername: patientUsername,
+      Status: "Upcoming",
+    });
+    const reqDate = new Date(date);
+    if (!prevApp) {
+      res
+        .status(404)
+        .json({ err: "Patient wasn't scheduled for an upcoming appointment!" });
+      return;
+    } else if (
+      prevApp.Date.getFullYear() == reqDate.getFullYear() &&
+      prevApp.Date.getMonth() + 1 == reqDate.getMonth() + 1 &&
+      prevApp.Date.getDate() + 1 == reqDate.getDate() + 1 &&
+      prevApp.Date.getUTCHours() == reqDate.getUTCHours()
+    ) {
+      res
+        .status(404)
+        .json({
+          err: "You're rescheduling appointment on the same date it's scheduled on!",
+        });
+    } else {
+      const patientApp = await appointmentModel.find({
+        $or: [
+          { PatientUsername: patientUsername, Status: "Upcoming" },
+          { DoctorUsername: docUsername, Status: "Upcoming" },
+        ],
+      });
+      const reqDate = new Date(date);
+      let isBooked = false;
+      for (const appReserved of patientApp) {
+        if (
+          reqDate.getFullYear() == appReserved.Date.getFullYear() &&
+          reqDate.getMonth() + 1 == appReserved.Date.getMonth() + 1 &&
+          reqDate.getDate() == appReserved.Date.getDate() &&
+          reqDate.getUTCHours() == appReserved.Date.getUTCHours()
+        ) {
+          isBooked = true;
+          break;
+        }
+
+        if (isBooked) {
+          res
+            .status(400)
+            .json({ err: "There is another appointment booked on same date!" });
+          return;
+        } else {
+          const updateAppOld = await appointmentModel.findOneAndUpdate(
+            {
+              PatientUsername: patientUsername,
+              DoctorUsername: docUsername,
+              Status: "Upcoming",
+            },
+            { Date: date, Status: "Rescheduled" }
+          );
+          const newApp = await appointmentModel.create({
+            PatientUsername: patientUsername,
+            PatientName: updateAppOld.PatientName,
+            DoctorName: updateAppOld.DoctorName,
+            DoctorUsername: docUsername,
+            Status: "Upcoming",
+            Date: date,
+          });
+          res
+            .status(200)
+            .json("You have rescheduled appointment successfully!");
+          return;
+        }
+      }
+    }
+  } catch (error) {
+    res.status(404).json(error);
+  }
+};
 ```
 
 ## Installation
