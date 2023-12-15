@@ -806,7 +806,7 @@ const createAppointment = async (req, res) => {
       PatientName,
       Status,
       Date,
-      BookedBy:patient.Username
+      BookedBy:username
     });
     console.log("created");
     res.status(201).json(newApp);
