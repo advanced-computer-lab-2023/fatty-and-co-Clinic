@@ -238,6 +238,7 @@ function PrescriptionTable() {
                             View Prescribed Medicines
                         </Button>
                     </Td>
+                    
                   </Tr>
                 ))}
                 </Tbody>
