@@ -1,5 +1,9 @@
 import {
+  Avatar,
+  AvatarGroup,
   Flex,
+  Icon,
+  Progress,
   Td,
   Text,
   Tr,
@@ -10,16 +14,9 @@ import {
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
-import AddPrescriptionButton from "views/Doctors/viewAppointments/components/addPrescriptionButton";
-import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
-import UpdatePrescription from "views/Doctors/viewAppointments/components/UpdatePrescription";
-import OrderPrescription from "views/Patient/viewAppointPat/components/OrderPrescription";
-import { useAuthContext } from "hooks/useAuthContext";
-// import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
-function AppointmentsRow(props) {
+function Famappointmentrow(props) {
   const {
-    customkey,
     DoctorName,
     DoctorUsername,
     PatientName,
@@ -27,13 +24,14 @@ function AppointmentsRow(props) {
     Status,
     Type,
     DateTime,
+ 
   } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
       {DoctorName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
-          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+        <Td minWidth={{ sm: "150px" }} pl="0px">
+          <Flex align="center" py=".8rem" minWidth="40%" flexWrap="nowrap">
             <Text
               fontSize="md"
               color={textColor}
@@ -45,9 +43,9 @@ function AppointmentsRow(props) {
           </Flex>
         </Td>
       )}
-
+ 
       {PatientName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
+        <Td minWidth={{ sm: "150px" }} pl="20px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
               fontSize="md"
@@ -73,7 +71,7 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "150px" }} pl="0px" padding="10px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -86,7 +84,7 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "190px" }} padding="10px">
+      <Td minWidth={{ sm: "150px" }}>
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
           {new Date(DateTime).toLocaleDateString("en-GB")}
         </Text>
@@ -96,31 +94,28 @@ function AppointmentsRow(props) {
           {new Date(DateTime).toLocaleTimeString("en-GB")}
         </Text>
       </Td>
-      <Stack spacing={0} direction="row" align="center">
-        {PatientUsername && Status === "Completed" && (
-          <Td minWidth={{ sm: "100px" }}>
-            <CreateFollowUpButton patientUsername={PatientUsername} />
-          </Td>
-        )}
-        {Status === "Completed" && !hasPrescription && (
-          <Td minWidth={{ sm: "100px" }}>
-            <AddPrescriptionButton
-              customkey={customkey}
-              setHasPrescription={setHasPrescription}
-            />
-          </Td>
-        )}
+      {PatientUsername && Status === "Completed" && (
+        <Td minWidth={{ sm: "150px" }}>
+          <CreateFollowUpButton patientUsername={PatientUsername} />
+        </Td>
 
-        {Status === "Completed" && hasPrescription && (
-          <Td minWidth={{ sm: "100px" }}>
-            <UpdatePrescription customkey={customkey} />
-          </Td>
-        )}
+   
+      )}
+  <Td minWidth={{ sm: "150px" }}>
+  {(Status === "Upcoming" ||Status === "Rescheduled" ) && ( // Render the cancel button only if status is "Upcoming"
+       <Button
+       colorScheme="red"
+       onClick={() => props.handleCancelAppointment(DoctorUsername)}
+     >
+       Cancel
+     </Button>
+  )}
+</Td>
+     
 
-        //add button for the user to order prescription
-      </Stack>
     </Tr>
   );
 }
 
-export default AppointmentsRow;
+export default Famappointmentrow;
+//components
