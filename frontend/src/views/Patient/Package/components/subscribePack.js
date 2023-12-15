@@ -23,10 +23,9 @@ import MakePayment from "../../makePayment";
 import { PackageContextProvider } from "../../viewPackagesFam/components/Context";
 import PackageI from "../../viewPackagesFam";
 import { useWalletContext } from "hooks/useWalletContext";
-
 import axios from "axios";
 
-function SubscribePackage() {
+function SubscribePackage({ packages, familyPackages }) {
   const [PackageName, setPackageName] = useState("");
   const [NationalId, setNationalId] = useState("");
   const history = useHistory();
@@ -105,6 +104,7 @@ function SubscribePackage() {
   };
 
   const handleNoSelected = async (e) => {
+    console.log("familyPackages", familyPackages);
     e.preventDefault();
     toast({
       title: "Please select a payment method!",
@@ -116,7 +116,7 @@ function SubscribePackage() {
   };
   const handleSubscribe = async (e) => {
     e.preventDefault();
-
+    
     try {
       if (!PackageName) {
         toast({
@@ -149,6 +149,9 @@ function SubscribePackage() {
               headers: { Authorization },
             });
             dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
+            const timer = setTimeout(() => {
+              location.reload();
+            }, 1000); // 1000ms delay
           } catch (error) {
             console.error("Error fetching wallet amount", error);
           }
@@ -184,6 +187,9 @@ function SubscribePackage() {
               headers: { Authorization },
             });
             dispatch({ type: "GET_WALLET", payload: res.data.Wallet });
+            const timer = setTimeout(() => {
+              location.reload();
+            }, 1000); // 1000ms delay
           } catch (error) {
             console.error("Error fetching wallet amount", error);
           }
@@ -192,7 +198,7 @@ function SubscribePackage() {
             title: "Failed to pay & subscribe for family member!",
             // description: errorData.error,
             status: "error",
-            description:errorData.error,
+            description: errorData.error,
             duration: 9000,
             isClosable: true,
           });
@@ -205,75 +211,111 @@ function SubscribePackage() {
 
   return (
     <Flex>
-        <CardHeader>
-          <Flex justify="space-between" align="center" mb="1rem" w="100%">
-            <Text fontSize="xl" color="teal.400" fontWeight="bold">
-              Subscribe Now
-            </Text>
-          </Flex>
-        </CardHeader>
-        <CardBody>
-          <Flex direction="column" w="100%">
-            <form>
-
-              <br />
-              <Stack spacing={3}>
-                <Input
-                  variant="filled"
-                  type="text"
-                  placeholder="Package"
-                  value={PackageName}
-                  onChange={(e) => setPackageName(e.target.value)}
-                />
-                <Input
-                  variant="filled"
-                  type="NationalId"
-                  placeholder="NationalId"
-                  value={NationalId}
-                  onChange={(e) => setNationalId(e.target.value)}
-                />
-                <Box>
-                  <select
-                    value={selectedOption}
-                    onChange={(e) => setSelectedOption(e.target.value)}
-                    style={{
-                      backgroundColor: "teal.300", // Mint blue background color
-                      color: "#319795", // Mint blue text color
-                      padding: "8px 12px",
-                      borderRadius: "4px",
-                      border: "1px solid #319795", // Mint blue border color
-                    }}
-                  >
-                    {" "}
-                    <option value="">Payment Method</option>
-                    <option value="Wallet">Wallet</option>
-                    <option value="Credit">Credit Card</option>
-                  </select>
-                </Box>
-                <Button
-                  colorScheme="teal"
-                  borderColor="teal.300"
-                  color="teal.300"
-                  fontSize="xs"
-                  p="8px 32px"
-                  type="submit"
-                  textColor="white"
-                  onClick={
-                    selectedOption === "Wallet"
-                      ? handleSubscribe
-                      : selectedOption === "Credit"
-                      ? handleSubscribeCredit
-                      : handleNoSelected
-                  }
+      <CardHeader>
+        <Flex justify="space-between" align="center" mb="1rem" w="100%">
+          <Text fontSize="xl" color="teal.400" fontWeight="bold" ml="30px">
+            Subscribe Now
+          </Text>
+        </Flex>
+      </CardHeader>
+      <CardBody>
+        <Flex direction="column" w="100%">
+          <form>
+            <br />
+            <Stack spacing={3}>
+              <Box>
+                <select
+                  onChange={(e) => {
+                    setPackageName(e.target.value);
+                  }}
+                  w="200px"
+                  style={{
+                    backgroundColor: "teal.300", // Mint blue background color
+                    color: "#319795", // Mint blue text color
+                    padding: "8px 12px",
+                    borderRadius: "4px",
+                    border: "1px solid #319795", // Mint blue border color
+                    width: "50%",
+                  }}
+                >
+                  <option value="">Package</option>
+                  {packages.map((row) => {
+                    return <option value={row.Name}>{row.Name}</option>;
+                  })}
+                </select>
+              </Box>
+              <Box>
+                <select
+                  onChange={(e) => {
+                    setNationalId(e.target.value);
+                  }}
+                  style={{
+                    backgroundColor: "teal.300", // Mint blue background color
+                    color: "#319795", // Mint blue text color
+                    padding: "8px 12px",
+                    borderRadius: "4px",
+                    border: "1px solid #319795", // Mint blue border color
+                    width: "50%",
+                  }}
+                >
+                  <option value="">Myself</option>
+                  {/* {familyPackages && familyPackages.map((row) => {
+                    if (row.Patient === null) {
+                    } else {
+                      var name = row.Patient
+                        ? row.Patient.Name
+                        : row.FamilyMem.Name;
+                      var ni = row.Patient
+                        ? row.Patient.NationalId
+                        : row.FamilyMem.NationalId;
+                      return <option value={ni}>{name}</option>;
+                    }
+                  })} */}
+                </select>
+              </Box>
+              <Box>
+                <select
+                  value={selectedOption}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                  style={{
+                    backgroundColor: "teal.300", // Mint blue background color
+                    color: "#319795", // Mint blue text color
+                    padding: "8px 12px",
+                    borderRadius: "4px",
+                    border: "1px solid #319795", // Mint blue border color
+                    width: "50%",
+                  }}
                 >
                   {" "}
-                  <Icon as={FaUserPlus} mr={2} />
-                  Pay
-                </Button>
-              </Stack>
-            </form>
-          </Flex>
-        </CardBody>
+                  <option value="">Payment Method</option>
+                  <option value="Wallet">Wallet</option>
+                  <option value="Credit">Credit Card</option>
+                </select>
+              </Box>
+              <Button
+                colorScheme="teal"
+                borderColor="teal.300"
+                color="teal.300"
+                fontSize="xs"
+                p="8px 32px"
+                type="submit"
+                textColor="white"
+                onClick={
+                  selectedOption === "Wallet"
+                    ? handleSubscribe
+                    : selectedOption === "Credit"
+                    ? handleSubscribeCredit
+                    : handleNoSelected
+                }
+              >
+                {" "}
+                <Icon as={FaUserPlus} mr={2} />
+                Pay
+              </Button>
+            </Stack>
+          </form>
+        </Flex>
+      </CardBody>
     </Flex>
   );
 }

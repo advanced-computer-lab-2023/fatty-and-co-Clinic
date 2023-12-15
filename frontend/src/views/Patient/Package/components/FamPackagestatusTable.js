@@ -1,5 +1,6 @@
 // Chakra imports
 import {
+  Button,
   Flex,
   Table,
   Tbody,
@@ -13,12 +14,15 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import Statuspackagerow from "components/Tables/statuspackagerow";
+import Statuspackagerow from "./statuspackagerow";
 //console.log(statuspackagerow)
 import React from "react";
 const FamPackagestatusTable = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
-  title="Family Member Packages"
+  title = "Family Member Packages";
+
+  
+
   return (
     <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader p="6px 0px 22px 0px">
@@ -41,22 +45,29 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
           </Thead>
           <Tbody>
             {data.map((row) => {
-              if(row){
-              var id = row.Patient?row.Patient._id: row.FamilyMem._id ;
-              var name = row.Patient?row.Patient.Name: row.FamilyMem.Name ;
-           
+              if (row) {
+                var id = row.Patient ? row.Patient._id : row.FamilyMem._id;
+                var name = row.Patient ? row.Patient.Name : row.FamilyMem.Name;
 
-              return (
-                <Statuspackagerow
-                  key={id}
-                  Name={name}
-                  Status={row.Status?row.Status:""}
-                  Package={row.Package?row.Package.Name:""}
-                  Enddate={row.Enddate?row.Enddate:""}
-                  Startdate={row.Startdate?row.Startdate:""}
-                  Renewaldate={!row.Renewaldate||row.Status==="Cancelled"?"":row.Renewaldate}
-                />
-              );}
+                return (
+                  <Statuspackagerow
+                    key={id}
+                    Name={name}
+                    Status={row.Status ? row.Status : ""}
+                    Package={row.Package ? row.Package.Name : ""}
+                    Enddate={row.Enddate ? row.Enddate : ""}
+                    Startdate={row.Startdate ? row.Startdate : ""}
+                    Renewaldate={
+                      !row.Renewaldate || row.Status === "Cancelled"
+                        ? ""
+                        : row.Renewaldate
+                    }
+                    NationalId={ row.Patient? row.Patient.NationalId : "" }
+
+                   
+                  />
+                );
+              }
             })}
           </Tbody>
         </Table>
@@ -65,4 +76,4 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
   );
 };
 
-export default FamPackagestatusTable ;
+export default FamPackagestatusTable;

@@ -1,18 +1,68 @@
 import {
   Avatar,
   AvatarGroup,
+  Button,
   Flex,
   Icon,
   Progress,
   Td,
   Text,
+  useToast,
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
+import { API_PATHS } from "API/api_paths";
+
+import { useAuthContext } from "hooks/useAuthContext";
+
+
 function Statuspackagerow(props) {
-  const { Name, Status, Package, Enddate, Startdate, Renewaldate } = props;
+  const { Name, Status, Package, Enddate, Startdate, Renewaldate , NationalId } = props;
   const textColor = useColorModeValue("gray.700", "white");
+
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
+  const toast = useToast();
+  
+  const handleCancellation = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log("NationalId", NationalId);
+      const response = await fetch(API_PATHS.CancelFamilysubscribtion, {
+        method: "PATCH",
+        headers: {
+          Authorization,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ NationalId }),
+      });
+
+      //console.log("Response", response.status);
+      const errorData = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Cancelled successfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+
+      } else {
+        toast({
+          title: "Failed to Cancel",
+          description: errorData.error,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
 
   return (
     <Tr>
@@ -89,6 +139,9 @@ function Statuspackagerow(props) {
               : ""}{" "}
           </Text>
         </Flex>
+      </Td>
+      <Td>
+        <Button  bg="red.500" onClick={handleCancellation} > </Button>
       </Td>
     </Tr>
   );

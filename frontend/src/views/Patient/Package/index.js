@@ -13,6 +13,7 @@ import { useState } from "react";
 import Subscription from "./components/Subscription";
 import PackageI from "./components/PackageInformation";
 import FamPackagestatusTable from "./components/FamPackagestatusTable";
+import SubscribePackage from "./components/subscribePack";
 
 function Package() {
   const { user } = useAuthContext();
@@ -76,7 +77,8 @@ function Package() {
     <Flex direction="column" pt={{ base: "120px", md: "75px" }} >
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }} >
         <Box>
-          <Subscription subscription={subscription} myPackage={myPackage} />
+          <Subscription subscription={subscription} myPackage={myPackage} packages={packages}  familyPackages={familyPackages}/>
+          <SubscribePackage packages={packages} familyPackages={familyPackages} />
           <FamPackagestatusTable
             title={"My Package"}
             captions={[

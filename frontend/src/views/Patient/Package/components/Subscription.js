@@ -20,8 +20,6 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
-import SubscribePackage from "./subscribePack";
-
 const Subscription = ({ subscription, myPackage }) => {
   // Chakra color mode
   const textColor = useColorModeValue("gray.700", "white");
@@ -30,6 +28,7 @@ const Subscription = ({ subscription, myPackage }) => {
   const toast = useToast();
   const history = useHistory();
   const [isCancelled, setIsCancelled] = useState(false);
+ 
   useEffect(() => {}, [subscription, myPackage]);
 
   const isSubscriptionEmpty = () => {
@@ -178,7 +177,7 @@ const Subscription = ({ subscription, myPackage }) => {
         </>
       ) : (
         <>
-          <SubscribePackage />
+          
         </>
       )}
     </Card>
