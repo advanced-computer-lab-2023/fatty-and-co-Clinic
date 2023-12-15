@@ -8,7 +8,6 @@ import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext
 
 export default function ViewAppointmentsInner() {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
-  const [patientUsername, setPatientUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -37,16 +36,10 @@ export default function ViewAppointmentsInner() {
       .then((response) => {
         // setData(response.data);
         dispatch({ type: "SET_APPOINTMENTS", payload: response.data });
-        
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
   }, [searchParams]);
-
-  const handleRescheduleAppoinmtent=(patientUsername)=>{
-   setPatientUsername(patientUsername);
-  }
-
 
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
@@ -111,10 +104,9 @@ export default function ViewAppointmentsInner() {
         </Flex>
         <AppointmentsTable
           title={"Available Appointments"}
-          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
+          captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}
-          handleRescheduleAppoinmtent={handleRescheduleAppoinmtent}
         />
       </Flex>
     </Box>
