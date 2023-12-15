@@ -32,10 +32,12 @@ function AppointmentsRow(props) {
     Status,
     Type,
     DateTime,
+    handleRescheduleAppointment
   } = props;
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [hasPrescription, setHasPrescription] = useState("");
+  const [patientUsername,setPatientUsername]=useState("");
   const { prescriptions, dispatch } = usePrescriptionContext();
   useEffect(() => {
     const checkPrescriptionStatus = async () => {
@@ -141,7 +143,18 @@ function AppointmentsRow(props) {
             <UpdatePrescription customkey={customkey} />
           </Td>
         )}
+           <Td minWidth={{ sm: "150px" }}>
+      {(Status === "Upcoming" ) && ( // Render the reschedule button only if status is "Upcoming"
+       <Button
+       colorScheme="teal"
+       onClick={() => props.handleRescheduleAppointment(PatientUsername)}
+     >
+       Reschedule
+     </Button>
+  )}
+</Td>
       </Stack>
+     
     </Tr>
   );
 }

@@ -18,7 +18,7 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
+export const AppointmentsTable = ({ title, captions, data, isLoading, handleRescheduleAppointment }) => {
   //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
@@ -63,6 +63,7 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
                     Type={row.FollowUp ? "Follow Up" : "First Time"}
                     Status={row.Status}
                     DateTime={row.Date}
+                    handleRescheduleAppointment={handleRescheduleAppointment}
                   />
                 );
               })}
