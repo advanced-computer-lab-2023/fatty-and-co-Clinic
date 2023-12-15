@@ -208,32 +208,35 @@ const updateDescription = async (req, res) => {
 
   res.status(200).json(updatedPrescription);
 };
-const calculatePrescriptionCost = async (req, res) => {
-  const placeOrder = async (req, res) => {
-    try {
-      const { appointmentId } = req.query;
-      const prescription = await prescriptionsModel.findOne({
-        AppointmentId: appointmentId,
-      });
-      const patient = await patientModel.findOne({
-        Username: prescription.PatientUsername,
-      });
-      // const TotalCost = await calculatePrescriptionCost(req, res);
-      const med = await medicineModel.find({
-        Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
-      });
-      for (const medicine of med) {
-        await axios.post("http://localhost:7000/cart/addToCart", {
-          Medicine: medicine, // Pass a single medicine in an array
-        });
+const placeOrder = async (req, res) => {
+  try {
+    const { appointmentId } = req.query;
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+    const patient = await patientModel.findOne({
+      Username: prescription.PatientUsername,
+    });
+    // const TotalCost = await calculatePrescriptionCost(req, res);
+    const med = await medicineModel.find({
+      Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
+    });
+    for (const medicine of med) {
+      if (medicine.Quantity < 1) {
+        return res
+          .status(404)
+          .json({ message: "Medicine not available in the pharmacy." });
       }
-      res
-        .status(200)
-        .json({ message: "Medicines added to cart successfully." });
-    } catch (error) {
-      res.status(400).send({ message: error.message });
     }
-  };
+    for (const medicine of med) {
+      await axios.post("http://localhost:7000/cart/addToCart", {
+        Medicine: medicine, // Pass a single medicine in an array
+      });
+    }
+    res.status(200).json({ message: "Medicines added to cart successfully." });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
 
   module.exports = {
     addPrescription,
