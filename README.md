@@ -205,46 +205,196 @@ const reschedulePatient = async (req, res) => {
 
 ## Installation
 
-Install my-project with npm
+1. Clone the repository:
 
 ```bash
-  npm install my-project
-  cd my-project
+git clone https://github.com/advanced-computer-lab-2023/fatty-and-co-Clinic
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd fatty-and-co-Clinic
+```
+
+3. Install the dependencies for backend
+
+```bash
+cd backend
+npm install
+```
+
+4. Install the dependencies for frontend
+
+```bash
+cd ../frontend
+npm install
 ```
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your .env file in /backend
 
-`API_KEY`
+`MONGO_URI`
+This is the URI for your MongoDB database. It should be in the format: `mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority`
 
-`ANOTHER_API_KEY`
+`JWT_SECRET`
+This is the secret key used for signing and verifying JWT tokens for user authentication.
+
+`STRIPE_PRIVATE_KEY`
+This is your private key for the Stripe API for handling payments. You can obtain this key from your Stripe dashboard.
+
+`PORT`
+This is the port number on which your backend server will run. If not specified, it will default to 8000. If changed you will also need to change the API_Paths in frontend/API
+
+Create a `.env` file in the root of your backend directory and insert your key/value pairs in the following format of `KEY=VALUE`:
+
+```env
+MONGO_URI=your_mongo_uri
+JWT_SECRET=your_jwt_secret
+STRIPE_PRIVATE_KEY=your_stripe_private_key
+PORT=your_port_number
+```
 
 ## API Reference
 
-#### Get all items
+### Guest Routes
+
+#### Login
 
 ```http
-  GET /api/items
+POST /login
 ```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| Parameter  | Type     | Description                          |
+| :--------- | :------- | :----------------------------------- |
+| `Username` | `string` | **Required**. Username to login with |
+| `Password` | `string` | **Required**. Password to login with |
 
-#### Get item
+#### Send OTP
 
 ```http
-  GET /api/items/${id}
+POST /sendOTP
 ```
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+| Parameter | Type     | Description                                        |
+| :-------- | :------- | :------------------------------------------------- |
+| `Email`   | `string` | **Required**. The Email of the user to send OTP to |
 
-#### add(num1, num2)
+#### Validate OTP
 
-Takes two numbers and returns the sum.
+```http
+POST /validateOTP
+```
+
+| Parameter | Type     | Description                                             |
+| :-------- | :------- | :------------------------------------------------------ |
+| `Email`   | `string` | **Required**. The Email of the user the OTP was sent to |
+| `otp`     | `string` | **Required**. The otp to validate                       |
+
+#### Add Patient
+
+```http
+POST /addPatient
+```
+
+| Parameter                  | Type     | Description                                                                  |
+| :------------------------- | :------- | :--------------------------------------------------------------------------- |
+| `Username`                 | `string` | **Required**. The username of the patient                                    |
+| `Name`                     | `string` | **Required**. The name of the patient                                        |
+| `Password`                 | `string` | **Required**. The password of the patient                                    |
+| `Email`                    | `string` | **Required**. The email of the patient                                       |
+| `MobileNum`                | `string` | **Required**. The mobile number of the patient                               |
+| `DateOfBirth`              | `string` | **Required**. The date of birth of the patient                               |
+| `Gender`                   | `string` | **Required**. The gender of the patient ["M", "F"]                           |
+| `EmergencyContactNumber`   | `string` | **Required**. The emergency contact number of the patient                    |
+| `EmergencyContactName`     | `string` | **Required**. The emergency contact name of the patient                      |
+| `EmergencyContactRelation` | `string` | **Required**. The relationship between the patient and the emergency contact |
+
+#### Add Doctor Signup Request
+
+```http
+POST /addRequest
+```
+
+| Parameter               | Type     | Description                                            |
+| :---------------------- | :------- | :----------------------------------------------------- |
+| `Username`              | `string` | **Required**. The username of the doctor               |
+| `Password`              | `string` | **Required**. The password of the doctor               |
+| `Email`                 | `string` | **Required**. The email of the doctor                  |
+| `Name`                  | `string` | **Required**. The name of the doctor                   |
+| `DateOfBirth`           | `string` | **Required**. The date of birth of the doctor          |
+| `HourlyRate`            | `number` | **Required**. The hourly rate of the doctor            |
+| `Affiliation`           | `string` | **Required**. The affiliation of the doctor            |
+| `EducationalBackground` | `string` | **Required**. The educational background of the doctor |
+| `Speciality`            | `string` | **Required**. The speciality of the doctor             |
+
+#### Reset Password
+
+```http
+PATCH /resetPass/
+```
+
+| Parameter  | Type     | Description                                                  |
+| :--------- | :------- | :----------------------------------------------------------- |
+| `Email`    | `string` | **Required**. The Email of the user to reset the password of |
+| `Password` | `string` | **Required**. The new Password                               |
+
+#### Get Notifications
+
+```http
+GET /getNotifs
+```
+
+No parameters required.
+
+#### Update Request
+
+```http
+PUT /updateRequest/:id
+```
+
+| Parameter | Type     | Description                     |
+| :-------- | :------- | :------------------------------ |
+| `id`      | `string` | **Required**. ID of the request |
+| `request` | `object` | **Required** The new request    |
+
+#### Update Email
+
+```http
+PATCH /updateEmail
+```
+
+| Parameter | Type     | Description                 |
+| :-------- | :------- | :-------------------------- |
+| `Email`   | `string` | **Required**. The new Email |
+
+#### Update Password
+
+```http
+PATCH /updatePass/
+```
+
+| Parameter     | Type     | Description                    |
+| :------------ | :------- | :----------------------------- |
+| `OldPassword` | `string` | **Required**. The old password |
+| `NewPassword` | `string` | **Required**. The new password |
+
+### Admin Routes
+
+### Doctor Routes
+
+### Patient Routes
+
+### Appointment Routes
+
+### Package Routes
+
+### Payment Routes
+
+### Prescription Routes
+
+### Test Routes
 
 ## Tests
 
@@ -256,43 +406,100 @@ To run tests, run the following command
 
 ## How To Use
 
-Clone the project
+1. Go to the project directory
 
 ```bash
-  git clone https://link-to-project
+  cd fatty-and-co-Clinic
 ```
 
-Go to the project directory
+2. Start the backend server
 
 ```bash
-  cd my-project
+cd backend/src
+nodemon server
 ```
 
-Install dependencies
+3. Open a new terminal and start the frontend server
 
 ```bash
-  npm install
+cd ../../frontend
+npm start
 ```
 
-Start the server
-
-```bash
-  npm run start
-```
+Now, both the frontend and backend servers should be running. You can access the application in your browser at http://localhost:3000.
 
 ## Contributing
 
-Contributions are always welcome!
+Contributions are always welcome! Here are the ways you can contribute:
 
-See `contributing.md` for ways to get started.
+- [Reporting Bugs](#reporting-bugs)
+- [Suggesting Enhancements](#suggesting-enhancements)
+- [Your First Code Contribution](#your-first-code-contribution)
+- [Pull Requests](#pull-requests)
 
-Please adhere to this project's `code of conduct`.
+### Reporting Bugs
+
+This section guides you through submitting a bug report for this project. Following these guidelines helps maintainers and the community understand your report, reproduce the behavior, and find related reports.
+
+When you are creating a bug report, please [include as many details as possible](#how-do-i-submit-a-good-bug-report).
+
+### Suggesting Enhancements
+
+This section guides you through submitting an enhancement suggestion for this project, including completely new features and minor improvements to existing functionality. Following these guidelines helps maintainers and the community understand your suggestion and make decisions.
+
+When you are creating an enhancement suggestion, please [include as many details as possible](#how-do-i-submit-a-good-enhancement-suggestion).
+
+### Your First Code Contribution
+
+Unsure where to begin contributing to this project? You can start by looking through these `beginner` and `help-wanted` issues:
+
+We welcome contributions from everyone. If you're interested in helping out, here's how you can support this project:
+
+1. **Fork the repository**: This creates your own copy of the project where you can make your changes.
+
+2. **Clone your fork**: This downloads the repository to your local machine for editing. The command is `git clone https://github.com/your-username/repository-name.git`.
+
+3. **Create a branch**: Changes should be made on a separate branch to allow for review and to keep your code separate from the master branch. The command is `git checkout -b branch-name`.
+
+4. **Make your changes**: Edit the files in your favorite text editor.
+
+5. **Commit your changes**: Save your changes and prepare them for uploading or 'pushing' to GitHub. The command is `git commit -m "Commit message"`.
+
+6. **Push your changes**: Upload your changes to your repository on GitHub. The command is `git push origin branch-name`.
+
+7. **Submit a pull request**: Send your changes to the project maintainer for review. Go to your repository on GitHub, click the 'Pull Request' button, and enter the details of your changes.
+
+Please ensure your contribution adheres to:
+
+- The existing coding style.
+- The code is adequately commented.
+- The code is adequately tested.
+
+Thank you for your interest in contributing! We look forward to reviewing your contribution.
+
+### Pull Requests
+
+The process described here has several goals:
+
+- Maintain the project's quality
+- Fix problems that are important to users
+- Engage the community in working toward the best possible project
+- Enable a sustainable system for the project's maintainers to review contributions
+
+Please follow these steps to have your contribution considered by the maintainers:
+
+1. Follow all instructions in [the template](PULL_REQUEST_TEMPLATE.md)
+2. Follow the [Code Style](#Code-Style)
+3. After you submit your pull request, verify that all status checks are passing
+
+While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
 ## Credits
 
-- [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
-- [Awesome README](https://github.com/matiassingers/awesome-readme)
-- [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+- [Readme Template](https://www.mygreatlearning.com/blog/readme-file/#Q5)
+- [Frontend Template](https://www.creative-tim.com/product/purity-ui-dashboard)
+- [Video Chat Provider JAAS](https://meet.jit.si/)
+- [Best Mern Stack tutorial](https://www.youtube.com/watch?v=98BzS5Oz5E4&list=PL4cUxeGkcC9iJ_KkrkBZWZRHVwnzLIoUE)
 
 ## Authors
 
@@ -328,3 +535,25 @@ SOFTWARE.
 ## Appendix
 
 Any additional information goes here
+
+## How Do I Submit A Good Bug Report?
+
+Bugs are tracked as GitHub issues. Create an issue on the repository and provide the following information:
+
+- Use a clear and descriptive title for the issue to identify the problem.
+- Describe the exact steps which reproduce the problem in as many details as possible. When listing steps, don't just say what you did, but explain how you did it.
+- Provide specific examples to demonstrate the steps. Include links to files or GitHub projects, or copy/pasteable snippets, which you use in those examples. If you're providing snippets in the issue, use Markdown code blocks.
+- Describe the behavior you observed after following the steps and point out what exactly is the problem with that behavior.
+- Explain which behavior you expected to see instead and why.
+- Include screenshots and animated GIFs which show you following the described steps and clearly demonstrate the problem.
+
+## How Do I Submit A Good Enhancement Suggestion?
+
+Enhancement suggestions are tracked as GitHub issues. Create an issue on the repository and provide the following information:
+
+- Use a clear and descriptive title for the issue to identify the suggestion.
+- Provide a step-by-step description of the suggested enhancement in as many details as possible.
+- Provide specific examples to demonstrate the steps or how the enhancement would work. Include copy/pasteable snippets which you use in those examples, as Markdown code blocks.
+- Describe the current behavior and explain which behavior you expected to see instead and why.
+- Include screenshots and animated GIFs which help you demonstrate the steps or point out the part of the project which the suggestion is related to.
+- Explain why this enhancement would be useful to most users and isn't something that can or should be implemented as a community plugin.

@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 fatty and co [add our names here]
+Copyright (c) 2023 Fatty & co™ [add our names here]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
