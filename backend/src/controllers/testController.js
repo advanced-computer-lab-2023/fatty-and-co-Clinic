@@ -7,6 +7,8 @@ const systemUserModel = require("../models/systemusers");
 const requestModel = require("../models/requests");
 const prescriptionModel = require("../models/prescriptions");
 const docSlotsModel = require("../models/docSlots");
+const notifsModel = require("../models/notifications");
+
 
 const { default: mongoose } = require("mongoose");
 const {
@@ -99,7 +101,7 @@ const createAppointment = async (req, res) => {
   //this patient is technically fam member
   if (!FamMemName) {
     console.log("fam");
-    patient = await patientModel.findOne({ Username: username });
+    Familymemebr = await patientModel.findOne({ FamMemName: username });
     patNameFinal = patient.Name;
   } else {
     console.log("user");
@@ -227,7 +229,6 @@ const createPatient = async (req, res) => {
   try {
     await systemUserModel.addEntry(
       username,
-
       password,
       generateEmail(),
       "Patient"
@@ -248,12 +249,97 @@ const createPatient = async (req, res) => {
       Patient: newPat,
       Status: "Unsubscribed",
     });
+    
     res.status(201).json(newPatient);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+// create family member
+/*
+   const newFamilymember = await familyMemberModel.create({
+      Patient: findPatientMain,
+      FamilyMem:familymember,
+     // FamilyMemberUsername:familymember.username,
+      Name: Name,
+      NationalId: NationalId,
+      Age: Age,
+      Gender: Gender,
+      Relation: Relation,
+    });
 
+*/
+
+// const createfamilymember = async (req, res) => {
+//  const  currentuser=req.user.Username;
+// const  currentPatient=await patientModel.find({Username:currentuser});
+//   const {
+//     Username,
+//     Password,
+//     Name,
+//     MobileNum,
+//     NationalId,
+//     relation,
+//     EmergencyContact,
+//     Gender,
+//     DateOfBirth,
+//     PackageName,
+//   } = req.body;
+
+//   const username = Username || generateUsername();
+//   const password = Password || generatePassword();
+//   const name = Name || generateName();
+//   const mobileNum = MobileNum || generateMobileNum();
+//   const nationalId = NationalId || generateNationalId();
+//   const dateOfBirth = DateOfBirth || generateDateOfBirth();
+//   const packageName = PackageName || generatePackage();
+//   const emergencyContact = EmergencyContact || {
+//     FullName: generateName(),
+//     PhoneNumber: generateMobileNum(),
+//   };
+//   const gender = Gender || generateGender();
+
+//   try {
+//     await systemUserModel.addEntry(
+//       username,
+//       password,
+//       generateEmail(),
+//       "Patient"
+//     );
+//     const familyMember = await patientModel.create({
+//       Username: username,
+//       Name: name,
+//       MobileNum: mobileNum,
+//       NationalId: nationalId,
+//       Gender: gender,
+//       EmergencyContact: emergencyContact,
+//       DateOfBirth: dateOfBirth,
+//       PackageName: packageName,
+//     });
+//     const currentDate = new Date();
+//     const dob = new Date(familyMember.DateOfBirth);
+//   const newFamilymember = await familyMemberModel.create({
+//       Patient: currentPatient,
+//       FamilyMem: familyMember,
+//       FamilyMemberUsername: familyMember.Username,
+//       Name: familyMember.Name,
+//       NationalId: familyMember.NationalId,
+//       Age: Math.floor(
+//         Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+//       ),
+//       Gender: familyMember.Gender,
+//       Relation: relation
+//     });
+  
+//     const newUnsubscribed = await subscriptionModel.create({
+//       Patient: familyMember,
+//       Status: "Unsubscribed",
+//     });
+//     res.status(201).json(newFamilymember);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 // create a random appointment
 const createRandomAppointment = async (req, res) => {
   const {
@@ -285,7 +371,6 @@ const createRandomAppointment = async (req, res) => {
       PatientName: patientName,
       Status: status,
       Date: date,
-      BookedBy: patientName,
     });
     res.status(201).json(newApp);
   } catch (error) {
@@ -419,6 +504,18 @@ const getDocSlot = async (req, res) => {
   }
 };
 
+const createNotif = async (req, res) => {
+  try {
+    const {Title, Message, Username} = req.body;
+    const notif = await notifsModel.create({
+      Title, Message, Username, Date: new Date()
+    });
+    res.status(201).json(notif);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createSystemUser,
   createDoctor,
@@ -435,4 +532,5 @@ module.exports = {
   createDocSlot,
   getDocSlot,
   acceptDoc,
+  createNotif,
 };

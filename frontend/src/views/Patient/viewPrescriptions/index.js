@@ -7,7 +7,6 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
-import html2canvas from "html2canvas";
 import jsPdf from "jspdf";
 import logo from "assets/img/ShebeenElkom.png";
 import {
@@ -15,6 +14,7 @@ import {
   Grid,
   Input,
   Flex,
+  Heading,
   FormControl,
   Table,
   Thead,
@@ -32,7 +32,13 @@ import {
   useColorModeValue,
   Select,
   Text,
+  VStack,
+  StackDivider,
 } from "@chakra-ui/react";
+import { BsPrescription2 } from "react-icons/bs";
+import { DownloadIcon } from '@chakra-ui/icons'
+import { jsPDF } from "jspdf";
+import { FaSignature } from "react-icons/fa";
 
 function PrescriptionTable() {
   const { patientUsername } = useParams();
@@ -43,56 +49,44 @@ function PrescriptionTable() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [doctorNames, setDoctorNames] = useState(new Set());
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const textColor = useColorModeValue("gray.700", "white");
 
   useEffect(() => {
-    fetchUniqueDoctorNames();
     fetchPrescriptions();
-  }, [patientUsername]);
+  }, [patientUsername, doctorName, status, date]);
 
-  const fetchUniqueDoctorNames = () => {
-    // Fetch all prescriptions to get unique doctor names
-
+  const fetchPrescriptions = () => {
+    // Construct the URL based on filters and patient username
+    let url = API_PATHS.viewPrescriptions;
+    setIsLoading(true);
     axios
-      .get(API_PATHS.viewPrescriptions, {
+      .post(url, {
+            DoctorName: doctorName,
+            Date: date,
+            Status: status,
+        },{
         headers: {
           Authorization: Authorization,
         },
       })
       .then((response) => {
+        // get unique doctor names for filtering using doctor name
         const uniqueNames = new Set();
         response.data.forEach((prescription) => {
           uniqueNames.add(prescription.DoctorName);
         });
         setDoctorNames(uniqueNames);
-      })
-      .catch((error) => {
-        console.error("Error fetching unique doctor names:", error);
-      });
-  };
-
-  const fetchPrescriptions = () => {
-    // Construct the URL based on filters and patient username
-    let url = API_PATHS.viewPrescriptions;
-
-    if (doctorName) url += `&DoctorName=${doctorName}`;
-    if (date) url += `&Date=${date}`;
-    if (status) url += `&Status=${status}`;
-
-    axios
-      .get(url, {
-        headers: {
-          Authorization: Authorization,
-        },
-      })
-      .then((response) => {
+        console.log(response.data);
         setPrescriptions(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching prescriptions:", error);
+        setIsLoading(false);
       });
   };
 
@@ -122,24 +116,43 @@ function PrescriptionTable() {
   };
 
   const handleStatusChange = (event) => {
-    console.log(event);
     setStatus(event.target.value);
   };
   const handleDateChange = (event) => {
-    console.log(event);
     setDate(event.target.value);
   };
+  
+  const clearSearch = () => {
+    setDoctorName("");
+    setStatus("");
+    setDate("");
+    fetchPrescriptions();
+  }
 
   return (
-    <Box pt="80px">
+    <Box>
       <Flex
         direction="column"
         alignItems="flex-start"
         pt="50px"
         justifyContent="flex-start"
       >
-        <Flex direction="row" alignItems="flex-start">
-          <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+        
+        <Card my="0px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+          <CardHeader p="6px 0px 22px 0px">
+            <Flex direction="column">
+              <Text
+                fontSize="lg"
+                color={textColor}
+                fontWeight="bold"
+                pb=".5rem"
+                marginLeft={6}
+              >
+                Prescriptions
+              </Text>
+            </Flex>
+            <Flex direction="row" alignItems="flex-start">
+          <Grid templateColumns="repeat(5, 1fr)" gap={6} marginLeft={4}>
             <FormControl>
               <Select
                 bg="white"
@@ -176,50 +189,42 @@ function PrescriptionTable() {
             <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
               Search
             </Button>
+            <Button w="100%" h="10" onClick={clearSearch} marginLeft={4}>
+              Clear
+            </Button>
           </Grid>
         </Flex>
-        <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
-          <CardHeader p="6px 0px 22px 0px">
-            <Flex direction="column">
-              <Text
-                fontSize="lg"
-                color={textColor}
-                fontWeight="bold"
-                pb=".5rem"
-              >
-                Prescriptions
-              </Text>
-            </Flex>
           </CardHeader>
           <CardBody>
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th>Doctor Name</Th>
-                  <Th>Date</Th>
                   <Th>Diagnosis</Th>
+                  <Th>Doctor Name</Th>
                   <Th>Status</Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {prescriptions.map((prescription) => (
                   <Tr
                     key={prescription._id}
-                    onClick={() => openModal(prescription._id)}
                   >
+                    <Td>
+                        <Heading as="h4" size="md" color="teal">
+                            {prescription && prescription.Diagnosis
+                        ? prescription.Diagnosis
+                        : "N/A"}
+                        </Heading>
+                        <Text fontSize="s" color="gray.500">
+                            Diagnosed on {" "} {prescription && prescription.Date
+                        ?  new Date(prescription.Date).toLocaleDateString("en-GB")
+                        : "N/A"}
+                        </Text>
+                    </Td>
                     <Td>
                       {prescription && prescription.DoctorName
                         ? prescription.DoctorName
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Date
-                        ?  new Date(prescription.Date).toLocaleDateString("en-GB")
-                        : "N/A"}
-                    </Td>
-                    <Td>
-                      {prescription && prescription.Diagnosis
-                        ? prescription.Diagnosis
                         : "N/A"}
                     </Td>
                     <Td>
@@ -227,11 +232,17 @@ function PrescriptionTable() {
                         ? prescription.Status
                         : "N/A"}
                     </Td>
+                    <Td>
+                        <Button colorScheme="teal" variant="solid" 
+                            rightIcon={<BsPrescription2 />} onClick={() => openModal(prescription._id)}>
+                            View Prescribed Medicines
+                        </Button>
+                    </Td>
                   </Tr>
                 ))}
-              </Tbody>
+                </Tbody>
             </Table>
-          </CardBody>
+            </CardBody>
         </Card>
       </Flex>
       {selectedPrescription && (
@@ -242,74 +253,98 @@ function PrescriptionTable() {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Prescription Details</ModalHeader>
+            <ModalHeader>Medicine Prescribed</ModalHeader>
             <ModalCloseButton />
-
             <ModalBody>
-              <p>Doctor Name: {selectedPrescription.DoctorName}</p>
-              <p>Date: {new Date(selectedPrescription.Date).toLocaleDateString("en-GB")}</p>
-              <p>Diagnosis: {selectedPrescription.Diagnosis}</p>
-              <p>Status: {selectedPrescription.Status}</p>
-              <p>Medicines:</p>
-              <ul style={{ listStyleType: "lower-alpha", marginLeft: "40px" }}>
+              <ul className="myList" style={{  marginLeft: "40px" }}>
                 {selectedPrescription.Medicine.map((medicine, index) => (
-                  <li key={index}>{medicine.Name}</li>
+                  <li key={index}><span className="medicine-name">{medicine.Name}</span>
+                  <span className="medicine-dosage">{", " + medicine.Dosage + " mg"}</span> </li>
                 ))}
               </ul>
+              <style>
+                {
+                  //css for the prescription details
+                  `
+                  .myList li .medicine-name {
+                    font-weight: bold;
+                    color: #2c3e50;
+                  }
+                  
+                  .myList li .medicine-dosage {
+                    font-style: italic;
+                    color: #7f8c8d;
+                  }
+                  `
+
+                }
+              </style>
               <Button
                 id="print-button"
                 style={{ marginTop: "20px" }}
+                // ...
+
                 onClick={(e) => {
-                  const doc = new jsPdf();
+                  const doc = new jsPDF();
                   //write the prescription details text with css
                   let y = 23;
                   doc.addImage(logo, 50, 10, 20, 20);
+                  
                   doc.setTextColor("teal");
                   doc.setFontSize(20);
                   doc.text("SHEBEEN HEALTH ClINC", 75, y);
+                  doc.setFont("Arial", "normal"); // Set font family and style
                   doc.setTextColor("black");
                   doc.setFontSize(16);
                   y += 15;
                   doc.text("Prescription", 15, y);
                   doc.setFontSize(10);
                   y += 8;
-                  // doc.text(
-                  //   "Patient Name: " + ,
-                  //   20,
-                  //   y
-                  // );
-                  // y += 8;
                   doc.text("Date: " + new Date(selectedPrescription.Date).toLocaleDateString("en-GB"), 20, y);
                   y += 8;
-                  doc.text(
-                    "Diagnosis: " + selectedPrescription.Diagnosis,
-                    20,
-                    y
-                  );
+                  doc.text("Diagnosis: " + selectedPrescription.Diagnosis, 20, y);
                   y += 8;
                   doc.text("Status: " + selectedPrescription.Status, 20, y);
                   y += 8;
-                  doc.text("Medicines: ", 20, y);
+
+                  // Table headers
+                  doc.setFont("Arial", "bold");
                   doc.setFontSize(12);
-                  y += 8;
-                  //write the medicines list with css
+                  doc.setTextColor("white");
+                  doc.setFillColor(0, 128, 128); // Set table header background color to teal
+                  doc.rect(20, y, 80, 10, "F");
+                  doc.text("Medicine", 25, y + 8);
+                  doc.text("Dosage", 75, y + 8);
+                  y += 18;
+
+                  doc.setFont("Arial", "normal");
+                  doc.setFontSize(12);
+                  doc.setTextColor("black");
+
+                  // Table rows
                   selectedPrescription.Medicine.forEach((medicine, index) => {
                     doc.text(medicine.Name, 25, y);
+                    doc.text(medicine.Dosage + " mg", 77, y);
                     y += 10;
                   });
+
                   doc.setFontSize(10);
-                  doc.text(
-                    "Doctor Signature " ,
-                    150,
-                    y
-                  );
+                  doc.setFont("Arial", "normal"); // Set font family and style for doctor name
+                  doc.text("Doctor Signature ", 150, y);
                   y += 8;
+                  
+                  doc.setFont("Arial", "italic"); // Set font family and style for doctor signature
                   doc.text(selectedPrescription.DoctorName, 150, y);
+
+                  // Add signature icon
+                  // const signatureIcon = doc.splitTextToSize(FaSignature({ size: 20 }), 20);
+                  // doc.addImage(signatureIcon, 150, y + 10, 20, 20);
 
                   doc.save("Prescription.pdf");
                 }}
               >
                 Download
+                <DownloadIcon ml={2} />
               </Button>
             </ModalBody>
           </ModalContent>

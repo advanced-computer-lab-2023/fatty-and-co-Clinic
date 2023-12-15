@@ -7,10 +7,13 @@ const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
 const Patient = require("../models/patients");
+const appointmentModel=require("../models/appointments");
 const prescriptionModel = require("../models/prescriptions");
+const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+
 const {
   findFiles,
   findFileByFilename,
@@ -28,6 +31,7 @@ const {
   generateGender,
 } = require("../common/utils/generators");
 //hi Kholoud
+
 // const createPatient = async (req, res) => {
 //   const {
 //     Username,
@@ -103,6 +107,17 @@ const getPatient = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+const getPatientInfo = async (req, res) => {
+  try{
+    var username = req.user.Username;
+    const patient = await patientModel.findOne({ Username: username });
+    const user = await systemUserModel.findOne({ Username: username });
+    res.status(200).send({patient, user});
+  }catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
 
 //find patient by username
 const getPatientUsername = async (req, res) => {
@@ -1023,6 +1038,27 @@ const viewHealthPackage = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+// returns whole subscription with package
+const viewSubscribedPackage = async (req, res) => {
+  try {
+    const current_user = req.user.Username; //changed this
+    const patient = await patientModel.findOne({ Username: current_user });
+    const subscription = await subscriptionModel
+      .findOne({ Patient: patient, Status: "Subscribed" })
+      .populate("Patient")
+      .populate("Package");
+    if (subscription) {
+      const package = subscription.Package;
+      res.status(200).send({subscription, package});
+    } else {
+      res.status(404).send({ Error: "Cannot find any current subscriptions!" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
 const viewHealthPackagewithstatus = async (req, res) => {
   try {
     const current_user = req.user.Username;
@@ -1306,7 +1342,7 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
+      .find({  $and: [{ Patient: patient }, { FamilyMem: { $ne: patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
     res.status(200).send(fam);
@@ -1338,10 +1374,10 @@ const selectPatient = async (req, res) => {
 // Get prescriptions of a given patient. Can also be filtered
 // using `DoctorUsername` or `Date` or `Status`.
 const getPrescriptions = async (req, res) => {
-  const query = req.query;
+  const query = req.body;
   // console.log(query);
   const patientUsername = req.user.Username; // Extract patientUsername
-  // console.log(req.params.patientUsername);
+  // console.log(patientUsername);
 
   try {
     const baseQuery = { PatientUsername: patientUsername };
@@ -1616,27 +1652,39 @@ const uploadFile = async (req, res) => {
   }
 };
  */
+/*{
+  "Username":"Alaa1000",
+  "Name":"ALaa",
+  "Password":"Alaa1000!",
+  "Email":"Hany123@yahoo.com",
+  "MobileNum":"01288998877",
+  "NationalId":"0000000000000099",
+  "DateOfBirth":"2012-11-07T08:00:00.010+00:00",
+  "Gender":"M",
+  "relation":"Child",
+  "EmergencyContactNumber":"01299999999",
+  "EmergencyContactName":"HANA"
+} */
 const createFamilymember = async (req, res) => {
-  const currentuser = req.user.Username;
-  const currentPatient = await patientModel.findOne({ Username: currentuser });
-  console.log("current patient ");
-  console.log(currentPatient);
-  const {
-    Username,
-    Name,
-    Password,
-    Email,
-    MobileNum,
-    NationalId,
-    DateOfBirth,
-    Gender,
-    relation,
-    EmergencyContactNumber,
-    EmergencyContactName,
-    Wallet,
-  } = req.body;
-
-  try {
+  const  currentuser=req.user.Username;
+ const  currentPatient=await patientModel.findOne({Username:currentuser});
+ console.log("current patient ");
+ console.log(currentPatient);
+ const  {
+  Username,
+  Name,
+  Password,
+  Email,
+  MobileNum,
+  NationalId,
+  DateOfBirth,
+  Gender,
+  relation,
+  Wallet,
+} = req.body;
+ 
+ //taste test
+   try {
     const user = await systemUserModel.addEntry(
       Username,
       Password,
@@ -1652,36 +1700,27 @@ const createFamilymember = async (req, res) => {
       DateOfBirth: DateOfBirth,
       Gender: Gender,
       EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
+        FullName: currentuser.Name,
+        PhoneNumber: currentuser.PhoneNumber,
+        Relation:(relation === "Child") ? "Father" : "Spouse"
       },
       LinkedPatients: [],
       Wallet: Wallet,
     });
 
-    console.log("here is the family member ");
-
-    const Familymemberfound = await patientModel.findOne({
-      Username: Username,
-    });
-    console.log(Familymemberfound);
-    const currentDate = new Date();
-    const dob = new Date(DateOfBirth);
-    const dob1 = new Date(currentPatient.DateOfBirth);
-
-    const newFamilymember = await familyMemberModel.create({
-      Patient: currentPatient,
-      FamilyMem: Familymemberfound,
-      FamilyMemberUsername: Username,
-      Name: Name,
-      NationalId: NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-      ),
-      Gender: Gender,
-      Relation: relation,
-    });
-    const newFamilymember2 = await familyMemberModel.create({
+   const newFamilymember = await familyMemberModel.create({
+       Patient: currentPatient,
+       FamilyMem:Familymemberfound,
+       FamilyMemberUsername: Username,
+       Name: Name,
+       NationalId: NationalId,
+       Age: Math.floor(
+         Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+       ),
+       Gender: Gender,
+       Relation: relation
+     });
+     const newFamilymember2 = await familyMemberModel.create({
       Patient: Familymemberfound,
       FamilyMem: currentPatient,
       FamilyMemberUsername: currentPatient.Username,
@@ -1691,7 +1730,7 @@ const createFamilymember = async (req, res) => {
         Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
       ),
       Gender: currentPatient.Gender,
-      Relation: currentPatient.relation,
+ 
     });
 
     const newUnsubscribed = await subscriptionModel.create({
@@ -1724,8 +1763,9 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       NationalId: NationalId,
     });
     if (famrelated == null) {
-      res.status(400).send({ error: "Family member not related to you " });
-    } else if (subscribed) {
+      res.status(400).send({ Error: "Family member not related to you " });
+    } 
+   else if (subscribed) {
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
@@ -1759,6 +1799,30 @@ const viewUpcomingAppointmentsPat = async (req, res) => {
     res.status(500).json(error);
   }
 };
+const viewfamilymembersappointments = async (req, res) => {
+  const username = req.user.Username;
+  const {Status}=req.body;
+  try {
+    const appointments = await appointmentModel.find(
+      {
+        PatientUsername: { $ne: username }, // Filter for PatientUsername not equal to username
+        Status: Status, // Assuming 'Status' field is for filtering upcoming appointments
+        BookedBy: username // Filter for appointments booked by the current user
+      }
+    );
+
+    if (appointments.length === 0) {
+      return res.status(404).json({ message: "No appointments found." });
+    }
+
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+
 
 //make sure from the ta that past appointments is completed bas
 const viewPastAppoitmentsPat = async (req, res) => {
@@ -1780,7 +1844,63 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
-const getFamSessionCost = async (req, res) => {
+const followupAppointment = async (req, res) => {
+
+  try {
+    const doctorUsername = req.query.DoctorUsername;
+    const familyMemberUsername = req.body.FamilyMemberUsername;
+    const patientUsername = req.user.Username;
+    const date = new Date(req.query.date);
+    const today = new Date();
+    const doctor = await doctorModel.findOne({
+      Username: doctorUsername,
+    });
+
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      if(familyMemberUsername){
+        const patient = await patientModel.findOne({
+          Username: familyMemberUsername,
+        });
+        const request = await requestModel.create({
+          DoctorUsername: doctorUsername,
+          DoctorName: doctor.Name,
+          PatientUsername: patientUsername,
+          PatientName: patient.Name,
+          Status: "Pending",
+          FollowUp: true,
+          Date: date,
+        });
+        res.status(200).json(request);
+
+      }
+      else {
+        const patient = await patientModel.findOne({
+          Username: patientUsername,
+        });
+        const request = await requestModel.create({
+        DoctorUsername: doctorUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Pending",
+        FollowUp: true,
+        Date: date,
+      });
+      res.status(200).json(request);
+
+      }
+      
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+const getFamSessionCost = async (req,res) => {
   const username = req.user.Username;
   const famName = req.query.FamName;
   try {
@@ -1813,6 +1933,7 @@ module.exports = {
   viewHealthFam,
   viewOptionPackages,
   viewHealthPackage,
+  viewSubscribedPackage,
   session_index,
   createFamilymember,
   getFamilymembers,
@@ -1822,6 +1943,7 @@ module.exports = {
   getAllPatients,
   deletePatient,
   getPatient,
+  getPatientInfo,
   updatePatient,
   selectPrescription,
   getEmergencyContact,
@@ -1836,5 +1958,7 @@ module.exports = {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
+  viewfamilymembersappointments,
   getWalletAmount,
+  followupAppointment,
 };

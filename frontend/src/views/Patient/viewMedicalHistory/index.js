@@ -40,7 +40,7 @@ function MedicalHistoryI() {
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
         {healthRecords && (
-          <HealthRecordInformation title={"Uploaded Health Records"} data={healthRecords} />
+          <HealthRecordInformation title={"Health Records and Medical History"} data={healthRecords} />
         )}
 
         <HealthRecordForm />

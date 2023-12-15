@@ -1,9 +1,5 @@
 import {
-  Avatar,
-  AvatarGroup,
   Flex,
-  Icon,
-  Progress,
   Td,
   Text,
   Tr,
@@ -14,10 +10,17 @@ import {
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
+import AddPrescriptionButton from "views/Doctors/viewAppointments/components/addPrescriptionButton";
+import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
+import UpdatePrescription from "views/Doctors/viewAppointments/components/UpdatePrescription";
+import { useAuthContext } from "hooks/useAuthContext";
+// import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 function AppointmentsRow(props) {
   const {
+    customkey,
     DoctorName,
+    DoctorUsername,
     PatientName,
     PatientUsername,
     Status,
@@ -69,7 +72,7 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "150px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px" padding="10px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="md"
@@ -82,7 +85,7 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "150px" }}>
+      <Td minWidth={{ sm: "190px" }} padding="10px">
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
           {new Date(DateTime).toLocaleDateString("en-GB")}
         </Text>

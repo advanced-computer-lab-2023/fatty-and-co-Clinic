@@ -28,16 +28,19 @@ import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
+import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
-import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
+//import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
+import PatientProfile from "views/Patient/viewProfile";
+
 
 import {
   HomeIcon,
@@ -48,6 +51,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+import DoctorProfile from "views/Doctors/viewProfile";
 
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
@@ -91,13 +95,13 @@ var dashRoutes = [
     component: ViewMyPackageswithstatus,
     layout: "/patient",
   },
-  {
-    path: "/ViewFamPackageswithstatus",
-    name: "Family Subscriptions",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewFamPackageswithstatus,
-    layout: "/patient",
-  },
+  // {
+  //   path: "/ViewFamPackageswithstatus",
+  //   name: "Family Subscriptions",
+  //   icon: <HomeIcon color="inherit" />,
+  //   component: ViewFamPackageswithstatus,
+  //   layout: "/patient",
+  // },
 
   {
     path: "/package",
@@ -114,9 +118,15 @@ var dashRoutes = [
     component: PatientAppointments,
     layout: "/patient",
   },
-
   {
-    path: "/Subscribtions/",
+    path: "/viewfamAppoint",
+    name: "View family Appointments ",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamilyApp,
+    layout: "/patient",
+  },
+  {
+    path: "/Subscribtions",
     name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -262,7 +272,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/medicalhistory/:patientUsername",
+    path: "/medicalhistory",
     name: "Medical History",
     icon: <HomeIcon color="inherit" />,
     component: MedicalHistoryPatient,
@@ -348,6 +358,20 @@ var dashRoutes = [
     icon: <RocketIcon color="inherit" />,
     component: WalletPayment,
     layout: "/patient",
+    show: false,
+  },
+  {
+    path: "/profile",
+    name: "View patient profile",
+    component: PatientProfile,
+    layout: "/patient",
+    show: false,
+  },
+  {
+    path: "/profile",
+    name: "View doctor profile",
+    component: DoctorProfile,
+    layout: "/doctor",
     show: false,
   },
 

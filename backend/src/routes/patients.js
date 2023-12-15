@@ -10,13 +10,16 @@ const {
   updateFamCredit,
   updateSubscription,
   payForFamSubscription,
+  followupAppointment,
   cancelSubscription,
   viewHealthFam,
   viewHealthPackage,
+  viewSubscribedPackage,
   subscribepackagefamilymem,
   getAllPatients,
   deletePatient,
   getPatient,
+  getPatientInfo,
   updatePatient,
   getPatientUsername,
   viewOptionPackages,
@@ -34,6 +37,8 @@ const {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
+  viewfamilymembersappointments,
+  resch
 } = require("../controllers/patientController");
 
 const { constants } = require("buffer");
@@ -79,6 +84,7 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
+router.get("/getPatientInfo", getPatientInfo)
 router.get("/getOptionPackages", viewOptionPackages);
 router.patch("/getAmountCredit", getAmountSubscription); //gets amount to be paid for self
 router.patch("/getAmountCreditFam", getAmountFam); //gets amount to be paid for fam
@@ -122,6 +128,14 @@ router.get("/getPatientUsername/:Username", getPatientUsername);
  * @prop {string} Speciality - The speciality of the doctor to search for
  */
 router.get("/view/doctors/", checkPatient, session_index);
+/**
+ * @route GET familymembers appointments 
+ * @desc Returns appoiments 
+ * @access Public
+
+ */
+router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
+
 
 /**
  * @route POST /patients/createFamilymember
@@ -149,7 +163,7 @@ router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of par
  * @access Public
  */
 // TODO: add type check as middleware if needed
-router.get("/getPrescriptions", getPrescriptions);
+router.post("/getPrescriptions",checkPatient, getPrescriptions);
 
 /**
  * @route POST /patients/uploadFile
@@ -190,6 +204,8 @@ router.delete("/removeHealthRecord/:filename", removeHealthRecord);
  */
 router.get("/selectPatient", selectPatient);
 
+router.post("/requestfollowupAppointment", checkPatient, followupAppointment);
+
 /**
  * @route GET /patients/selectPrescription
  * @desc Returns a prescription by ID
@@ -208,6 +224,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/linkPatient", linkPatient);
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
+router.get("/viewSubscription",viewSubscribedPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);
 router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
   viewUpcomingAppointmentsPat(req, res);
