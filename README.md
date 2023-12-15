@@ -4,7 +4,7 @@
 This project is a virtual clinic website for remotely booking and holding medical appointments.
 
 
-![Logo](https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Menoufia_Governorate.PNG)
+![Logo](./frontend/src/assets/img/ShebeenElkom.png)
 
 
 ## Motivation
