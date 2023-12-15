@@ -37,6 +37,7 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
+import { IoEyeSharp } from "react-icons/io5";
 import { DownloadIcon } from "@chakra-ui/icons";
 import { jsPDF } from "jspdf";
 import { FaSignature } from "react-icons/fa";
@@ -245,10 +246,11 @@ function PrescriptionTable() {
                         : "N/A"}
                     </Td>
                     <Td>
-                      <Flex justifyContent="center">
+                      <Flex justifyContent="flex-end">
                         <Button
                           colorScheme="teal"
                           variant="solid"
+                          leftIcon={<IoEyeSharp />}
                           rightIcon={<BsPrescription2 />}
                           onClick={() => openModal(prescription._id)}
                         >

@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-import { IoAddCircleSharp } from "react-icons/io5";
+import { MdLocalPharmacy } from "react-icons/md";
 
 import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -60,7 +60,7 @@ export default function OrderPrescription({ appointmentId }) {
       <Button
         colorScheme="teal"
         variant="solid"
-        rightIcon={<IoAddCircleSharp />}
+        rightIcon={<MdLocalPharmacy />}
         onClick={handleSubmit}
       >
         Add To Pharmacy Cart
