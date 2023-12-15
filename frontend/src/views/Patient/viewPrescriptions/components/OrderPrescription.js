@@ -15,16 +15,19 @@ export default function OrderPrescription({ appointmentId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("appointmentId" + appointmentId);
     try {
       const response = await fetch(API_PATHS.addToCart, {
         method: "POST",
         headers: {
           Authorization,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ appointmentId }),
       });
+      console.log("response " + response.data);
       console.log("Response", response.status);
-      if (response.ok) {
+      if (response.status === 200) {
         toast({
           title: "prescription added to cart",
           description:

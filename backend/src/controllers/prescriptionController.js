@@ -1,3 +1,4 @@
+const { addMedicineToCart } = require("./cartController");
 const { trusted } = require("mongoose");
 const appointmentModel = require("../models/appointments");
 const { default: mongoose } = require("mongoose");
@@ -12,6 +13,7 @@ const doctorModel = require("../models/doctors");
 const { MongoClient } = require("mongodb");
 const axios = require("axios");
 const prescriptionsModel = require("../models/prescriptions");
+const cartModel = require("../models/cart");
 
 const addPrescription = async (req, res) => {
   try {
@@ -210,30 +212,47 @@ const updateDescription = async (req, res) => {
 };
 const placeOrder = async (req, res) => {
   try {
-    const { appointmentId } = req.query;
+    console.log(req.body);
+    const { appointmentId } = req.body;
+    console.log(appointmentId);
     const username = req.user.Username;
+    console.log("username" + username);
     const password = req.user.Password;
+    console.log("password" + password);
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
-    const patient = await patientModel.findOne({
-      Username: prescription.PatientUsername,
-    });
+    console.log("appointmentId" + appointmentId);
     // const TotalCost = await calculatePrescriptionCost(req, res);
     const med = await medicineModel.find({
       Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
     });
-    for (const medicine of med) {
+    for (var medicine of med) {
+      console.log(medicine.Name);
+      console.log("quantity" + medicine.Quantity);
       if (medicine.Quantity < 1) {
-        med.pull(medicine);
+        med.splice(med.indexOf(medicine), 1);
         console.log(medicine.Name + " is out of stock");
       }
     }
-    await axios.post("http://localhost:7000/guest/cartLogin", {
-      Username: username,
-      Password: password,
-      Medicines: med,
-    });
+    console.log("med" + med + "ay 7aga");
+    //find user's cart
+    const cart = await cartModel.findOne({ PatientUsername: username });
+    console.log("cart" + cart);
+    //call add medicine to cart for each in med
+    for (var medicine of med) {
+      console.log("medicine" + medicine);
+      cart.TotalCost += medicine.Price;
+      cart.Medicine.push(medicine);
+      await cart.save();
+    }
+    // await axios.post("http://localhost:7000/guest/cartLogin", {
+    //   body: {
+    //     Username: username,
+    //     Password: "Pa55word!",
+    //     Medicines: med,
+    //   },
+    // });
     res.status(200).json({ message: "Medicines added to cart successfully." });
   } catch (error) {
     res.status(400).send({ message: error.message });

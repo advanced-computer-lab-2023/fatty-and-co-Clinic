@@ -88,6 +88,7 @@ function PrescriptionTable() {
         console.log(response.data);
         setPrescriptions(response.data);
         setIsLoading(false);
+        console.log(prescriptions);
       })
       .catch((error) => {
         console.error("Error fetching prescriptions:", error);
