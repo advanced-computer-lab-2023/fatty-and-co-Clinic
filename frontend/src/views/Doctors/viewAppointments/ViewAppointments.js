@@ -6,7 +6,8 @@ import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 import { useHistory } from "react-router-dom";
-
+//const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}`;
+//history.replace(redirectUrl);
 export default function ViewAppointmentsInner() {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
   const [patientUsername, setPatientUsername] = useState("");
@@ -46,6 +47,8 @@ export default function ViewAppointmentsInner() {
 
   const handleRescheduleAppoinmtent=(patientUsername)=>{
    setPatientUsername(patientUsername);
+   const redirectUrl=`doctor/viewMySlots/?username=${patientUsername}`
+   history.replace(redirectUrl)
   }
 
 

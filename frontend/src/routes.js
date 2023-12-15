@@ -9,6 +9,7 @@ import SignUp from "views/Auth/SignUp";
 import DocAcc from "views/Auth/docAccepted";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
+import rescheduleApp from "views/Doctors/rescheduleAppDet/rescheduleApp";
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
@@ -19,6 +20,7 @@ import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import createFamilymember from "views/Patient/createFamilyMember";
 import viewDoctors from "views/Patient/viewDoctors";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
+import ViewMySlots from "views/Doctors/viewMySlotDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
@@ -229,7 +231,14 @@ var dashRoutes = [
     component: DeleteUser,
     layout: "/admin",
   },
-
+  {
+    path: "/viewMySlots/:username",
+    name: "View Doctor Details",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewMySlots,
+    layout: "/doctor",
+   show: false, // Add this to hide route from sidebar
+  },
   {
     path: "/viewDoctorDetails/:username",
     name: "View Doctor Details",
@@ -239,6 +248,14 @@ var dashRoutes = [
    show: false, // Add this to hide route from sidebar
   },
 
+  {
+    path: "/rescheduleApp/:row",
+    name: "Reschedule",
+    icon: <HomeIcon color="inherit" />,
+    component: rescheduleApp,
+    layout: "/doctor",
+   show: false, // Add this to hide route from sidebar
+  },
   {
     path: "/bookAptDetails/:row",
     name: "Book Appointment Details",
