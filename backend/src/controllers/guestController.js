@@ -5,6 +5,8 @@ const requestModel = require("../models/requests");
 const patientModel = require("../models/patients");
 const subscriptionModel = require("../models/subscriptions");
 const cartModel = require("../models/cart");
+const notificationsModel = require("../models/notifications");
+
 
 const bcrypt = require("bcrypt");
 const { validatePassword } = require("../common/utils/validators");
@@ -306,6 +308,16 @@ const createPatient = async (req, res) => {
   }
 };
 
+const getNotifs = async (req, res) => {
+  try {
+    const notifs = await notificationsModel.find({Username: req.user.Username});
+    const count = notifs.length;
+    res.status(200).send({ notifs, count });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
 module.exports = {
   createRequest,
   updateRequest,
@@ -316,4 +328,5 @@ module.exports = {
   sendOTP,
   validateOTP,
   resetPass,
+  getNotifs,
 };
