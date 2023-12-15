@@ -694,7 +694,9 @@ const cancelAppForFam = async (req, res) => {
   try {
 
      const patientSignedIn= req.user.Username
-     const {doctorUsername,patientUsername}=req.body
+     const {doctorUsername,patientUsername}=req.body;
+     console.log(doctorUsername);
+     console.log(patientUsername);
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername, Status:"Upcoming"})
      const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername})
      const user = await User.findOne({Username: patientUsername});
@@ -889,7 +891,9 @@ function getSessionPrice(hourlyRate, packageDiscount) {
     // EndTime,
   }  */
 
-
+/* DoctorId,
+                Date,
+                FamMemName, */
 const createAppointment = async (req, res) => {
   const username = req.user.Username;
   var patient;
@@ -919,8 +923,8 @@ const createAppointment = async (req, res) => {
   const doc = await User.findOne({Username: DoctorUsername});
   try {
     const newApp = await appointmentModel.create({
-      DoctorUsername,
-      DoctorName,
+     DoctorUsername: doctor.Username,
+      DoctorName:doctor.Name,
       PatientUsername: PatientUsernameFinal,
       PatientName,
       Status,
@@ -1157,5 +1161,4 @@ module.exports = {
   testAppointRef,
   rescheduleAppointmentPatient,
   reschedulefamilymember
-
-};
+}
