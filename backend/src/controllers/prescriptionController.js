@@ -67,13 +67,14 @@ const getPrescriptionMeds = async (req, res) => {
 
 const addMedToPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicine, dosage } = req.query;
+    const { appointmentId, medicine, dosage, description } = req.query;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
     const medicines = {
       Name: medicine,
       Dosage: dosage,
+      Description: description,
     };
     prescription.Medicine.push(medicines);
     await prescription.save();
@@ -178,37 +179,71 @@ const updateDosage = async (req, res) => {
 // };
 
 //place an order to the pharmacy using the medicine list
-const placeOrder = async (req, res) => {
-  try {
-    const { appointmentId } = req.query;
-    const prescription = await prescriptionsModel.findOne({
-      AppointmentId: appointmentId,
-    });
-    const patient = await patientModel.findOne({
-      Username: prescription.PatientUsername,
-    });
-    // const TotalCost = await calculatePrescriptionCost(req, res);
-    const med = await medicineModel.find({
-      Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
-    });
-    for (const medicine of med) {
-      await axios.post("http://localhost:7000/cart/addToCart", {
-        Medicine: medicine, // Pass a single medicine in an array
-      });
-    }
-    res.status(200).json({ message: "Medicines added to cart successfully." });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
+const updateDescription = async (req, res) => {
+  const AppointmentId = req.query.AppointmentId;
+  const medicineName = req.query.medicineName;
+  const newDescription = req.query.description;
 
-module.exports = {
-  addPrescription,
-  addMedToPrescription,
-  deleteMedFromPrescription,
-  updateDosage,
-  checkForPrescription,
-  // calculatePrescriptionCost,
-  placeOrder,
-  getPrescriptionMeds,
+  const prescription = await prescriptionsModel.findOne({
+    AppointmentId: AppointmentId,
+  });
+
+  if (!prescription) {
+    return res.status(404).json({ message: "Prescription not found." });
+  }
+
+  const medicineToUpdate = prescription.Medicine.find(
+    (medicine) => medicine.Name === medicineName
+  );
+
+  if (!medicineToUpdate) {
+    return res
+      .status(404)
+      .json({ message: "Medicine not found in the prescription." });
+  }
+
+  medicineToUpdate.Description = newDescription;
+
+  const updatedPrescription = await prescription.save();
+
+  res.status(200).json(updatedPrescription);
+};
+const calculatePrescriptionCost = async (req, res) => {
+  const placeOrder = async (req, res) => {
+    try {
+      const { appointmentId } = req.query;
+      const prescription = await prescriptionsModel.findOne({
+        AppointmentId: appointmentId,
+      });
+      const patient = await patientModel.findOne({
+        Username: prescription.PatientUsername,
+      });
+      // const TotalCost = await calculatePrescriptionCost(req, res);
+      const med = await medicineModel.find({
+        Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
+      });
+      for (const medicine of med) {
+        await axios.post("http://localhost:7000/cart/addToCart", {
+          Medicine: medicine, // Pass a single medicine in an array
+        });
+      }
+      res
+        .status(200)
+        .json({ message: "Medicines added to cart successfully." });
+    } catch (error) {
+      res.status(400).send({ message: error.message });
+    }
+  };
+
+  module.exports = {
+    addPrescription,
+    addMedToPrescription,
+    deleteMedFromPrescription,
+    updateDosage,
+    checkForPrescription,
+    // calculatePrescriptionCost,
+    placeOrder,
+    getPrescriptionMeds,
+    updateDescription,
+  };
 };
