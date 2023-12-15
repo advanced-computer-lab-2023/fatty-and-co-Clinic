@@ -210,7 +210,9 @@ const updateDescription = async (req, res) => {
 };
 const placeOrder = async (req, res) => {
   try {
-    const { appointmentId, pharmacyUsername, pharmacyPassword } = req.query;
+    const { appointmentId } = req.query;
+    const username = req.user.Username;
+    const password = req.user.Password;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
@@ -228,24 +230,24 @@ const placeOrder = async (req, res) => {
       }
     }
     await axios.post("http://localhost:7000/guest/cartLogin", {
-      Username: pharmacyUsername,
-      Password: pharmacyPassword,
+      Username: username,
+      Password: password,
       Medicines: med,
     });
     res.status(200).json({ message: "Medicines added to cart successfully." });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
+};
 
-  module.exports = {
-    addPrescription,
-    addMedToPrescription,
-    deleteMedFromPrescription,
-    updateDosage,
-    checkForPrescription,
-    // calculatePrescriptionCost,
-    placeOrder,
-    getPrescriptionMeds,
-    updateDescription,
-  };
+module.exports = {
+  addPrescription,
+  addMedToPrescription,
+  deleteMedFromPrescription,
+  updateDosage,
+  checkForPrescription,
+  // calculatePrescriptionCost,
+  placeOrder,
+  getPrescriptionMeds,
+  updateDescription,
 };

@@ -13,11 +13,11 @@ import CreateFollowUpButton from "views/Doctors/viewAppointments/components/Crea
 import AddPrescriptionButton from "views/Doctors/viewAppointments/components/addPrescriptionButton";
 import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
 import UpdatePrescription from "views/Doctors/viewAppointments/components/UpdatePrescription";
-import OrderPrescription from "views/Patient/viewAppointPat/components/OrderPrescription";
 import { useAuthContext } from "hooks/useAuthContext";
 // import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 function AppointmentsRow(props) {
+  const { user } = useAuthContext();
   const {
     customkey,
     DoctorName,
@@ -116,8 +116,6 @@ function AppointmentsRow(props) {
             <UpdatePrescription customkey={customkey} />
           </Td>
         )}
-
-        //add button for the user to order prescription
       </Stack>
     </Tr>
   );
