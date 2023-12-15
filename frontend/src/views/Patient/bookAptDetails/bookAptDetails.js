@@ -38,7 +38,9 @@ export function bookAptDetails() {
   //   const { row } = useParams();
   //   console.log(useParams());
   const location = useLocation();
+  console.log(location);
   const { state } = location;
+  console.log(state);
   let StartTime = state.StartTime;
   let DayName = state.DayName;
   let DoctorId = state.DoctorId;

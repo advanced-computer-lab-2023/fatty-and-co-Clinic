@@ -681,7 +681,9 @@ const cancelAppForFam = async (req, res) => {
   try {
 
      const patientSignedIn= req.user.Username
-     const {doctorUsername,patientUsername}=req.body
+     const {doctorUsername,patientUsername}=req.body;
+     console.log(doctorUsername);
+     console.log(patientUsername);
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername, Status:"Upcoming"})
      var refund=0
      const currDate= new Date()
@@ -769,7 +771,9 @@ function getSessionPrice(hourlyRate, packageDiscount) {
   }  */
 
 
-
+/* DoctorId,
+                Date,
+                FamMemName, */
 const createAppointment = async (req, res) => {
   const username = req.user.Username;
   var patient;
@@ -777,7 +781,7 @@ const createAppointment = async (req, res) => {
   var familymember;
   patient = await patientModel.findOne({ Username: username });
 //const familymember=null;
-  const { DoctorUsername, FamMemName, Date } = req.body;
+  const { DoctorId,  Date ,FamMemName} = req.body;
  // console.log("body: " + req.body.FamMemName);
   //this patient is technically fam member
   if (FamMemName) {
@@ -786,9 +790,9 @@ const createAppointment = async (req, res) => {
   } else {
     patNameFinal = patient;
   }
-  console.log(DoctorUsername);
+ // console.log(DoctorUsername);
   //console.log(doctor);
-  const doctor = await doctorModel.findOne({Username:DoctorUsername});
+  const doctor = await doctorModel.findById(DoctorId)
   console.log(doctor);
   const PatientUsernameFinal = patNameFinal.Username;
   const PatientName=patNameFinal.Name;
@@ -796,8 +800,8 @@ const createAppointment = async (req, res) => {
   const Status = "Upcoming";
   try {
     const newApp = await appointmentModel.create({
-      DoctorUsername,
-      DoctorName,
+     DoctorUsername: doctor.DoctorUsername,
+      DoctorName:doctor.DoctorName,
       PatientUsername: PatientUsernameFinal,
       PatientName,
       Status,

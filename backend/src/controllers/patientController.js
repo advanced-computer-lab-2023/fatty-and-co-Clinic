@@ -1060,7 +1060,7 @@ const viewHealthFamwithstatus = async (req, res) => {
     const username = req.user.Username;
     const Patient = await patientModel.findOne({ Username: username });
     const famMems = await familyMemberModel
-      .find({ $or: [{ Patient: Patient }, { FamilyMem: Patient }] })
+      .find({  $and: [{ Patient: Patient }, { FamilyMem: { $ne: Patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
 
