@@ -96,7 +96,10 @@ export const API_PATHS = {
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
   cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
+  rescheduleForPatient: APPOINTMENT_BASE+ "rescheduleForPatient/",
 
+  ///cancelAppFam
+  cancellappointmentfam:APPOINTMENT_BASE+"cancelAppFam/",
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
   walletPayment: PAYEMENT_BASE + "walletPayment",
@@ -109,4 +112,6 @@ export const API_PATHS = {
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
   updateDescription: PRESCRIPTION_BASE + "updateDescription",
+  getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
+  getPrescriptionAPP: PRESCRIPTION_BASE + "getPrescriptionAPP",
 };

@@ -539,7 +539,21 @@ console.log("here is the user ",PatientUser);
   } else {
     res.status(200).json(appointments);
   }
-};
+};const getAllAppointmentsPat = async (req, res) => {
+   try {
+     const patientUsername = req.query.patientUsername;
+
+     // Find all appointments for the given patientUsername
+     const appointments = await appointmentModel.find({
+       PatientUsername: patientUsername,
+     });
+
+     res.json(appointments);
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: "Internal Server Error" });
+   }
+}
 const getAppointmentsPat = async (req, res) => {
   const PatientUser = req.user.Username;
   const query = req.query;
@@ -694,7 +708,9 @@ const cancelAppForFam = async (req, res) => {
   try {
 
      const patientSignedIn= req.user.Username
-     const {doctorUsername,patientUsername}=req.body
+     const {doctorUsername,patientUsername}=req.body;
+     console.log(doctorUsername);
+     console.log(patientUsername);
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername, Status:"Upcoming"})
      const existApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,BookedBy:patientSignedIn,PatientUsername:patientUsername})
      const user = await User.findOne({Username: patientUsername});
@@ -919,13 +935,13 @@ const createAppointment = async (req, res) => {
   const doc = await User.findOne({Username: DoctorUsername});
   try {
     const newApp = await appointmentModel.create({
-      DoctorUsername,
-      DoctorName,
+      DoctorUsername: doctor.Username,
+      DoctorName: doctor.Name,
       PatientUsername: PatientUsernameFinal,
       PatientName,
       Status,
       Date,
-      BookedBy:patient.Username
+      BookedBy: patient.Username,
     });
 
     const n1 = await notificationModel.create({
@@ -1156,6 +1172,6 @@ module.exports = {
   getAppointmentsfamilymembers,
   testAppointRef,
   rescheduleAppointmentPatient,
-  reschedulefamilymember
-
+  reschedulefamilymember,
+  getAllAppointmentsPat,
 };
