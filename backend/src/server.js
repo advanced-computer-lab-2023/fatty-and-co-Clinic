@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+
 const http = require('http');
 const socketIo = require('socket.io');
 
@@ -23,9 +24,15 @@ const packageRoutes = require("./routes/package");
 const paymentRoutes = require("./routes/payments");
 const prescriptionsRoutes = require("./routes/prescriptions");
 const messageRoutes = require("./routes/messages");
-const conversationRoutes = require ("./routes/conversations")
+const conversationRoutes = require ("./routes/conversations");
+const notificationRoutes = require("./routes/notifications");
+
+
+const createNotification = require("./controllers/notificationController").createNotification;
 // Middleware Variables
 const requireAuth = require("./common/middleware/requireAuth");
+
+
 
 // ENV Variables
 const port = process.env.PORT || 8000;
@@ -59,6 +66,7 @@ io.on('connection', (socket) => {
 
   //upon connection
   console.log('New client connected');
+  console.log(users);
   //take username and socket id from client
   socket.on('addUser', (username) => {
     addUsers(username, socket.id);
@@ -67,17 +75,26 @@ io.on('connection', (socket) => {
 
 
   //upon sending message
-  socket.on('sendMessage', ({sendUsername, recUsername, text}) => {
+  socket.on('sendMessage', async ({sendUsername, recUsername, text}) => {
     const user = getUser(recUsername);
     console.log(user);
-  // //  if(!user)
-  console.log(users);
+   if(typeof user !== 'undefined')
+  {console.log(users);
    { io.to(user.socketId).emit('getMessage',{
       sendUsername,
       text,
-   });}
-  io.emit('notification', { message: "new message" });
-  console.log("notification sent");
+   });}}
+   //this means the receiver is not currently talking to him
+   else{
+    const seen = false;
+    const notif = await createNotification(sendUsername, recUsername, seen);
+    console.log(notif);
+    
+
+      // io.emit('notification', { message: "new message" });
+  // console.log("notification sent")
+   }
+  });
 
   //upon disconnection
   socket.on('disconnect', () => {
@@ -86,8 +103,18 @@ io.on('connection', (socket) => {
     console.log(users);
 
   });
+
+  socket.on('changeReceiver', (username) => {
+    // Disconnect the user from the socket
+    const user = users.find(user => user.username === username);
+    if (typeof user !== "undefined") {
+      removeUser(user.socketId);
+      console.log(users);
+    }
+  });
+
 });
-});
+
 
 // Middleware (applied on all routes)
 app.use(cors());
@@ -126,7 +153,7 @@ app.use("/payment", paymentRoutes);
 app.use("/prescription", prescriptionsRoutes);
 app.use("/message", messageRoutes);
 app.use("/convo", conversationRoutes);
-
+app.use("/notification", notificationRoutes); 
 // Server
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })

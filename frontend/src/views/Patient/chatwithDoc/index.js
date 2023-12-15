@@ -15,7 +15,7 @@ const ChatWithDoc = () => {
   const [messages, setMessages] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState(false);
 
-  
+
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
 
@@ -52,10 +52,27 @@ const ChatWithDoc = () => {
     }
   }, [currentDoctor]);
 
-  const handleDoctorClick = (doctor) => {
+  const handleDoctorClick = async (doctor) => {
     setCurrentDoctor(doctor);
+
+    const updatedDoctors = chatDocs.map(d => d.Username === doctor.Username ? { ...d, hasNotif: false } : d);
+    setChatDocs(updatedDoctors);
+
+    console.log("clicked");
+    console.log(doctor.Username);
     setSelectedDoc(true);
+    await axios.put(
+      API_PATHS.setNotificationsToSeen,
+      { senderUsername: doctor.Username },
+      { headers: { Authorization } }
+    );
   };
+
+
+
+
+  //so when the user clicks on a doctor, the notification is set to seen
+  useEffect(() => {}, [chatDocs]);
 
   const fetchConversations = async () => {
     try {
@@ -76,7 +93,7 @@ const ChatWithDoc = () => {
       });
     }
   };
-  
+
   useEffect(() => {
     fetchConversations();
   }, []);
@@ -91,6 +108,7 @@ const ChatWithDoc = () => {
               key={doctor._id}
               user={doctor}
               onClick={() => handleDoctorClick(doctor)}
+              hasNotif={doctor.hasNotif}
             />
           ))}
         </Box>

@@ -32,47 +32,19 @@ const BuiltByDevelopers = ({ title, name, description, image }) => {
             <Text fontSize='lg' color={textColor} fontWeight='bold' pb='.5rem'>
               {name}
             </Text>
-            <Text fontSize='sm' color='gray.400' fontWeight='normal'>
+            <Text fontSize='md' color='gray.400' fontWeight='bo'>
               {description}
             </Text>
             <Spacer />
-            <Flex align='center'>
-              <Button
-                p='0px'
-                variant='no-hover'
-                bg='transparent'
-                my={{ sm: "1.5rem", lg: "0px" }}>
-                <Text
-                  fontSize='sm'
-                  color={textColor}
-                  fontWeight='bold'
-                  cursor='pointer'
-                  transition='all .5s ease'
-                  my={{ sm: "1.5rem", lg: "0px" }}
-                  _hover={{ me: "4px" }}>
-                  Read more
-                </Text>
-                <Icon
-                  as={BsArrowRight}
-                  w='20px'
-                  h='20px'
-                  fontSize='2xl'
-                  transition='all .5s ease'
-                  mx='.3rem'
-                  cursor='pointer'
-                  pt='4px'
-                  _hover={{ transform: "translateX(20%)" }}
-                />
-              </Button>
-            </Flex>
+
           </Flex>
           <Spacer />
           <Flex
             bg='teal.300'
-            align='center'
+            //align='center'
             justify='center'
             borderRadius='15px'
-            width={{ lg: "40%" }}
+            width={{ lg: "50%" }}
             minHeight={{ sm: "250px" }}>
             {image}
           </Flex>

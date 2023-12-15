@@ -6,11 +6,13 @@ const subscriptionModel = require("../models/subscriptions");
 const familyMemberModel = require("../models/familymembers");
 const packageModel = require("../models/packages");
 const doctorModel = require("../models/doctors");
+const appointmentModel = require("../models/appointments");
 const Patient = require("../models/patients");
 const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
+const notificationModel = require("../models/notifications");
 const {
   findFiles,
   findFileByFilename,
@@ -1810,26 +1812,47 @@ const getFamSessionCost = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
-// const getChatDoctors = async (req, res) => {
-  // const username = req.user.Username;
-  // try {
-  //   const patientAppointments = await appointmentModel.find({
-  //     PatientUsername: username,
-  //     Status: { $ne: "Cancelled" },
-  //   });
-  //   let chatDoctors = [];
-  //   for (const appointment of patientAppointments) {
-  //     const doctor = await doctorModel.findOne({
-  //       Username: appointment.DoctorUsername,
+
+
+  // const getChatDoctors = async (req, res) => {
+  //   const username = req.user.Username;
+  //   try {
+  //     const patientAppointments = await appointmentModel.find({
+  //       PatientUsername: username,
+  //       Status: { $ne: "Cancelled" },
   //     });
-  //     chatDoctors.push(doctor);
+  
+  //     const uniqueDoctorUsernames = new Set();
+  
+  //     const chatDoctors = await Promise.all(
+  //       patientAppointments.map(async (appointment) => {
+  //         const doctor = await doctorModel.findOne({
+  //           Username: appointment.DoctorUsername,
+  //         });
+  
+  //        // console.log(username);
+  //         // Check if the doctor username is already in the set
+  //         if (!uniqueDoctorUsernames.has(doctor.Username)) {
+  //           // If not, add it to the set and include the doctor in the result
+  //           uniqueDoctorUsernames.add(doctor.Username);
+  //           //await createConversation()
+  //           return doctor;
+  //         }
+  
+  //         return null; // If the doctor is already in the set, return null
+  //       })
+  //     );
+  
+  //     // Filter out null values (those are the duplicates)
+  //     const filteredChatDoctors = chatDoctors.filter((doctor) => doctor !== null);
+  
+
+  //     res.status(200).json(filteredChatDoctors);
+  //   } catch (error) {
+  //     res.status(500).send({ message: error.message });
   //   }
-  //   res.status(200).json(chatDoctors);
-  // } catch (error) {
-  //   // res.status(200).json(myDiscount);
-  //   res.status(500).send({ message: error.message });
-  // }
-//};
+  // };
+
 
   const getChatDoctors = async (req, res) => {
     const username = req.user.Username;
@@ -1847,13 +1870,23 @@ const getFamSessionCost = async (req, res) => {
             Username: appointment.DoctorUsername,
           });
   
-         // console.log(username);
           // Check if the doctor username is already in the set
           if (!uniqueDoctorUsernames.has(doctor.Username)) {
             // If not, add it to the set and include the doctor in the result
             uniqueDoctorUsernames.add(doctor.Username);
-            //await createConversation()
-            return doctor;
+  
+            // Fetch the notifications for the doctor
+            const notifications = await notificationModel.find({
+              senderUsername: doctor.Username,
+              seen: false,
+            });
+  
+            // If there are any unseen notifications, set hasNotif to true
+            const hasNotif = notifications.length > 0;
+            console.log("hasNotif");
+            console.log(hasNotif);
+            // Return the doctor and hasNotif in the result
+            return { ...doctor._doc, hasNotif };
           }
   
           return null; // If the doctor is already in the set, return null
@@ -1862,14 +1895,12 @@ const getFamSessionCost = async (req, res) => {
   
       // Filter out null values (those are the duplicates)
       const filteredChatDoctors = chatDoctors.filter((doctor) => doctor !== null);
-  
-
+        console.log(filteredChatDoctors);
       res.status(200).json(filteredChatDoctors);
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
   };
-
   const getPatientUsernameSocket = async (req, res) => { 
    try{ const username = req.user.Username;
     res.status(200).json(username);}

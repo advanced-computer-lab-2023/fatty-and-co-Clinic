@@ -9,10 +9,12 @@ import {
   Box,
   Heading,
   Spacer,
+  Table,
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
 import alborglab from "assets/img/alborglab.png";
+import orange from "assets/img/orange.jpg";
 import logoChakra from "assets/svg/logo-white.svg";
 import BarChart from "components/Charts/BarChart";
 import LineChart from "components/Charts/LineChart";
@@ -42,8 +44,9 @@ import { useAuthContext } from "hooks/useAuthContext";
 import { useHistory } from "react-router-dom";
 // const ENDPOINT = "http://localhost:8000";
 // const notificationSocket = socketIOClient(ENDPOINT);
-import { FaStethoscope } from "react-icons/fa";
+import { FaStethoscope, FaCalendarCheck } from "react-icons/fa";
 import AppointmentsRow from "components/Tables/AppointmentsRow";
+import AppointmentsRowDash from "components/Tables/AppointmentRowDash";
 export default function DashboardPat() {
   const iconBoxInside = useColorModeValue("white", "white");
 
@@ -74,9 +77,12 @@ export default function DashboardPat() {
     Speciality: "",
   });
 
-  //for the more button
+  //for the moreDoctors button
   let newUrl = `./viewDoctors`;
 
+
+  //For the moreAppointments button
+  let appointmentsUrl = `./viewAppointPat`;
   useEffect(() => {
     const url = API_PATHS.viewDoctors;
     axios
@@ -92,7 +98,8 @@ export default function DashboardPat() {
     axios
       .get(url, { headers: { Authorization } })
       .then((response) => {
-        setAppointments(response.data);
+        const upcomingAppointments = response.data.filter(appointment => appointment.Status === 'Upcoming');
+        setAppointments(upcomingAppointments);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -100,106 +107,9 @@ export default function DashboardPat() {
   useEffect(() => {}, [data]);
   return (
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-      <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
-        <MiniStatistics
-          title={"Today's Moneys"}
-          amount={"$53,000"}
-          percentage={55}
-          icon={<WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-        />
-        <MiniStatistics
-          title={"Today's Users"}
-          amount={"2,300"}
-          percentage={5}
-          icon={<GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-        />
-        <MiniStatistics
-          title={"New Clients"}
-          amount={"+3,020"}
-          percentage={-14}
-          icon={<DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-        />
-        <MiniStatistics
-          title={"Total Sales"}
-          amount={"$173,000"}
-          percentage={8}
-          icon={<CartIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
-        />
-      </SimpleGrid>
-      <Grid
-        templateColumns={{ md: "1fr", lg: "1.8fr 1.2fr" }}
-        templateRows={{ md: "1fr auto", lg: "1fr" }}
-        my="26px"
-        gap="24px"
-      >
-        <BuiltByDevelopers
-          title={"Built by Developers"}
-          name={"Purity UI Dashboard"}
-          description={
-            "From colors, cards, typography to complex elements, you will find the full documentation."
-          }
-          image={
-            <Image
-              src={logoChakra}
-              alt="chakra image"
-              minWidth={{ md: "300px", lg: "auto" }}
-            />
-          }
-        />
-        <WorkWithTheRockets
-          backgroundImage={alborglab}
-          title={"Coming soon"}
-          description={
-            "Revolutionize healthcare with lab insights, seamlessly integrated into virtual clinics."
-          }
-        />
-      </Grid>
-      <Grid
-        templateColumns={{ sm: "1fr", lg: "1.3fr 1.7fr" }}
-        templateRows={{ sm: "repeat(2, 1fr)", lg: "1fr" }}
-        gap="24px"
-        mb={{ lg: "26px" }}
-      >
-        <ActiveUsers
-          title={"Active Users"}
-          percentage={23}
-          chart={<BarChart />}
-        />
-        <SalesOverview
-          title={"Sales Overview"}
-          percentage={5}
-          chart={<LineChart />}
-        />
-      </Grid>
-      <Grid
-        templateColumns={{ sm: "1fr", md: "1fr 1fr", lg: "2fr 1fr" }}
-        templateRows={{ sm: "1fr auto", md: "1fr", lg: "1fr" }}
-        gap="24px"
-      >
-        <Projects
-          title={"Projects"}
-          amount={30}
-          captions={["Companies", "Members", "Budget", "Completion"]}
-          data={dashboardTableData}
-        />
-      </Grid>
-      {/* //testing notifications */}
-      {/* <div>NOTIFICATIONS </div>
-      <Grid container spacing={3}>
-        {notifications.map((notification, index) => (
-          <Grid item xs={12} key={index}>
-            <div>{notification.message}</div>
-          </Grid>
-        ))}
-      </Grid> */}
-      <OrdersOverview
-        title={"Orders Overview"}
-        amount={30}
-        data={timelineData}
-      />
 
-      {/* //featured doctors */}
-      <Flex
+{/* //featured doctors */}
+<Flex
         flexDirection="column"
         pt={{ base: "120px", md: "75px" }}
         align="center"
@@ -240,6 +150,51 @@ export default function DashboardPat() {
           </Flex>
         </Box>
       </Flex>
+      <Grid
+        templateColumns={{ md: "1fr", lg: "1.8fr 1.2fr" }}
+        templateRows={{ md: "1fr auto", lg: "1fr" }}
+        my="26px"
+        gap="24px"
+      >
+
+<WorkWithTheRockets
+          backgroundImage={alborglab}
+          title={"Coming soon"}
+          description={
+            "Your health is our priority. Seamless integration with your lab results with ALBORG. You will be able to check your results through Shebeen Health Clinic and apply for lab packages Accuracy you can trust"
+          }
+        />
+        <BuiltByDevelopers
+          title={"Tip of the day"}
+          name={"Seasonal Flu!"}
+          description={
+            "Guava and Orange help improve immunity since they are rich in Vitamin C"
+          }
+          image={
+            <Image
+              src={orange}
+              alt="chakra image"
+              minWidth={{ md: "300px", lg: "auto" }}
+            />
+          }
+        />
+ 
+      </Grid>
+
+
+      {/* //testing notifications */}
+      {/* <div>NOTIFICATIONS </div>
+      <Grid container spacing={3}>
+        {notifications.map((notification, index) => (
+          <Grid item xs={12} key={index}>
+            <div>{notification.message}</div>
+          </Grid>
+        ))}
+      </Grid> */}
+
+
+      
+
 
       {
         //my appointments
@@ -248,38 +203,39 @@ export default function DashboardPat() {
       <Flex
         flexDirection="column"
         pt={{ base: "120px", md: "75px" }}
-        align="center"
+        align="left"
       >
-        <Box boxShadow="base" p="6" rounded="md" bg="white" width="100%">
+        <Box boxShadow="base" p="6" rounded="md" bg="white" width="50%">
           <Flex justifyContent="center">
             <Heading mb="4" fontSize="xl">
               <Flex align="center">
                 <Box mr={3}>
-                  <FaStethoscope size={20} />
+                <FaCalendarCheck size={20} />
                 </Box>
-                View All Appointments
+                Upcoming Appointments
               </Flex>
             </Heading>
           </Flex>
-          <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
-            {appointments.slice(0, 4).map((row) => (
-              <AppointmentsRow
+          <Table >
+            {appointments.slice(0, 3).map((row) => (
+              <AppointmentsRowDash
                 key={row.Username}
                 DoctorName={row.DoctorName}
+                Status={row.Status} 
                 Type={row.FollowUp ? "Follow Up" : "First Time"}
                 DateTime={row.Date}
               />
             ))}
-          </SimpleGrid>
+          </Table>
 
           <Flex justifyContent="center" mt="4">
             <Button
               colorScheme="teal"
               onClick={() => {
-                history.push(newUrl);
+                history.push(appointmentsUrl);
               }}
             >
-              View More Doctors
+              View My Appointments
             </Button>
           </Flex>
         </Box>

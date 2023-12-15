@@ -8,7 +8,7 @@ const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
 const PRESCRIPTION_BASE = "http://localhost:8000/prescription/";
 const MESSAGE_BASE = "http://localhost:8000/message/";
-
+const NOTIFICATION_BASE = "http://localhost:8000/notification/";  
 
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
@@ -112,4 +112,8 @@ export const API_PATHS = {
   //Message
   getMessages: MESSAGE_BASE + "getMessages",
   createMessage: MESSAGE_BASE + "createMessage",
+
+  //notifications
+  getNotifications: NOTIFICATION_BASE + "getNotifications",
+  setNotificationsToSeen: NOTIFICATION_BASE + "setNotificationsToSeen", 
 };

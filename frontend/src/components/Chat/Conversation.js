@@ -4,7 +4,7 @@ import { Avatar, Box, Text } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 
 
-const Conversation = ({ user, onClick }) => {
+const Conversation = ({ user, onClick, hasNotif }) => {
   const [hover, setHover] = useState(false);
 
   return (
@@ -20,8 +20,20 @@ const Conversation = ({ user, onClick }) => {
       onMouseLeave={() => setHover(false)}
       backgroundColor={hover ? "#f0f0f0" : ""}
     >
-      <Avatar bg="teal.500" size="sm" name={user.Name} src={user.avatarUrl} />
-      <Box ml={4}>
+<Box position="relative">
+  <Avatar bg="teal.500" size="sm" name={user.Name} src={user.avatarUrl} />
+  {user.hasNotif && (
+    <Box
+      position="absolute"
+      top="-1"
+      right="0"
+      h="9px"
+      w="8px"
+      bg="green.500"
+      borderRadius="50%"
+    />
+  )}
+</Box>      <Box ml={4}>
         <Text fontWeight="bold">{user.Name}</Text>
       </Box>
     </Box>

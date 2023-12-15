@@ -14,6 +14,9 @@ const socket = socketIOClient(ENDPOINT);
 
 console.log(socket);
 
+
+//TODO: SEND EVENT FOR LIVE NOTIFICATION
+//TODO: 
 //TODO: SEND THE NEW MESSAGE LOGIC (SETSTATE AND USESTATE TO THE INDEX FILE)
 const ChatBox = ({ messages: initialMessages, receiver }) => {
   const [messages, setMessages] = useState(initialMessages); // [ { sender: "user1", content: "Hello", timestamp: "2021-05-01T12:00:00.000Z", isCurrentUser: true }, ...
@@ -21,6 +24,7 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
   const Authorization = `Bearer ${user.token}`;
   const [newMessage, setNewMessage] = useState("");
    
+  //const [receiverstate, setReceiverState] = useState
   const [arrivalMessage, setArrivalMessage] = useState("");
 
   const toast = useToast();
@@ -120,7 +124,7 @@ const getDoctorUsername = async () => {
     console.log(currentUsername);
 
     //console.log(socket);
-    socket.on("connection", () => {
+    socket.on("connect", () => {
       console.log("Connected to server");
     });
 
@@ -132,12 +136,20 @@ const getDoctorUsername = async () => {
     });
 
     // Disconnect from the Socket.IO server when the component unmounts
-    return () => {
-      //socket.disconnect();
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, [currentUsername]);
 
  
+  // useEffect(() => {
+  //   console.log("receiver changed");
+  //   console.log(receiver);
+  //   return () => {
+  //     if(currentUsername === receiver.Username)
+  //       socket.disconnect();
+  //   };
+  // }, [receiver]);
   
 
   useEffect(() => {
@@ -185,8 +197,15 @@ const getDoctorUsername = async () => {
     console.log(messages);
   }, [messages]);
 
+
+
   useEffect(() => {
     if (receiver) {
+      // Emit a 'changeReceiver' event when the receiver changes
+      if(currentUsername == receiver.Username)
+      socket.emit('changeReceiver', currentUsername);
+    console.log("receiver");
+    console.log(receiver);
       fetchMessages();
     }
   }, [receiver]);
@@ -204,6 +223,8 @@ const getDoctorUsername = async () => {
         { Receiver: receiver.Username, text: newMessage },
         { headers: { Authorization } }
       );
+      console.log(receiver.Username );
+      
       setMessages((messages) => [...messages, response.data]);
       console.log(messages);
       setNewMessage("");
@@ -212,6 +233,8 @@ const getDoctorUsername = async () => {
     }
   };
 
+  console.log("receiverhello");
+  console.log(receiver);
 
   return (
     <Flex
