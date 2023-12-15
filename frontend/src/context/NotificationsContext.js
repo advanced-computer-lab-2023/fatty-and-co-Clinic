@@ -6,11 +6,13 @@ export const notificationsReducer = (state, action) => {
   switch (action.type) {
     case "GET_NOTIFICATIONS":
       return { ...state, notifications: action.payload };
-    case "NEW_NOTIFICATION":
+    case "UPDATE_NOTIFICATION":
         return {
-          ...state,
-          notifications: state.notifications + action.payload,
-        };
+            ...state,
+            notifications: state.notifications.map((notification) =>
+              notification._id === action.payload._id ? action.payload : notification
+            ),
+          };
     
     default:
       return state;

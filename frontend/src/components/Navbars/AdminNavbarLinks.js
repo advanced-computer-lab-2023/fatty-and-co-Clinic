@@ -60,6 +60,7 @@ export default function HeaderLinks(props) {
   const { Wallet, dispatch } = useWalletContext();
   const { notifications, Dispatch } = useNotificationsContext();
   // const [Wallet, setWallet] = useState(null);
+  
   useEffect(() => {
     const fetchWalletAmount = async () => {
       try {
@@ -77,15 +78,33 @@ export default function HeaderLinks(props) {
         const notifs = await axios.get(API_PATHS.getNotifs ,{
           headers: { Authorization },
         });
-        console.log(notifs.data.notifs);
-        Dispatch({ type: "GET_NOTIFICATIONS", payload: notifs.data.notifs });
+        console.log(notifs.data);
+        Dispatch({ type: "GET_NOTIFICATIONS", payload: notifs.data });
       } catch (error) {
         console.error("Error fetching notifications", error);
       }
     };
+    
+
+    const handleClick = async (Message, Title) => {
+      try {
+        const notif = await axios.get(API_PATHS.viewNotif ,{Message, Title} , {
+          headers: { Authorization },
+        });
+        console.log(notif.data);
+        Dispatch({ type: "UPDATE_NOTIFICATION", payload: notif.data });
+      } catch (error) {
+        console.error("Error fetching notifications", error);
+      }
+      if(user.userType === "Patient"){
+        history.push('./viewAppointPat');
+      } else {
+        history.push('./viewAppointments');
+      }
+  
+    };
     fetchWalletAmount();
     fetchNotifications();
-
     console.log(notifications);
   }, [Authorization]);
 
@@ -224,13 +243,11 @@ export default function HeaderLinks(props) {
             
             {Array.isArray(notifications) && notifications.map((row) => {
               return (
-              <MenuItem borderRadius="8px" mb="10px">
-                <a href= {(user.userType === "Patient"? "/patient/viewAppointPat" : "/doctor/viewAppointments")}>
+              <MenuItem borderRadius="8px" mb="10px" onClick={handleClick({Message: row.Message, Title: row.Title})}>
               <ItemContent
                 info= {row.Message}
                 boldInfo={row.Title}
               />
-            </a>
             </MenuItem>
               );
             })}            
