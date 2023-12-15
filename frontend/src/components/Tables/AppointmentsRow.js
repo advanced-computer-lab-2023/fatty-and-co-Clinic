@@ -21,7 +21,7 @@ import AddPrescriptionButton from "views/Doctors/viewAppointments/components/add
 import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
 import UpdatePrescription from "views/Doctors/viewAppointments/components/UpdatePrescription";
 import { useAuthContext } from "hooks/useAuthContext";
-import { usePrescriptionContext } from "hooks/usePrescriptionContext";
+//import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 function AppointmentsRow(props) {
   const {

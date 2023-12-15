@@ -69,11 +69,15 @@ io.on('connection', (socket) => {
   //upon sending message
   socket.on('sendMessage', ({sendUsername, recUsername, text}) => {
     const user = getUser(recUsername);
-    io.to(user.socketId).emit('getMessage',{
+    console.log(user);
+  // //  if(!user)
+  console.log(users);
+   { io.to(user.socketId).emit('getMessage',{
       sendUsername,
       text,
-    });
-  });
+   });}
+  io.emit('notification', { message: "new message" });
+  console.log("notification sent");
 
   //upon disconnection
   socket.on('disconnect', () => {
@@ -83,7 +87,7 @@ io.on('connection', (socket) => {
 
   });
 });
-
+});
 
 // Middleware (applied on all routes)
 app.use(cors());

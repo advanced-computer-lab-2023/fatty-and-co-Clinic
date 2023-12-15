@@ -199,6 +199,8 @@ const session_index = async (req, res) => {
     const discount = await getPackageDiscount(req.user.Username);
     const famDiscount = await getPackageFamDiscount(req.user.Username);
 
+    //to test smth in the front end
+    const test = 900;
     const mySessions = doctors.map((doctor) => {
       return {
         Username: doctor.Username,
@@ -206,6 +208,7 @@ const session_index = async (req, res) => {
         Speciality: doctor.Speciality,
         Cost: getSessionPrice(doctor.HourlyRate, discount).toFixed(2),
         CostFam: getSessionPrice(doctor.HourlyRate, famDiscount).toFixed(2),
+        CostOld: getSessionPrice(doctor.HourlyRate, 0).toFixed(2),
 
         //
       };

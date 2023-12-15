@@ -296,15 +296,22 @@ const filterDoctor = async (req, res) => {
       }
       //adding session price to filtered doctors
       for (const element of myDoctors) {
-        const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1); // 1.1 to account for 10% clinic markup
+        const calcCost = (1 - packageDis / 100) * (element.HourlyRate * 1.1);
+        const calcCostOld = element.HourlyRate * 1.1;
+        const calcCostfam = calcCost;
+        // 1.1 to account for 10% clinic markup
         // Add an object to the 'mySessions' array that contains the doctor's name, speciality, and calculated cost
         myFilteredDoctors.push({
           Username: element.Username,
           Name: element.Name,
           Speciality: element.Speciality,
           Cost: calcCost,
+          CostOld: calcCostOld,
+          CostFam: calcCostfam,
+
         });
       }
+      console.log(myFilteredDoctors);
       res.status(200).json(myFilteredDoctors);
     });
   } catch (err) {
@@ -427,6 +434,7 @@ const filterDoctorSlotEdition = async (req, res) => {
         Speciality: element.Speciality,
         //HourlyRate: element.HourlyRate,
         Cost: getSessionPrice(element.HourlyRate, discount).toFixed(2),
+        CostOld: getSessionPrice(element.HourlyRate, discount).toFixed(2),
         CostFam: getSessionPrice(element.HourlyRate, famDiscount).toFixed(2),
       });
     }

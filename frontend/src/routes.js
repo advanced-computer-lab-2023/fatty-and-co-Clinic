@@ -50,7 +50,7 @@ import {
   SupportIcon,
 } from "components/Icons/Icons";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
-
+import DashboardPat from "views/Dashboard/DashboardPat";
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
 //component de 7aga fe views
@@ -315,6 +315,14 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: Dashboard,
     layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardPat,
+    layout: "/patient",
   },
   {
     path: "/dashboard",

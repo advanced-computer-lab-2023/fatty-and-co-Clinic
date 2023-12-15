@@ -5,6 +5,10 @@ import {
   Image,
   SimpleGrid,
   useColorModeValue,
+  Button,
+  Box,
+  Heading,
+  Spacer,
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
@@ -29,15 +33,29 @@ import SalesOverview from "./components/SalesOverview";
 import WorkWithTheRockets from "./components/WorkWithTheRockets";
 import io from "socket.io-client";
 import socketIOClient from "socket.io-client";
-
+import { Link } from "react-router-dom";
+import DoctorCard from "views/Patient/viewDoctors/components/DoctorCard";
+import { API_PATHS } from "API/api_paths";
+import axios from "axios";
+import { useAuthContext } from "hooks/useAuthContext";
+import { useHistory } from "react-router-dom";
 // const ENDPOINT = "http://localhost:8000";
 // const notificationSocket = socketIOClient(ENDPOINT);
-
-export default function Dashboard() {
+import { FaStethoscope } from "react-icons/fa";
+export default function DashboardPat() {
   const iconBoxInside = useColorModeValue("white", "white");
 
+  const { user } = useAuthContext();
+  const Authorization = `Bearer ${user.token}`;
   const [notifications, setNotifications] = useState([]);
 
+  const history = useHistory();
+
+  const handleRowClick = (row) => {
+    setSelectedRow(row);
+
+    history.push(newUrl, newState);
+  };
   // useEffect(() => {
   //   notificationSocket.on("notification", (data) => {
   //     setNotifications((prevNotifications) => [...prevNotifications, data]);
@@ -45,6 +63,26 @@ export default function Dashboard() {
   //   });
   // }, []);
 
+  const [data, setData] = useState([{}]);
+  const [searchParams, setSearchParams] = useState({
+    Name: "",
+    Speciality: "",
+  });
+
+  //for the more button
+  let newUrl = `./viewDoctors`;
+
+  useEffect(() => {
+    const url = API_PATHS.viewDoctors;
+    axios
+      .get(url, { params: searchParams, headers: { Authorization } })
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, [searchParams]);
+
+  useEffect(() => {}, [data]);
   return (
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
       <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
@@ -112,11 +150,11 @@ export default function Dashboard() {
           percentage={23}
           chart={<BarChart />}
         />
-        <SalesOverview
-          title={"Sales Overview"}
-          percentage={5}
-          chart={<LineChart />}
-        />
+        {/* <SalesOverview
+            title={"Sales Overview"}
+            percentage={5}
+            chart={<LineChart />}
+          /> */}
       </Grid>
       <Grid
         templateColumns={{ sm: "1fr", md: "1fr 1fr", lg: "2fr 1fr" }}
@@ -129,20 +167,58 @@ export default function Dashboard() {
           captions={["Companies", "Members", "Budget", "Completion"]}
           data={dashboardTableData}
         />
-        <OrdersOverview
-          title={"Orders Overview"}
-          amount={30}
-          data={timelineData}
-        />
       </Grid>
-      <div>NOTIFICATIONS </div>
+      {/* //testing notifications */}
+      {/* <div>NOTIFICATIONS </div>
       <Grid container spacing={3}>
         {notifications.map((notification, index) => (
           <Grid item xs={12} key={index}>
             <div>{notification.message}</div>
           </Grid>
         ))}
-      </Grid>
+      </Grid> */}
+
+      <Flex
+        flexDirection="column"
+        pt={{ base: "120px", md: "75px" }}
+        align="center"
+      >
+        <Box boxShadow="base" p="6" rounded="md" bg="white" width="100%">
+          <Flex justifyContent="center">
+            <Heading mb="4" fontSize="xl">
+              <Flex align="center">
+                <Box mr={3}>
+                  <FaStethoscope size={20} />
+                </Box>
+                Featured Doctors
+              </Flex>
+            </Heading>
+          </Flex>
+          <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
+            {data.slice(0, 4).map((row) => (
+              <DoctorCard
+                key={row.Username}
+                Name={row.Name}
+                Speciality={row.Speciality}
+                Cost={row.Cost}
+                CostOld={row.CostOld}
+                onClick={() => handleRowClick(row)}
+              />
+            ))}
+          </SimpleGrid>
+
+          <Flex justifyContent="center" mt="4">
+            <Button
+              colorScheme="blue"
+              onClick={() => {
+                history.push(newUrl);
+              }}
+            >
+              More
+            </Button>
+          </Flex>
+        </Box>
+      </Flex>
     </Flex>
   );
 }
