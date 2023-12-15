@@ -34,7 +34,7 @@ const DocSlotAptsTable = ({ title, captions, data,cameFromReschedule }) => {
   let CostFam = state.CostFam;
   
   const handleBookClick = (row) => {
-    if (cameFromReschedule) {
+if (cameFromReschedule) {
       console.log("Handling Reschedule..."); // Log if came from Reschedule /reschdule/:row
       let newUrl = `../reschdule/${row}`;
       let newState = {
@@ -48,17 +48,17 @@ const DocSlotAptsTable = ({ title, captions, data,cameFromReschedule }) => {
       history.push(newUrl, newState);
     
     } else {
-      let newUrl = `../bookAptDetails/${row}`;
-      let newState = {
-        DayName: row.DayName,
-        StartTime: row.StartTime,
-        DoctorId: row.DoctorId,
+    let newUrl = `../bookAptDetails/${row}`;
+    let newState = {
+      DayName: row.DayName,
+      StartTime: row.StartTime,
+      DoctorId: row.DoctorId,
         Cost: Cost,
         CostFam: CostFam,
-      };
+    };
 
-      history.push(newUrl, newState);
-    }
+    history.push(newUrl, newState);
+}
   };
 
   return (
@@ -92,7 +92,7 @@ const DocSlotAptsTable = ({ title, captions, data,cameFromReschedule }) => {
                   DayName={row.DayName}
                   StartTime={row.StartTime}
                   bookClickHandler={() => handleBookClick(row)}
-                  cameFromReschedule={cameFromReschedule} 
+cameFromReschedule={cameFromReschedule} 
                 />
               );
             })}
