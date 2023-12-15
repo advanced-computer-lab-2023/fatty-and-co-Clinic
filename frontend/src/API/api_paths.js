@@ -97,7 +97,7 @@ export const API_PATHS = {
   cancellappointment: `${APPOINTMENT_BASE}cancelAppointment/`,
 
   ///cancelAppFam
-  cancellappointmentfam:APPOINTMENT_BASE+"cancelAppFam/",
+  cancellappointmentfam: APPOINTMENT_BASE + "cancelAppFam/",
   // Payment
   cardPayment: `${PAYEMENT_BASE}cardPayment`,
   walletPayment: `${PAYEMENT_BASE}walletPayment`,
@@ -109,5 +109,6 @@ export const API_PATHS = {
   updateDosage: `${PRESCRIPTION_BASE}updateDosage`,
   checkForPrescription: `${PRESCRIPTION_BASE}checkForPrescription`,
   getPrescriptionMeds: `${PRESCRIPTION_BASE}getPrescriptionMeds`,
+  addToCart: `${PRESCRIPTION_BASE}orderPrescription`,
   updateDescription: `${PRESCRIPTION_BASE}updateDescription`,
 };

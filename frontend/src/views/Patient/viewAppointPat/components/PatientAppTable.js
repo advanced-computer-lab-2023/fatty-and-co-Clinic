@@ -16,6 +16,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import PatientAppRow from "components/Tables/PatientAppRow";
 import AppointmentsRow from "components/Tables/AppointmentsRow";
+import { useAuthContext } from "hooks/useAuthContext";
 
 import React from "react";
 
