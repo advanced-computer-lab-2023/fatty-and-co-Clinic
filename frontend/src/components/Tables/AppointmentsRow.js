@@ -45,7 +45,7 @@ function AppointmentsRow(props) {
         </Td>
       )}
 
-      {PatientName && (
+      {/* {PatientName && (
         <Td minWidth={{ sm: "250px" }} pl="0px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
             <Text
@@ -58,7 +58,7 @@ function AppointmentsRow(props) {
             </Text>
           </Flex>
         </Td>
-      )}
+      )} */}
       <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text

@@ -21,7 +21,7 @@ const {
   payDoctor,
   validateBookingDate,
   getPaymentAmount,
-  getDoctorInfo,,
+  getDoctorInfo,
   getChatPatients,
   getDocUsernameSocket,
 } = require("../controllers/doctorController");

@@ -12,7 +12,6 @@ const prescriptionModel = require("../models/prescriptions");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
-const appointmentModel = require("../models/appointments");
 const {
   findFiles,
   findFileByFilename,

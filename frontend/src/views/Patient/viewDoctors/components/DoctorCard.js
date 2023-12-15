@@ -93,7 +93,7 @@ function DoctorCard(props) {
       <Divider />
       <Box p="4">
         <ButtonGroup spacing="2" justifyContent="flex-end"  width="full">
-          <Button variant="solid" colorScheme="blue" onClick={onClick} >
+          <Button variant="solid" colorScheme="teal" onClick={onClick} >
             Book
           </Button>
           {/* You can add more buttons or customize the actions as needed */}

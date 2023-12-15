@@ -49,7 +49,7 @@ const WorkWithTheRockets = ({ title, description, backgroundImage }) => {
               {description}
             </Text>
             <Spacer />
-            <Flex align='center' mt={{ sm: "20px", lg: "40px", xl: "90px" }}>
+            {/* <Flex align='center' mt={{ sm: "20px", lg: "40px", xl: "90px" }}>
               <Button p='0px' variant='no-hover' bg='transparent' mt='12px'>
                 <Text
                   fontSize='sm'
@@ -70,7 +70,7 @@ const WorkWithTheRockets = ({ title, description, backgroundImage }) => {
                   pt='4px'
                 />
               </Button>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Portal>
       </CardBody>

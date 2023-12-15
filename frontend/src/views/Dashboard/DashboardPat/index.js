@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
+import alborglab from "assets/img/alborglab.png";
 import logoChakra from "assets/svg/logo-white.svg";
 import BarChart from "components/Charts/BarChart";
 import LineChart from "components/Charts/LineChart";
@@ -42,6 +43,7 @@ import { useHistory } from "react-router-dom";
 // const ENDPOINT = "http://localhost:8000";
 // const notificationSocket = socketIOClient(ENDPOINT);
 import { FaStethoscope } from "react-icons/fa";
+import AppointmentsRow from "components/Tables/AppointmentsRow";
 export default function DashboardPat() {
   const iconBoxInside = useColorModeValue("white", "white");
 
@@ -63,7 +65,10 @@ export default function DashboardPat() {
   //   });
   // }, []);
 
+  //featured docs
   const [data, setData] = useState([{}]);
+
+  const [appointments, setAppointments] = useState([{}]); //my appointments
   const [searchParams, setSearchParams] = useState({
     Name: "",
     Speciality: "",
@@ -80,7 +85,17 @@ export default function DashboardPat() {
         setData(response.data);
       })
       .catch((err) => console.log(err));
-  }, [searchParams]);
+  }, []);
+
+  useEffect(() => {
+    const url = API_PATHS.viewAppointPat;
+    axios
+      .get(url, { headers: { Authorization } })
+      .then((response) => {
+        setAppointments(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {}, [data]);
   return (
@@ -132,10 +147,10 @@ export default function DashboardPat() {
           }
         />
         <WorkWithTheRockets
-          backgroundImage={peopleImage}
-          title={"Work with the rockets"}
+          backgroundImage={alborglab}
+          title={"Coming soon"}
           description={
-            "Wealth creation is a revolutionary recent positive-sum game. It is all about who takes the opportunity first."
+            "Revolutionize healthcare with lab insights, seamlessly integrated into virtual clinics."
           }
         />
       </Grid>
@@ -150,11 +165,11 @@ export default function DashboardPat() {
           percentage={23}
           chart={<BarChart />}
         />
-        {/* <SalesOverview
-            title={"Sales Overview"}
-            percentage={5}
-            chart={<LineChart />}
-          /> */}
+        <SalesOverview
+          title={"Sales Overview"}
+          percentage={5}
+          chart={<LineChart />}
+        />
       </Grid>
       <Grid
         templateColumns={{ sm: "1fr", md: "1fr 1fr", lg: "2fr 1fr" }}
@@ -177,7 +192,13 @@ export default function DashboardPat() {
           </Grid>
         ))}
       </Grid> */}
+      <OrdersOverview
+        title={"Orders Overview"}
+        amount={30}
+        data={timelineData}
+      />
 
+      {/* //featured doctors */}
       <Flex
         flexDirection="column"
         pt={{ base: "120px", md: "75px" }}
@@ -209,12 +230,56 @@ export default function DashboardPat() {
 
           <Flex justifyContent="center" mt="4">
             <Button
-              colorScheme="blue"
+              colorScheme="teal"
               onClick={() => {
                 history.push(newUrl);
               }}
             >
-              More
+              View More Doctors
+            </Button>
+          </Flex>
+        </Box>
+      </Flex>
+
+      {
+        //my appointments
+      }
+
+      <Flex
+        flexDirection="column"
+        pt={{ base: "120px", md: "75px" }}
+        align="center"
+      >
+        <Box boxShadow="base" p="6" rounded="md" bg="white" width="100%">
+          <Flex justifyContent="center">
+            <Heading mb="4" fontSize="xl">
+              <Flex align="center">
+                <Box mr={3}>
+                  <FaStethoscope size={20} />
+                </Box>
+                View All Appointments
+              </Flex>
+            </Heading>
+          </Flex>
+          <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
+            {appointments.slice(0, 4).map((row) => (
+              <AppointmentsRow
+                key={row.Username}
+                DoctorName={row.DoctorName}
+                Type={row.FollowUp ? "Follow Up" : "First Time"}
+                DateTime={row.Date}
+              />
+            ))}
+          </SimpleGrid>
+
+          <Flex justifyContent="center" mt="4">
+            <Button
+              colorScheme="teal"
+              onClick={() => {
+                history.push(newUrl);
+              }}
+            >
+              View More Doctors
             </Button>
           </Flex>
         </Box>
