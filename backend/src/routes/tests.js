@@ -15,6 +15,7 @@ const {
   createDocSlot,
   getDocSlot,
   acceptDoc,
+  createNotif,
 } = require("../controllers/testController");
 
 const { testAppointRef } = require("../controllers/appointmentController");
@@ -87,6 +88,10 @@ router.get("/Patients", (req, res) => {
 
 router.get("/Appointments", (req, res) => {
   getAppointments(req, res);
+});
+
+router.post("/createNotif", (req, res) => {
+  createNotif(req, res);
 });
 
 /**

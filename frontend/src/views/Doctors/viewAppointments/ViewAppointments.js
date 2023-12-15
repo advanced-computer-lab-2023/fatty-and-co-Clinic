@@ -10,7 +10,6 @@ import { useHistory } from "react-router-dom";
 //history.replace(redirectUrl);
 export default function ViewAppointmentsInner() {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
-  const [patientUsername, setPatientUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -39,7 +38,6 @@ export default function ViewAppointmentsInner() {
       .then((response) => {
         // setData(response.data);
         dispatch({ type: "SET_APPOINTMENTS", payload: response.data });
-        
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
@@ -50,6 +48,8 @@ export default function ViewAppointmentsInner() {
    const redirectUrl=`doctor/viewMySlots/?username=${patientUsername}`
    history.replace(redirectUrl)
   }
+
+
 
 
   const handleSearchButtonClick = () => {
@@ -115,10 +115,9 @@ export default function ViewAppointmentsInner() {
         </Flex>
         <AppointmentsTable
           title={"Available Appointments"}
-          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
+          captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}
-          handleRescheduleAppoinmtent={handleRescheduleAppoinmtent}
         />
       </Flex>
     </Box>

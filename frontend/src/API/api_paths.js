@@ -20,6 +20,7 @@ export const API_PATHS = {
   resetPass: GUEST_BASE + "resetPass/",
   sendOTP: GUEST_BASE + "sendOTP/",
   validateOTP: GUEST_BASE + "validateOTP/",
+  getNotifs: GUEST_BASE + "getNotifs/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
@@ -111,4 +112,6 @@ export const API_PATHS = {
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
   updateDescription: PRESCRIPTION_BASE + "updateDescription",
+  getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
+  getPrescriptionAPP: PRESCRIPTION_BASE + "getPrescriptionAPP",
 };
