@@ -34,9 +34,9 @@ const DocSlotAptsTable = ({ title, captions, data,cameFromReschedule }) => {
   let CostFam = state.CostFam;
   
   const handleBookClick = (row) => {
-    if (cameFromReschedule) {
-      console.log("Handling Reschedule..."); // Log if came from Reschedule
-    } else {
+    // if (cameFromReschedule) {
+    //   console.log("Handling Reschedule..."); // Log if came from Reschedule
+    // } else {
       let newUrl = `../bookAptDetails/${row}`;
       let newState = {
         DayName: row.DayName,
@@ -47,7 +47,7 @@ const DocSlotAptsTable = ({ title, captions, data,cameFromReschedule }) => {
       };
 
       history.push(newUrl, newState);
-    }
+    
   };
 
   return (
