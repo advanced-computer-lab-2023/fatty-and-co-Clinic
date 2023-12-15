@@ -78,3 +78,4 @@ export const FamPackagestatusTable = ({ title, captions, data }) => {
     </Card>
   );
 };
+export default FamPackagestatusTable;

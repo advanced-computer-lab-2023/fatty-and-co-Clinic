@@ -33,7 +33,7 @@ import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
-//import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
+import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
@@ -95,13 +95,13 @@ var dashRoutes = [
     component: ViewMyPackageswithstatus,
     layout: "/patient",
   },
-  // {
-  //   path: "/ViewFamPackageswithstatus",
-  //   name: "Family Subscriptions",
-  //   icon: <HomeIcon color="inherit" />,
-  //   component: ViewFamPackageswithstatus,
-  //   layout: "/patient",
-  // },
+  {
+    path: "/ViewFamPackageswithstatus",
+    name: "Family Subscriptions",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamPackageswithstatus,
+    layout: "/patient",
+  },
 
   {
     path: "/package",
@@ -215,7 +215,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/createFamilymember/:Createparameter",
+    path: "/createFamilymember/",
     name: "Add Family Member",
     icon: <PersonIcon color="inherit" />,
     component: createFamilymember,
@@ -236,7 +236,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -245,7 +245,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -253,7 +253,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
   
 

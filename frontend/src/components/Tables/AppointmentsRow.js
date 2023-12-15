@@ -84,7 +84,7 @@ function AppointmentsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "100px" }}>
+      <Td minWidth={{ sm: "150px" }}>
         <Text       fontSize="md"
                    color={textColor}
                    //fontWeight="bold"
