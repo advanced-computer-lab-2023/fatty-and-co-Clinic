@@ -18,7 +18,7 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
+export const AppointmentsTable = ({ title, captions, data, isLoading, handleRescheduleAppoinmtent }) => {
   const isUpcomingAppointment = (status) => {
     return status === "Upcoming";
   };
@@ -66,6 +66,7 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
                     Type={row.FollowUp ? "Follow Up" : "First Time"}
                     Status={row.Status}
                     DateTime={row.Date}
+                    handleRescheduleAppoinmtent={handleRescheduleAppoinmtent}
                   />
                 );
                 

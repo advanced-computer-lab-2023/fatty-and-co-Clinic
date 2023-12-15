@@ -104,13 +104,17 @@ import {
             <CreateFollowUpButton patientUsername={PatientUsername} />
           </Td>
         )}
-         <Td>
-        {isUpcomingAppointment(Status) && (
-          <Button colorScheme="green" onClick={() => onRescheduleClick(PatientUsername)}>
-            Reschedule
-          </Button>
-        )}
-      </Td>
+    <Td minWidth={{ sm: "150px" }}>
+      {(Status === "Upcoming" ) && ( // Render the reschedule button only if status is "Upcoming"
+       <Button
+       colorScheme="teal"
+       onClick={() => props.handleRescheduleAppointment(PatientUsername)}
+     >
+       Reschedule
+     </Button>
+  )}
+</Td>
+     
       </Tr>
     );
   }
