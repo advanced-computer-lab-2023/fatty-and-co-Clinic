@@ -21,6 +21,7 @@ const {
   payDoctor,
   validateBookingDate,
   getPaymentAmount,
+  getDoctorInfo,,
   getChatPatients,
   getDocUsernameSocket,
 } = require("../controllers/doctorController");
@@ -192,6 +193,8 @@ router.get("/validateBookingDate", checkPatient, (req, res) => {
 router.get("/getPaymentAmount", checkPatient, (req, res) => {
   getPaymentAmount(req, res);
 });
+
+router.get("/getDoctorInfo", checkDoctor, getDoctorInfo);
 
 router.get("/getChatPatients", checkDoctor, (req, res) => {
   getChatPatients(req, res);

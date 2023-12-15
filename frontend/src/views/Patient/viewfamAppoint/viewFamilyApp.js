@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Flex, Button, Box, Input, Select,useToast } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import PatientAppTable from "./components/PatientAppTable";
+import FamAppTable from "./components/FamAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
 
-export function ViewPatientAppointments() {
+export function ViewFamilyApp() {
   const [DoctorUsername, setDoctorUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
@@ -28,7 +28,7 @@ export function ViewPatientAppointments() {
   ];
 
   useEffect(() => {
-    const url = API_PATHS.viewAppointPat;
+    const url = API_PATHS.viewFamAppoint;
     setIsLoading(true);
     axios
       .get(url, { params: searchParams, headers: { Authorization } })
@@ -164,14 +164,18 @@ export function ViewPatientAppointments() {
         </Flex>
 
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
-        <PatientAppTable
-          title={"Your Appointments"}
-          captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
+        <FamAppTable
+          title={"Available Appointments"}
+          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
           data={data}
           isLoading={isLoading}
           handleCancelAppointment={handleCancelAppointment}
         />
-      
+        {/* )) || (
+                <Text fontSize="3xl" fontWeight="bold">
+                  Username not found
+                </Text>
+              )} */}
       </Flex>
     </Box>
   );
