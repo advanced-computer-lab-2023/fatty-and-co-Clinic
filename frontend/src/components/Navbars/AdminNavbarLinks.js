@@ -84,25 +84,23 @@ export default function HeaderLinks(props) {
         console.error("Error fetching notifications", error);
       }
     };
-    
-
-    const handleClick = async (Message, Title) => {
-      try {
-        const notif = await axios.get(API_PATHS.viewNotif ,{Message, Title} , {
-          headers: { Authorization },
-        });
-        console.log(notif.data);
-        Dispatch({ type: "UPDATE_NOTIFICATION", payload: notif.data });
-      } catch (error) {
-        console.error("Error fetching notifications", error);
-      }
-      if(user.userType === "Patient"){
-        history.push('./viewAppointPat');
-      } else {
-        history.push('./viewAppointments');
-      }
+    // const handleClick = async (Message, Title) => {
+    //   try {
+    //     const notif = await axios.patch(API_PATHS.viewNotif ,{Message, Title} , {
+    //       headers: { Authorization },
+    //     });
+    //     console.log(notif.data);
+    //     Dispatch({ type: "UPDATE_NOTIFICATION", payload: notif.data });
+    //   } catch (error) {
+    //     console.error("Error updating notification", error);
+    //   }
+    //   if(user.userType === "Patient"){
+    //     history.push('./viewAppointPat');
+    //   } else {
+    //     history.push('./viewAppointments');
+    //   }
   
-    };
+    // };
     fetchWalletAmount();
     fetchNotifications();
     console.log(notifications);
@@ -243,7 +241,7 @@ export default function HeaderLinks(props) {
             
             {Array.isArray(notifications) && notifications.map((row) => {
               return (
-              <MenuItem borderRadius="8px" mb="10px" onClick={handleClick({Message: row.Message, Title: row.Title})}>
+              <MenuItem borderRadius="8px" mb="10px" >
               <ItemContent
                 info= {row.Message}
                 boldInfo={row.Title}
