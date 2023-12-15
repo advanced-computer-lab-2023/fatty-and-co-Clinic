@@ -19,13 +19,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { AuthContextProvider } from "context/AuthContext";
 import { WalletContextProvider } from "context/WalletContext";
+import { NotificationsContextProvider } from "context/NotificationsContext";
 import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthContextProvider>
       <WalletContextProvider>
+        <NotificationsContextProvider>
         <App />
+        </NotificationsContextProvider>
       </WalletContextProvider>
     </AuthContextProvider>
   </React.StrictMode>,

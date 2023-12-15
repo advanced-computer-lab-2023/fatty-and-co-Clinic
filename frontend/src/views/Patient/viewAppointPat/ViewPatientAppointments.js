@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Button, Box, Input, Select,useToast } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Select,useToast,Text } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import PatientAppTable from "./components/PatientAppTable";
@@ -72,7 +72,10 @@ export function ViewPatientAppointments() {
           duration: 9000,
           isClosable: true,
         });
-  
+        const timer = setTimeout(() => {
+          location.reload();
+        }, 500); // 1000ms delay
+        window.location.reload();
      
    
       } else {
@@ -120,9 +123,20 @@ export function ViewPatientAppointments() {
         pt="50px"
         justifyContent="flex-start"
       >
-        <Flex direction="row" alignItems="flex-start">
+        <Flex direction="row" alignItems="flex-start">    <Text
+                fontSize="lg"
+                color="black"
+                fontWeight="bold"
+                pb=".2rem"
+                marginLeft={8}
+              
+              >
+                Appointments
+              </Text>
+
           <Select
             bg="white"
+            marginLeft={10}
             onChange={(e) => {
               handleStatusSearchValueChange(e);
             }}
@@ -138,6 +152,7 @@ export function ViewPatientAppointments() {
             bg="white"
             type="date"
             placeholder="Filter by Date"
+            marginLeft={10}
             onChange={handleDateSearchValueChange}
           />
           <Button
@@ -147,7 +162,8 @@ export function ViewPatientAppointments() {
             fontSize="xs"
             p="8px 32px"
            textColor="white"
-           onClick={handleSearchButtonClick} marginLeft={4}>
+
+           onClick={handleSearchButtonClick} marginLeft={10}>
             Search
           </Button>
 
@@ -158,14 +174,14 @@ export function ViewPatientAppointments() {
             fontSize="xs"
             p="8px 32px"
            textColor="white"
-           onClick={handleClrButtonClick} marginLeft={4}>
+           onClick={handleClrButtonClick} marginLeft={10}>
             Clear
           </Button>
         </Flex>
 
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <PatientAppTable
-          title={"Your Appointments"}
+          // title={"Your Appointments"}
           captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
           data={data}
           isLoading={isLoading}
