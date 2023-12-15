@@ -1,7 +1,11 @@
 import {
   Avatar,
   AvatarGroup,
+  Avatar,
+  AvatarGroup,
   Flex,
+  Icon,
+  Progress,
   Icon,
   Progress,
   Td,
@@ -25,13 +29,13 @@ import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
 function AppointmentsRow(props) {
   const {
-    customkey,
     DoctorName,
     PatientName,
     PatientUsername,
     Status,
     Type,
     DateTime,
+ 
   } = props;
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -84,14 +88,14 @@ function AppointmentsRow(props) {
             </Text>
           </Flex>
         </Td>
-      )}
+      )} */}
       <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
-            fontSize="md"
-            color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
+               fontSize="md"
+               color={textColor}
+               //fontWeight="bold"
+               minWidth="100%"
           >
             {Status}
           </Text>
@@ -99,12 +103,13 @@ function AppointmentsRow(props) {
       </Td>
 
       <Td minWidth={{ sm: "150px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
-            fontSize="md"
-            color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
+          fontSize="md"
+          color={textColor}
+          //fontWeight="bold"
+          minWidth="100%"
           >
             {Type}
           </Text>
