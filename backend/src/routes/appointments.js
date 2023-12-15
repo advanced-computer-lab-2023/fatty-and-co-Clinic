@@ -13,8 +13,10 @@ const {
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
   testAppointRef,
-  rescheduleAppointmentPatient,reschedulefamilymember,
-  createAppointment
+  rescheduleAppointmentPatient,
+  reschedulefamilymember,
+  createAppointment,
+  getAllAppointmentsPat,
 } = require("../controllers/appointmentController");
 
 
@@ -38,7 +40,7 @@ router.get("/", (req, res) => {
  * @access Doctor
  */
 router.get("/findPatients", checkDoctor, findDoctorPatients); // checkDoctor middleware to make sure user is a doctor
-
+router.get("/getAllAppointmentsPat", getAllAppointmentsPat);
 /**
  * @route GET /appointments/upcoming
  * @desc Get upcoming appointments for a doctor

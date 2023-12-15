@@ -445,7 +445,21 @@ const getAppointmentsDoc = async (req, res) => {
     res.status(200).json(appointments);
   }
 };
+const getAllAppointmentsPat = async (req, res) => {
+   try {
+     const patientUsername = req.query.patientUsername;
 
+     // Find all appointments for the given patientUsername
+     const appointments = await appointmentModel.find({
+       PatientUsername: patientUsername,
+     });
+
+     res.json(appointments);
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: "Internal Server Error" });
+   }
+}
 const getAppointmentsPat = async (req, res) => {
   const PatientUser = req.user.Username;
   const query = req.query;
@@ -867,6 +881,6 @@ module.exports = {
   getAppointmentsPat,
   testAppointRef,
   rescheduleAppointmentPatient,
-  reschedulefamilymember
-
+  reschedulefamilymember,
+  getAllAppointmentsPat,
 };
