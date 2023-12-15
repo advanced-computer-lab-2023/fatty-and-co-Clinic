@@ -693,7 +693,7 @@ const cancelAppForFam = async (req, res) => {
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
       await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-      res.status(200).json("Appointment cancelled successfully!")
+      res.status(200).json({success:"Appointment cancelled successfully!"})
 
      }
      else{
@@ -706,7 +706,7 @@ const cancelAppForFam = async (req, res) => {
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      await patientModel.findOneAndUpdate({Username:patientSignedIn},{Wallet:bookedBy.Wallet+refund})
      await appointmentModel.findOneAndUpdate({BookedBy:patientSignedIn,DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-     res.status(200).json(`Appointment cancelled and an amount of ${refund} refund restored successfully!`)
+     res.status(200).json({success:`Appointment cancelled and an amount of ${refund} refund restored successfully!`})
   }
     
   } catch (error) {
@@ -730,7 +730,7 @@ const cancelAppForSelf = async (req, res) => {
      }
      else if(upcomingApp.Date.getTime()<currDate.getTime()+24*60*60){
       await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-      res.status(200).json("Appointment cancelled successfully!")
+      res.status(200).json({success:"Appointment cancelled successfully!"})
      }
      else{
      const patient=await patientModel.findOne({Username:patientUsername})
@@ -742,7 +742,7 @@ const cancelAppForSelf = async (req, res) => {
      const refund= getSessionPrice(doctor.HourlyRate,packDisc)
      upcomingApp.BookedBy==patientUsername? await patientModel.findOneAndUpdate({Username:patientUsername},{Wallet:patient.Wallet+refund}):await patientModel.findOneAndUpdate({Username:bookedBy.Username},{Wallet:bookedBy.Wallet+refund})
      await appointmentModel.findOneAndUpdate({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"},{Status:"Cancelled"})
-     res.status(200).json(`Appointment cancelled and refund amount of ${refund} has been returned successfully`)
+     res.status(200).json({success:`Appointment cancelled and refund amount of $${refund} has been returned successfully!`})
   
   }
     
