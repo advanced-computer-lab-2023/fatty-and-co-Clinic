@@ -4,6 +4,7 @@ import { BellIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
+  Tooltip,
   IconButton,
   Input,
   InputGroup,
@@ -106,7 +107,111 @@ export default function HeaderLinks(props) {
       alignItems="center"
       flexDirection="row"
     >
-      
+      {!user && (
+        <NavLink to="/auth/signin">
+          <Button
+            ms="0px"
+            px="0px"
+            me={{ sm: "2px", md: "16px" }}
+            color={navbarIcon}
+            variant="transparent-with-icon"
+            rightIcon={
+              document.documentElement.dir ? (
+                ""
+              ) : (
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
+              )
+            }
+            leftIcon={
+              document.documentElement.dir ? (
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
+              ) : (
+                ""
+              )
+            }
+          >
+            <Text display={{ sm: "none", md: "flex" }}>Sign In</Text>
+          </Button>
+        </NavLink>
+      )}
+      {user && (
+        <Button
+            ms="0px"
+            px="0px"
+            me={{ sm: "2px", md: "16px" }}
+            color={navbarIcon}
+            variant="transparent-with-icon"
+            rightIcon={
+              document.documentElement.dir ? (
+                ""
+              ) : (
+                <Tooltip label="Profile" fontSize='md'> 
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"black"}}  />
+                </Tooltip>
+              )
+            }
+            leftIcon={
+              document.documentElement.dir ? (
+               <Tooltip label="Profile" fontSize='md'> 
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"black"}}  />
+                </Tooltip>
+              ) : (
+                ""
+              )
+            }
+            onClick={()=>{history.push('./profile')}}
+          >
+          </Button>
+          )}
+      <SidebarResponsive
+        logoText={props.logoText}
+        secondary={props.secondary}
+        routes={routes}
+        // logo={logo}
+        {...rest}
+      />
+      {/* <SettingsIcon
+        cursor="pointer"
+        ms={{ base: "16px", xl: "0px" }}
+        me="16px"
+        mw="16px"
+        ref={settingsRef}
+        onClick={props.onOpen}
+        color={navbarIcon}
+        w="18px"
+        h="18px"
+      /> */}
+  
+      {user.userType !== "Admin" && (
+      <ChakraProvider theme={theme}>
+        <Tooltip label="Wallet" >
+          <Flex
+            alignItems="center"
+          >
+        <Icon
+              as={MdAttachMoney}
+              boxSize={5}
+              color={navbarIcon}
+              _hover={{ color: "teal.500", cursor: "pointer" }}
+              w="18px"
+              h="18px"
+              mb="2px"
+            />
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              color={navbarIcon}
+              _hover={{ color: "teal.500", cursor: "pointer" }}
+              w="auto"
+              h="27px"
+              mr="13px"
+            >
+          {Wallet !== null ? `${parseFloat(Wallet).toFixed(2)}` : ""}
+        </Text>
+        </Flex>
+        </Tooltip>
+      </ChakraProvider> 
+      )}
       <Menu>
         <MenuButton>
           <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
@@ -152,127 +257,28 @@ export default function HeaderLinks(props) {
           </Flex>
         </MenuList>
       </Menu>
-      {!user && (
-        <NavLink to="/auth/signin">
-          <Button
-            ms="0px"
-            px="0px"
-            me={{ sm: "2px", md: "16px" }}
-            color={navbarIcon}
-            variant="transparent-with-icon"
-            rightIcon={
-              document.documentElement.dir ? (
-                ""
-              ) : (
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-              )
-            }
-            leftIcon={
-              document.documentElement.dir ? (
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />
-              ) : (
-                ""
-              )
-            }
-          >
-            <Text display={{ sm: "none", md: "flex" }}>Sign In</Text>
-          </Button>
-        </NavLink>
-      )}
       {user && (
-        <>
-        <Button
-            ms="0px"
-            px="0px"
-            me={{ sm: "2px", md: "16px" }}
-            color={navbarIcon}
-            variant="transparent-with-icon"
-            rightIcon={
-              document.documentElement.dir ? (
-                ""
-              ) : (
-                <ProfileIcon  color={navbarIcon} w="22px" h="22px" me="0px" />
-              )
-            }
-            leftIcon={
-              document.documentElement.dir ? (
-                <ProfileIcon  color={navbarIcon} w="22px" h="22px" me="0px" />
-              ) : (
-                ""
-              )
-            }
-            // TODO: On click navigate to profile
-            onClick={()=>{history.push('./profile')}}
-          >
-          </Button>
           <Button
-            ms="0px"
-            px="0px"
-            me={{ sm: "2px", md: "16px" }}
-            color={navbarIcon}
-            variant="transparent-with-icon"
-            rightIcon={
-              document.documentElement.dir ? (
-                ""
-              ) : (
-                <Icon as={BsBoxArrowRight}  color={navbarIcon} w="22px" h="22px" me="0px" />
-              )
-            }
-            leftIcon={
-              document.documentElement.dir ? (
-                <Icon as={BsBoxArrowRight}  color={navbarIcon} w="22px" h="22px" me="0px" />
-              ) : (
-                ""
-              )
-            }
-            onClick={useLogout()}
-          >
-            <Text display={{ sm: "none", md: "flex" }}>Log out</Text>
-          </Button>
-        </>
-      )}
-      <SidebarResponsive
-        logoText={props.logoText}
-        secondary={props.secondary}
-        routes={routes}
-        // logo={logo}
-        {...rest}
-      />
-      {/* <SettingsIcon
-        cursor="pointer"
-        ms={{ base: "16px", xl: "0px" }}
-        me="16px"
-        mw="16px"
-        ref={settingsRef}
-        onClick={props.onOpen}
-        color={navbarIcon}
-        w="18px"
-        h="18px"
-      /> */}
-  
-      {/* {user.userType !== "Admin" && (
-      <ChakraProvider theme={theme}>
-        <Icon
-          as={MdAttachMoney}
-          boxSize={5}
+          ms="0px"
+          px="0px"
+          me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
-          w="18px"
-          h="18px"
-          mb="2px"
-        />
-      </ChakraProvider>
-      )}
-      <ChakraProvider theme={theme}>
-        <Text
-          fontSize="sm"
-          fontWeight="bold"
-          color={navbarIcon}
-          w="100px"
-          h="27px"
+          variant="transparent-with-icon"
+          _hover={{ color: "red.500", cursor: "pointer" }}
+          onClick={useLogout()}
         >
-          {Wallet !== null ? `${Wallet}` : ""}
-        </Text>
-      </ChakraProvider> */}
+          <Text display={{ sm: "none", md: "flex" }}>Log out</Text>
+          <Icon
+            as={BsBoxArrowRight}
+            _hover={{ color: "red.500", cursor: "pointer" }}
+            color={navbarIcon}
+            w="22px"
+            h="22px"
+            me="0px"
+            ml="5px"
+          />
+        </Button>
+      )}
     </Flex>
   );
 }

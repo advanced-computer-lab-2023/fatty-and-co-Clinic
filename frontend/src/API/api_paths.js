@@ -6,6 +6,7 @@ const ADMIN_BASE = "http://localhost:8000/admin/";
 const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
+const PRESCRIPTION_BASE = "http://localhost:8000/prescription/";
 
 
 // Add comments that indicate if the path needs a param and what that param is
@@ -45,14 +46,15 @@ export const API_PATHS = {
   payDoctor: DOCTOR_BASE + "payDoctor/",
   viewAllAvailableSlots: DOCTOR_BASE + "viewAllAvailableSlots/", //patient views working slots of Doctor
   validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
-  filterDoctorSlotEdition : DOCTOR_BASE + "filterDoctorSlotEdition/",
+  filterDoctorSlotEdition: DOCTOR_BASE + "filterDoctorSlotEdition/",
   getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
+  getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",
   viewDoctors: PATIENT_BASE + "view/doctors/", // add patient id as a param
-  viewPrescriptions: PATIENT_BASE + "getPrescriptions/", 
+  viewPrescriptions: PATIENT_BASE + "getPrescriptions/",
   getPrescription: PATIENT_BASE + "selectPrescription/", // add prescription id as a param
   createFamilyMember: PATIENT_BASE + "createFamilymember/",
   viewFamilyMembers: PATIENT_BASE + "getFamilymember/", // get familymember from req.params
@@ -89,11 +91,22 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
+  viewFamAppoint:APPOINTMENT_BASE+"getAppointmentsfamilymembers/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
+  cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
 
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
   walletPayment: PAYEMENT_BASE + "walletPayment",
+
+  //prescription
+  addPrescription: PRESCRIPTION_BASE + "addPrescription",
+  addMedToPrescription: PRESCRIPTION_BASE + "addMedToPrescription",
+  deleteMedFromPrescription: PRESCRIPTION_BASE + "deleteMedFromPrescription",
+  updateDosage: PRESCRIPTION_BASE + "updateDosage",
+  checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
+  getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
+  updateDescription: PRESCRIPTION_BASE + "updateDescription",
 };
