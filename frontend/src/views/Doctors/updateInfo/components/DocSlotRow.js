@@ -37,20 +37,6 @@ function DocSlotRow(props) {
           <Text
             fontSize="md"
             color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
-          >
-            {DayName}
-          </Text>
-        </Flex>
-      </Td>
-
-      <Td minWidth={{ sm: "250px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Text
-            fontSize="md"
-            color={textColor}
-            fontWeight="bold"
             minWidth="100%"
           >
             {Hour}
@@ -71,7 +57,7 @@ function DocSlotRow(props) {
                 type="time"
                 onChange={timeValueChangeHandler}
               />
-              <Button onClick={editConfirmHandler} colorScheme="green">Confirm</Button>
+              <Button onClick={editConfirmHandler} colorScheme="teal">Confirm</Button>
 
             </Flex>
 

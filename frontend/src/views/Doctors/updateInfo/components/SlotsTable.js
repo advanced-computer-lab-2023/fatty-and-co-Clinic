@@ -4,9 +4,15 @@ import {
   Table,
   Tbody,
   Text,
+  Button,
+  Collapse,
+  Box,
+  Select,
   Th,
   Thead,
+  Input,
   Tr,
+  Td,
   useColorModeValue,
   useDisclosure,
   Spinner,
@@ -15,7 +21,7 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import DocSlotRow from "components/Tables/DocSlotRow";
+import DocSlotRow from "./DocSlotRow";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
@@ -29,6 +35,7 @@ const SlotsTable = ({
   tableData,
   setTableData,
   isLoading,
+  day,
 }) => {
   //const { id } = useParams();
 
@@ -37,10 +44,30 @@ const SlotsTable = ({
   const textColor = useColorModeValue("gray.700", "white");
 
   const [StartTimeToUpdate, setStartTimeToUpdate] = useState(0);
+  const [StartTimeToAdd, setStartTimeToAdd] = useState(0);
   const [starttmp, setStartTmp] = useState("");
   // const [isChanged, setIsChanged] = useState(false);
-
+  
   const { isOpen, onToggle } = useDisclosure();
+  const [isChanged, setIsChanged] = useState(false);
+  
+  const [dayNumber, setDayNumber] = useState(0);
+  const options = [
+    { key: "Sunday", value: 0 },
+    { key: "Monday", value: 1 },
+    { key: "Tuesday", value: 2 },
+    { key: "Wednesday", value: 3 },
+    { key: "Thursday", value: 4 },
+    { key: "Friday", value: 5 },
+    { key: "Saturday", value: 6 },
+  ];
+  useEffect(() => {
+    const selectedOption = options.find(option => option.key === day);
+    
+    if (selectedOption) {
+      setDayNumber(selectedOption.value);
+    }
+  }, [day]);
 
   const handleDelete = (row) => {
     const url = API_PATHS.deleteMySlotsDoc + row.SlotId;
@@ -52,16 +79,36 @@ const SlotsTable = ({
 
   const handleEditTimeValueChange = (event) => {
     const newStartTimeTmp = event.target.value;
-    console.log(newStartTimeTmp);
     setStartTmp(newStartTimeTmp);
+    var hour_min_array = newStartTimeTmp.toString().split(":");
+    const hour = hour_min_array[0];
+    const mins = hour_min_array[1];
+    const newStartTimeToUpdate = parseFloat(hour + "." + mins);
+    setStartTimeToUpdate(newStartTimeToUpdate);
+  };
+   const handleAddTimeValueChange = (event) => {
+    const newStartTimeTmp = event.target.value;
+    console.log(newStartTimeTmp);
     console.log(newStartTimeTmp.toString());
     var hour_min_array = newStartTimeTmp.toString().split(":");
     const hour = hour_min_array[0];
     const mins = hour_min_array[1];
     console.log(mins);
-    const newStartTimeToUpdate = parseFloat(hour + "." + mins);
-    console.log(newStartTimeToUpdate);
-    setStartTimeToUpdate(newStartTimeToUpdate);
+    const newStartTimeToAdd = parseFloat(hour + "." + mins);
+    console.log(newStartTimeToAdd);
+    setStartTimeToAdd(newStartTimeToAdd);
+  };
+  const handleAddSlotConfirm = async () => {
+    const url = API_PATHS.addMySlotsDoc;
+    //const slot =
+    await axios
+      .post(url, null, {
+        params: { dayNumber, StartTimeToAdd },
+        headers: { Authorization },
+      })
+      .catch((error) => console.log(error));
+    fetchTableData();
+    onToggle();
   };
 
   const handleEditConfirm = (row) => {
@@ -86,30 +133,14 @@ const SlotsTable = ({
       .get(url, { headers: { Authorization } })
       .then((response) => {
         setTableData(response.data);
-        console.log("hello");
+        console.log("table data:" , response.data);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
       });
   };
 
-  // useEffect(() => {
-  //   console.log("ana henak");
-  //   fetchTableData();
-  // }, []);
-
   return (
-    <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
-      <CardHeader p="6px 0px 22px 0px">
-        <Flex direction="column">
-          <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
-            {/* title will be All doctors  */}
-            {title}
-          </Text>
-        </Flex>
-      </CardHeader>
-      <CardBody>
-        {
           <Table variant="simple" color={textColor}>
             <Thead>
               <Tr my=".8rem" pl="0px">
@@ -136,9 +167,7 @@ const SlotsTable = ({
                     <DocSlotRow
                       key={row.id}
                       SlotId={row.SlotId}
-                      DayName={row.DayName}
                       Hour={row.StartTime}
-                      // isSelected={selectedRow === row}
                       timeValueChangeHandler={() =>
                         handleEditTimeValueChange(event)
                       }
@@ -148,11 +177,29 @@ const SlotsTable = ({
                   );
                 })
               )}
+              <Tr>
+                <Td>
+                  <Button onClick={onToggle}  colorScheme="teal" size="lg">
+                    Add a slot
+                  </Button>
+                  <Collapse
+                    in={isOpen}
+                    transition={{ exit: { delay: 0.3 }, enter: { duration: 0.5 } }}
+                  >
+                    <Box maxW="sm">
+
+                      <Flex>
+                        <Input bg="white" type="time" onChange={handleAddTimeValueChange} />
+                        <Button onClick={handleAddSlotConfirm} colorScheme="teal">
+                          Confirm
+                        </Button>
+                      </Flex>
+                    </Box>
+                  </Collapse>
+                </Td>
+              </Tr>
             </Tbody>
           </Table>
-        }
-      </CardBody>
-    </Card>
   );
 };
 
