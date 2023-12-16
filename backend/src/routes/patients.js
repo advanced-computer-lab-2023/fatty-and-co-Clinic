@@ -37,8 +37,8 @@ const {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
-  viewfamilymembersappointments,
-  resch
+  getChatDoctors,
+  getPatientUsernameSocket,
 } = require("../controllers/patientController");
 
 const { constants } = require("buffer");
@@ -84,7 +84,7 @@ router.delete("/deletePatient/:id", deletePatient); // TODO: check if the one de
  * @param {string} id - The ID of the patient to get
  */
 router.get("/getPatient/:id", getPatient);
-router.get("/getPatientInfo", getPatientInfo)
+router.get("/getPatientInfo", getPatientInfo);
 router.get("/getOptionPackages", viewOptionPackages);
 router.patch("/getAmountCredit", getAmountSubscription); //gets amount to be paid for self
 router.patch("/getAmountCreditFam", getAmountFam); //gets amount to be paid for fam
@@ -128,14 +128,6 @@ router.get("/getPatientUsername/:Username", getPatientUsername);
  * @prop {string} Speciality - The speciality of the doctor to search for
  */
 router.get("/view/doctors/", checkPatient, session_index);
-/**
- * @route GET familymembers appointments 
- * @desc Returns appoiments 
- * @access Public
-
- */
-router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
-
 
 /**
  * @route POST /patients/createFamilymember
@@ -148,6 +140,14 @@ router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
  * @prop {string} Relation - The relation of the family member to the patient ["Spouse", "Child"]
  */
 router.post("/createFamilymember", checkPatient, createFamilymember);
+
+/**
+ * @route GET familymembers appointments 
+ * @desc Returns appoiments 
+ * @access Public
+
+ */
+router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
 
 /**
  * @route GET /patients/getFamilymember
@@ -163,7 +163,7 @@ router.get("/getFamilymember/:Patient", getFamilymembers); //Changed name of par
  * @access Public
  */
 // TODO: add type check as middleware if needed
-router.post("/getPrescriptions",checkPatient, getPrescriptions);
+router.post("/getPrescriptions", checkPatient, getPrescriptions);
 
 /**
  * @route POST /patients/uploadFile
@@ -192,7 +192,7 @@ router.get("/downloadFile/:filename", downloadFile);
 /**
  * @route DELETE /patients/removeHealthRecord
  * @desc Removes a file health record
- * @access Patient 
+ * @access Patient
  * @param {string} filename - The filename in the params
  */
 router.delete("/removeHealthRecord/:filename", removeHealthRecord);
@@ -224,7 +224,7 @@ router.get("/getEmergencyContact/:Username", getEmergencyContact);
 router.patch("/linkPatient", linkPatient);
 router.post("/subscribepackagefamilymem", subscribepackagefamilymem);
 router.get("/viewMyPackage/", viewHealthPackage);
-router.get("/viewSubscription",viewSubscribedPackage);
+router.get("/viewSubscription", viewSubscribedPackage);
 router.patch("/payFamilySubscription/", payForFamSubscription);
 router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
   viewUpcomingAppointmentsPat(req, res);
@@ -232,5 +232,9 @@ router.get("/viewUpcomingAppointmentsPat", checkPatient, (req, res) => {
 router.get("/viewPastAppoitmentsPat", checkPatient, (req, res) => {
   viewPastAppoitmentsPat(req, res);
 });
+
+router.get("/getChatDoctors", checkPatient, getChatDoctors);
+
+router.get("/getPatientUsernameSocket", checkPatient, getPatientUsernameSocket);
 
 module.exports = router;
