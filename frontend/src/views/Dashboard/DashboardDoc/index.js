@@ -16,7 +16,7 @@ import {
   Th,
   Tbody,
   Text,
-  Td
+  Td,
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
@@ -29,6 +29,7 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
+import Header from "./Header"
 
 // Custom icons
 import {
@@ -38,7 +39,7 @@ import {
   WalletIcon,
   
 } from "components/Icons/Icons.js";
-import { ChevronRightIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon, HamburgerIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
 import { dashboardTableData, timelineData } from "variables/general";
 // import io from "socket.io-client";
@@ -54,6 +55,7 @@ import { FaStethoscope, FaCalendarCheck } from "react-icons/fa";
 import AppointmentsRow from "components/Tables/AppointmentsRow";
 // import AppointmentsRowDash from "components/Tables/AppointmentRowDash";
 import { set } from "date-fns";
+import ProfileBgImage from "assets/img/ProfileBackground.png";
 
 
 // const ENDPOINT = "http://localhost:8000";
@@ -71,6 +73,11 @@ const toast = useToast();
   const [currentUsername, setCurrentUsername] = useState("");
   const [hasNotif, setHasNotif] = useState(false);
   const [upcoming, setUpcoming] = useState([]);
+  const [doctor, setDoctor] = useState([{}]);
+    const bgProfile = useColorModeValue(
+      "hsla(0,0%,100%,.8)",
+      "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
+    );
   
 
 //   socket.on("receivedNotification", (recUsername, sendUsername) => {
@@ -168,88 +175,97 @@ useEffect(() => {
     const redirectUrl = `/doctor/viewAppointments`;
     history.replace(redirectUrl);
   };
+    useEffect(() => {
+      getDoctorInfo();
+    }, []);
+
+    const getDoctorInfo = () => {
+      const url = API_PATHS.getDoctorInfo;
+      axios
+        .get(url, {
+          headers: {
+            Authorization: Authorization,
+          },
+        })
+        .then((response) => {
+          setDoctor(response.data.doctor);
+          console.log(response.data);
+          setSystemUser(response.data.user);
+        })
+        .catch((err) => console.log(err));
+    };
   return (
-    <>
-      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap="22px">
-        <Box
-          borderWidth="1px"
-          borderRadius="lg"
-          overflow="hidden"
-          p="4"
-          boxShadow="md"
-          mt="20"
-        >
-          <Card>
-            <Flex direction="column">
-              <CardHeader p="12px 5px" mb="12px">
-                <Text fontSize="lg" fontWeight="bold">
-                  Your upcoming Appointments
-                </Text>
-              </CardHeader>
-              <CardBody>
-                <Flex direction="column" w="100%">
-                  <Table variant="simple">
-                    <Thead>
-                      <Tr>
-                        <Th>Patient name</Th>
-                        <Th>FollowUp</Th>
-                        <Th>Date</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {upcoming.map(
-                        (appointment, index) =>
-                          // Check if the appointment has status "Upcoming" before rendering
-                          appointment.Status === "Upcoming" && (
-                            <Tr key={index}>
-                              <Td
-                                minWidth={{ sm: "100px" }}
-                                fontWeight="semibold"
-                              >
-                                {appointment.PatientName}
-                              </Td>
-                              <Td fontWeight="semibold">
-                                {appointment.FollowUp
-                                  ? "Follow Up"
-                                  : "First Time"}
-                              </Td>
-                              <Td
-                                minWidth={{ sm: "90px" }}
-                                fontWeight="semibold"
-                              >
-                                {appointment.Date}
-                              </Td>
-                            </Tr>
-                          )
-                      )}
-                    </Tbody>
-                  </Table>
-                </Flex>
-              </CardBody>
-              <Text textAlign="center" fontSize="sm" color="gray.500" mt={2}>
-                <Button
-                  colorScheme="teal"
-                  size="sm"
-                  leftIcon={<ChevronRightIcon />}
-                  onClick={handleViewAll}
-                >
-                  View all appointments
-                </Button>
+    <Flex direction="column">
+      <Header
+        backgroundHeader={ProfileBgImage}
+        backgroundProfile={bgProfile}
+        name={doctor.Name}
+      />
+
+      <Box
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow="hidden"
+        p="4"
+        boxShadow="md"
+      >
+        <Card>
+          <Flex direction="column">
+            <CardHeader p="12px 5px" mb="12px">
+              <Text fontSize="lg" fontWeight="bold">
+                Your upcoming Appointments
               </Text>
-            </Flex>
-          </Card>
-        </Box>
-        <Box
-          borderWidth="1px"
-          borderRadius="lg"
-          overflow="hidden"
-          p="4"
-          boxShadow="md"
-          mt="20"
-        >
-          <Card></Card>
-        </Box>
-      </Grid>
-    </>
+            </CardHeader>
+            <CardBody>
+              <Flex direction="column" w="100%">
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>Patient name</Th>
+                      <Th>FollowUp</Th>
+                      <Th>Date</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {upcoming.map(
+                      (appointment, index) =>
+                        // Check if the appointment has status "Upcoming" before rendering
+                        appointment.Status === "Upcoming" && (
+                          <Tr key={index}>
+                            <Td
+                              minWidth={{ sm: "100px" }}
+                              fontWeight="semibold"
+                            >
+                              {appointment.PatientName}
+                            </Td>
+                            <Td fontWeight="semibold">
+                              {appointment.FollowUp
+                                ? "Follow Up"
+                                : "First Time"}
+                            </Td>
+                            <Td minWidth={{ sm: "90px" }} fontWeight="semibold">
+                              {appointment.Date}
+                            </Td>
+                          </Tr>
+                        )
+                    )}
+                  </Tbody>
+                </Table>
+              </Flex>
+            </CardBody>
+            <Text textAlign="center" fontSize="sm" color="gray.500" mt={2}>
+              <Button
+                colorScheme="teal"
+                size="sm"
+                leftIcon={<HamburgerIcon />}
+                onClick={handleViewAll}
+              >
+                View all appointments
+              </Button>
+            </Text>
+          </Flex>
+        </Card>
+      </Box>
+    </Flex>
   );
 }
