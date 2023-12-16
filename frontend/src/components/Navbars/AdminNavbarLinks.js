@@ -33,7 +33,7 @@ import { ItemContent } from "components/Menu/ItemContent";
 import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useLogout } from "hooks/useLogout";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -50,7 +50,6 @@ const theme = extendTheme({
     MdAttachMoney,
   },
 });
-
 
 export default function HeaderLinks(props) {
   const { user } = useAuthContext();
@@ -95,7 +94,7 @@ export default function HeaderLinks(props) {
     };
     const fetchNotifications = async () => {
       try {
-        const notifs = await axios.get(API_PATHS.getNotifs ,{
+        const notifs = await axios.get(API_PATHS.getNotifs, {
           headers: { Authorization },
         });
         console.log(notifs.data);
@@ -158,33 +157,46 @@ export default function HeaderLinks(props) {
       )}
       {user && (
         <Button
-            ms="0px"
-            px="0px"
-            me={{ sm: "2px", md: "16px" }}
-            color={navbarIcon}
-            variant="transparent-with-icon"
-            rightIcon={
-              document.documentElement.dir ? (
-                ""
-              ) : (
-                <Tooltip label="Profile" fontSize='md'> 
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"teal.500"}}  />
-                </Tooltip>
-              )
-            }
-            leftIcon={
-              document.documentElement.dir ? (
-               <Tooltip label="Profile" fontSize='md'> 
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"teal.500"}}  />
-                </Tooltip>
-              ) : (
-                ""
-              )
-            }
-            onClick={()=>{history.push('./profile')}}
-          >
-          </Button>
-          )}
+          ms="0px"
+          px="0px"
+          me={{ sm: "2px", md: "16px" }}
+          color={navbarIcon}
+          variant="transparent-with-icon"
+          rightIcon={
+            document.documentElement.dir ? (
+              ""
+            ) : (
+              <Tooltip label="Profile" fontSize="md">
+                <ProfileIcon
+                  color={navbarIcon}
+                  w="22px"
+                  h="22px"
+                  me="0px"
+                  _hover={{ color: "black" }}
+                />
+              </Tooltip>
+            )
+          }
+          leftIcon={
+            document.documentElement.dir ? (
+              <Tooltip label="Profile" fontSize="md">
+                <ProfileIcon
+                  color={navbarIcon}
+                  w="22px"
+                  h="22px"
+                  me="0px"
+                  _hover={{ color: "black" }}
+                />
+              </Tooltip>
+            ) : (
+              ""
+            )
+          }
+          onClick={() => {
+            history.push("./profile");
+          }}
+        ></Button>
+      )}
       <SidebarResponsive
         logoText={props.logoText}
         secondary={props.secondary}
@@ -203,7 +215,7 @@ export default function HeaderLinks(props) {
         w="18px"
         h="18px"
       /> */}
-  
+
       {user.userType !== "Admin" && (
       <ChakraProvider theme={theme}>
         <Tooltip label="Wallet" >
@@ -270,7 +282,7 @@ export default function HeaderLinks(props) {
       </Menu>
       )}
       {user && (
-          <Button
+        <Button
           ms="0px"
           px="0px"
           me={{ sm: "2px", md: "16px" }}

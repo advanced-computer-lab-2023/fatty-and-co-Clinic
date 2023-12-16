@@ -25,6 +25,8 @@ const {
   validateBookingDate,
   getPaymentAmount,
   getDoctorInfo,
+  getChatPatients,
+  getDocUsernameSocket,
   getRequest,
   getRequests,
   acceptFollowUp,
@@ -210,6 +212,12 @@ router.get("/getPaymentAmount", checkPatient, (req, res) => {
   getPaymentAmount(req, res);
 });
 
+router.get("/getChatPatients", checkDoctor, (req, res) => {
+  getChatPatients(req, res);
+});
+// getDocUsernameSocket;
+router.get("/getDocUsernameSocket", checkDoctor, (req, res) => {
+  getDocUsernameSocket(req, res);
+});
 router.get("/getDoctorInfo", checkDoctor, getDoctorInfo);
-
 module.exports = router;
