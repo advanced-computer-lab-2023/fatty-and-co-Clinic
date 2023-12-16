@@ -18,10 +18,9 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
-function DocSlotRowApt(props) {
-  const { DayName, StartTime, bookClickHandler,cameFromReschedule,cameFromRescheduleFam} = props;
+function DoctorSlotApt(props) {
+  const { DayName, StartTime, bookRescheduleClick} = props;
   const textColor = useColorModeValue("gray.700", "white");
-  const buttonText = cameFromReschedule ||cameFromRescheduleFam ? "Reschedule" : "Book"; // Change button text based on cameFromReschedule
 
   return (
     <Tr
@@ -53,12 +52,14 @@ function DocSlotRowApt(props) {
       </Td>
 
       <Td>
-      <Button onClick={bookClickHandler} colorScheme="teal">
-      {buttonText}
+        <Button   
+          onClick={() => props.bookRescheduleClick(DayName,StartTime)}
+         colorScheme="teal">
+          Reschedule
         </Button>
       </Td>
     </Tr>
   );
 }
 
-export default DocSlotRowApt;
+export default DoctorSlotApt;
