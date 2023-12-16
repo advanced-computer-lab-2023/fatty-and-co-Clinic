@@ -3,7 +3,6 @@ import { Box, Text, Flex } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useParams , useLocation} from "react-router-dom";
-
 import { useAuthContext } from "hooks/useAuthContext";
 import DocSlotAptsTable from "./DocSlotAptsTable";
 
@@ -16,20 +15,20 @@ export const ViewMySlots = () => {
   });
   const [tableData, setTableData] = useState([{}]);
   const location = useLocation();
-  const { state } = location;
-  //const { username } = useParams();
-  let username = state.Username;
- 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
+  const searchParams = new URLSearchParams(location.search);
+  const patientUsername = searchParams.get("username");
+  const doctor= searchParams.get("doctor");
 
   useEffect(() => {
     axios
-      .get(API_PATHS.getDoctorByUsername + user.Username, {
+      .get(API_PATHS.getDoctorByUser , {
         headers: { Authorization },
       })
       .then((response) => response.data)
       .then((data) => {
+       
         setFormData({
           name: data.Name,
           speciality: data.Speciality,
@@ -42,7 +41,7 @@ export const ViewMySlots = () => {
 
   useEffect(() => {
     axios
-      .get(API_PATHS.viewAllAvailableSlots + username, {
+      .get(API_PATHS.viewMySlots ,{
         headers: { Authorization },
       })
       .then((response) => setTableData(response.data))
@@ -53,7 +52,7 @@ export const ViewMySlots = () => {
 
   return (
     <Box pt="80px">
-      {(username && username !== ":username" && (
+       {(doctor && doctor !== ":username" && (
         <Flex flexDirection="column">
           <Box>
             <Text>
@@ -74,10 +73,9 @@ export const ViewMySlots = () => {
             </Text>
             <DocSlotAptsTable
               title={"Doctor's Working Slots"}
-              captions={["Day", "Hour", "Book"]}
+              captions={["Day", "Hour", ""]}
               data={tableData}
-
-              //setTableData={setTableData}
+              setTableData={setTableData}
             />
           </Box>
         </Flex>

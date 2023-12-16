@@ -1,5 +1,8 @@
 const express = require("express");
 const {
+  validateBookingDateDoctor,
+  viewAllAvailableSlotsForMe,
+  getDoctorByUser,
   createDoctor,
   deleteDoctor,
   getAllDoctors,
@@ -70,7 +73,8 @@ router.patch("/updateDoctor", checkDoctor, updateDoctor);
  * @param {string} id - The ID of the doctor
  */
 router.get("/getDoctorByid/:id", getDoctorByID);
-
+router.get("/getDoctorByUser",checkDoctor,getDoctorByUser)
+router.get("/viewMySlots/",checkDoctor,viewAllAvailableSlotsForMe)
 /**
  * @route GET /doctors/username/:username
  * @desc Returns a doctor by username
@@ -187,6 +191,9 @@ router.get("/viewMySlotsDoc", checkDoctor, (req, res) => {
 router.get("/validateBookingDate", checkPatient, (req, res) => {
   validateBookingDate(req, res);
 });
+
+router.get("/validateBookingDateDoctor",checkDoctor,(req, res) => {
+  validateBookingDate(req, res);})
 
 router.get("/getPaymentAmount", checkPatient, (req, res) => {
   getPaymentAmount(req, res);

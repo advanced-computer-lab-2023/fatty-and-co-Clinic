@@ -30,27 +30,17 @@ export function rescheduleApp() {
   console.log(Authorization);
 
   const toast = useToast();
-
-  const history = useHistory();
-
   const location = useLocation();
-  console.log(location);
-  const { state } = location;
-  console.log(state);
-  let StartTime = state.StartTime;
-  let DayName = state.DayName;
-  let DoctorId = state.DoctorId;
- 
+  const searchParams = new URLSearchParams(location.search);
+  const patientUsername = searchParams.get("username");
+  const DayName = searchParams.get("day");
+  const StartTime = searchParams.get("startTime");
+  const DoctorId=searchParams.get("id")
 
+  console.log(DayName)
+  console.log(DoctorId)
+  console.log(patientUsername)
 
-  console.log(state);
-  //const username = user.Username;
-
-  console.log(StartTime);
-  console.log(DayName);
-  console.log(DoctorId);
-
-  
   const [aptDate, setAptDate] = useState(new Date());
 
 
@@ -78,45 +68,55 @@ export function rescheduleApp() {
     );
     console.log("dateCheck" + dateToCheck);
     DateFinal = formatISO(dateToCheck);
-
+    
     console.log("dateCheckF" + DateFinal);
-
-    const url = API_PATHS.validateBookingDate;
-
-    axios
-      .get(url, {
-        params: { DayName, DateFinal, DoctorId },
-        headers: { Authorization },
-      })
-      .then((response) => {
-        const url2= API_PATHS.rescheduleForPatient;
-        axios.post(url2,{
-          params: { patientUsername, DateFinal},
-          headers: { Authorization }}).
-        then((response)=>{
-          if(response.status==200){
-          toast({
-            title: "Success",
-            description: "Appointment rescheduled successfully!",
-            status: "success",
-            duration: 5000, // Adjust duration as needed
-            isClosable: true,
-          });}
-          else{
-            toast({
-              title: "Error",
-              description: "Cannot reschedule!",
-              status: "error",
-              duration: 5000, // Adjust duration as needed
-              isClosable: true,
-            });}
-        })
-      
-      
-      
-      })
-      .catch((error) => {
-        console.log(error);
+     const url = API_PATHS.validateForDoctor;
+    try {
+        const response = await axios.get(url, {
+          params: { DayName, DateFinal, DoctorId },
+          headers: { Authorization },
+        });
+        if (response.status === 200) {
+         console.log(API_PATHS.rescheduleForDoctor)
+          try {
+            const reschedule = await fetch(API_PATHS.rescheduleForDoctor, {
+              method: "POST",
+              headers: {
+                Authorization,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                patientUsername:patientUsername,
+                date: DateFinal,
+              }),
+            });
+    
+            const errorData = await reschedule.json();
+    
+            if (reschedule.ok) {
+              toast({
+                title: "Rescheduled successfully",
+                status: "success",
+                description: errorData.success,
+                duration: 9000,
+                isClosable: true,
+              });
+    
+            } else {
+              toast({
+                title: "Failed to Reschedule",
+                description: errorData.error,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+            }
+          } catch (error) {
+            console.error("An error occurred during Resceduling", error);
+          }
+        }
+      } catch (error) {
+        console.error("Error validating booking date", error);
         toast({
           title: "Error",
           description: error.response.data.message,
@@ -124,7 +124,7 @@ export function rescheduleApp() {
           duration: 9000,
           isClosable: true,
         });
-      });
+      }
   };
  
 

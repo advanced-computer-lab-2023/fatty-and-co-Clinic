@@ -672,6 +672,7 @@ const reschedulePatient = async (req, res) => {
       return;
      }
      else if(prevApp.Date.getFullYear()==reqDate.getFullYear()&& prevApp.Date.getMonth()+1==reqDate.getMonth()+1&& prevApp.Date.getDate()+1==reqDate.getDate()+1&& prevApp.Date.getUTCHours()==reqDate.getUTCHours()){
+      console.log("First else")
       res.status(404).json({err:"You're rescheduling appointment on the same date it's scheduled on!"})
      }
      else{
@@ -687,14 +688,15 @@ const reschedulePatient = async (req, res) => {
           isBooked= true;
           break;
      }
- 
+     console.log("isBooked "+ isBooked)
      if(isBooked){
+      console.log("error another app booked on same day")
       res.status(400).json({err:"There is another appointment booked on same date!"})
       return;
      }
      else{
      const updateAppOld=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date,Status:"Rescheduled"})      
-     const newApp= await appointmentModel.create({PatientUsername:patientUsername,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
+     const newApp= await appointmentModel.create({PatientUsername:patientUsername,BookedBy: updateAppOld.BookedBy,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
      res.status(200).json("You have rescheduled appointment successfully!")
      return;}
     }}
@@ -703,6 +705,18 @@ const reschedulePatient = async (req, res) => {
   }
 }
 
+
+
+const getDoctorId= async(req,res)=>{
+  try{
+    const doctorUsername=req.user.Username
+    const doctorRow= await doctorModel.findOne({Username:doctorUsername})
+    res.status(200).json(doctorRow._id)
+  }
+  catch{
+    res.status(404).json({err:"Cannot find doctor"})
+  }
+}
 const cancelAppForFam = async (req, res) => {
  
   try {
@@ -1294,6 +1308,7 @@ const reschdulebypatient= async (req, res) => {
 
   
 module.exports = {
+  getDoctorId,
   cancelAppForFam,
   cancelAppForSelf,
   createAppointment,

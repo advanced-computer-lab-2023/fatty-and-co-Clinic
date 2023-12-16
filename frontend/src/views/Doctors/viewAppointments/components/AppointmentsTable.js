@@ -57,6 +57,7 @@ export const AppointmentsTable = ({ title, captions, data, isLoading, handleResc
                   <AppointmentsRow
                     DoctorName={row.DoctorName}
                     key={row._id}
+                    DoctorUsername={row.DoctorName}
                     customkey={row._id}
                     PatientName={row.PatientName}
                     PatientUsername={row.PatientUsername}

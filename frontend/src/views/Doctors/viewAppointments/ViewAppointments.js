@@ -18,7 +18,7 @@ export default function ViewAppointmentsInner() {
   const [statusSearchValue, setStatusSearchValue] = useState("");
   const [dateSearchValue, setDateSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const [patientUsername,setPatientUsername]=useState("");
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const history = useHistory();
@@ -43,9 +43,9 @@ export default function ViewAppointmentsInner() {
       .finally(() => setIsLoading(false));
   }, [searchParams]);
 
-  const handleRescheduleAppoinmtent=(patientUsername)=>{
-   setPatientUsername(patientUsername);
-   const redirectUrl=`doctor/viewMySlots/?username=${patientUsername}`
+  const handleRescheduleAppointment=(DoctorUsername,PatientUsername)=>{
+   setPatientUsername(PatientUsername);
+   const redirectUrl=`/doctor/viewMySlots/?username=${PatientUsername}&doctor=${DoctorUsername}`
    history.replace(redirectUrl)
   }
 
@@ -118,7 +118,7 @@ export default function ViewAppointmentsInner() {
           captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}
-          handleRescheduleAppoinmtent={handleRescheduleAppoinmtent}
+          handleRescheduleAppointment={handleRescheduleAppointment}
         />
       </Flex>
     </Box>
