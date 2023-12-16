@@ -1,28 +1,25 @@
 // Chakra imports
-import { Flex, Icon, Link, Text, useColorModeValue, Heading, Button, useToast, Divider, Box } from "@chakra-ui/react";
+import { Flex, Icon, Link, Text, useColorModeValue, Heading, Button, useToast } from "@chakra-ui/react";
 // Custom components
 import Card from "components/Card/Card";
 import CardBody from "components/Card/CardBody";
 import CardHeader from "components/Card/CardHeader";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useHistory } from 'react-router-dom';
 import { useAuthContext } from "hooks/useAuthContext";
 
-const Subscription = ({ subscription, myPackage }) => {
+const Subscription = ({ subscription, myPackage, refresh }) => {
   // Chakra color mode
   const textColor = useColorModeValue("gray.700", "white");
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const toast = useToast();
   const history = useHistory();
-  const [isCancelled, setIsCancelled] = useState(false);
-  useEffect(() => {
-    }, [subscription, myPackage]);
 
   const isSubscriptionEmpty = () => {
-    return isCancelled|| (Array.isArray(subscription) && subscription.every(obj => Object.keys(obj).length === 0));
+    return (Array.isArray(subscription) && subscription.every(obj => Object.keys(obj).length === 0));
   };
 
   const handleCancel = async (e) => {
@@ -44,7 +41,8 @@ const Subscription = ({ subscription, myPackage }) => {
           duration: 9000,
           isClosable: true,
         });
-        setIsCancelled(true);
+        refresh();
+        setPackage2("");
       } else {
         toast({
           title: "Failed to Cancel",
@@ -58,110 +56,87 @@ const Subscription = ({ subscription, myPackage }) => {
       console.error("An error occurred", error);
     }
   };
-
-   const packageColors = {
-    silver: "gray.400",
-    platinum: "blue.200",
-    premium: "blue.200",
-    gold: "yellow.400",
-  };
-
-  // Get the color based on the package name, default to teal.500 if not found
-  const packageColor = packageColors[myPackage.Name?.toLowerCase()] || "teal.500";
   
   return (
-    <Card p='16px' my={{ sm: "24px", xl: "0px" }} w="100%">
-      {!isSubscriptionEmpty()?(
-        <>
+    <Card p='16px' my={{ sm: "24px", xl: "0px" }}>
       <CardHeader p='12px 5px' mb='12px'>
-        <Text fontSize="lg" fontWeight="bold">
-          Subscribed to{" "}
-          <Text as="span" color={packageColor}>
-            {myPackage.Name}
-          </Text>{" "}
-            package
+        <Text fontSize='lg' color={textColor} fontWeight='bold'>
+          Subscribed Package Details
         </Text>
       </CardHeader>
       <CardBody px='5px'>
-        <Flex direction='column' w="100%">
-            <Box align='center'>
-            <Heading size='xs' textTransform='uppercase'>
-                Price
+        {!isSubscriptionEmpty()?(
+        <Flex direction='column'>
+            <Heading as="h3" size="lg" mb="4">
+                 You are subscribed to the{" "}
+                <Text as="span" color="red.500">
+                 {myPackage.Name}
+                </Text>{" "}
+                package
             </Heading>
-            <Text pt='2' fontSize='sm'>
-                {myPackage.Price}
-            </Text>
-            </Box>
-            <Divider />
-            <Box align='center' mt='4'>
-            <Heading size='xs' textTransform='uppercase'>
-                Discounts
-            </Heading>
-            
-            <Flex justifyContent="space-between">
-                <Box textAlign="left">
-                <Text pt="2" fontSize="sm" align="center">
-                    Session
-                </Text>
-                <Text pt="2" fontSize="sm" align="center">
-                    {myPackage.Session_Discount}%
-                </Text>
-                </Box>
 
-                <Box textAlign="center">
-                    <Text pt="2" fontSize="sm" align="center">
-                    Medicine
-                </Text>
-
-                <Text pt="2" fontSize="sm" align="center">
-                    {myPackage.Medicine_Discount}%
-                </Text>
-                </Box>
-                <Box textAlign="right" >
-                    <Text pt="2" fontSize="sm" align="center">
-                        Family
-                    </Text>
-                    <Text pt="2" fontSize="sm" align="center">
-                        {myPackage.Family_Discount}%
-                    </Text>
-                </Box>
-            </Flex>
-            </Box>
-            <Divider />
-            <Box align='center' mt='4'>
-            <Heading size='xs' textTransform='uppercase'>
-                End date
-            </Heading>
-            <Text pt='2' fontSize='sm'>
-                {new Date(subscription.Enddate).toLocaleDateString("en-GB")}
+          <Flex align='center' mb='15px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              Price:{" "}
             </Text>
-            </Box>
-            <Divider />
-            <Box align='center' mt='4'>
-            <Heading size='xs' textTransform='uppercase'>
-                Renewal Date
-            </Heading>
-            <Text pt='2' fontSize='sm'>
-                {new Date(subscription.Renewaldate).toLocaleDateString("en-GB")}
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              {myPackage.Price}
             </Text>
-            </Box>
-            <Divider/>
-            <Box align='center' mt='4'>
-             <Button colorScheme="red" width="fit-content" onClick={handleCancel}>
+          </Flex>
+          <Flex align='center' mb='18px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              Session Discount:{" "}
+            </Text>
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              {myPackage.Session_Discount}%
+            </Text>
+          </Flex>
+          <Flex align='center' mb='18px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              Medicine_Discount:{" "}
+            </Text>
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              {myPackage.Medicine_Discount}%
+            </Text>
+          </Flex>
+          <Flex align='center' mb='18px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              Family Discount:{" "}
+            </Text>
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              {myPackage.Family_Discount}%
+            </Text>
+          </Flex>
+          <Flex align='center' mb='18px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              Start Date:{" "}
+            </Text>
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              { new Date(subscription.Startdate).toLocaleDateString("en-GB")}
+            </Text>
+          </Flex>
+          <Flex align='center' mb='18px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              Renewal Date:{" "}
+            </Text>
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              {new Date(subscription.Renewaldate).toLocaleDateString("en-GB")}
+            </Text>
+          </Flex>
+          <Flex align='center' mb='18px'>
+            <Text fontSize='md' color={textColor} fontWeight='bold' me='10px'>
+              End Date:{" "}
+            </Text>
+            <Text fontSize='md' color='gray.500' fontWeight='400'>
+              {new Date(subscription.Enddate).toLocaleDateString("en-GB")}
+            </Text>
+          </Flex>
+          <Button colorScheme="red" width="fit-content" onClick={handleCancel}>
                 Cancel Subscription
-            </Button>
-            </Box>
+          </Button>
         </Flex>
-        </CardBody>
-        </>
+        
         ):(
-        <>
-        <CardHeader p='12px 5px' mb='12px'>
-            <Text fontSize='lg' color={textColor} fontWeight='bold'>
-            Subscription 
-            </Text>
-        </CardHeader>
-        <CardBody px='5px'>
         <Flex direction='column'>
             <Heading  as="h2" size="xl" mb={4}>You are not subscribed to any package</Heading>
             <Heading as="h3" size="lg" mb={4} color="teal">Explore Our Exclusive Packages</Heading>
@@ -173,9 +148,8 @@ const Subscription = ({ subscription, myPackage }) => {
                 Subscribe Now
             </Button>
         </Flex>
-        </CardBody>
-        </>
         )}
+      </CardBody>
     </Card>
   );
 };

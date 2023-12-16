@@ -28,7 +28,6 @@ import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
-import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
@@ -42,7 +41,7 @@ import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
 import VideoCallPage from "views/Patient/VideoCallTemp";
-
+import chatWithDoc from "views/Patient/chatwithDoc";
 import {
   HomeIcon,
   StatsIcon,
@@ -52,8 +51,9 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
-import DoctorProfile from "views/Doctors/viewProfile";
-
+import ChatWithPatient from "views/Doctors/chat/chatwithPat";
+import DashboardPat from "views/Dashboard/DashboardPat";
+import DashboardDoc from "views/Dashboard/DashboardDoc";
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
 //component de 7aga fe views
@@ -126,15 +126,9 @@ var dashRoutes = [
     component: PatientAppointments,
     layout: "/patient",
   },
+
   {
-    path: "/viewfamAppoint",
-    name: "View family Appointments ",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewFamilyApp,
-    layout: "/patient",
-  },
-  {
-    path: "/Subscribtions",
+    path: "/Subscribtions/",
     name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -239,6 +233,20 @@ var dashRoutes = [
   },
 
   {
+    path: "/chatWithDoctor/",
+    name: "Chat With Doctor",
+    icon: <HomeIcon color="inherit" />,
+    component: chatWithDoc,
+    layout: "/patient",
+  },
+  {
+    path: "/chatWithPatient/",
+    name: "Chat With Patient",
+    icon: <HomeIcon color="inherit" />,
+    component: ChatWithPatient,
+    layout: "/doctor",
+  },
+  {
     path: "/viewDoctorDetails/:username",
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,
@@ -279,7 +287,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/medicalhistory",
+    path: "/medicalhistory/:patientUsername",
     name: "Medical History",
     icon: <HomeIcon color="inherit" />,
     component: MedicalHistoryPatient,
@@ -328,7 +336,15 @@ var dashRoutes = [
     name: "Dashboard",
     rtlName: "لوحة القيادة",
     icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
+    component: DashboardPat,
+    layout: "/patient",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardDoc,
     layout: "/doctor",
   },
 
@@ -380,13 +396,6 @@ var dashRoutes = [
     name: "View patient profile",
     component: PatientProfile,
     layout: "/patient",
-    show: false,
-  },
-  {
-    path: "/profile",
-    name: "View doctor profile",
-    component: DoctorProfile,
-    layout: "/doctor",
     show: false,
   },
 

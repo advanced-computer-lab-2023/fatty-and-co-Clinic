@@ -71,7 +71,7 @@ router.post("/rescheduleAppointmentfamilymember", checkPatient, reschedulefamily
  * @access Patient
  */
 router.get("/getAppointmentsPat", checkPatient, getAppointmentsPat);
-router.get("/getAppointmentsfamilymembers", checkPatient, getAppointmentsfamilymembers);
+
 router.get("/filterAppointmentsByStatusDoc", checkPatient, filterAppointmentsByStatusDoc);
 router.get("/filterAppointmentsByStatusPat", checkPatient, filterAppointmentsByStatusPat);
 router.get("/filterAppointmentsByDateDoc", checkPatient, filterAppointmentsByDateDoc);

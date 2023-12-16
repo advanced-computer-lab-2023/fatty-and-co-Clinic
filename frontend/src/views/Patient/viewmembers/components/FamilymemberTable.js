@@ -47,6 +47,7 @@ export const FamilymemberTable = ({ title, captions, data }) => {
             {data.map((row) => {
               return (
                 <FamilymemberRow
+              
                   Name={row.Name}
                   NationalId={row.NationalId}
                   Age={row.Age}

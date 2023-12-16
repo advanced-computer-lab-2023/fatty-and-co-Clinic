@@ -6,6 +6,7 @@ import PackageInformation from "./components/PackageInformation";
 import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { usePackageContext } from "./hooks/usePackageContext";
+import PackageForm from "./components/PackageForm";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 
@@ -40,6 +41,8 @@ function PackageI() {
         {packages && (
           <PackageInformation title={"Available Packages"} data={packages} />
         )}
+
+        <PackageForm />
       </Grid>
     </Flex>
   );

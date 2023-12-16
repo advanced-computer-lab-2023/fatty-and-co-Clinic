@@ -91,7 +91,6 @@ const addMedToPrescription = async (req, res) => {
     const medicines = {
       Name: medicine,
       Dosage: dosage,
-      Description: description,
     };
     prescription.Medicine.push(medicines);
     await prescription.save();

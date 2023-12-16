@@ -24,8 +24,6 @@ import {
   VStack,
   StackDivider,
   Icon,
-  InputGroup,
-  InputLeftElement,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
@@ -34,7 +32,7 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
 import AddMedButton from "views/Doctors/viewAppointments/components/addMedButton";
-import { MinusIcon, AddIcon, EditIcon } from "@chakra-ui/icons";
+import { MinusIcon, AddIcon } from "@chakra-ui/icons";
 
 export default function UpdatePrescription({ customkey }) {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
@@ -43,8 +41,6 @@ export default function UpdatePrescription({ customkey }) {
 
   const [medicine, setMedicine] = useState("");
   const [dosage, setDosage] = useState("");
-
-  const [descriptionAdd, setDescriptionAdd] = useState("");
   const [addMed, setaddMed] = useState(false);
   const [meds, setMeds] = useState([]);
   const [descriptions, setDescriptions] = useState([]);
@@ -82,9 +78,6 @@ export default function UpdatePrescription({ customkey }) {
     // Check prescription status when the component mounts
     getMeds();
   }, []);
-  useEffect(() => {
-    setDescriptions(meds.map((med) => med.Description || ""));
-  }, [meds]);
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
@@ -220,7 +213,6 @@ export default function UpdatePrescription({ customkey }) {
     setaddMed(false);
     // ...
     setIsModalOpen(false);
-    setDescriptions(meds.map((med) => med.Description || ""));
   };
   return (
     <>
@@ -252,25 +244,6 @@ export default function UpdatePrescription({ customkey }) {
                     <Text color="white" mb="2px" fontWeight="semibold">
                       Dosage: {med.Dosage}
                     </Text>
-                    <div>
-                      <label
-                        htmlFor="description"
-                        style={{ color: "white", fontWeight: "semibold" }}
-                      >
-                        Description:
-                      </label>
-                      <InputGroup>
-                        <InputLeftElement
-                          children={<EditIcon color="gray.300" />}
-                        />
-                        <Input
-                          value={descriptions[index]}
-                          onChange={(event) =>
-                            handleDescription(event, index, med.Name)
-                          }
-                        />
-                      </InputGroup>
-                    </div>
                   </Box>
 
                   <VStack>
@@ -325,25 +298,6 @@ export default function UpdatePrescription({ customkey }) {
                         onClick={() => handleInc(med.Name, med.Dosage + 1)}
                       />
                     </ButtonGroup>
-                    <Button
-                      p="0px"
-                      bg="transparent"
-                      mb={{ sm: "10px", md: "0px" }}
-                      me={{ md: "12px" }}
-                      onClick={() => handleEdit(med.Name, index)}
-                    >
-                      <Flex
-                        color="black"
-                        cursor="pointer"
-                        align="center"
-                        p="16px"
-                      >
-                        <Icon as={FaPencilAlt} me="4px" />
-                        <Text fontSize="xs" fontWeight="semibold">
-                          EDIT
-                        </Text>
-                      </Flex>
-                    </Button>
                   </VStack>
                 </HStack>
                 <hr width="100%" color="gray" />
@@ -376,13 +330,6 @@ export default function UpdatePrescription({ customkey }) {
                   bg="white"
                   placeholder="Enter dosage"
                   onChange={handleDosage}
-                />
-                <Text mb="8px">Description: </Text>
-                <Input
-                  description={descriptionAdd}
-                  bg="white"
-                  placeholder="Enter description"
-                  onChange={handleDescriptionAdd}
                 />
               </div>
             )}

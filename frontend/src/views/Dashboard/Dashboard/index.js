@@ -5,12 +5,16 @@ import {
   Image,
   SimpleGrid,
   useColorModeValue,
+  Box,
+  Button,
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
 import logoChakra from "assets/svg/logo-white.svg";
 import BarChart from "components/Charts/BarChart";
 import LineChart from "components/Charts/LineChart";
+
+import { IoChatbubbleEllipses } from "react-icons/io5";
 // Custom icons
 import {
   CartIcon,
@@ -18,7 +22,7 @@ import {
   GlobeIcon,
   WalletIcon,
 } from "components/Icons/Icons.js";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { dashboardTableData, timelineData } from "variables/general";
 import ActiveUsers from "./components/ActiveUsers";
 import BuiltByDevelopers from "./components/BuiltByDevelopers";
@@ -27,9 +31,24 @@ import OrdersOverview from "./components/OrdersOverview";
 import Projects from "./components/Projects";
 import SalesOverview from "./components/SalesOverview";
 import WorkWithTheRockets from "./components/WorkWithTheRockets";
+import io from "socket.io-client";
+import socketIOClient from "socket.io-client";
+
+// const ENDPOINT = "http://localhost:8000";
+// const notificationSocket = socketIOClient(ENDPOINT);
 
 export default function Dashboard() {
   const iconBoxInside = useColorModeValue("white", "white");
+
+  const [notifications, setNotifications] = useState([]);
+
+
+  //const { user } = useAuthContext();
+ // const Authorization = `Bearer ${user.token}`;
+
+  const [currentUsername, setCurrentUsername] = useState("");
+
+  const [hasNotif, setHasNotif] = useState(false);
 
   return (
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
@@ -121,6 +140,42 @@ export default function Dashboard() {
           data={timelineData}
         />
       </Grid>
+      
+      <Box
+          position="fixed"
+          bottom="0"
+          right="0"
+          width="150px"
+          height="150px"
+          overflow="hidden"
+        >
+          <Button
+            colorScheme="white"
+            borderRadius="full"
+            boxShadow="lg"
+            p="7"
+            position="relative"
+            onClick={() => {
+              history.push(chatUrl);
+            }}
+          >
+            <IoChatbubbleEllipses size="3.0em" color="teal" />
+            {/* Green Dot */}
+            {hasNotif && (
+              <Box
+                position="absolute"
+                top="0px"
+                right="-1px"
+                width="14px"
+                height="14px"
+                borderRadius="full"
+                backgroundColor="teal"
+                zIndex="1"
+              />
+            )}
+          </Button>
+        </Box>
+      
     </Flex>
   );
 }

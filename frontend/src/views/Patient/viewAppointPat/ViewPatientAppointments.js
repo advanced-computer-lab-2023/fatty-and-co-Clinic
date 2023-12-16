@@ -6,7 +6,6 @@ import PatientAppTable from "./components/PatientAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
 
 export function ViewPatientAppointments() {
-  const [DoctorUsername, setDoctorUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -185,9 +184,12 @@ export function ViewPatientAppointments() {
           captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
           data={data}
           isLoading={isLoading}
-          handleCancelAppointment={handleCancelAppointment}
         />
-      
+        {/* )) || (
+                <Text fontSize="3xl" fontWeight="bold">
+                  Username not found
+                </Text>
+              )} */}
       </Flex>
     </Box>
   );

@@ -659,6 +659,7 @@ const testAppointRef = async (req, res) => {
     });
 };
 
+
 const reschedulePatient = async (req, res) => {
  
   try {
@@ -1169,7 +1170,6 @@ module.exports = {
   upcomingAppforDoc,
   searchPatient,
   getAppointmentsPat,
-  getAppointmentsfamilymembers,
   testAppointRef,
   rescheduleAppointmentPatient,
   reschedulefamilymember,

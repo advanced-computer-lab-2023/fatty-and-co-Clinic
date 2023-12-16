@@ -4,7 +4,6 @@ import { BellIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
-  Tooltip,
   IconButton,
   Input,
   InputGroup,
@@ -108,6 +107,31 @@ export default function HeaderLinks(props) {
       alignItems="center"
       flexDirection="row"
     >
+      
+      <Menu>
+      <Tooltip label="Notifications" fontSize='md'> 
+        <MenuButton>
+          <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
+        </MenuButton>
+      </Tooltip>
+        <MenuList p="16px 8px">
+          <Flex flexDirection="column">
+            
+            {Array.isArray(notifications) && notifications.map((row) => {
+              return (
+              <MenuItem borderRadius="8px" mb="10px">
+                <a href= {(user.userType === "Patient"? "/patient/viewAppointPat" : "/doctor/viewAppointments")}>
+              <ItemContent
+                info= {row.Message}
+                boldInfo={row.Title}
+              />
+            </a>
+            </MenuItem>
+              );
+            })}            
+          </Flex>
+        </MenuList>
+      </Menu>
       {!user && (
         <NavLink to="/auth/signin">
           <Button
@@ -136,6 +160,7 @@ export default function HeaderLinks(props) {
         </NavLink>
       )}
       {user && (
+        <>
         <Button
             ms="0px"
             px="0px"
@@ -146,24 +171,46 @@ export default function HeaderLinks(props) {
               document.documentElement.dir ? (
                 ""
               ) : (
-                <Tooltip label="Profile" fontSize='md'> 
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"black"}}  />
-                </Tooltip>
+                <ProfileIcon  color={navbarIcon} w="22px" h="22px" me="0px" />
               )
             }
             leftIcon={
               document.documentElement.dir ? (
-               <Tooltip label="Profile" fontSize='md'> 
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"black"}}  />
-                </Tooltip>
+                <ProfileIcon  color={navbarIcon} w="22px" h="22px" me="0px" />
               ) : (
                 ""
               )
             }
+            // TODO: On click navigate to profile
             onClick={()=>{history.push('./profile')}}
           >
           </Button>
-          )}
+          <Button
+            ms="0px"
+            px="0px"
+            me={{ sm: "2px", md: "16px" }}
+            color={navbarIcon}
+            variant="transparent-with-icon"
+            rightIcon={
+              document.documentElement.dir ? (
+                ""
+              ) : (
+                <Icon as={BsBoxArrowRight}  color={navbarIcon} w="22px" h="22px" me="0px" />
+              )
+            }
+            leftIcon={
+              document.documentElement.dir ? (
+                <Icon as={BsBoxArrowRight}  color={navbarIcon} w="22px" h="22px" me="0px" />
+              ) : (
+                ""
+              )
+            }
+            onClick={useLogout()}
+          >
+            <Text display={{ sm: "none", md: "flex" }}>Log out</Text>
+          </Button>
+        </>
+      )}
       <SidebarResponsive
         logoText={props.logoText}
         secondary={props.secondary}
@@ -183,82 +230,29 @@ export default function HeaderLinks(props) {
         h="18px"
       /> */}
   
-      {user.userType !== "Admin" && (
+      {/* {user.userType !== "Admin" && (
       <ChakraProvider theme={theme}>
-        <Tooltip label="Wallet" >
-          <Flex
-            alignItems="center"
-          >
         <Icon
-              as={MdAttachMoney}
-              boxSize={5}
-              color={navbarIcon}
-              _hover={{ color: "teal.500", cursor: "pointer" }}
-              w="18px"
-              h="18px"
-              mb="2px"
-            />
-            <Text
-              fontSize="sm"
-              fontWeight="bold"
-              color={navbarIcon}
-              _hover={{ color: "teal.500", cursor: "pointer" }}
-              w="auto"
-              h="27px"
-              mr="13px"
-            >
-          {Wallet !== null ? `${parseFloat(Wallet).toFixed(2)}` : ""}
-        </Text>
-        </Flex>
-        </Tooltip>
-      </ChakraProvider> 
-      )}
-      <Menu>
-      <Tooltip label="Notifications" fontSize='md'> 
-        <MenuButton>
-          <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
-        </MenuButton>
-      </Tooltip>
-        <MenuList p="16px 8px">
-          <Flex flexDirection="column">
-            
-            {Array.isArray(notifications) && notifications.map((row) => {
-              return (
-              <MenuItem borderRadius="8px" mb="10px">
-                <a href= {(user.userType === "Patient"? "/patient/viewAppointPat" : "/doctor/viewAppointments")}>
-              <ItemContent
-                info= {row.Message}
-                boldInfo={row.Title}
-              />
-            </a>
-            </MenuItem>
-              );
-            })}            
-          </Flex>
-        </MenuList>
-      </Menu>
-      {user && (
-          <Button
-          ms="0px"
-          px="0px"
-          me={{ sm: "2px", md: "16px" }}
+          as={MdAttachMoney}
+          boxSize={5}
           color={navbarIcon}
-          variant="transparent-with-icon"
-          _hover={{ color: "red.500", cursor: "pointer" }}
-          onClick={useLogout()}
-        >
-          <Text display={{ sm: "none", md: "flex" }}>Log out</Text>
-          <Icon
-            as={BsBoxArrowRight}
-            _hover={{ color: "red.500", cursor: "pointer" }}
-            color={navbarIcon}
-            w="22px"
-            h="22px"
-            me="0px"
-            ml="5px"
-          />
-        </Button>
+          w="18px"
+          h="18px"
+          mb="2px"
+        />
+      </ChakraProvider>
       )}
+      <ChakraProvider theme={theme}>
+        <Text
+          fontSize="sm"
+          fontWeight="bold"
+          color={navbarIcon}
+          w="100px"
+          h="27px"
+        >
+          {Wallet !== null ? `${Wallet}` : ""}
+        </Text>
+      </ChakraProvider> */}
     </Flex>
   );
 }
