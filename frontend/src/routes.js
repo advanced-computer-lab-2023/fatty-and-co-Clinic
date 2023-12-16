@@ -352,7 +352,7 @@ var dashRoutes = [
     layout: "/patient",
     show: false, // Add this to hide route from sidebar
   },
-
+ 
   {
     path: "/bookAptDetails/:row",
     name: "Book Appointment Details",
