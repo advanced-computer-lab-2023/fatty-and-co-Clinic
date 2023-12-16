@@ -1,8 +1,9 @@
 import { JaaSMeeting } from "@jitsi/react-sdk";
 import { Spinner } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
+import { set } from "date-fns";
 
-function VideoChat({ roomName, displayName }) {
+function VideoChat({ roomName, displayName, setIsVideoCall }) {
   const history = useHistory();
   return (
     <JaaSMeeting
@@ -61,7 +62,8 @@ function VideoChat({ roomName, displayName }) {
       onApiReady={(externalApi) => {
         externalApi.on("videoConferenceLeft", () => {
           // Perform any additional actions here
-          history.push("./"); // TODO: redirect to chat page
+          // history.push("./"); // TODO: redirect to chat page
+          setIsVideoCall(false);
           console.log("The user has left the conference");
         });
       }}

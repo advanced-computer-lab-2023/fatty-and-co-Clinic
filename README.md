@@ -9,6 +9,12 @@ A brief description of what this project does and who it's for
 
 ## Motivation
 ## Build Status
+
+- Project is in development stage
+- unit tests are needed
+- UI and UX need to be improved in several areas such as booking an appointment
+  [include all missing or broken requirements here]
+
 ## Code Style
 ## Screenshots
 
@@ -90,12 +96,24 @@ Takes two numbers and returns the sum.
 
 ## Tests
 
-To run tests, run the following command
+To run jest tests, run the following command
 
 ```bash
   npm run test
 ```
 
+
+The api routes were tested using postman , Postman is an application used for API testing. It is an HTTP client that tests HTTP requests, utilizing a graphical user interface, through which we obtain different types of responses that need to be subsequently validated. Postman offers many endpoint interaction methods. The following are some of the most used, including their functions:
+
+    GET: Obtain information
+    POST: Add information
+    PUT: Replace information
+    PATCH: Update certain information
+    DELETE: Delete information
+
+And we tested the behaviour of our routes and if they produce the correct status code and response according to our project flow .
+
+Many testing routes were created to test the various API endpoints through postman. You can find these in [API_REFERENCE.md](API_REFERENCE.md)
 
 ## How To Use
 
@@ -135,10 +153,18 @@ Please adhere to this project's `code of conduct`.
 
 ## Credits
 
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
-
+- [Readme Template](https://www.mygreatlearning.com/blog/readme-file/#Q5)
+- [Frontend Template](https://www.creative-tim.com/product/purity-ui-dashboard)
+- [Video Chat Provider JAAS](https://meet.jit.si/)
+- [Best Mern Stack tutorial](https://www.youtube.com/watch?v=98BzS5Oz5E4&list=PL4cUxeGkcC9iJ_KkrkBZWZRHVwnzLIoUE)
+- [React Documentation](https://react.dev/)
+- [Chakra UI Documentation](https://chakra-ui.com/docs/)
+- [Template Documentation](https://demos.creative-tim.com/docs-purity-ui-dashboard/docs/)
+- [MERN stack authentication + profile](https://www.youtube.com/playlist?list=PLr_bWRQ_9ePVfQwf0LorPwTlOZSBoPGIu)
+- [Search Bar in React Tutorial - Cool Search Filter Tutorial](https://www.youtube.com/watch?v=x7niho285qs&list=PLs8AFNosNo41M5IvL5TdewlCzyOUrhDc1&index=16&t=1337s)
+- [React: Add/Remove Input Fields Dynamically on button click](https://youtu.be/XtS14dXwvwE?list=PLs8AFNosNo41M5IvL5TdewlCzyOUrhDc1)
+- [MERN Auth Tutorial](https://www.youtube.com/playlist?list=PL4cUxeGkcC9g8OhpOZxNdhXggFz2lOuCT)
+- (add youtube videos and any guides used)
 
 ## Authors
 

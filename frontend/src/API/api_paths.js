@@ -12,6 +12,7 @@ const NOTIFICATION_BASE = "http://localhost:8000/notification/";
 
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
+  base: API_BASE,
   // Guest
   docSignUp: GUEST_BASE + "addRequest/",
   updateEmail: GUEST_BASE + "updateEmail/",
