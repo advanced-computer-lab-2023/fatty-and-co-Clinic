@@ -1652,33 +1652,73 @@ const uploadFile = async (req, res) => {
 };
  */
 const createFamilymember = async (req, res) => {
-  const currentuser = req.user.Username;
-  const currentPatient = await patientModel.findOne({ Username: currentuser });
-  console.log("current patient ");
-  console.log(currentPatient);
-  const {
+  const  currentuser=req.user.Username;
+ const  currentPatient=await patientModel.findOne({Username:currentuser});
+ console.log("current patient ");
+ //console.log(currentPatient);
+ const  {
+  Username,
+  Name,
+  Password,
+  Email,
+  MobileNum,
+  NationalId,
+  DateOfBirth,
+  Gender,
+  relation,
+  Wallet,
+} = req.body;
+
+ //taste test
+   try {
+    console.log(await patientModel.findOne({Username: Username}));
+     if (NationalId.length !== 16) {
+    // Return an error message.
+    res.status(400).json({ error: "The national ID must be 16 digits long." });
+    return;
+  }
+
+  else if (await patientModel.findOne({Username: Username}))
+  {
+    res.status(400).json({ error: "Username Already exists " });
+    return;
+
+  }
+  else if (await patientModel.findOne({NationalId:NationalId  }))
+  {
+    res.status(400).json({ error: " National id already exists  " });
+    return;
+
+  }
+  else if (await patientModel.findOne({MobileNum:MobileNum  }))
+  {
+    res.status(400).json({ error: " Mobile number already exists   " });
+    return;
+
+  }
+  else if (await systemUserModel.findOne({Email:Email }))
+  {
+    res.status(400).json({ error: " Email already exists  " });
+    return;
+
+  }
+  else if (await systemUserModel.findOne({Username:Username }))
+  {
+    res.status(400).json({ error: " Email already exists  " });
+    return;
+
+  }
+  const currentDate = new Date();
+  const dob = new Date(DateOfBirth);// family memebr you create 
+  const dob1=new Date(currentPatient.DateOfBirth);// signed in 
+  const user = await systemUserModel.addEntry(
     Username,
-    Name,
     Password,
     Email,
-    MobileNum,
-    NationalId,
-    DateOfBirth,
-    Gender,
-    relation,
-    EmergencyContactNumber,
-    EmergencyContactName,
-    Wallet,
-  } = req.body;
-
-  try {
-    const user = await systemUserModel.addEntry(
-      Username,
-      Password,
-      Email,
-      "Patient"
-    );
-    console.log(user);
+    "Patient"
+  );
+console.log(user);
+ console.log("here is the family member ");
     const familyMember = await patientModel.create({
       Username: Username,
       Name: Name,
@@ -1687,57 +1727,56 @@ const createFamilymember = async (req, res) => {
       DateOfBirth: DateOfBirth,
       Gender: Gender,
       EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
+        FullName: currentuser.Name,
+        PhoneNumber: currentuser.PhoneNumber,
+        Relation: (relation === "Child") ? "Father" : "Spouse"
       },
       LinkedPatients: [],
       Wallet: Wallet,
     });
+  
+ 
+   const Familymemberaddedtopatient=await patientModel.findOne({Username:Username});
+   console.log(Familymemberaddedtopatient);
 
-    console.log("here is the family member ");
-
-    const Familymemberfound = await patientModel.findOne({
-      Username: Username,
-    });
-    console.log(Familymemberfound);
-    const currentDate = new Date();
-    const dob = new Date(DateOfBirth);
-    const dob1 = new Date(currentPatient.DateOfBirth);
-
-    const newFamilymember = await familyMemberModel.create({
-      Patient: currentPatient,
-      FamilyMem: Familymemberfound,
-      FamilyMemberUsername: Username,
-      Name: Name,
-      NationalId: NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-      ),
-      Gender: Gender,
-      Relation: relation,
-    });
-    const newFamilymember2 = await familyMemberModel.create({
-      Patient: Familymemberfound,
-      FamilyMem: currentPatient,
-      FamilyMemberUsername: currentPatient.Username,
-      Name: currentPatient.Name,
-      NationalId: currentPatient.NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
-      ),
-      Gender: currentPatient.Gender,
-      Relation: currentPatient.relation,
-    });
-
-    const newUnsubscribed = await subscriptionModel.create({
-      Patient: Familymemberfound,
-      Status: "Unsubscribed",
-    });
-    res.status(200).json(newFamilymember);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//new one yu just took
+   const newFamilymember = await familyMemberModel.create({
+       Patient: Familymemberaddedtopatient,
+       FamilyMem:currentPatient,
+       FamilyMemberUsername: Username,
+       Name: Name,
+       NationalIdFam: NationalId,
+       Age: Math.floor(
+         Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
+       ),
+       Gender: Gender,
+       Relation: relation
+     });
+   // new one as apatient
+   console.log("Nationalid",currentPatient.NationalId);
+     const newFamilymember2 = await familyMemberModel.create({
+       Patient: currentPatient,
+     FamilyMem:Familymemberaddedtopatient,
+       FamilyMemberUsername: currentPatient.Username,
+       Name: currentPatient.Name,
+       NationalIdFam:currentPatient.NationalId,
+       Age: Math.floor(
+         Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
+       ),
+       Gender: currentPatient.Gender,
+       Relation: (relation === "Child") ? "Father" : "Spouse"
+       
+     });
+   console.log("Family memeber2",newFamilymember2);
+      const newUnsubscribed = await subscriptionModel.create({
+        Patient: Familymemberaddedtopatient,
+        Status: "Unsubscribed",
+      });
+     res.status(200).json(newFamilymember2);
+   } catch (error) {
+     res.status(500).json({ error: error.message });
+   }
+ };
 
 const cancelSubscriptionfamilymember = async (req, res) => {
   try {
