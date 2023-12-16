@@ -46,7 +46,7 @@ import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
-
+import ChatWithPharmacist from "views/Doctors/chat/chatwithPhar";
 import VideoCallPage from "views/Patient/VideoCallTemp";
 import {
   HomeIcon,
@@ -101,6 +101,15 @@ var dashRoutes = [
     component: VideoCallPage,
     layout: "/doctor",
   },
+  {
+    path: "/chatWithPharm",
+    name: "chatWithPharm",
+    icon: <HomeIcon color="inherit" />,
+    component: ChatWithPharmacist,
+    layout: "/doctor",
+  },
+
+
   {
     path: "/package",
     name: "Package",
