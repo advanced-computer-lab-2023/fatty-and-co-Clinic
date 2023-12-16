@@ -3,6 +3,8 @@ import { Flex, Button, Box, Input, Select,useToast , Text,useColorModeValue} fro
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
+import { FamAppTable } from "./components/FamAppTable";
+
 // window . location . reload 
 export function ViewFamilyApp() {
   const [DoctorUsername, setDoctorUsername] = useState("");
