@@ -135,6 +135,12 @@ const dateConfirmHandler = async() => {
                 duration: 9000,
                 isClosable: true,
               });
+              setIsLoading(false);
+              const timer = setTimeout(() => {
+                const url="/patient/viewAppointPat"
+                history.replace(url)
+              //  window.location.reload();
+              }, 2000); 
     
             } else {
               toast({
@@ -159,25 +165,14 @@ const dateConfirmHandler = async() => {
           isClosable: true,
         });
       }
+      finally {
+        setIsLoading(false); // Set loading to false when function completes
+
+      }
+
   };
   
-//   const checkOutHandler = () => {
-//     let newUrl = `../AppointmentConfirmation`;
-//     let newState = {
-//       DoctorId: DoctorId,
-//       Date: DateFinal,
-//       FamMemName: FamMemName,
-//       Cost: Cost,
-//       CostFam: CostFam,
-//     };
 
-//     console.log(user.username);
-//     console.log(user.Username);
-//     console.log(user);
-//     // console.log("hellostate");
-//     console.log(newState);
-//     history.push(newUrl, newState);
-//   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
