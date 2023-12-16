@@ -133,7 +133,8 @@ const dateConfirmHandler = async() => {
                 duration: 9000,
                 isClosable: true,
               });
-    
+              history.push('../viewAppointPat');
+              window.location.reload();
             } else {
               toast({
                 title: "Failed to Rescedule",
@@ -143,6 +144,7 @@ const dateConfirmHandler = async() => {
                 isClosable: true,
               });
             }
+
           } catch (error) {
             console.error("An error occurred during Resceduling", error);
           }

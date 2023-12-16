@@ -12,6 +12,8 @@ import {
   Button,
   } from "@chakra-ui/react";
   import React from "react";
+  import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
+
   
   function PatientAppRow(props) {
     const {
@@ -109,7 +111,7 @@ import {
          colorScheme="teal"
         onClick={() => props.handlereschdule(DoctorUsername)}
        >
-         reschdule
+         Reschedule
        </Button>
     )}
   </Td>

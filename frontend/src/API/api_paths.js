@@ -52,6 +52,10 @@ export const API_PATHS = {
   getDoctorByUser:DOCTOR_BASE+"getDoctorByUser/",
   viewMySlots:DOCTOR_BASE+"viewMySlots/",
   validateForDoctor:DOCTOR_BASE+"validateBookingDateDoctor/",
+  getFollowUps: DOCTOR_BASE + "followUps/",
+  getFollowUp: DOCTOR_BASE + "getRequest/",
+  rejectFollowUp: DOCTOR_BASE + "rejectFollowUp/",
+  acceptFollowUp: DOCTOR_BASE + "acceptFollowUp/",
 
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",

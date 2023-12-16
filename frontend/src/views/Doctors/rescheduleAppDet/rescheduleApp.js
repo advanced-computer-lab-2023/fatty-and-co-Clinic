@@ -24,6 +24,7 @@ import DocSlotAptsTable from "../viewMySlotDetails/DocSlotAptsTable";
 export function rescheduleApp() {
   const { isOpen, onToggle } = useDisclosure();
   const [isOpen1, setIsOpen1] = useState(false);
+  const history = useHistory();
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -101,7 +102,8 @@ export function rescheduleApp() {
                 duration: 9000,
                 isClosable: true,
               });
-    
+              history.push('../viewAppointments');
+              window.location.reload();
             } else {
               toast({
                 title: "Failed to Reschedule",
