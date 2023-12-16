@@ -28,6 +28,7 @@ import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
+import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
 import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
@@ -40,6 +41,7 @@ import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
+import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
@@ -155,6 +157,13 @@ var dashRoutes = [
     name: "View Patient Appointments ",
     icon: <HomeIcon color="inherit" />,
     component: PatientAppointments,
+    layout: "/patient",
+  },
+  {
+    path: "/viewfamAppoint",
+    name: "View family Appointments ",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewFamilyApp,
     layout: "/patient",
   },
 
@@ -405,7 +414,14 @@ var dashRoutes = [
     layout: "/patient",
     show: false,
   },
-
+  {
+    path: "/profile",
+    name: "View doctor profile",
+    component: DoctorProfile,
+    layout: "/doctor",
+    show: false,
+  },
+  
   {
     name: "ACCOUNT PAGES",
     category: "account",
