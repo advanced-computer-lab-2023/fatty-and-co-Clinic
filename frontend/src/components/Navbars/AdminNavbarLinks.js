@@ -17,6 +17,7 @@ import {
   ChakraProvider,
   extendTheme,
   Divider,
+  Tooltip,
 } from "@chakra-ui/react";
 import { BsBoxArrowRight } from "react-icons/bs";
 import { Icon } from "@chakra-ui/icon";

@@ -135,10 +135,7 @@ const getDoctorUsername = async () => {
       console.log("Disconnected from server");
     });
 
-    // Disconnect from the Socket.IO server when the component unmounts
-    // return () => {
-    //   socket.disconnect();
-    // };
+
   }, [currentUsername]);
 
  
