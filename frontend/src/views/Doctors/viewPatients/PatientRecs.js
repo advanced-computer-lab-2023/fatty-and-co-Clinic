@@ -237,7 +237,7 @@ export default function PatientAppointmentsDoc() {
                 selectedPrescription.Medicine.forEach((medicine, index) => {
                   doc.text(medicine.Name, 25, y);
                   doc.text(medicine.Dosage + " mg", 77, y);
-                   doc.text(medicine.Description, 105, y);
+                  doc.text(medicine.Description, 105, y);
                   y += 10;
                 });
 
@@ -262,7 +262,7 @@ export default function PatientAppointmentsDoc() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Grid templateColumns={{ sm: "1fr", xl: "repeat(2, 1fr)" }} gap="22px">
+      <Grid templateColumns={{ sm: "1fr", xl: "2fr 1fr" }} gap="22px">
         <Box
           borderWidth="1px"
           borderRadius="lg"
@@ -319,7 +319,7 @@ export default function PatientAppointmentsDoc() {
         </Box>
         <Box
           borderWidth="1px"
-          borderRadius="lg"
+          borderRadius="sm"
           overflow="hidden"
           p="4"
           boxShadow="md"
