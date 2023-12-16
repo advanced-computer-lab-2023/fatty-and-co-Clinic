@@ -254,11 +254,10 @@ const viewHealthFam = async (req, res) => {
       })
     );
     res.status(200).json(package);
-  } catch {
-    res.json(404).json({ error: "No family members are subscribed" });
+  } catch (error){
+    res.json(400).json({ error: "No family members are subscribed" });
   }
 };
-
 const viewOptionPackages = async (req, res) => {
   try {
     const packages = await packageModel.find({});
@@ -1049,7 +1048,7 @@ const viewHealthFamwithstatus = async (req, res) => {
     const username = req.user.Username;
     const Patient = await patientModel.findOne({ Username: username });
     const famMems = await familyMemberModel
-      .find({ $and: [{ Patient: Patient }, { FamilyMem: { $ne: Patient } }] })
+      .find({ $and: [{ FamilyMem: Patient }, { Patient: { $ne: Patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
 
@@ -1223,7 +1222,7 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
+      .find({  $and: [{ FamilyMem: patient }, { patient: { $ne: patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
     res.status(200).send(fam);
@@ -1231,7 +1230,6 @@ const getFamilymembers = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
-
 const selectPatient = async (req, res) => {
   const id = req.query.id;
 
@@ -1324,10 +1322,10 @@ const subscribepackagefamilymem = async (req, res) => {
     // console.log(Patient) //changed this
     const { NationalId, PackageName } = req.body;
     const Package = await packageModel.findOne({ Name: PackageName });
-    const fam = await familyMemberModel.findOne({ NationalId: NationalId });
+    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId });
     const famrelated = await familyMemberModel.find({
       Patient: Patient.id,
-      NationalId: NationalId,
+      NationalIdFam: NationalId,
     });
     const subscribedcheck = await subscriptionModel.findOne({ FamilyMem: fam });
 
@@ -1426,7 +1424,7 @@ const linkPatient = async (req, res) => {
       res.status(204).send({ message: "Can't link yourself" });
     } else {
       const formerlyLinked = await familyMemberModel.findOne({
-        NationalId: familyMember.NationalId,
+        NationalIdFam: familyMember.NationalId,
       });
       var newFamilymember = null;
       if (!formerlyLinked) {
@@ -1439,7 +1437,7 @@ const linkPatient = async (req, res) => {
           FamilyMem: familyMember,
           FamilyMemberUsername: familyMember.Username,
           Name: familyMember.Name,
-          NationalId: familyMember.NationalId,
+          NationalIdFam: familyMember.NationalId,
           Age: Math.floor(
             Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
           ),
@@ -1506,7 +1504,7 @@ const createFamilymember = async (req, res) => {
 
  //taste test
    try {
-    console.log(await patientModel.findOne({Username: Username}));
+  //  console.log(await patientModel.findOne({Username: currentuser}));
      if (NationalId.length !== 16) {
     // Return an error message.
     res.status(400).json({ error: "The national ID must be 16 digits long." });
@@ -1588,10 +1586,11 @@ console.log(user);
        Relation: relation
      });
    // new one as apatient
+   console.log("Here");
    console.log("Nationalid",currentPatient.NationalId);
      const newFamilymember2 = await familyMemberModel.create({
        Patient: currentPatient,
-     FamilyMem:Familymemberaddedtopatient,
+       FamilyMem:Familymemberaddedtopatient,
        FamilyMemberUsername: currentPatient.Username,
        Name: currentPatient.Name,
        NationalIdFam:currentPatient.NationalId,
@@ -1607,6 +1606,7 @@ console.log(user);
         Patient: Familymemberaddedtopatient,
         Status: "Unsubscribed",
       });
+  console.log(newFamilymember2);
      res.status(200).json(newFamilymember2);
    } catch (error) {
      res.status(500).json({ error: error.message });
@@ -1625,14 +1625,14 @@ const cancelSubscriptionfamilymember = async (req, res) => {
     const day = String(Startdate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
     const patient = await patientModel.findOne({ Username: signedIn });
-    const fam = await familyMemberModel.findOne({ NationalId: NationalId });
+    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId });
     const subscribed = await subscriptionModel.findOne({
       FamilyMem: fam,
       FamilyMem: fam.id,
     });
     const famrelated = await familyMemberModel.find({
       Patient: patient.id,
-      NationalId: NationalId,
+      NationalIdFam: NationalId,
     });
     if (famrelated == null) {
       res.status(400).send({ error: "Family member not related to you " });
@@ -1672,22 +1672,83 @@ const viewUpcomingAppointmentsPat = async (req, res) => {
 };
 
 const viewfamilymembersappointments = async (req, res) => {
-  const username = req.user.Username;
-  const { Status } = req.body;
-  try {
-    const appointments = await appointmentModel.find({
-      PatientUsername: { $ne: username }, // Filter for PatientUsername not equal to username
-      Status: Status, // Assuming 'Status' field is for filtering upcoming appointments
-      BookedBy: username, // Filter for appointments booked by the current user
-    });
+  const PatientUser = req.user.Username;
+  console.log("Here",PatientUser);
+  const query = req.query;
+  const Status = query.Status;
+  const dateValue = new Date(query.Date);
+  const newDate = dateValue.addDays(1);
+console.log(PatientUser);
 
-    if (appointments.length === 0) {
-      return res.status(404).json({ message: "No appointments found." });
-    }
+  const hasDate = isNaN(dateValue) ? "n" : "y";
 
+  // Check if the 'id' parameter is a valid MongoDB ObjectID
+  if (!await appointmentModel.findOne({ PatientUsername: PatientUser })) {
+    res.status(404).json({ error: "Invalid Username" });
+    return;
+  }
+
+  const appointments =
+    Status != "Rescheduled" &&
+    Status != "Completed" &&
+    Status != "Cancelled" &&
+    Status != "Upcoming" &&
+    hasDate == "n"
+      ? await appointmentModel.find(  {
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser // Filter for appointments booked by the current user
+      })
+      : (Status == "Rescheduled" ||
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
+        hasDate == "y" &&
+        dateValue.getUTCHours() === 0
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : (Status == "Rescheduled" ||
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
+        hasDate == "n"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+        })
+      : Status == "Rescheduled" ||
+        Status == "Completed" ||
+        Status == "Cancelled" ||
+        Status == "Upcoming"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+        })
+      : hasDate == "y" && dateValue.getUTCHours() == 0
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : hasDate == "y"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Date: dateValue,
+        })
+      : "Bad request";
+
+  // Return a 200 success response with a JSON object that contains the 'mySessions' array
+  console.log("length",appointments.length);
+  if (appointments == "bad requests") {
+    res.status(404).json("No Appointments Found");
+  } else {
     res.status(200).json(appointments);
-  } catch (error) {
-    res.status(500).json(error);
   }
 };
 
