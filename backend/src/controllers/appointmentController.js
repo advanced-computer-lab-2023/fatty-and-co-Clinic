@@ -696,7 +696,7 @@ const reschedulePatient = async (req, res) => {
      }
      else{
      const updateAppOld=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date,Status:"Rescheduled"})      
-     const newApp= await appointmentModel.create({PatientUsername:patientUsername,BookedBy: patientUsername,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
+     const newApp= await appointmentModel.create({PatientUsername:patientUsername,BookedBy: updateAppOld.BookedBy,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
      res.status(200).json("You have rescheduled appointment successfully!")
      return;}
     }}
