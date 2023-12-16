@@ -853,6 +853,8 @@ const cancelAppForSelf = async (req, res) => {
      const currDate= new Date();
      const user = await User.findOne({Username: patientUsername});
      const doc = await User.findOne({Username: doctorUsername});
+     const user = await User.findOne({Username: patientUsername});
+     const doc = await User.findOne({Username: doctorUsername});
      var refund=0
      if(!upcomingApp){
       res.status(404).json({err:"Can't cancel an appointment that's rescheduled/cancelled/completed!"})
@@ -924,7 +926,7 @@ const cancelAppForSelf = async (req, res) => {
       text: `Cancelled appointment with ${patient.Name} that was scheduled on ${Date(upcomingApp.Date).toLocaleDateString("en-GB")}`,
     });
      
-    res.status(200).json({success: `Appointment cancelled and an amount of ${refund} refund restored successfully!`})
+    res.status(200).json({success:`Appointment cancelled and an amount of ${refund} refund restored successfully!`})
   
   }
     
