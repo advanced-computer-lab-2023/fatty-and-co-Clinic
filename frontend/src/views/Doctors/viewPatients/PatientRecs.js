@@ -30,22 +30,31 @@ import {
   Thead,
   Th,
   Tbody,
+  Grid,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { InfoOutlineIcon } from "@chakra-ui/icons";
+import logo from "assets/img/ShebeenElkom.png";
+import { InfoOutlineIcon, DownloadIcon } from "@chakra-ui/icons";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { BsPrescription2 } from "react-icons/bs";
 import { API_PATHS } from "API/api_paths";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
+import CardHeader from "components/Card/CardHeader.js";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { jsPDF } from "jspdf";
 export default function PatientAppointmentsDoc() {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const searchParams = new URLSearchParams(location.search);
   const [appointments, setAppointments] = useState([]);
+  const patientUserName = searchParams.get("username");
   const patientName = searchParams.get("name");
+  const [healthRecords, setHealthRecords] = useState([]);
   const [meds, setMeds] = useState([]);
+  const [selectedPrescription, setSelectedPrescription] = useState("");
   const [status, setStatus] = useState("");
   const [diagnosis, setDiagnosis] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,7 +63,7 @@ export default function PatientAppointmentsDoc() {
     const getAppointments = async () => {
       try {
         const response = await fetch(
-          `${API_PATHS.getAllAppointmentsPat}?patientUsername=${patientName}`,
+          `${API_PATHS.getAllAppointmentsPat}?patientUsername=${patientUserName}`,
           {
             headers: {
               Authorization: Authorization,
@@ -72,8 +81,28 @@ export default function PatientAppointmentsDoc() {
         console.error("Error getting appointments:", error.message);
       }
     };
+    const fetchHealthRecords = async () => {
+      const response = await fetch(
+        API_PATHS.getMedicalHistory + patientUserName,
+        {
+          headers: {
+            Authorization: Authorization,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setHealthRecords(data.MedicalHistory);
+        console.log(data.MedicalHistory);
+        // dispatch({ type: "SET_PACKAGES", payload: data });
+      } else {
+        console.log(data);
+      }
+    };
 
     // Check prescription status when the component mounts
+    fetchHealthRecords();
+
     getAppointments();
   }, []);
   const handleCloseModal = () => {
@@ -93,6 +122,7 @@ export default function PatientAppointmentsDoc() {
       );
       if (response.ok) {
         const result = await response.json();
+        setSelectedPrescription(result.prescription);
         setMeds(result.prescription.Medicine);
         setDiagnosis(result.prescription.Diagnosis);
         setStatus(result.prescription.Status);
