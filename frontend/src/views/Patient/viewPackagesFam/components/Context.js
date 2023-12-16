@@ -13,7 +13,7 @@ export const packagesReducer = (state, action) => {
   }
 };
 
-export function PackageContextProvider({ children }) {
+export const PackageContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(packagesReducer, {
     packages: null,
   });
@@ -22,4 +22,4 @@ export function PackageContextProvider({ children }) {
       {children}
     </PackageContext.Provider>
   );
-}
+};

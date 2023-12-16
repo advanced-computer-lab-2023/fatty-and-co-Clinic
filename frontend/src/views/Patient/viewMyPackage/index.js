@@ -3,10 +3,10 @@ import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { Flex, Button, Box, Input, Text, Select } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useAuthContext } from "hooks/useAuthContext";
 import MyPackageTable from "./components/MyPackageTable";
+import { useAuthContext } from "hooks/useAuthContext";
 
-function ViewMyPackage() {
+const ViewMyPackage = () => {
   const [data, setData] = useState([{}]);
 
   const { user } = useAuthContext();
@@ -17,7 +17,7 @@ function ViewMyPackage() {
     axios
       .get(url, {
         headers: {
-          Authorization,
+          Authorization: Authorization,
         },
       })
       .then((response) => {
@@ -35,7 +35,7 @@ function ViewMyPackage() {
         justifyContent="flex-start"
       >
         <MyPackageTable
-          title="My Package"
+          title={"My Package"}
           captions={[
             "Name",
             "Price",
@@ -48,10 +48,10 @@ function ViewMyPackage() {
 
         {/* <Text fontSize="3xl" fontWeight="bold">
               No Subscriptions Found
-            </Text>
+            </Text> 
            */}
       </Flex>
     </Box>
   );
-}
+};
 export default ViewMyPackage;

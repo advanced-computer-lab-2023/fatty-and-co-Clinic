@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import {
   HashRouter,
@@ -11,8 +11,9 @@ import {
 import { Box, Spinner } from "@chakra-ui/react";
 
 import { useAuthContext } from "hooks/useAuthContext";
+import { useState, useEffect } from "react";
 
-// IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
+//IMPORT LAYOUTS (LAZEM A CREATE COMPONENT /connected le view)
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
 import PatientLayout from "layouts/Patient.js";
@@ -29,7 +30,7 @@ function App() {
     setIsLoading(false);
   }, []);
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <Box
         display="flex"
@@ -39,56 +40,51 @@ function App() {
       >
         <Spinner size="xl" />
       </Box>
-    );
-  } // loading screen
+    ); // loading screen
 
-  if (!user) {
+  if (!user)
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/auth" component={AuthLayout} />
+          <Route path={`/auth`} component={AuthLayout} />
           <Route render={() => <Redirect to="/auth" />} />
         </Switch>
       </BrowserRouter>
     );
-  }
 
-  if (user.userType === "Admin") {
+  if (user.userType === "Admin")
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/admin" component={AdminLayout} />
+          <Route path={`/admin`} component={AdminLayout} />
           <Route render={() => <Redirect to="/admin" />} />
         </Switch>
       </BrowserRouter>
     );
-  }
-  if (user.userType === "Doctor") {
+  if (user.userType === "Doctor")
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/doctor" component={DoctorLayout} />
+          <Route path={`/doctor`} component={DoctorLayout} />
           <Route render={() => <Redirect to="/doctor" />} />
         </Switch>
       </BrowserRouter>
     );
-  }
 
-  if (user.userType === "Patient") {
+  if (user.userType === "Patient")
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/patient" component={PatientLayout} />
+          <Route path={`/patient`} component={PatientLayout} />
           <Route render={() => <Redirect to="/patient" />} />
         </Switch>
       </BrowserRouter>
     );
-  }
 
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/auth" component={AuthLayout} />
+        <Route path={`/auth`} component={AuthLayout} />
         <Route render={() => <Redirect to="/auth" />} />
       </Switch>
     </BrowserRouter>

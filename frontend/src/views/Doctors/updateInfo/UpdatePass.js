@@ -18,7 +18,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
-import { FaUserPlus, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 import { API_PATHS } from "API/api_paths";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -26,7 +26,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
 
 const SignInSchema = Yup.object().shape({
@@ -61,7 +61,7 @@ function UpdatePass() {
       axios
         .patch(
           API_PATHS.updatePass,
-          { OldPassword, NewPassword: Password },
+          { OldPassword: OldPassword, NewPassword: Password },
           { headers: { Authorization } }
         )
         .then((response) => {

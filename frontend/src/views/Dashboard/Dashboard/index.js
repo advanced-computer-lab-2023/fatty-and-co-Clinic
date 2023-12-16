@@ -36,27 +36,27 @@ export default function Dashboard() {
       <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
         <MiniStatistics
           title={"Today's Moneys"}
-          amount="$53,000"
+          amount={"$53,000"}
           percentage={55}
-          icon={<WalletIcon h="24px" w="24px" color={iconBoxInside} />}
+          icon={<WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
         <MiniStatistics
           title={"Today's Users"}
-          amount="2,300"
+          amount={"2,300"}
           percentage={5}
-          icon={<GlobeIcon h="24px" w="24px" color={iconBoxInside} />}
+          icon={<GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
         <MiniStatistics
-          title="New Clients"
-          amount="+3,020"
+          title={"New Clients"}
+          amount={"+3,020"}
           percentage={-14}
-          icon={<DocumentIcon h="24px" w="24px" color={iconBoxInside} />}
+          icon={<DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
         <MiniStatistics
-          title="Total Sales"
-          amount="$173,000"
+          title={"Total Sales"}
+          amount={"$173,000"}
           percentage={8}
-          icon={<CartIcon h="24px" w="24px" color={iconBoxInside} />}
+          icon={<CartIcon h={"24px"} w={"24px"} color={iconBoxInside} />}
         />
       </SimpleGrid>
       <Grid
@@ -66,9 +66,11 @@ export default function Dashboard() {
         gap="24px"
       >
         <BuiltByDevelopers
-          title="Built by Developers"
-          name="Purity UI Dashboard"
-          description="From colors, cards, typography to complex elements, you will find the full documentation."
+          title={"Built by Developers"}
+          name={"Purity UI Dashboard"}
+          description={
+            "From colors, cards, typography to complex elements, you will find the full documentation."
+          }
           image={
             <Image
               src={logoChakra}
@@ -79,8 +81,10 @@ export default function Dashboard() {
         />
         <WorkWithTheRockets
           backgroundImage={peopleImage}
-          title="Work with the rockets"
-          description="Wealth creation is a revolutionary recent positive-sum game. It is all about who takes the opportunity first."
+          title={"Work with the rockets"}
+          description={
+            "Wealth creation is a revolutionary recent positive-sum game. It is all about who takes the opportunity first."
+          }
         />
       </Grid>
       <Grid
@@ -90,12 +94,12 @@ export default function Dashboard() {
         mb={{ lg: "26px" }}
       >
         <ActiveUsers
-          title="Active Users"
+          title={"Active Users"}
           percentage={23}
           chart={<BarChart />}
         />
         <SalesOverview
-          title="Sales Overview"
+          title={"Sales Overview"}
           percentage={5}
           chart={<LineChart />}
         />
@@ -106,13 +110,13 @@ export default function Dashboard() {
         gap="24px"
       >
         <Projects
-          title="Projects"
+          title={"Projects"}
           amount={30}
           captions={["Companies", "Members", "Budget", "Completion"]}
           data={dashboardTableData}
         />
         <OrdersOverview
-          title="Orders Overview"
+          title={"Orders Overview"}
           amount={30}
           data={timelineData}
         />

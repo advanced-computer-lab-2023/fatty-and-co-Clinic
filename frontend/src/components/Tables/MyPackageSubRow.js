@@ -10,7 +10,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-
 function MyPackageSubRow(props) {
   const { Name, Status, Enddate, Startdate, Renewaldate } = props;
   const textColor = useColorModeValue("gray.700", "white");

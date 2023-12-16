@@ -14,8 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { formatISO } from "date-fns";
+import { useHistory } from "react-router-dom";
 
 import { useAuthContext } from "hooks/useAuthContext";
 import DocSlotAptsTable from "../viewDoctors/components/DocSlotAptsTable";
@@ -33,7 +34,7 @@ export function bookAptDetails() {
 
   const history = useHistory();
 
-  // the doctor id
+  //the doctor id
   //   const { row } = useParams();
   //   console.log(useParams());
   const location = useLocation();
@@ -46,23 +47,21 @@ export function bookAptDetails() {
   let Cost = state.Cost;
   let CostFam = state.CostFam;
 
-
-
   console.log(state);
-  // const username = user.Username;
+  //const username = user.Username;
 
   console.log(StartTime);
   console.log(DayName);
   console.log(DoctorId);
 
-  // const [famMemOptions, setFamMemOptions] = useState([{}]);
+  //const [famMemOptions, setFamMemOptions] = useState([{}]);
 
-  // check if date<new date
+  //check if date<new date
   const [aptDate, setAptDate] = useState(new Date());
-  // const [isFamMember, setIsFamMember] = useState(false);
+  //const [isFamMember, setIsFamMember] = useState(false);
   const [FamMemName, setFamMemName] = useState(null);
 
-  let DateFinal = new Date();
+  var DateFinal = new Date();
 
   const dateAptHandler = (event) => {
     setAptDate(event.target.value);
@@ -71,10 +70,10 @@ export function bookAptDetails() {
 
   const dateConfirmHandler = () => {
     const hourMinString = StartTime.toString().split(":");
-    console.log(`hourmin: ${hourMinString}`);
+    console.log("hourmin: " + hourMinString);
     const bookingDate = new Date(aptDate);
     // console.log((new Date(aptDate)).getFullYear());
-    // const formattedDate = formatISO(date);
+    //const formattedDate = formatISO(date);
 
     const dateToCheck = new Date(
       bookingDate.getFullYear(),
@@ -83,52 +82,11 @@ export function bookAptDetails() {
       hourMinString[0],
       hourMinString[1]
     );
-    console.log(`dateCheck${dateToCheck}`);
+    console.log("dateCheck" + dateToCheck);
     DateFinal = formatISO(dateToCheck);
 
     console.log("dateCheckF" + DateFinal);
-/*
-    try {
-   
-      const response = await fetch(API_PATHS.cancellappointment, {
-        method: "PATCH",
-        headers: {
-          Authorization,
-          "Content-Type": "application/json",
-        },
-    
-        body: JSON.stringify({doctorUsername:DoctorUsername})
-      // body: JSON.stringify({Package2}),
-      });
-  
-      console.log("Response", response.status);
-      const errorData = await response.json();
-      if (response.ok) {
-        toast({
-          title: "Cancelled successfully",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        const timer = setTimeout(() => {
-          location.reload();
-        }, 500); // 1000ms delay
-        window.location.reload();
-     
-   
-      } else {
-        toast({
-          title: "Failed to Cancel",
-          description: errorData.error,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      console.error("An error occurred", error);
-    }
-  }; */
+
     const url = API_PATHS.validateBookingDate;
     axios
       .get(url, {
@@ -159,13 +117,13 @@ export function bookAptDetails() {
       });
   };
   const checkOutHandler = () => {
-    const newUrl = "../AppointmentConfirmation";
-    const newState = {
-      DoctorId,
+    let newUrl = `../AppointmentConfirmation`;
+    let newState = {
+      DoctorId: DoctorId,
       Date: DateFinal,
-      FamMemName,
-      Cost,
-      CostFam,
+      FamMemName: FamMemName,
+      Cost: Cost,
+      CostFam: CostFam,
     };
 
     console.log(user.username);
@@ -264,7 +222,7 @@ export function bookAptDetails() {
 export default bookAptDetails;
 
 {
-  /* <Select size="md"
+  /* <Select size="md" 
           //onChange={handleDayNumberToAdd}
           >
             <option value=""></option>

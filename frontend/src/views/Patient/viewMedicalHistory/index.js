@@ -2,15 +2,16 @@
 import { Box, Flex, Grid, Icon } from "@chakra-ui/react";
 // Assets
 import React from "react";
+import HealthRecordInformation from "./components/HealthRecordInformation";
 import { useEffect } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
+import { useMedicalHistoryContext } from "./hooks/useMedicalHistoryContext";
+import HealthRecordForm from "./components/HealthRecordForm";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useState } from "react";
 import { he } from "date-fns/locale";
-import HealthRecordForm from "./components/HealthRecordForm";
-import { useMedicalHistoryContext } from "./hooks/useMedicalHistoryContext";
-import HealthRecordInformation from "./components/HealthRecordInformation";
+
 
 function MedicalHistoryI() {
   // const { healthRecords, dispatch } = usePackageContext();
@@ -19,14 +20,11 @@ function MedicalHistoryI() {
   const [healthRecords, setHealthRecords] = useState(null);
   useEffect(() => {
     const fetchHealthRecords = async () => {
-      const response = await fetch(
-        API_PATHS.getMedicalHistory + user.userType,
-        {
-          headers: {
-            Authorization,
-          },
+      const response = await fetch(API_PATHS.getMedicalHistory+user.userType ,{
+        headers:{
+          'Authorization': Authorization
         }
-      );
+      });
       const data = await response.json();
       if (response.ok) {
         setHealthRecords(data.MedicalHistory);
@@ -42,10 +40,7 @@ function MedicalHistoryI() {
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
       <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
         {healthRecords && (
-          <HealthRecordInformation
-            title="Health Records and Medical History"
-            data={healthRecords}
-          />
+          <HealthRecordInformation title={"Health Records and Medical History"} data={healthRecords} />
         )}
 
         <HealthRecordForm />

@@ -47,7 +47,9 @@ export default function UpdatePrescription({ customkey }) {
   const [descriptionAdd, setDescriptionAdd] = useState("");
   const [addMed, setaddMed] = useState(false);
   const [meds, setMeds] = useState([]);
-  const [descriptions, setDescriptions] = useState([]);
+   const [descriptions, setDescriptions] = useState(
+   []
+   );
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -60,7 +62,7 @@ export default function UpdatePrescription({ customkey }) {
           `${API_PATHS.getPrescriptionMeds}?appointmentId=${customkey}`,
           {
             headers: {
-              Authorization,
+              Authorization: Authorization,
               // Other headers if needed
             },
           }
@@ -88,11 +90,12 @@ export default function UpdatePrescription({ customkey }) {
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
-  const handleDescription = (event, index, medicineName) => {
-    const newDescriptions = [...descriptions];
-    newDescriptions[index] = event.target.value;
-    setDescriptions(newDescriptions);
-  };
+const handleDescription = (event, index,medicineName) => {
+  const newDescriptions = [...descriptions];
+  newDescriptions[index] = event.target.value;
+  setDescriptions(newDescriptions);
+  
+};
   const handleDescriptionAdd = (event) => {
     setDescriptionAdd(event.target.value);
   };
@@ -100,121 +103,123 @@ export default function UpdatePrescription({ customkey }) {
     setDosage(event.target.value);
   };
   const toast = useToast();
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch(
-        `${API_PATHS.addMedToPrescription}?appointmentId=${customkey}&medicine=${medicine}&dosage=${dosage}&description=${descriptionAdd}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization,
-            // Other headers if needed
-          },
-        }
-      );
+const handleSubmit = async () => {
+  
+  try {
+const response = await fetch(
+  `${API_PATHS.addMedToPrescription}?appointmentId=${customkey}&medicine=${medicine}&dosage=${dosage}&description=${descriptionAdd}`,
+  {
+    method: "POST",
+    headers: {
+      Authorization,
+      // Other headers if needed
+    },
+  }
+);
 
-      if (response.ok) {
-        const result = await response.json();
-        toast({
-          title: "Prescription added",
-          description:
-            "We've added your prescription to the appointment selected.",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
-        setaddMed(true);
-        setMeds(result.Medicine);
-      } else {
-        console.error("Error adding medicine:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error adding medicine:", error.message);
+    if (response.ok) {
+      const result = await response.json();
       toast({
-        title: "Error",
-        description: "We've encountered an error while adding this medicine.",
-        status: "error",
+        title: "Prescription added",
+        description:
+          "We've added your prescription to the appointment selected.",
+        status: "success",
         duration: 9000,
         isClosable: true,
       });
+      setaddMed(true);
+      setMeds(result.Medicine);
+    } else {
+      console.error("Error adding medicine:", response.statusText);
     }
-  };
+  } catch (error) {
+    console.error("Error adding medicine:", error.message);
+    toast({
+      title: "Error",
+      description: "We've encountered an error while adding this medicine.",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+  }
+};
   const handleAddMed = () => {
     setaddMed(true);
   };
-  const handleDelete = async (medName) => {
-    try {
-      const response = await fetch(
-        `${API_PATHS.deleteMedFromPrescription}?appointmentId=${customkey}&medicineName=${medName}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization,
-            // Other headers if needed
-          },
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log(result);
-        setMeds(result.Medicine);
-      } else {
-        console.error("Error deleting medicine:", response.statusText);
+const handleDelete = async (medName) => {
+  try {
+    const response = await fetch(
+      `${API_PATHS.deleteMedFromPrescription}?appointmentId=${customkey}&medicineName=${medName}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization,
+          // Other headers if needed
+        },
       }
-    } catch (error) {
-      console.error("Error deleting medicine:", error.message);
+    );
+      
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result);
+     setMeds(result.Medicine);
+    } else {
+      console.error("Error deleting medicine:", response.statusText);
     }
-  };
-  const handleInc = async (medName, dosage) => {
-    try {
-      const response = await fetch(
-        `${API_PATHS.updateDosage}?AppointmentId=${customkey}&medicineName=${medName}&dosage=${dosage}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization,
-            // Other headers if needed
-          },
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-
-        setMeds(result.Medicine);
-      } else {
-        console.error("Error deleting medicine:", response.statusText);
+  } catch (error) {
+    console.error("Error deleting medicine:", error.message);
+  }
+};
+const handleInc = async (medName,dosage) => {
+  try {
+    const response = await fetch(
+      `${API_PATHS.updateDosage}?AppointmentId=${customkey}&medicineName=${medName}&dosage=${dosage}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization,
+          // Other headers if needed
+        },
       }
-    } catch (error) {
-      console.error("Error deleting medicine:", error.message);
+    );
+    
+
+    if (response.ok) {
+      const result = await response.json();
+      
+      setMeds(result.Medicine);
+    } else {
+      console.error("Error deleting medicine:", response.statusText);
     }
-  };
+  } catch (error) {
+    console.error("Error deleting medicine:", error.message);
+  }
+};
 
-  const handleEdit = async (medName, index) => {
-    try {
-      const response = await fetch(
-        `${API_PATHS.updateDescription}?AppointmentId=${customkey}&medicineName=${medName}&description=${descriptions[index]}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization,
-            // Other headers if needed
-          },
-        }
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-
-        setMeds(result.Medicine);
-      } else {
-        console.error("Error deleting medicine:", response.statusText);
+const handleEdit = async (medName,index) => {
+  try {
+    const response = await fetch(
+      `${API_PATHS.updateDescription}?AppointmentId=${customkey}&medicineName=${medName}&description=${descriptions[index]}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization,
+          // Other headers if needed
+        },
       }
-    } catch (error) {
-      console.error("Error deleting medicine:", error.message);
+    );
+
+    if (response.ok) {
+      const result = await response.json();
+
+      setMeds(result.Medicine);
+    } else {
+      console.error("Error deleting medicine:", response.statusText);
     }
-  };
+  } catch (error) {
+    console.error("Error deleting medicine:", error.message);
+  }
+};
 
   const handleCloseModal = () => {
     setaddMed(false);
@@ -308,7 +313,7 @@ export default function UpdatePrescription({ customkey }) {
                         mt="-1"
                       >
                         <Flex
-                          color="black"
+                          color={"black"}
                           cursor="pointer"
                           align="center"
                           p="12px"

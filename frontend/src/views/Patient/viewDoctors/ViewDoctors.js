@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
+import DoctorsTable from "./components/DoctorsTable";
 import { Flex, Button, Box, Text, Input } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
-import DoctorsTable from "./components/DoctorsTable";
 
 export function ViewDoctors() {
   const [data, setData] = useState([{}]);
@@ -70,7 +70,7 @@ export function ViewDoctors() {
     }
   }, [filterParams]);
 
-  // add date and hour
+  //add date and hour
   const handleFilterOnChange = (value) => {
     setFilterParams({
       ...filterParams,
@@ -233,7 +233,7 @@ export function ViewDoctors() {
           </Button>
         </Flex>
         <DoctorsTable
-          title="Available Doctors"
+          title={"Available Doctors"}
           captions={["Name", "Speciality", "Cost"]}
           data={data}
         />

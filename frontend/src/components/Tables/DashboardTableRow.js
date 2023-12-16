@@ -18,7 +18,7 @@ function DashboardTableRow(props) {
     <Tr>
       <Td minWidth={{ sm: "250px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Icon as={logo} h="24px" w="24px" pe="5px" />
+          <Icon as={logo} h={"24px"} w={"24px"} pe="5px" />
           <Text
             fontSize="md"
             color={textColor}
@@ -32,14 +32,16 @@ function DashboardTableRow(props) {
 
       <Td>
         <AvatarGroup size="sm">
-          {members.map((member) => (
-            <Avatar
-              name="Ryan Florence"
-              key={member}
-              src={member}
-              _hover={{ zIndex: "3", cursor: "pointer" }}
-            />
-          ))}
+          {members.map((member) => {
+            return (
+              <Avatar
+                name="Ryan Florence"
+                key={member}
+                src={member}
+                _hover={{ zIndex: "3", cursor: "pointer" }}
+              />
+            );
+          })}
         </AvatarGroup>
       </Td>
       <Td>
@@ -49,9 +51,12 @@ function DashboardTableRow(props) {
       </Td>
       <Td>
         <Flex direction="column">
-          <Text fontSize="md" color="teal.300" fontWeight="bold" pb=".2rem">
-            {`${progression}%`}
-          </Text>
+          <Text
+            fontSize="md"
+            color="teal.300"
+            fontWeight="bold"
+            pb=".2rem"
+          >{`${progression}%`}</Text>
           <Progress
             colorScheme={progression === 100 ? "teal" : "cyan"}
             size="xs"

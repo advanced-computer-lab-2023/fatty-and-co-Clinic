@@ -27,8 +27,8 @@ import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 // Assets
 import BgSignUp from "assets/img/BgSignUp.png";
-import React, { useState } from "react";
-
+import React from "react";
+import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
 
 const genders = ["M", "F"];
@@ -161,7 +161,7 @@ function SignUp() {
         bgSize="cover"
         mx={{ md: "auto" }}
         mt={{ md: "14px" }}
-      />
+      ></Box>
       <Flex
         direction="column"
         textAlign="center"
@@ -179,12 +179,7 @@ function SignUp() {
           fontWeight="normal"
           mt="10px"
           mb="26px"
-          w={{
-            base: "90%",
-            sm: "60%",
-            lg: "40%",
-            xl: "30%",
-          }}
+          w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
         >
           Please fill in this registration form to create a patient account and
           access our services!

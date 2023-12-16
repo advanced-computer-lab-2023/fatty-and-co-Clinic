@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import PatientRow from "components/Tables/PatientRow";
+import PatientTable from "./components/PatientTable";
 import { Flex, Button, Box } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-import PatientTable from "./components/PatientTable";
 
 function ViewDoctorsPatients() {
   const [data, setData] = useState([{}]);
@@ -66,7 +66,7 @@ function ViewDoctorsPatients() {
           </Button>
         </Flex>
         <PatientTable
-          title="my patients"
+          title={"my patients"}
           captions={["Name", "MobileNum", "DateOfBirth"]}
           data={data}
         />

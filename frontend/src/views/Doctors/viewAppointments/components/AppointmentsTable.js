@@ -18,8 +18,8 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 
 import React from "react";
 
-export function AppointmentsTable({ title, captions, data, isLoading }) {
-  // Table that uses row
+export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
+  //Table that uses row
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
@@ -38,11 +38,17 @@ export function AppointmentsTable({ title, captions, data, isLoading }) {
           <Table variant="simple" color={textColor}>
             <Thead>
               <Tr my=".8rem" pl="0px">
-                {captions.map((caption, idx) => (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
-                ))}
+                {captions.map((caption, idx) => {
+                  return (
+                    <Th
+                      color="gray.400"
+                      key={idx}
+                      ps={idx === 0 ? "0px" : null}
+                    >
+                      {caption}
+                    </Th>
+                  );
+                })}
               </Tr>
             </Thead>
             <Tbody>
@@ -66,6 +72,6 @@ export function AppointmentsTable({ title, captions, data, isLoading }) {
       </CardBody>
     </Card>
   );
-}
+};
 
 export default AppointmentsTable;

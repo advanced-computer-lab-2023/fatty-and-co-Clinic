@@ -15,7 +15,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import RequestsRow from "components/Tables/RequestsRow";
 import React from "react";
 
-function Requests({ title, captions, data }) {
+const Requests = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Card overflowX={{ sm: "scroll", xl: "hidden" }}>
@@ -28,28 +28,31 @@ function Requests({ title, captions, data }) {
         <Table variant="simple" color={textColor}>
           <Thead>
             <Tr my=".8rem" pl="0px" color="gray.400">
-              {captions.map((caption, idx) => (
-                <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                  {caption}
-                </Th>
-              ))}
+              {captions.map((caption, idx) => {
+                return (
+                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
+                    {caption}
+                  </Th>
+                );
+              })}
             </Tr>
           </Thead>
           <Tbody>
-            {Array.isArray(data) &&
-              data.map((row) => (
+            {Array.isArray(data) && data.map((row) => {
+              return (
                 <RequestsRow
                   key={`${row.Username}-${row.Name}`}
                   Name={row.Name}
-                  Username={row.Username}
+                  Username= {row.Username}
                   Status={row.Status}
                 />
-              ))}
+              );
+            })}
           </Tbody>
         </Table>
       </CardBody>
     </Card>
   );
-}
+};
 
 export default Requests;

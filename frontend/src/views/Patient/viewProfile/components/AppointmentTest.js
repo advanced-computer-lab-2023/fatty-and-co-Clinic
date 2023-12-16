@@ -1,15 +1,5 @@
 // Chakra imports
-import {
-  Flex,
-  Text,
-  useColorModeValue,
-  Button,
-  Box,
-  Input,
-  Select,
-  VStack,
-  HStack,
-} from "@chakra-ui/react";
+import { Flex, Text, useColorModeValue, Button, Box, Input, Select, VStack, HStack } from "@chakra-ui/react";
 // Custom components
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -20,34 +10,26 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 
-function AppointmentCard({ date, DoctorName }) {
+const AppointmentCard = ({ date, DoctorName }) => {
   const appDate = new Date(date);
 
   return (
     <Box borderWidth="1px" borderRadius="lg" p="4" mb="4">
-      <Text fontSize="md" color="gray.600">
-        {appDate.toLocaleDateString("en-US")}
-      </Text>
+      <Text fontSize="md" color="gray.600">{appDate.toLocaleDateString('en-US')}</Text>
       <Text fontSize="md">{DoctorName}</Text>
     </Box>
   );
-}
+};
 
-function AppointmentsList({ appointments }) {
-  return (
-    <VStack align="start" spacing="4">
-      {appointments.map((appointment, index) => (
-        <AppointmentCard
-          key={index}
-          date={appointment.Date}
-          DoctorName={appointment.DoctorName}
-        />
-      ))}
-    </VStack>
-  );
-}
+const AppointmentsList = ({ appointments }) => (
+  <VStack align="start" spacing="4">
+    {appointments.map((appointment, index) => (
+      <AppointmentCard key={index} date={appointment.Date} DoctorName={appointment.DoctorName}/>
+    ))}
+  </VStack>
+);
 
-function Appointments({ patientAppointments }) {
+const Appointments = ({ patientAppointments }) => {
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -81,14 +63,13 @@ function Appointments({ patientAppointments }) {
       });
   }, [searchParams]);
   return (
+    
     <Box>
-      <Text fontSize="xl" fontWeight="bold" mb="4">
-        Patient Appointments
-      </Text>
+      <Text fontSize="xl" fontWeight="bold" mb="4">Patient Appointments</Text>
       <AppointmentsList appointments={data} />
     </Box>
   );
-}
+};
 
 // const Appointments = ({ title, amount, data }) => {
 //   const textColor = useColorModeValue("gray.700", "white");

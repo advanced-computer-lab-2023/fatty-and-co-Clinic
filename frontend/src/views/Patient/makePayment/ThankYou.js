@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
-function ThankYouCard() {
+const ThankYouCard = () => {
   const textColor = useColorModeValue("gray.700", "white");
   const history = useHistory();
 
@@ -41,6 +41,6 @@ function ThankYouCard() {
       </Box>
     </Flex>
   );
-}
+};
 
 export default ThankYouCard;

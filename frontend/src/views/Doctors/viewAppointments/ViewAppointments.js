@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Flex, Button, Box, Input, Select } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
+import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
-import AppointmentsTable from "./components/AppointmentsTable";
 
 export default function ViewAppointmentsInner() {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
@@ -36,6 +36,7 @@ export default function ViewAppointmentsInner() {
       .then((response) => {
         // setData(response.data);
         dispatch({ type: "SET_APPOINTMENTS", payload: response.data });
+        
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
@@ -103,7 +104,7 @@ export default function ViewAppointmentsInner() {
           </Button>
         </Flex>
         <AppointmentsTable
-          title="Available Appointments"
+          title={"Available Appointments"}
           captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}

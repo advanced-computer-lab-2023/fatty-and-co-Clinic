@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
+import Requests from "./components/RequestsTable";
 import { Flex, Box, useToast } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
 import { useRequestsContext } from "hooks/useRequestsContext";
-import Requests from "./components/RequestsTable";
 
 export function ViewRequestsInner() {
   // const [data, setData] = useState([{}]);
@@ -46,7 +46,7 @@ export function ViewRequestsInner() {
         justifyContent="flex-start"
       >
         <Requests
-          title="Requests"
+          title={"Requests"}
           captions={["Name", "Username", "Status", ""]}
           data={requests}
         />

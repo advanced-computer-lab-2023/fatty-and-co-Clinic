@@ -18,7 +18,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
-import { FaUserPlus, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 import { API_PATHS } from "API/api_paths";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -26,7 +26,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
 
 const SignInSchema = Yup.object().shape({
@@ -61,7 +61,7 @@ function ChangePassword() {
       axios
         .patch(
           API_PATHS.updatePass,
-          { OldPassword, NewPassword: Password },
+          { OldPassword: OldPassword, NewPassword: Password },
           { headers: { Authorization } }
         )
         .then((response) => {
@@ -93,93 +93,103 @@ function ChangePassword() {
   };
 
   return (
-    <Formik
-      innerRef={formikRef}
-      initialValues={{
-        OldPassword: "",
-        Password: "",
-      }}
-      validationSchema={SignInSchema}
-      onSubmit={handlePasswordSubmit}
-    >
-      {({ isSubmitting, errors, touched }) => (
-        <Form>
-          <Field name="OldPassword">
-            {({ field, form }) => (
-              <FormControl
-                mb="24px"
-                isInvalid={errors.OldPassword && touched.OldPassword}
-              >
-                <FormLabel fontSize="lg" color={textColor} fontWeight="bold">
-                  Current Password
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    {...field}
-                    fontSize="sm"
-                    ms="4px"
-                    borderRadius="15px"
-                    type={showOldPassword ? "text" : "password"}
-                    placeholder="Current Password"
-                    size="lg"
-                  />
-                  <InputRightElement>
-                    {showOldPassword ? (
-                      <FaEyeSlash onClick={handleShowOldClick} />
-                    ) : (
-                      <FaEye onClick={handleShowOldClick} />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{errors.OldPassword}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
 
-          <Field name="Password">
-            {({ field, form }) => (
-              <FormControl
-                mb="24px"
-                isInvalid={errors.Password && touched.Password}
-              >
-                <FormLabel fontSize="lg" color={textColor} fontWeight="bold">
-                  New Password
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    {...field}
-                    fontSize="sm"
-                    ms="4px"
-                    borderRadius="15px"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="New Password"
-                    size="lg"
-                  />
-                  <InputRightElement>
-                    {showPassword ? (
-                      <FaEyeSlash onClick={handleShowClick} />
-                    ) : (
-                      <FaEye onClick={handleShowClick} />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-                <FormErrorMessage>{errors.Password}</FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
+        <Formik
+          innerRef={formikRef}
+          initialValues={{
+            OldPassword: "",
+            Password: "",
+          }}
+          validationSchema={SignInSchema}
+          onSubmit={handlePasswordSubmit}
+        >
+          {({ isSubmitting, errors, touched }) => (
+            <Form>
+              <Field name="OldPassword">
+                {({ field, form }) => (
+                  <FormControl
+                    mb="24px"
+                    isInvalid={errors.OldPassword && touched.OldPassword}
+                  >
+                    <FormLabel
+                      fontSize="lg"
+                      color={textColor}
+                      fontWeight="bold"
+                    >
+                      Current Password
+                    </FormLabel>
+                    <InputGroup>
+                      <Input
+                        {...field}
+                        fontSize="sm"
+                        ms="4px"
+                        borderRadius="15px"
+                        type={showOldPassword ? "text" : "password"}
+                        placeholder="Current Password"
+                        size="lg"
+                      />
+                      <InputRightElement>
+                        {showOldPassword ? (
+                          <FaEyeSlash onClick={handleShowOldClick} />
+                        ) : (
+                          <FaEye onClick={handleShowOldClick} />
+                        )}
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>{errors.OldPassword}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
 
-          <Button
-            isLoading={isSubmitting}
-            colorScheme="teal"
-            type="submit"
-            w="100%"
-            mb="35px"
-          >
-            Save
-          </Button>
-        </Form>
-      )}
-    </Formik>
+              <Field name="Password">
+                {({ field, form }) => (
+                  <FormControl
+                    mb="24px"
+                    isInvalid={errors.Password && touched.Password}
+                  >
+                    <FormLabel
+                      fontSize="lg"
+                      color={textColor}
+                      fontWeight="bold"
+                    >
+                      New Password
+                    </FormLabel>
+                    <InputGroup>
+                      <Input
+                        {...field}
+                        fontSize="sm"
+                        ms="4px"
+                        borderRadius="15px"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="New Password"
+                        size="lg"
+                      />
+                      <InputRightElement>
+                        {showPassword ? (
+                          <FaEyeSlash onClick={handleShowClick} />
+                        ) : (
+                          <FaEye onClick={handleShowClick} />
+                        )}
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>{errors.Password}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+
+              <Button
+                isLoading={isSubmitting}
+                colorScheme="teal"
+                type="submit"
+                w="100%"
+                mb="35px"
+              >
+                Save
+              </Button>
+            </Form>
+          )}
+        </Formik>
+
   );
 }
 

@@ -104,7 +104,7 @@ const DocSignUpSchema = Yup.object().shape({
     }),
 });
 
-const formatHourlyRate = (val) => `$${val}`;
+const formatHourlyRate = (val) => `$` + val;
 
 function docSignUp() {
   const titleColor = useColorModeValue("teal.300", "teal.200");
@@ -125,8 +125,8 @@ function docSignUp() {
   const handleSubmit = async (values, { setSubmitting }) => {
     setError(null);
 
-    const formData = new FormData();
-    for (const key in values) {
+    let formData = new FormData();
+    for (let key in values) {
       formData.append(key, values[key]);
     }
 
@@ -189,7 +189,7 @@ function docSignUp() {
         bgSize="cover"
         mx={{ md: "auto" }}
         mt={{ md: "14px" }}
-      />
+      ></Box>
       <Flex
         direction="column"
         textAlign="center"
@@ -207,12 +207,7 @@ function docSignUp() {
           fontWeight="normal"
           mt="10px"
           mb="26px"
-          w={{
-            base: "90%",
-            sm: "60%",
-            lg: "40%",
-            xl: "30%",
-          }}
+          w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
         >
           Please fill in this registration form to request creating a doctor
           account and access our services!
@@ -267,6 +262,7 @@ function docSignUp() {
                         placeholder="Enter your username"
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>{errors.Username}</FormErrorMessage>
                     </FormControl>
@@ -290,6 +286,8 @@ function docSignUp() {
                           type={showPassword ? "text" : "Password"}
                           placeholder="Your Password"
                           size="lg"
+                          // required
+                          // onChange={(e) => setPassword(e.target.value)}
                         />
                         <InputRightElement
                           aria-label={
@@ -325,6 +323,7 @@ function docSignUp() {
                         placeholder="Your email address"
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>{errors.Email}</FormErrorMessage>
                     </FormControl>
@@ -348,6 +347,7 @@ function docSignUp() {
                         placeholder="Your full name"
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>{errors.Name}</FormErrorMessage>
                     </FormControl>
@@ -371,6 +371,7 @@ function docSignUp() {
                         placeholder="..."
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>{errors.DateOfBirth}</FormErrorMessage>
                     </FormControl>
@@ -393,6 +394,8 @@ function docSignUp() {
                         onChange={(val) => form.setFieldValue(field.name, val)}
                         value={formatHourlyRate(field.value)}
                         min={1}
+                        // precision={2}
+                        // max={50}
                       >
                         <NumberInputField fontSize="sm" />
                         <NumberInputStepper>
@@ -422,6 +425,7 @@ function docSignUp() {
                         placeholder="Enter The Hospital/Institution You Work At"
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>{errors.Affiliation}</FormErrorMessage>
                     </FormControl>
@@ -449,6 +453,7 @@ function docSignUp() {
                         placeholder="Enter Your Educational Background"
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>
                         {errors.EducationalBackground}
@@ -474,6 +479,7 @@ function docSignUp() {
                         placeholder="Enter Your Speciality"
                         // mb="24px"
                         size="lg"
+                        // required
                       />
                       <FormErrorMessage>{errors.Speciality}</FormErrorMessage>
                     </FormControl>
@@ -498,10 +504,10 @@ function docSignUp() {
                         color="teal.300"
                         borderWidth={1}
                         borderColor="teal.300"
-                        _hover={{ bg: "teal.50" }}
+                        _hover={{ bg:"teal.50" }}
                         // w="60%"
                         h="45"
-                        fontWeight="bold"
+                        fontWeight={"bold"}
                         // mb="24px"
                         borderRadius="15px"
                         style={{
@@ -546,8 +552,8 @@ function docSignUp() {
                         color="teal.300"
                         borderWidth={1}
                         borderColor="teal.300"
-                        _hover={{ bg: "teal.50" }}
-                        fontWeight="bold"
+                        _hover={{ bg:"teal.50" }}
+                        fontWeight={"bold"}
                         // w="60%"
                         h="45"
                         // mb="24px"
@@ -559,7 +565,7 @@ function docSignUp() {
                         }}
                       >
                         Medical License <span style={{ color: "red" }}>* </span>{" "}
-                        <Icon as={IoMdCloudUpload} boxSize={4} />{" "}
+                        <Icon as={IoMdCloudUpload} boxSize={4}  />{" "}
                       </FormLabel>
                       <Input
                         type="file"
@@ -597,8 +603,8 @@ function docSignUp() {
                         color="teal.300"
                         borderWidth={1}
                         borderColor="teal.300"
-                        _hover={{ bg: "teal.50" }}
-                        fontWeight="bold"
+                        _hover={{ bg:"teal.50" }}
+                        fontWeight={"bold"}
                         // w="60%"
                         h="45"
                         // mb="24px"
@@ -610,7 +616,7 @@ function docSignUp() {
                         }}
                       >
                         Medical Degree <span style={{ color: "red" }}>* </span>{" "}
-                        <Icon as={IoMdCloudUpload} boxSize={4} />{" "}
+                        <Icon as={IoMdCloudUpload}  boxSize={4} />{" "}
                       </FormLabel>
                       <Input
                         type="file"
@@ -631,7 +637,7 @@ function docSignUp() {
                     </FormControl>
                   )}
                 </Field>
-
+                
                 {uploadProgress > 0 && (
                   <Progress
                     colorScheme="teal"

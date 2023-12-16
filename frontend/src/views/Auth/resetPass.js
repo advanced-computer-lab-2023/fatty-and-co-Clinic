@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 // Chakra imports
 import {
   Box,
@@ -25,108 +25,105 @@ import { Formik, Form, Field } from "formik";
 
 // Assets
 import signInImage from "assets/img/signInImage.png";
-
+import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
-import axios from "axios";
+import axios from 'axios';
 
 const SignInSchema = Yup.object().shape({
-  Password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
-      "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
-    ),
-});
+    Password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/,
+        "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+      ),
+  });
 
 function resetPass() {
-  const [email, setEmail] = useState("");
-  const [isFormSubmitted, setFormSubmitted] = useState(false);
-  const [isOTPSubmitted, setOTPSubmitted] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const toast = useToast();
+    const [email, setEmail] = useState('');
+    const [isFormSubmitted, setFormSubmitted] = useState(false);
+    const [isOTPSubmitted, setOTPSubmitted] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const toast = useToast();
 
-  const handleShowClick = () => setShowPassword(!showPassword);
+    const handleShowClick = () => setShowPassword(!showPassword);
+  
+    const handleSubmit = async (values, { setSubmitting }) => {
+      console.log(values);
+      try {
+        const { Email } = values;
+        console.log(Email);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
-    console.log(values);
-    try {
-      const { Email } = values;
-      console.log(Email);
+        setEmail(Email);  
+        const response = await axios.post(API_PATHS.sendOTP, { Email });
+        console.log(email);
+  
+        console.log('Server response:', response.data);
+  
+        setFormSubmitted(true);
+        setSubmitting(false);
+      } catch (error) {
+        console.error(error);
+        setSubmitting(false);
+      }
+    };
+  
+    const handleOtpSubmit = async (values, { setSubmitting }) => {
+        try{
+            console.log('OTP submitted:', values.otp);
+                const { otp} = values;
+                //await handleSubmit(values, { setSubmitting });
+                console.log(otp);
+                console.log(email);
+                console.log('Request Payload:', { Email: email, otp: otp });
 
-      setEmail(Email);
-      const response = await axios.post(API_PATHS.sendOTP, { Email });
-      console.log(email);
+                const response = await axios.post(API_PATHS.validateOTP, { Email: email , otp: otp });
+            
+                console.log('Server response:', response.data);
 
-      console.log("Server response:", response.data);
+                setOTPSubmitted(true);
+                setFormSubmitted(false);
+                setSubmitting(false);
+        } catch (error) {
+            console.error(error);
+          }
+    };
 
-      setFormSubmitted(true);
-      setSubmitting(false);
-    } catch (error) {
-      console.error(error);
-      setSubmitting(false);
-    }
-  };
+    const handlePasswordSubmit = async (values, { setSubmitting }) => {
+        try{
+            console.log('Password submitted:', values.Password);
+                const { Password} = values;
+                console.log(Password);
+                console.log('Request Payload:', { Email: email, Password: Password });
 
-  const handleOtpSubmit = async (values, { setSubmitting }) => {
-    try {
-      console.log("OTP submitted:", values.otp);
-      const { otp } = values;
-      // await handleSubmit(values, { setSubmitting });
-      console.log(otp);
-      console.log(email);
-      console.log("Request Payload:", { Email: email, otp });
+                const response = await axios.patch(API_PATHS.resetPass, { Email: email, Password: Password })
+                .then((response) => {
+                    // Handle success or provide feedback to the user
+                    toast({
+                      title: "Password reset successfully",
+                      status: "success",
+                      duration: 9000,
+                      isClosable: true,
+                    });
+                  })
+                  .catch((error) => {
+                    toast({
+                      title: "Failed to reset password",
+                      description: error.response.data.error,
+                      status: "error",
+                      duration: 9000,
+                      isClosable: true,
+                    });
+                    console.error("An error occurred", error);
+                  });;;
+            
+                console.log('Server response:', response.data);
 
-      const response = await axios.post(API_PATHS.validateOTP, {
-        Email: email,
-        otp,
-      });
-
-      console.log("Server response:", response.data);
-
-      setOTPSubmitted(true);
-      setFormSubmitted(false);
-      setSubmitting(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handlePasswordSubmit = async (values, { setSubmitting }) => {
-    try {
-      console.log("Password submitted:", values.Password);
-      const { Password } = values;
-      console.log(Password);
-      console.log("Request Payload:", { Email: email, Password });
-
-      const response = await axios
-        .patch(API_PATHS.resetPass, { Email: email, Password })
-        .then((response) => {
-          // Handle success or provide feedback to the user
-          toast({
-            title: "Password reset successfully",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-          });
-        })
-        .catch((error) => {
-          toast({
-            title: "Failed to reset password",
-            description: error.response.data.error,
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
-          console.error("An error occurred", error);
-        });
-
-      console.log("Server response:", response.data);
-
-      window.location.href = "/auth/signin";
-    } catch (error) {
-      console.error(error);
-    }
-  };
+            
+                window.location.href = '/auth/signin';
+        } catch (error) {
+            console.error(error);
+          }
+    };
 
   // Chakra color mode
   const titleColor = useColorModeValue("teal.300", "teal.200");
@@ -134,33 +131,29 @@ function resetPass() {
   return (
     <Flex position="relative" mb="40px">
       <Flex
-        h={{ sm: "initial", md: "75vh", lg: "85vh" }}
+        h={{ sm: 'initial', md: '75vh', lg: '85vh' }}
         w="100%"
         maxW="1044px"
         mx="auto"
         justifyContent="space-between"
         mb="30px"
-        pt={{ sm: "100px", md: "0px" }}
+        pt={{ sm: '100px', md: '0px' }}
       >
         <Flex
           alignItems="center"
           justifyContent="start"
-          style={{ userSelect: "none" }}
-          w={{ base: "100%", md: "50%", lg: "42%" }}
+          style={{ userSelect: 'none' }}
+          w={{ base: '100%', md: '50%', lg: '42%' }}
         >
           <Flex
             direction="column"
             w="100%"
             background="transparent"
             p="48px"
-            mt={{ md: "150px", lg: "80px" }}
+            mt={{ md: '150px', lg: '80px' }}
           >
             <Heading color={titleColor} fontSize="32px" mb="10px">
-              {isFormSubmitted
-                ? "Enter OTP"
-                : isOTPSubmitted
-                ? "Reset Password"
-                : "Welcome Back"}
+              {isFormSubmitted ? 'Enter OTP' : isOTPSubmitted? 'Reset Password' : 'Welcome Back'}
             </Heading>
             <Text
               mb="36px"
@@ -170,16 +163,14 @@ function resetPass() {
               fontSize="14px"
             >
               {isFormSubmitted
-                ? "Enter the OTP sent to your email"
-                : isOTPSubmitted
-                ? "Enter your new password"
-                : "Enter an email to reset your password"}
+                ? 'Enter the OTP sent to your email'
+                : isOTPSubmitted? 'Enter your new password': 'Enter an email to reset your password'}
             </Text>
 
             {isFormSubmitted ? (
               <Formik
                 initialValues={{
-                  otp: "",
+                  otp: '',
                 }}
                 onSubmit={handleOtpSubmit}
               >
@@ -215,10 +206,10 @@ function resetPass() {
                       color="white"
                       mt="20px"
                       _hover={{
-                        bg: "teal.200",
+                        bg: 'teal.200',
                       }}
                       _active={{
-                        bg: "teal.400",
+                        bg: 'teal.400',
                       }}
                     >
                       SUBMIT OTP
@@ -227,9 +218,10 @@ function resetPass() {
                 )}
               </Formik>
             ) : isOTPSubmitted ? (
-              <Formik
+                
+                <Formik
                 initialValues={{
-                  Password: "",
+                  Password: '',
                 }}
                 validationSchema={SignInSchema}
                 onSubmit={handlePasswordSubmit}
@@ -245,23 +237,23 @@ function resetPass() {
                           <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                             Password
                           </FormLabel>
-                          <InputGroup>
-                            <Input
-                              {...field}
-                              fontSize="sm"
-                              ms="4px"
-                              borderRadius="15px"
-                              type={showPassword ? "text" : "password"}
-                              placeholder="Your Password"
-                              size="lg"
-                            />
-                            <InputRightElement>
-                              {showPassword ? (
-                                <FaEyeSlash onClick={handleShowClick} />
-                              ) : (
-                                <FaEye onClick={handleShowClick} />
-                              )}
-                            </InputRightElement>
+                          <InputGroup> 
+                          <Input
+                            {...field}
+                            fontSize="sm"
+                            ms="4px"
+                            borderRadius="15px"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Your Password"
+                            size="lg"
+                          />
+                          <InputRightElement>
+                            {showPassword ? (
+                              <FaEyeSlash onClick={handleShowClick} />
+                            ) : (
+                              <FaEye onClick={handleShowClick} />
+                            )}
+                          </InputRightElement>
                           </InputGroup>
                           <FormErrorMessage>{errors.Password}</FormErrorMessage>
                         </FormControl>
@@ -279,10 +271,10 @@ function resetPass() {
                       color="white"
                       mt="20px"
                       _hover={{
-                        bg: "teal.200",
+                        bg: 'teal.200',
                       }}
-                      _active={{
-                        bg: "teal.400",
+                      _active={{ 
+                        bg: 'teal.400',
                       }}
                     >
                       RESET
@@ -290,10 +282,11 @@ function resetPass() {
                   </Form>
                 )}
               </Formik>
-            ) : (
+
+              ): (
               <Formik
                 initialValues={{
-                  Email: "",
+                  Email: '',
                 }}
                 onSubmit={handleSubmit}
               >
@@ -333,10 +326,10 @@ function resetPass() {
                       color="white"
                       mt="20px"
                       _hover={{
-                        bg: "teal.200",
+                        bg: 'teal.200',
                       }}
-                      _active={{
-                        bg: "teal.400",
+                      _active={{ 
+                        bg: 'teal.400',
                       }}
                     >
                       SUBMIT
@@ -382,7 +375,7 @@ function resetPass() {
             bgPosition="50%"
             position="absolute"
             borderBottomLeftRadius="20px"
-          />
+          ></Box>
         </Box>
       </Flex>
     </Flex>

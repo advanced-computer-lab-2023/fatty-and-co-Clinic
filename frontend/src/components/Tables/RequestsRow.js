@@ -7,16 +7,11 @@ import {
   Text,
   Tr,
   useColorModeValue,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton 
 } from "@chakra-ui/react";
 import RequestButton from "views/Admin/Requests/components/RequestButton";
 import React, { useState } from "react";
+
 
 function RequestsRow(props) {
   const { Username, Name, Status } = props;
@@ -56,7 +51,7 @@ function RequestsRow(props) {
         </Flex>
       </Td>
 
-      <Td minWidth={{ sm: "150px" }} pl="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">     
         <Badge
           bg={
             Status === "Accepted"
@@ -81,7 +76,8 @@ function RequestsRow(props) {
       </Td>
 
       <Td minWidth={{ sm: "50px" }} pr="0px">
-        <RequestButton Username={Username} Status={Status} />
+        <RequestButton Username = {Username} Status = {Status} ></RequestButton>
+        
       </Td>
     </Tr>
   );

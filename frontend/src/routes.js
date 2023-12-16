@@ -34,7 +34,7 @@ import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
-// import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
+//import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
@@ -42,7 +42,7 @@ import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
 import home from "views/Patient/home";
-import VideoCallPage from "views/Patient/VideoCallTemp";
+
 
 import {
   HomeIcon,
@@ -55,19 +55,12 @@ import {
 } from "components/Icons/Icons";
 import DoctorProfile from "views/Doctors/viewProfile";
 
-// path da el url el added lama ben doos 3ala a certain component fel ui
-// icon ben7ot fe el component name
-// component de 7aga fe views
+//path da el url el added lama ben doos 3ala a certain component fel ui
+//icon ben7ot fe el component name
+//component de 7aga fe views
 
 // TODO: organize routes by type of user
-const dashRoutes = [
-  {
-    path: "/videoCall",
-    name: "Video Call",
-    icon: <HomeIcon color="inherit" />,
-    component: VideoCallPage,
-    layout: "/patient",
-  },
+var dashRoutes = [
   {
     path: "/home",
     name: "Home",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 // Chakra imports
 import {
   Box,
@@ -25,7 +25,7 @@ import { Formik, Form, Field } from "formik";
 // Assets
 import signInImage from "assets/img/signInImage.png";
 import { useLogin } from "hooks/useLogin";
-
+import { useState } from "react";
 import { API_PATHS } from "API/api_paths";
 
 const SignInSchema = Yup.object().shape({
@@ -191,7 +191,7 @@ function SignIn() {
                       fontWeight="normal"
                     >
                       Remember me
-                      {/* TODO: Handle remember me later
+                      {/* TODO: Handle remember me later 
                     </FormLabel>
                   </FormControl> */}
                   <Button
@@ -268,7 +268,7 @@ function SignIn() {
             bgSize="cover"
             bgPosition="50%"
             position="absolute"
-          />
+          ></Box>
         </Box>
       </Flex>
     </Flex>

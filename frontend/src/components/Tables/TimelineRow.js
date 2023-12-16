@@ -13,8 +13,8 @@ function TimelineRow(props) {
           as={logo}
           bg={bgIconColor}
           color={color}
-          h="30px"
-          w="26px"
+          h={"30px"}
+          w={"26px"}
           pe="6px"
           zIndex="1"
           position="relative"
@@ -25,7 +25,7 @@ function TimelineRow(props) {
           w="2px"
           bg="gray.200"
           h={index === arrLength - 1 ? "15px" : "100%"}
-        />
+        ></Box>
       </Flex>
       <Flex direction="column" justifyContent="flex-start" h="100%">
         <Text fontSize="sm" color={textColor} fontWeight="bold">

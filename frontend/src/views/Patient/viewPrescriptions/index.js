@@ -7,7 +7,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
-import  { jsPDF } from "jspdf";
+import { jsPDF } from "jspdf";
 import logo from "assets/img/ShebeenElkom.png";
 import OrderPrescription from "./components/OrderPrescription";
 import {
@@ -62,7 +62,7 @@ function PrescriptionTable() {
 
   const fetchPrescriptions = () => {
     // Construct the URL based on filters and patient username
-    const url = API_PATHS.viewPrescriptions;
+    let url = API_PATHS.viewPrescriptions;
     setIsLoading(true);
     axios
       .post(
@@ -98,11 +98,11 @@ function PrescriptionTable() {
 
   const openModal = async (prescriptionId) => {
     try {
-      const url = `${API_PATHS.getPrescription}?id=${prescriptionId}`;
+      const url = API_PATHS.getPrescription + `?id=${prescriptionId}`;
       console.log(url);
       const response = await axios.get(url, {
         headers: {
-          Authorization,
+          Authorization: Authorization,
         },
       });
       setSelectedPrescription(response.data);
@@ -276,7 +276,7 @@ function PrescriptionTable() {
       </Flex>
       {selectedPrescription && (
         <Modal
-          id="selectedPrescription._id"
+          id={"selectedPrescription._id"}
           isOpen={isModalOpen}
           onClose={closeModal}
         >
@@ -297,7 +297,7 @@ function PrescriptionTable() {
               </ul>
               <style>
                 {
-                  // css for the prescription details
+                  //css for the prescription details
                   `
                   .myList li .medicine-name {
                     font-weight: bold;
@@ -318,7 +318,7 @@ function PrescriptionTable() {
 
                 onClick={(e) => {
                   const doc = new jsPDF();
-                  // write the prescription details text with css
+                  //write the prescription details text with css
                   let y = 23;
                   doc.addImage(logo, 50, 10, 20, 20);
 
@@ -347,7 +347,7 @@ function PrescriptionTable() {
                     y
                   );
                   y += 8;
-                  doc.text(`Status: ${selectedPrescription.Status}`, 20, y);
+                  doc.text("Status: " + selectedPrescription.Status, 20, y);
                   y += 8;
 
                   // Table headers
@@ -367,7 +367,7 @@ function PrescriptionTable() {
                   // Table rows
                   selectedPrescription.Medicine.forEach((medicine, index) => {
                     doc.text(medicine.Name, 25, y);
-                    doc.text(`${medicine.Dosage} mg`, 77, y);
+                    doc.text(medicine.Dosage + " mg", 77, y);
                     y += 10;
                   });
 

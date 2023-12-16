@@ -37,7 +37,7 @@ function RequestButton({ Username, Status }) {
   useEffect(() => {
     axios
       .get(API_PATHS.getRequest, {
-        params: { Username },
+        params: { Username: Username },
         headers: { Authorization },
       })
       .then(async (response) => {
@@ -61,7 +61,7 @@ function RequestButton({ Username, Status }) {
     axios
       .post(
         API_PATHS.acceptRequest,
-        { Username },
+        { Username: Username },
         {
           headers: { Authorization },
         }
@@ -93,7 +93,7 @@ function RequestButton({ Username, Status }) {
     axios
       .put(
         API_PATHS.rejectRequest,
-        { Username },
+        { Username: Username },
         {
           headers: { Authorization },
         }
@@ -124,7 +124,7 @@ function RequestButton({ Username, Status }) {
   const downloadIdFile = async () => {
     const idF = await fetch(API_PATHS.getRequestFile + data.IdFileName, {
       headers: {
-        Authorization,
+        Authorization: Authorization,
       },
     });
     const idFileBlob = await idF.blob();
@@ -132,7 +132,7 @@ function RequestButton({ Username, Status }) {
 
     const link = document.createElement("a");
     link.href = idFileurl;
-    link.download = `id file${data.IdFileName}`;
+    link.download = "id file" + data.IdFileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -143,7 +143,7 @@ function RequestButton({ Username, Status }) {
       API_PATHS.getRequestFile + data.MedicalDegreeName,
       {
         headers: {
-          Authorization,
+          Authorization: Authorization,
         },
       }
     );
@@ -152,7 +152,7 @@ function RequestButton({ Username, Status }) {
 
     const link = document.createElement("a");
     link.href = MedicalDegreurl;
-    link.download = `medical degree file${data.MedicalDegreeName}`;
+    link.download = "medical degree file" + data.MedicalDegreeName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -163,7 +163,7 @@ function RequestButton({ Username, Status }) {
       API_PATHS.getRequestFile + data.MedicalLicenseName,
       {
         headers: {
-          Authorization,
+          Authorization: Authorization,
         },
       }
     );
@@ -172,7 +172,7 @@ function RequestButton({ Username, Status }) {
 
     const link = document.createElement("a");
     link.href = licenseurl;
-    link.download = `medical license file${data.MedicalLicenseName}`;
+    link.download = "medical license file" + data.MedicalLicenseName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -190,10 +190,7 @@ function RequestButton({ Username, Status }) {
           <ModalBody>
             {data ? (
               <div>
-                <p>
-                  Request Details:
-                  {jsonData}
-                </p>
+                <p>Request Details: {jsonData}</p>
                 <VStack spacing={3} w="80%">
                   <button onClick={downloadIdFile}>
                     ID File
@@ -224,7 +221,7 @@ function RequestButton({ Username, Status }) {
                 </Button>
               </div>
             ) : (
-              <div />
+              <div></div>
             )}
           </ModalFooter>
         </ModalContent>

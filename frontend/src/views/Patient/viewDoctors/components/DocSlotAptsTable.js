@@ -15,12 +15,13 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import DoctorsRow from "components/Tables/DoctorsRow";
 
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import DocSlotRowApt from "components/Tables/DocSlotRowApt";
 import { useAuthContext } from "hooks/useAuthContext";
+import { useParams , useLocation} from "react-router-dom";
 
-function DocSlotAptsTable({ title, captions, data }) {
+const DocSlotAptsTable = ({ title, captions, data }) => {
   const history = useHistory();
   const textColor = useColorModeValue("gray.700", "white");
 
@@ -29,17 +30,17 @@ function DocSlotAptsTable({ title, captions, data }) {
 
   const location = useLocation();
   const { state } = location;
-  const { Cost } = state;
-  const { CostFam } = state;
-
+  let Cost = state.Cost;
+  let CostFam = state.CostFam;
+  
   const handleBookClick = (row) => {
-    const newUrl = `../bookAptDetails/${row}`;
-    const newState = {
+    let newUrl = `../bookAptDetails/${row}`;
+    let newState = {
       DayName: row.DayName,
       StartTime: row.StartTime,
       DoctorId: row.DoctorId,
-      Cost,
-      CostFam,
+      Cost: Cost,
+      CostFam: CostFam,
     };
 
     history.push(newUrl, newState);
@@ -59,27 +60,31 @@ function DocSlotAptsTable({ title, captions, data }) {
         <Table variant="simple" color={textColor}>
           <Thead>
             <Tr my=".8rem" pl="0px">
-              {captions.map((caption, idx) => (
-                <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                  {caption}
-                </Th>
-              ))}
+              {captions.map((caption, idx) => {
+                return (
+                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
+                    {caption}
+                  </Th>
+                );
+              })}
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((row) => (
-              <DocSlotRowApt
-                key={row.id}
-                DayName={row.DayName}
-                StartTime={row.StartTime}
-                bookClickHandler={() => handleBookClick(row)}
-              />
-            ))}
+            {data.map((row) => {
+              return (
+                <DocSlotRowApt
+                  key={row.id}
+                  DayName={row.DayName}
+                  StartTime={row.StartTime}
+                  bookClickHandler={() => handleBookClick(row)}
+                />
+              );
+            })}
           </Tbody>
         </Table>
       </CardBody>
     </Card>
   );
-}
+};
 
 export default DocSlotAptsTable;

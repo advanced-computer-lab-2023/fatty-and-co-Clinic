@@ -12,10 +12,11 @@ import {
 import React from "react";
 
 export function FamilymemberRow(props) {
-  const { Name, NationalId, Age, Gender, Relation } = props;
+  const {Name,NationalId,Age,Gender,Relation } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
+    
       <Td minWidth={{ sm: "50px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text
@@ -78,6 +79,7 @@ export function FamilymemberRow(props) {
           </Text>
         </Flex>
       </Td>
+
     </Tr>
   );
 }

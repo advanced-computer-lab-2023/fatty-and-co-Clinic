@@ -19,11 +19,12 @@ import CardHeader from "components/Card/CardHeader.js";
 
 import { useHistory } from "react-router-dom";
 import { useAuthContext } from "hooks/useAuthContext";
-import { useWalletContext } from "hooks/useWalletContext";
-import axios from "axios";
 import MakePayment from "../makePayment";
 import { PackageContextProvider } from "../viewPackagesFam/components/Context";
 import PackageI from "../viewPackagesFam";
+import { useWalletContext } from "hooks/useWalletContext";
+
+import axios from "axios";
 
 function SubscribePackage() {
   const [PackageName, setPackageName] = useState("");
@@ -50,8 +51,7 @@ function SubscribePackage() {
           isClosable: true,
         });
         return; // Don't proceed further
-      }
-      if (PackageName && !NationalId) {
+      } else if (PackageName && !NationalId) {
         const response = await fetch(API_PATHS.getAmountCredit, {
           method: "PATCH",
           headers: {
@@ -112,6 +112,7 @@ function SubscribePackage() {
       duration: 9000,
       isClosable: true,
     });
+    return;
   };
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -125,8 +126,7 @@ function SubscribePackage() {
           isClosable: true,
         });
         return;
-      }
-      if (PackageName && !NationalId) {
+      } else if (PackageName && !NationalId) {
         const response = await fetch(API_PATHS.subscribePackageSelf, {
           method: "PATCH",
           headers: {
@@ -192,7 +192,7 @@ function SubscribePackage() {
             title: "Failed to pay & subscribe for family member!",
             // description: errorData.error,
             status: "error",
-            description: errorData.error,
+            description:errorData.error,
             duration: 9000,
             isClosable: true,
           });

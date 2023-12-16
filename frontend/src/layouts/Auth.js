@@ -21,22 +21,24 @@ export default function Pages(props) {
     return function cleanup() {};
   });
   const getActiveRoute = (routes) => {
-    const activeRoute = "Default Brand Text";
+    let activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
-        const collapseActiveRoute = getActiveRoute(routes[i].views);
+        let collapseActiveRoute = getActiveRoute(routes[i].views);
         if (collapseActiveRoute !== activeRoute) {
           return collapseActiveRoute;
         }
       } else if (routes[i].category) {
-        const categoryActiveRoute = getActiveRoute(routes[i].views);
+        let categoryActiveRoute = getActiveRoute(routes[i].views);
         if (categoryActiveRoute !== activeRoute) {
           return categoryActiveRoute;
         }
-      } else if (
-        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-      ) {
-        return routes[i].name;
+      } else {
+        if (
+          window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+        ) {
+          return routes[i].name;
+        }
       }
     }
     return activeRoute;
@@ -61,8 +63,8 @@ export default function Pages(props) {
   //   }
   //   return activeNavbar;
   // };
-  const getRoutes = (routes) =>
-    routes.map((prop, key) => {
+  const getRoutes = (routes) => {
+    return routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
@@ -77,9 +79,11 @@ export default function Pages(props) {
             key={key}
           />
         );
+      } else {
+        return null;
       }
-      return null;
     });
+  };
   const navRef = React.useRef();
   document.documentElement.dir = "ltr";
   return (

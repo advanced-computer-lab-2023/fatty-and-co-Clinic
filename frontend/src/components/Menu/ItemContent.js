@@ -1,7 +1,7 @@
 // chakra imports
 import { Avatar, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { ClockIcon } from "components/Icons/Icons";
-import { BsCircleFill } from "react-icons/bs";
+import { BsCircleFill } from 'react-icons/bs';
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -10,7 +10,8 @@ export function ItemContent(props) {
   const notificationColor = useColorModeValue("gray.700", "white");
   const spacing = " ";
   return (
-    <Flex flexDirection="row">
+    <>
+      <Flex flexDirection="row">
       <Flex flexDirection="column">
         <Text fontSize="14px" mb="5px" color={notificationColor}>
           <Text fontWeight="bold" fontSize="14px" as="span">
@@ -20,7 +21,8 @@ export function ItemContent(props) {
           {props.info}
         </Text>
       </Flex>
-      <Flex alignItems="flex-end" />
+      <Flex alignItems="flex-end" >
+      </Flex>
 
       {/* <Avatar
         name={props.aName}
@@ -28,6 +30,8 @@ export function ItemContent(props) {
         borderRadius="12px"
         me="16px"
       /> */}
-    </Flex>
+      </Flex>
+      
+    </>
   );
 }

@@ -19,11 +19,12 @@ import {
 import React from "react";
 
 function DocSlotRowApt(props) {
-  const { DayName, StartTime, bookClickHandler } = props;
+  const { DayName, StartTime, bookClickHandler} = props;
   const textColor = useColorModeValue("gray.700", "white");
 
   return (
-    <Tr>
+    <Tr
+    >
       <Td minWidth={{ sm: "250px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text

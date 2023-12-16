@@ -65,36 +65,37 @@ function ChangeEmail() {
   };
 
   return (
-    <CardBody>
-      <Flex direction="column" w="100%">
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={20} mb="20px">
-            <Heading as="h4" size="md">
-              New Email
-            </Heading>
-            <Input
-              variant="filled"
-              type="email"
-              placeholder="New Email"
-              value={Email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Button
-              colorScheme="teal"
-              borderColor="teal.300"
-              color="teal.300"
-              p="8px 32px"
-              type="submit"
-              textColor="white"
-              w="100%"
-              mb="10"
-            >
-              Save
-            </Button>
-          </Stack>
-        </form>
-      </Flex>
-    </CardBody>
+
+      <CardBody>
+        <Flex direction="column" w="100%">
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={20} mb="20px">
+                <Heading as='h4' size='md'>
+                    New Email
+                </Heading>
+              <Input
+                variant="filled"
+                type="email"
+                placeholder="New Email"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button
+                colorScheme="teal"
+                borderColor="teal.300"
+                color="teal.300"
+                p="8px 32px"
+                type="submit"
+                textColor="white"
+                w="100%"
+                mb="10"
+              >
+                Save
+              </Button>
+            </Stack>
+          </form>
+        </Flex>
+      </CardBody>
   );
 }
 

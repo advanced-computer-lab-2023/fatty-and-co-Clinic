@@ -7,7 +7,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-
 export function SearchBar(props) {
   const [inputValue, setInputValue] = useState("");
   const handleInputChange = (event) => {
@@ -49,7 +48,7 @@ export function SearchBar(props) {
               boxShadow: "none",
             }}
             icon={<SearchIcon color={searchIconColor} w="15px" h="15px" />}
-          />
+          ></IconButton>
         }
       />
       <Input

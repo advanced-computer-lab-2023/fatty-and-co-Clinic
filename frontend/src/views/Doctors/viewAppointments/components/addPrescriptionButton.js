@@ -24,10 +24,7 @@ import { useAuthContext } from "hooks/useAuthContext";
 
 // import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 
-export default function AddPrescriptionButton({
-  customkey,
-  setHasPrescription,
-}) {
+export default function AddPrescriptionButton({ customkey, setHasPrescription }) {
   // const { prescriptions, dispatch } = usePrescriptionContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
@@ -43,9 +40,9 @@ export default function AddPrescriptionButton({
   const handleDiagnosis = (event) => {
     setDiagnosis(event.target.value);
   };
-  const handleDescription = (event) => {
+  const handleDescription = (event)=>{
     setDescription(event.target.value);
-  };
+  }
   const handleMedicine = (event) => {
     setMedicine(event.target.value);
   };
@@ -54,6 +51,7 @@ export default function AddPrescriptionButton({
   };
   const toast = useToast();
   const handleSubmit = () => {
+    
     const meds = {
       Name: medicine,
       Dosage: dosage,
@@ -65,7 +63,7 @@ export default function AddPrescriptionButton({
         params: {
           appointmentId: customkey,
           medicines: meds,
-          diagnosis,
+          diagnosis: diagnosis,
         },
         headers: { Authorization },
       })
@@ -78,7 +76,7 @@ export default function AddPrescriptionButton({
           duration: 9000,
           isClosable: true,
         });
-        setHasPrescription(true);
+        setHasPrescription (true);
       })
       .catch((err) =>
         toast({
@@ -125,10 +123,7 @@ export default function AddPrescriptionButton({
               placeholder="Enter medicine"
               onChange={handleDescription}
             />
-            <Text mb="8px">
-              Diagnosis:
-              {diagnosis}
-            </Text>
+            <Text mb="8px">Diagnosis: {diagnosis}</Text>
             <Input
               diagnosis={diagnosis}
               bg="white"

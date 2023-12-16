@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import FamPackageTable from "./components/FamPackageTable";
 
-function ViewFamPackages() {
+const ViewFamPackages = () => {
   const [data, setData] = useState([]);
 
   const { user } = useAuthContext();
@@ -17,7 +17,7 @@ function ViewFamPackages() {
     axios
       .get(url, {
         headers: {
-          Authorization,
+          Authorization: Authorization,
         },
       })
       .then((response) => {
@@ -36,7 +36,7 @@ function ViewFamPackages() {
         justifyContent="flex-start"
       >
         <FamPackageTable
-          title="My Package"
+          title={"My Package"}
           captions={[
             "Name",
             "Package",
@@ -46,13 +46,13 @@ function ViewFamPackages() {
             "Family_Discount",
           ]}
           data={data}
-        />
+        ></FamPackageTable>
         {/* <Text fontSize="3xl" fontWeight="bold">
               No Subscriptions Found
-            </Text>
+            </Text> 
            */}
       </Flex>
     </Box>
   );
-}
+};
 export default ViewFamPackages;

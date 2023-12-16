@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Button, Box, Input, Select,useToast,Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Button,
+  Box,
+  Input,
+  Select,
+  useToast,
+  Text,
+} from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import { useAuthContext } from "hooks/useAuthContext";
 import PatientAppTable from "./components/PatientAppTable";
+import { useAuthContext } from "hooks/useAuthContext";
 
 export function ViewPatientAppointments() {
   const [DoctorUsername, setDoctorUsername] = useState("");
@@ -45,7 +53,7 @@ export function ViewPatientAppointments() {
 
   const handleCancelAppointment = async (DoctorUsername) => {
     // e.preventDefault();
-    // console.log("DoctorUsername:", DoctorUsername);
+    //console.log("DoctorUsername:", DoctorUsername);
     setDoctorUsername(DoctorUsername);
 
     try {
@@ -73,8 +81,6 @@ export function ViewPatientAppointments() {
           location.reload();
         }, 500); // 1000ms delay
         window.location.reload();
-     
-   
       } else {
         toast({
           title: "Failed to Cancel",
@@ -120,17 +126,17 @@ export function ViewPatientAppointments() {
         pt="50px"
         justifyContent="flex-start"
       >
-        <Flex direction="row" alignItems="flex-start">    <Text
-                fontSize="lg"
-                color="black"
-                fontWeight="bold"
-                pb=".2rem"
-                marginLeft={8}
-              
-              >
-                Appointments
-              </Text>
-
+        <Flex direction="row" alignItems="flex-start">
+          {" "}
+          <Text
+            fontSize="lg"
+            color="black"
+            fontWeight="bold"
+            pb=".2rem"
+            marginLeft={8}
+          >
+            Appointments
+          </Text>
           <Select
             bg="white"
             marginLeft={10}
@@ -158,20 +164,22 @@ export function ViewPatientAppointments() {
             color="teal.300"
             fontSize="xs"
             p="8px 32px"
-           textColor="white"
-
-           onClick={handleSearchButtonClick} marginLeft={10}>
+            textColor="white"
+            onClick={handleSearchButtonClick}
+            marginLeft={10}
+          >
             Search
           </Button>
-
           <Button
             colorScheme="teal"
             borderColor="teal.500"
             color="teal.500"
             fontSize="xs"
             p="8px 32px"
-           textColor="white"
-           onClick={handleClrButtonClick} marginLeft={10}>
+            textColor="white"
+            onClick={handleClrButtonClick}
+            marginLeft={10}
+          >
             Clear
           </Button>
         </Flex>
@@ -179,7 +187,14 @@ export function ViewPatientAppointments() {
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
         <PatientAppTable
           // title={"Your Appointments"}
-          captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
+          captions={[
+            "Doctor Name",
+            "Status",
+            "Type",
+            "Date",
+            "Time",
+            "Cancell",
+          ]}
           data={data}
           isLoading={isLoading}
           handleCancelAppointment={handleCancelAppointment}

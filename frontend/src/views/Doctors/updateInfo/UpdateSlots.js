@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
+import SlotsTable from "./components/SlotsTable";
 import {
   Flex,
   Button,
@@ -24,7 +25,6 @@ import axios from "axios";
 import Card from "components/Card/Card";
 import CardHeader from "components/Card/CardHeader";
 import CardBody from "components/Card/CardBody";
-import SlotsTable from "./components/SlotsTable";
 
 export function UpdateSlots() {
   const { id } = useParams();
@@ -38,6 +38,7 @@ export function UpdateSlots() {
   const [isChanged, setIsChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  
   const fetchTableData = () => {
     const url = API_PATHS.viewMySlotsDoc;
     setIsLoading(true);
@@ -46,7 +47,7 @@ export function UpdateSlots() {
       .then((response) => {
         setTableData(response.data);
         console.log("hello");
-        console.log("table data:", response.data);
+        console.log("table data:" ,response.data);
       })
       .catch((error) => {
         console.log("Error fetching data: ", error);
@@ -58,54 +59,42 @@ export function UpdateSlots() {
     fetchTableData();
   }, []);
 
-  const daysMap = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  const daysMap = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   return (
-    <Card p="16px" my={{ sm: "24px", xl: "0px" }}>
-      <CardHeader p="12px 5px" mb="12px">
-        <Text fontSize="lg" color="black" fontWeight="bold">
+    <Card p='16px' my={{ sm: "24px", xl: "0px" }} >
+      <CardHeader p='12px 5px' mb='12px'>
+        <Text fontSize='lg' color="black" fontWeight='bold'>
           Slots
         </Text>
       </CardHeader>
-      <CardBody px="5px">
-        <Tabs
-          size="md"
-          variant="enclosed"
-          onChange={(index) => setSelectedTabIndex(index)}
-        >
-          <TabList>
-            <Tab>Monday</Tab>
-            <Tab>Tuesday</Tab>
-            <Tab>Wednesday</Tab>
-            <Tab>Thursday</Tab>
-            <Tab>Friday</Tab>
-            <Tab>Saturday</Tab>
-            <Tab>Sunday</Tab>
-          </TabList>
+      <CardBody px='5px'>
+      <Tabs size='md' variant='enclosed' onChange={index => setSelectedTabIndex(index)}>
+        <TabList>
+          <Tab>Monday</Tab>
+          <Tab>Tuesday</Tab>
+          <Tab>Wednesday</Tab>
+          <Tab>Thursday</Tab>
+          <Tab>Friday</Tab>
+          <Tab>Saturday</Tab>
+          <Tab>Sunday</Tab>
+        </TabList>
 
-          <TabPanels>
-            {daysMap.map((day, index) => (
-              <TabPanel key={day}>
-                <SlotsTable
-                  captions={["Time", "Edit Slot", "Delete"]}
-                  tableData={tableData.filter((item) => item.DayName === day)}
-                  setTableData={setTableData}
-                  isLoading={isLoading}
-                  day={day}
-                />
-              </TabPanel>
-            ))}
-          </TabPanels>
-        </Tabs>
+        <TabPanels>
+          {daysMap.map((day, index) => (
+          <TabPanel key={day}>
+            <SlotsTable 
+                captions={[ "Time", "Edit Slot", "Delete"]}
+                tableData={tableData.filter(item => item.DayName === day)}
+                setTableData={setTableData}
+                isLoading={isLoading}
+                day={day}
+              ></SlotsTable>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
       </CardBody>
     </Card>
   );
