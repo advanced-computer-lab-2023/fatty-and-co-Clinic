@@ -13,10 +13,12 @@ const {
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
   testAppointRef,
-  rescheduleAppointmentPatient,reschedulefamilymember,
-  createAppointment
+  rescheduleAppointmentPatient,
+  reschedulefamilymember,
+  createAppointment,
+  getAppointmentsfamilymembers,
+  getAllAppointmentsPat,
 } = require("../controllers/appointmentController");
-
 
 //const {createAppointment} = require("../controllers/testController");
 const { checkDoctor, checkPatient } = require("../common/middleware/checkType");
@@ -38,7 +40,7 @@ router.get("/", (req, res) => {
  * @access Doctor
  */
 router.get("/findPatients", checkDoctor, findDoctorPatients); // checkDoctor middleware to make sure user is a doctor
-
+router.get("/getAllAppointmentsPat", getAllAppointmentsPat);
 /**
  * @route GET /appointments/upcoming
  * @desc Get upcoming appointments for a doctor
@@ -60,8 +62,16 @@ router.get("/searchpatient", checkDoctor, searchPatient);
  * @access Doctor
  */
 router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
-router.post("/rescheduleAppointmentPatient", checkPatient, rescheduleAppointmentPatient);
-router.post("/rescheduleAppointmentfamilymember", checkPatient, reschedulefamilymember);
+router.post(
+  "/rescheduleAppointmentPatient",
+  checkPatient,
+  rescheduleAppointmentPatient
+);
+router.post(
+  "/rescheduleAppointmentfamilymember",
+  checkPatient,
+  reschedulefamilymember
+);
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient
@@ -69,21 +79,40 @@ router.post("/rescheduleAppointmentfamilymember", checkPatient, reschedulefamily
  */
 router.get("/getAppointmentsPat", checkPatient, getAppointmentsPat);
 
-router.get("/filterAppointmentsByStatusDoc", checkPatient, filterAppointmentsByStatusDoc);
-router.get("/filterAppointmentsByStatusPat", checkPatient, filterAppointmentsByStatusPat);
-router.get("/filterAppointmentsByDateDoc", checkPatient, filterAppointmentsByDateDoc);
-router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
-router.patch("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
-
+router.get(
+  "/filterAppointmentsByStatusDoc",
+  checkPatient,
+  filterAppointmentsByStatusDoc
+);
+router.get(
+  "/filterAppointmentsByStatusPat",
+  checkPatient,
+  filterAppointmentsByStatusPat
+);
+router.get(
+  "/filterAppointmentsByDateDoc",
+  checkPatient,
+  filterAppointmentsByDateDoc
+);
+router.get(
+  "/filterAppointmentsByDatePat",
+  checkPatient,
+  filterAppointmentsByDatePat
+);
+router.patch(
+  "/filterAppointmentsByDatePat",
+  checkPatient,
+  filterAppointmentsByDatePat
+);
 
 router.get("/testAppRef", testAppointRef);
 
-router.post("/createAppointment",checkPatient, createAppointment);
-router.post("/rescheduleForPatient",checkPatient,reschedulePatient);
+router.post("/createAppointment", checkPatient, createAppointment);
+router.post("/rescheduleForPatient", checkPatient, reschedulePatient);
 
 // Cancel for family member + for myself
 
-router.patch("/cancelAppFam",checkPatient,cancelAppForFam)
-router.patch("/cancelAppointment",checkPatient,cancelAppForSelf)
+router.patch("/cancelAppFam", checkPatient, cancelAppForFam);
+router.patch("/cancelAppointment", checkPatient, cancelAppForSelf);
 
 module.exports = router;

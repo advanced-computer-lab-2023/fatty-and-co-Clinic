@@ -18,7 +18,7 @@ import Statuspackagerow from "components/Tables/statuspackagerow";
 import React from "react";
 const FamPackagestatusTable = ({ title, captions, data }) => {
   const textColor = useColorModeValue("gray.700", "white");
-  title="Family Member Packages"
+  title = "Family Member Packages";
   return (
     <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
       <CardHeader p="6px 0px 22px 0px">
@@ -41,22 +41,28 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
           </Thead>
           <Tbody>
             {data.map((row) => {
-              if(row){
-              const id = row.Patient?row.Patient._id: row.FamilyMem._id ;
-              const name = row.Patient?row.Patient.Name: row.FamilyMem.Name ;
-           
+              if (row) {
+                const id = row.Patient ? row.Patient._id : row.FamilyMem._id;
+                const name = row.Patient
+                  ? row.Patient.Name
+                  : row.FamilyMem.Name;
 
-              return (
-                <Statuspackagerow
-                  key={id}
-                  Name={name}
-                  Status={row.Status?row.Status:""}
-                  Package={row.Package?row.Package.Name:""}
-                  Enddate={row.Enddate?row.Enddate:""}
-                  Startdate={row.Startdate?row.Startdate:""}
-                  Renewaldate={!row.Renewaldate||row.Status==="Cancelled"?"":row.Renewaldate}
-                />
-              );}
+                return (
+                  <Statuspackagerow
+                    key={id}
+                    Name={name}
+                    Status={row.Status ? row.Status : ""}
+                    Package={row.Package ? row.Package.Name : ""}
+                    Enddate={row.Enddate ? row.Enddate : ""}
+                    Startdate={row.Startdate ? row.Startdate : ""}
+                    Renewaldate={
+                      !row.Renewaldate || row.Status === "Cancelled"
+                        ? ""
+                        : row.Renewaldate
+                    }
+                  />
+                );
+              }
             })}
           </Tbody>
         </Table>
@@ -64,5 +70,6 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
     </Card>
   );
 };
+export default FamPackagestatusTable;
 
-export default FamPackagestatusTable ;
+export default FamPackagestatusTable;

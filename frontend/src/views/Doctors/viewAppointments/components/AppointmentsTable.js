@@ -65,7 +65,6 @@ export const AppointmentsTable = ({ title, captions, data, isLoading }) => {
                     DateTime={row.Date}
                   />
                 );
-                
               })}
             </Tbody>
           </Table>

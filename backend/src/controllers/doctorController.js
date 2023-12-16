@@ -1,4 +1,4 @@
-const doctorModel = require("../models/doctors");
+const doctorModel = require("../models/doctors"); 
 const appointmentModel = require("../models/appointments");
 const prescriptionsModel = require("../models/prescriptions");
 const patientModel = require("../models/patients");
@@ -7,7 +7,8 @@ const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 const subscriptionModel = require("../models/subscriptions");
-const notificationModel = require("../models/notifications");
+const requestModel = require("../models/appointmentrequests");
+const notificationModel = require("../models/notificationsChat");
 const { Int32 } = require("bson");
 
 // I think this is useless?
@@ -309,7 +310,6 @@ const filterDoctor = async (req, res) => {
           Cost: calcCost,
           CostOld: calcCostOld,
           CostFam: calcCostfam,
-
         });
       }
       console.log(myFilteredDoctors);
@@ -480,11 +480,8 @@ async function getPackageFamDiscount(patientUsername) {
     console.log("subscribed");
     return subscription.Package.Family_Discount;
   }
- return 0;
+  return 0;
 }
-
-
-
 
 //usage: returns the available slot(s) of all doctorsss
 //based on the date&time range passed from the user
@@ -885,67 +882,76 @@ const validateBookingDate = async (req, res) => {
     res.status(500).send({ message: "Chosen Date does not match chosen Day" });
 };
 
-const rescheduleAppointmentPatient= async(req,res) =>{
+const rescheduleAppointmentPatient = async (req, res) => {
   try {
     const PatientUser = req.user.Username;
-    const {doctorUsername,date}=req.body;
-   const newDate = newDate(date);
-   const tmpDate = new Date(DateFinal);
-    const Patient =await patientModel.findOne({Username:PatientUser});
+    const { doctorUsername, date } = req.body;
+    const newDate = newDate(date);
+    const tmpDate = new Date(DateFinal);
+    const Patient = await patientModel.findOne({ Username: PatientUser });
     const Doctor = await doctorModel.findOne({ Username: doctorUsername });
-    const hasappointment=await appointmentModel.findOne({DoctorUsername:doctorUsername,
-    PatientUsername:PatientUser,Status:"Upcoming" })
-  const Appointmentreserved =await appointmentModel.find({DoctorUsername:doctorUsername});
-  // Check is slot is avaliable 
-//  const isslotfordoctor =await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay()});
-  let isSlotAvailable = true;
-  for (const appointment of Appointmentreserved){
-    const existingDate = new Date(appointment.Date);
-    if (newDate.getHours() === existingDate.getHours()) {
-      isSlotAvailable = false;
-      break;
+    const hasappointment = await appointmentModel.findOne({
+      DoctorUsername: doctorUsername,
+      PatientUsername: PatientUser,
+      Status: "Upcoming",
+    });
+    const Appointmentreserved = await appointmentModel.find({
+      DoctorUsername: doctorUsername,
+    });
+    // Check is slot is avaliable
+    //  const isslotfordoctor =await docSlotsModel.find({DoctorId:Doctor,WorkingDay:newDate.getDay()});
+    let isSlotAvailable = true;
+    for (const appointment of Appointmentreserved) {
+      const existingDate = new Date(appointment.Date);
+      if (newDate.getHours() === existingDate.getHours()) {
+        isSlotAvailable = false;
+        break;
+      }
     }
-  }
-  let patientavaliable = true;
-  const patientappointments= await appointmentModel.findOne({
-    PatientUsername:PatientUser,Status:"Upcoming" });
-  for (const appointmentPatient of patientappointments){
-    const existingDate = new Date(appointmentPatient.Date);
-    if (newDate.getHours() === existingDate.getHours()) {
-      patientavaliable = false;
-      break;
+    let patientavaliable = true;
+    const patientappointments = await appointmentModel.findOne({
+      PatientUsername: PatientUser,
+      Status: "Upcoming",
+    });
+    for (const appointmentPatient of patientappointments) {
+      const existingDate = new Date(appointmentPatient.Date);
+      if (newDate.getHours() === existingDate.getHours()) {
+        patientavaliable = false;
+        break;
+      }
     }
-  }
-  if (!Patient){
-    res.status(500).send({message:"Wrong Patient Username "});
-  }
- else  if (!Doctor){
-    res.status(500).send({message:"No such a doctor with username "});
-  }
-else if (!patientavaliable){
-  res.status(500).send({message:"You already have an appointment  "});
-}
-  else if (isSlotAvailable){
-    res.status(500).send({message:" This slot is not avaliable for this dctor  "});
-  }
-  else if (!hasappointment){
-    res.status(500).send({message:"You don't have any appointments with this doctor to reschdule "});
-  }
-  else {
-     const rescheduledappointment=await appointmentModel.findOneAndUpdate(
-      {DoctorUsername:doctorUsername,
-        PatientUsername:PatientUser,Status:"Upcoming"},{Status:"Rescheduled",
-      Date:newDate}
-     )
-    res.status(200).json(rescheduledappointment);
-  }
+    if (!Patient) {
+      res.status(500).send({ message: "Wrong Patient Username " });
+    } else if (!Doctor) {
+      res.status(500).send({ message: "No such a doctor with username " });
+    } else if (!patientavaliable) {
+      res.status(500).send({ message: "You already have an appointment  " });
+    } else if (isSlotAvailable) {
+      res
+        .status(500)
+        .send({ message: " This slot is not avaliable for this dctor  " });
+    } else if (!hasappointment) {
+      res
+        .status(500)
+        .send({
+          message:
+            "You don't have any appointments with this doctor to reschdule ",
+        });
+    } else {
+      const rescheduledappointment = await appointmentModel.findOneAndUpdate(
+        {
+          DoctorUsername: doctorUsername,
+          PatientUsername: PatientUser,
+          Status: "Upcoming",
+        },
+        { Status: "Rescheduled", Date: newDate }
+      );
+      res.status(200).json(rescheduledappointment);
+    }
   } catch (error) {
     res.status(500).json(error);
   }
-}
-
-
-
+};
 
 const viewMySlotsDoc = async (req, res) => {
   const username = req.user.Username;
@@ -1085,16 +1091,18 @@ const getPaymentAmount = async (req, res) => {
 const getChatPatients = async (req, res) => {
   try {
     // Find all appointments associated with the current doctor
-    const docAppointments = await appointmentModel.find({ DoctorUsername: req.user.Username , Status : {$in: ["Upcoming" , "Completed"]}});
+    const docAppointments = await appointmentModel.find({
+      DoctorUsername: req.user.Username,
+      Status: { $in: ["Upcoming", "Completed"] },
+    });
     const uniquePatientUsernames = new Set();
-  
+
     const chatPatients = await Promise.all(
       docAppointments.map(async (appointment) => {
         const patient = await patientModel.findOne({
           Username: appointment.PatientUsername,
         });
 
-        
         // Check if the patient username is already in the set
         if (!uniquePatientUsernames.has(patient.Username)) {
           // If not, add it to the set and include the patient in the result
@@ -1117,22 +1125,81 @@ const getChatPatients = async (req, res) => {
     );
 
     // Filter out null values (those are the duplicates)
-    const filteredChatPatients = chatPatients.filter((patient) => patient !== null);
-
+    const filteredChatPatients = chatPatients.filter(
+      (patient) => patient !== null
+    );
 
     res.status(200).json(filteredChatPatients);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-const getDocUsernameSocket = async (req, res) => { 
-  try{ const username = req.user.Username;
-   res.status(200).json(username);}
-    catch (error) {
-     res.status(500).send({ message: error.message });
-    };
-   };
+const getDocUsernameSocket = async (req, res) => {
+  try {
+    const username = req.user.Username;
+    res.status(200).json(username);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
 
+const acceptFollowUp = async (req, res) => {
+  const { Username } = req.body;
+  const docUsername = req.user.Username;
+  console.log(Username, docUsername);
+  try {
+    const request = await requestModel.findOne({
+      PatientUsername: Username,
+      DoctorUsername: docUsername,
+      Status: { $ne: "Accepted" },
+    });
+    console.log(request);
+    const patient = await patientModel.findOne({ Username });
+    const doctor = await doctorModel.findOne({
+      Username: docUsername,
+    });
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      const appointment = await appointmentModel.create({
+        DoctorUsername: docUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Upcoming",
+        FollowUp: true,
+        Date: date,
+      });
+    }
+
+    request.Status = "Accepted";
+    await request.save();
+    res.status(200).json(request);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const rejectFollowUp = async (req, res) => {
+  const { Username } = req.body;
+  const docUsername = req.user.Username;
+  try {
+    const request = await requestModel.findOneAndUpdate(
+      {
+        PatientUsername: Username,
+        DoctorUsername: docUsername,
+        Status: { $ne: "Rejected" },
+      },
+      { $set: { Status: "Rejected" } },
+      { new: true }
+    );
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
@@ -1160,4 +1227,6 @@ module.exports = {
   getPaymentAmount,
   getChatPatients,
   getDocUsernameSocket,
+  acceptFollowUp,
+  rejectFollowUp,
 };

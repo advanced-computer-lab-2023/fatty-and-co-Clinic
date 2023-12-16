@@ -23,11 +23,20 @@ import {
   Icon,
   VStack,
   Flex,
+  HStack,
+  Text,
+  ModalFooter,
 } from "@chakra-ui/react";
-import { DownloadIcon } from "@chakra-ui/icons";
+import {
+  DownloadIcon,
+  InfoOutlineIcon,
+  PhoneIcon,
+  WarningTwoIcon,
+} from "@chakra-ui/icons";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import HealthRecordForm from "./components/HealthRecordForm";
+import { useHistory } from "react-router-dom";
 
 export function PatientTable() {
   const { user } = useAuthContext();
@@ -38,7 +47,8 @@ export function PatientTable() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
-  const [healthRecords, setHealthRecords] = useState(null);
+  const [healthRecords, setHealthRecords] = useState([]);
+  const history = useHistory();
 
   const [filters, setFilters] = useState({
     patientName: "",
@@ -99,24 +109,14 @@ export function PatientTable() {
     } catch (error) {
       console.error("Error fetching info and health records:", error);
     }
-    const fetchHealthRecords = async () => {
-      const response = await fetch(
-        API_PATHS.getMedicalHistory + patientUsername,
-        {
-          headers: {
-            Authorization: Authorization,
-          },
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setHealthRecords(data.MedicalHistory);
-        // dispatch({ type: "SET_PACKAGES", payload: data });
-      } else {
-        console.log(data);
-      }
-    };
-    fetchHealthRecords();
+  };
+
+
+  const handleViewRecords = async () => {
+   
+    const redirectUrl = `/doctor/patientRecords/?username=${selectedPatient.Username}&name=${selectedPatient.Name}`;
+    history.replace(redirectUrl);
+    
   };
 
   const closeInfoModal = () => {
@@ -190,16 +190,20 @@ export function PatientTable() {
               key={patient._id}
               onClick={() => openModal(patient._id)}
             >
-              <Td>{patient && patient.Name ? patient.Name : "N/A"}</Td>
-              <Td>
+              <Td fontWeight="semibold">
+                {patient && patient.Name ? patient.Name : "N/A"}
+              </Td>
+              <Td fontWeight="semibold">
                 {patient && patient.MobileNum ? patient.MobileNum : "N/A"}
               </Td>
-              <Td>
+              <Td fontWeight="semibold">
                 {patient && patient.DateOfBirth
                   ? new Date(patient.DateOfBirth).toLocaleDateString("en-GB")
                   : "N/A"}
               </Td>
-              <Td>{patient && patient.Gender ? patient.Gender : "N/A"}</Td>
+              <Td fontWeight="semibold">
+                {patient && patient.Gender ? patient.Gender : "N/A"}
+              </Td>
             </Tr>
           ))}
         </Tbody>
@@ -208,35 +212,57 @@ export function PatientTable() {
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Patient Details</ModalHeader>
+            <ModalHeader>
+              {" "}
+              <HStack spacing="2">
+                <InfoOutlineIcon color="teal.500" />
+                <Text>{selectedPatient.Name}</Text>
+                <Text>{selectedPatient.Gender}</Text>
+              </HStack>
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <p>patient name: {selectedPatient.Name}</p>
-              <p>Mobile Number: {selectedPatient.MobileNum}</p>
-              <p>
-                Date of birth:{" "}
-                {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
-                  "en-GB"
-                )}
-              </p>
-              <p>Gender:{selectedPatient.Gender}</p>
-              <p>Package Name:{selectedPatient.PackageName}</p>
-              <p>
-                Emergency Contact Name:
-                {selectedPatient.EmergencyContact.FullName}
-              </p>
-              <p>
-                Emergency Contact phone number:
-                {selectedPatient.EmergencyContact.PhoneNumber}
-              </p>
-              <Button
-                onClick={() => {
-                  openInfoModal(selectedPatient.Username);
-                }}
-              >
-                View Information and Health records.
-              </Button>
+              <VStack spacing="2" align="stretch">
+                <HStack spacing="2">
+                  <PhoneIcon color="teal.500" />
+                  <Text>{selectedPatient.MobileNum}</Text>
+                </HStack>
+                <HStack spacing="2">
+                  <span
+                    role="img"
+                    aria-label="gift"
+                    style={{ fontSize: "20px" }}
+                  >
+                    🎁
+                  </span>
+                  <Text>
+                    {" "}
+                    {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
+                      "en-GB"
+                    )}
+                  </Text>
+                </HStack>
+                <hr></hr>
+                {/* <p>Package Name:{selectedPatient.PackageName}</p> */}
+                <HStack spacing="2">
+                  <WarningTwoIcon color="teal.500" />
+                  <Text fontWeight="semibold">Emergency contact: </Text>
+                </HStack>
+                <HStack spacing="2">
+                  <InfoOutlineIcon color="teal.500" />
+                  <Text> {selectedPatient.EmergencyContact.FullName}</Text>
+                </HStack>
+                <HStack spacing="2">
+                  <PhoneIcon color="teal.500" />
+                  <Text>{selectedPatient.EmergencyContact.PhoneNumber}</Text>
+                </HStack>
+              </VStack>
             </ModalBody>
+            <ModalFooter>
+              <Button onClick={handleViewRecords}>
+                View appointments and Health records.
+              </Button>
+            </ModalFooter>
           </ModalContent>
         </Modal>
       )}
@@ -250,8 +276,8 @@ export function PatientTable() {
               <Heading as="h5" size="sm">
                 Health Records :
               </Heading>
-               {/* start of health records  TODO: make it a component */}
-               <Flex
+              {/* start of health records  TODO: make it a component */}
+              <Flex
                 direction={{ sm: "column", md: "row" }}
                 align="flex-start"
                 p={{ md: "5px" }}
@@ -287,7 +313,7 @@ export function PatientTable() {
                           <Icon as={DownloadIcon} me="3px" />
                         </button>
                         <div>
-                          {healthRecord.note && healthRecord.note!="null" && (
+                          {healthRecord.note && healthRecord.note != "null" && (
                             <p>note: {healthRecord.note}</p>
                           )}
                         </div>
@@ -295,8 +321,10 @@ export function PatientTable() {
                       </VStack>
                     ))}
                 </Flex>
-                <Flex direction="column" align="flex-start" >
-                <HealthRecordForm PatientUsername={selectedPatient.Username}/>
+                <Flex direction="column" align="flex-start">
+                  <HealthRecordForm
+                    PatientUsername={selectedPatient.Username}
+                  />
                 </Flex>
               </Flex>
               {/* end of health records */}

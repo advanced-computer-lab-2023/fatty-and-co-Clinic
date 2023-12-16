@@ -36,7 +36,7 @@ function AppointmentsRow(props) {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [hasPrescription, setHasPrescription] = useState("");
-  //  const { prescriptions, dispatch } = usePrescriptionContext();
+  // const { prescriptions, dispatch } = usePrescriptionContext();
   useEffect(() => {
     const checkPrescriptionStatus = async () => {
       try {
@@ -71,20 +71,6 @@ function AppointmentsRow(props) {
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
-      {DoctorName && (
-        <Td minWidth={{ sm: "250px" }} pl="0px">
-          <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-            <Text
-              fontSize="md"
-              color={textColor}
-              fontWeight="bold"
-              minWidth="100%"
-            >
-              {DoctorName}
-            </Text>
-          </Flex>
-        </Td>
-      )}
       {PatientName && (
         <Td minWidth={{ sm: "150px" }} pl="0px">
           <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
@@ -98,7 +84,7 @@ function AppointmentsRow(props) {
             </Text>
           </Flex>
         </Td>
-      )} 
+      )}
       <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Text

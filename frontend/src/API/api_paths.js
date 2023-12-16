@@ -8,7 +8,7 @@ const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
 const PRESCRIPTION_BASE = "http://localhost:8000/prescription/";
 const MESSAGE_BASE = "http://localhost:8000/message/";
-const NOTIFICATION_BASE = "http://localhost:8000/notification/";  
+const NOTIFICATION_BASE = "http://localhost:8000/notification/";
 
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
@@ -21,6 +21,7 @@ export const API_PATHS = {
   resetPass: GUEST_BASE + "resetPass/",
   sendOTP: GUEST_BASE + "sendOTP/",
   validateOTP: GUEST_BASE + "validateOTP/",
+  getNotifs: GUEST_BASE + "getNotifs/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
@@ -83,7 +84,7 @@ export const API_PATHS = {
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
   getChatDoctors: PATIENT_BASE + "getChatDoctors/",
   getPatientUsernameSocket: PATIENT_BASE + "getPatientUsernameSocket/",
-  
+
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",
@@ -93,10 +94,16 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
+  viewFamAppoint: APPOINTMENT_BASE + "getAppointmentsfamilymembers/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
+  cancellappointment: APPOINTMENT_BASE + "cancelAppointment/",
+  rescheduleForPatient: APPOINTMENT_BASE + "rescheduleForPatient/",
+  getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
 
+  ///cancelAppFam
+  cancellappointmentfam: APPOINTMENT_BASE + "cancelAppFam/",
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
   walletPayment: PAYEMENT_BASE + "walletPayment",
@@ -108,6 +115,8 @@ export const API_PATHS = {
   updateDosage: PRESCRIPTION_BASE + "updateDosage",
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
+  getPrescriptionAPP: PRESCRIPTION_BASE + "getPrescriptionAPP",
+  addToCart: PRESCRIPTION_BASE + "orderPrescription",
 
   //Message
   getMessages: MESSAGE_BASE + "getMessages",
@@ -115,5 +124,5 @@ export const API_PATHS = {
 
   //notifications
   getNotifications: NOTIFICATION_BASE + "getNotifications",
-  setNotificationsToSeen: NOTIFICATION_BASE + "setNotificationsToSeen", 
+  setNotificationsToSeen: NOTIFICATION_BASE + "setNotificationsToSeen",
 };

@@ -58,7 +58,9 @@ const Subscription = ({ subscription, myPackage, refresh }) => {
   };
   
   return (
-    <Card p='16px' my={{ sm: "24px", xl: "0px" }}>
+    <Card >
+      {!isSubscriptionEmpty()?(
+        <>
       <CardHeader p='12px 5px' mb='12px'>
         <Text fontSize='lg' color={textColor} fontWeight='bold'>
           Subscribed Package Details

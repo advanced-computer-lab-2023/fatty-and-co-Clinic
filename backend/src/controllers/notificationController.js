@@ -1,4 +1,4 @@
-const Notification = require('../models/notifications');
+const Notification = require('../models/notificationsChat');
 
 // Get all messages of A conversation
 const getNotifications = async (req, res) => {
