@@ -46,6 +46,7 @@ import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
+import VideoCallPage from "components/VideoCall/VideoChat";
 
 import {
   HomeIcon,
@@ -351,7 +352,7 @@ var dashRoutes = [
     layout: "/patient",
     show: false, // Add this to hide route from sidebar
   },
- 
+
   {
     path: "/bookAptDetails/:row",
     name: "Book Appointment Details",
@@ -427,7 +428,7 @@ var dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
-    show : false
+    show: false,
   },
   {
     path: "/dashboard",
@@ -502,7 +503,7 @@ var dashRoutes = [
     layout: "/doctor",
     show: false,
   },
-  
+
   {
     name: "ACCOUNT PAGES",
     category: "account",
