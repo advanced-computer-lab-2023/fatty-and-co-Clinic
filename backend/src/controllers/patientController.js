@@ -1795,6 +1795,26 @@ const viewUpcomingAppointmentsPat = async (req, res) => {
   }
 };
 
+const viewfamilymembersappointments = async (req, res) => {
+  const username = req.user.Username;
+  const { Status } = req.body;
+  try {
+    const appointments = await appointmentModel.find({
+      PatientUsername: { $ne: username }, // Filter for PatientUsername not equal to username
+      Status: Status, // Assuming 'Status' field is for filtering upcoming appointments
+      BookedBy: username, // Filter for appointments booked by the current user
+    });
+
+    if (appointments.length === 0) {
+      return res.status(404).json({ message: "No appointments found." });
+    }
+
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 //make sure from the ta that past appointments is completed bas
 const viewPastAppoitmentsPat = async (req, res) => {
   const username = req.user.Username;
@@ -2076,6 +2096,7 @@ module.exports = {
   viewHealthFamwithstatus,
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
+  viewfamilymembersappointments,
   getWalletAmount,
   getChatDoctors,
   getPatientUsernameSocket,
