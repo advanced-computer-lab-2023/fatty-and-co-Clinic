@@ -801,7 +801,7 @@ const cancelAppForFam = async (req, res) => {
      subject: "New Appointment",
      text: `Cancelled appointment with ${patient1.Name} that was scheduled on ${upcomingApp.Date}`,
    });
-     res.status(200).json(`Appointment cancelled and an amount of ${refund} refund restored successfully!`)
+     res.status(200).json({success:`Appointment cancelled and an amount of ${refund} refund restored successfully!`})
   }
     
   } catch (error) {
@@ -817,6 +817,8 @@ const cancelAppForSelf = async (req, res) => {
      const {doctorUsername}=req.body
      const upcomingApp=await appointmentModel.findOne({DoctorUsername:doctorUsername,PatientUsername:patientUsername, Status:"Upcoming"})
      const currDate= new Date();
+     const user = await User.findOne({Username: patientUsername});
+     const doc = await User.findOne({Username: doctorUsername});
      var refund=0
      if(!upcomingApp){
       res.status(404).json({err:"Can't cancel an appointment that's rescheduled/cancelled/completed!"})
@@ -851,7 +853,7 @@ const cancelAppForSelf = async (req, res) => {
       text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
     });
       
-      res.status(200).json("Appointment cancelled successfully!")
+      res.status(200).json({success:"Appointment cancelled successfully!"})
      }
      else{
      const patient=await patientModel.findOne({Username:patientUsername})
@@ -888,7 +890,7 @@ const cancelAppForSelf = async (req, res) => {
       text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
     });
      
-     res.status(200).json("Appointment cancelled successfully!")
+    res.status(200).json({success:`Appointment cancelled and an amount of ${refund} refund restored successfully!`})
   
   }
     
