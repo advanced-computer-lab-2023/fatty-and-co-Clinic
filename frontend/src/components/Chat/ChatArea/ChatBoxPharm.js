@@ -20,7 +20,7 @@ import VideoCallComponent from "./VideoCallComponent";
 import socketIOClient from "socket.io-client";
 import { SettingsIcon } from "@chakra-ui/icons";
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = "http://localhost:7000"; // endpoint to pharmacy socket
 const socket = socketIOClient(ENDPOINT);
 
 console.log(socket);
@@ -53,63 +53,6 @@ const ChatBoxPharm = ({ messages: initialMessages, receiver }) => {
 
   console.log(user);
 
-  //   const getPatientUsername = async () => {
-  //     try {
-  //       const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
-  //         headers: { Authorization },
-  //       });
-  //       setCurrentUsername(response.data);
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast({
-  //         title: "Error",
-  //         description: error.message,
-  //         status: "error",
-  //         duration: 9000,
-  //         isClosable: true,
-  //       });
-  //     }
-  //   };
-
-  //   const getDoctorUsername = async () => { try {
-  //     const response = await axios.get(API_PATHS.getDocUsernameSocket, {
-  //       headers: { Authorization },
-  //     });
-  //     setCurrentUsername(response.data);
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast({
-  //       title: "Error",
-  //       description: error.message,
-  //       status: "error",
-  //       duration: 9000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
-
-  const getPatientUsername = async () => {
-    try {
-      const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
-        headers: { Authorization },
-      });
-      setCurrentUsername(response.data);
-      console.log(response.data);
-      socket.emit("addUser", response.data); // Add this line
-    } catch (error) {
-      console.log(error);
-      toast({
-        title: "Error",
-        description: error.message,
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-    }
-  };
-
   const getDoctorUsername = async () => {
     try {
       const response = await axios.get(API_PATHS.getDocUsernameSocket, {
@@ -117,7 +60,7 @@ const ChatBoxPharm = ({ messages: initialMessages, receiver }) => {
       });
       setCurrentUsername(response.data);
       console.log(response.data);
-     // socket.emit("addUser", response.data); // Add this line
+      // socket.emit("addUser", response.data); // Add this line
     } catch (error) {
       console.log(error);
       toast({
@@ -136,7 +79,6 @@ const ChatBoxPharm = ({ messages: initialMessages, receiver }) => {
 
     console.log(user.userType);
     if (user.userType === "Doctor") getDoctorUsername();
-    else if (user.userType === "Patient") getPatientUsername();
 
     console.log("current username");
     console.log(currentUsername);
@@ -247,8 +189,6 @@ const ChatBoxPharm = ({ messages: initialMessages, receiver }) => {
   console.log("receiverhello");
   console.log(receiver);
 
-
-
   return (
     <Flex
       direction="column"
@@ -261,37 +201,33 @@ const ChatBoxPharm = ({ messages: initialMessages, receiver }) => {
       h="600px"
       justifyContent="space-between"
     >
-  
-        
-          <Flex direction="column" overflowY="auto" maxHeight="400px">
-            <Box>
-              {messages.length > 0 &&
-                messages.map((message, index) => (
-                  <Message key={index} message={message} />
-                ))}
-              <div ref={bottomChatRef} style={{ height: "0px" }} />
-            </Box>
-          </Flex>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-          >
-            <Flex mt={4} position="sticky">
-              <Input
-                placeholder="Type your message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                mr={2}
-              />
-              <Button type="submit" colorScheme="teal">
-                Send
-              </Button>
-            </Flex>
-          </form>
-        
-      
+      <Flex direction="column" overflowY="auto" maxHeight="400px">
+        <Box>
+          {messages.length > 0 &&
+            messages.map((message, index) => (
+              <Message key={index} message={message} />
+            ))}
+          <div ref={bottomChatRef} style={{ height: "0px" }} />
+        </Box>
+      </Flex>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSendMessage();
+        }}
+      >
+        <Flex mt={4} position="sticky">
+          <Input
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            mr={2}
+          />
+          <Button type="submit" colorScheme="teal">
+            Send
+          </Button>
+        </Flex>
+      </form>
     </Flex>
   );
 };

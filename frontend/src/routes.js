@@ -273,6 +273,13 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
+    path: "/chatWithPharmacist",
+    name: "Chat With Pharmacist",
+    icon: <HomeIcon color="inherit" />,
+    component: ChatWithPharmacist,
+    layout: "/doctor",
+  },
+  {
     path: "/viewDoctorDetails/:username",
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,

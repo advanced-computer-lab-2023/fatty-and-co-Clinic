@@ -20,41 +20,41 @@ const ChatWithPharmacist = () => {
   const [currentUsername, setCurrentUsername] = useState("");
 
   const currentPharmacist = {
-    "_id": "6569fc002440c3dfac738b9a",
-    "Username": "HusseinPha2@",
-    "Name": "Ethan Clark",
-    "DateOfBirth": "1962-01-25T22:00:00.000+00:00",
-    "HourlyRate": 13,
-    "Affiliation": "Medical Center of Houston",
-    "EducationalBackground": "Medicinsk Licentiat from Washington University School of Medicine in S…",
-    "__v": 0
-  }
+    _id: "6569fc002440c3dfac738b9a",
+    Username: "HusseinPha2@",
+    Name: "Ethan Clark",
+    DateOfBirth: "1962-01-25T22:00:00.000+00:00",
+    HourlyRate: 13,
+    Affiliation: "Medical Center of Houston",
+    EducationalBackground:
+      "Medicinsk Licentiat from Washington University School of Medicine in S…",
+    __v: 0,
+  };
+
   //const [chatPatients, setChatPatients] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const toast = useToast();
- // const [currentPatient, setCurrentPatient] = useState(null);
+  // const [currentPatient, setCurrentPatient] = useState(null);
   const [messages, setMessages] = useState([]);
- /// const [selectedPatient, setSelectedPatient] = useState(false);
+  /// const [selectedPatient, setSelectedPatient] = useState(false);
 
-//   socket.on("receivedNotification", (recUsername, sendUsername) => {
-//     console.log("notif username");
-//     console.log(recUsername);
-//     console.log(currentUsername);
-//     if (recUsername === currentUsername) {
-//       console.log("notification received");
-//       const updatedPat_rec = chatPatients.map((d) =>
-//         d.Username === sendUsername ? { ...d, hasNotif: true } : d
-//       );
-//       setChatPatients(updatedPat_rec);
-//       //setRender(true);
-//       console.log("chatPatsafternotification");
-//       console.log(chatPatients);
-//     }
-//   });
+  //   socket.on("receivedNotification", (recUsername, sendUsername) => {
+  //     console.log("notif username");
+  //     console.log(recUsername);
+  //     console.log(currentUsername);
+  //     if (recUsername === currentUsername) {
+  //       console.log("notification received");
+  //       const updatedPat_rec = chatPatients.map((d) =>
+  //         d.Username === sendUsername ? { ...d, hasNotif: true } : d
+  //       );
+  //       setChatPatients(updatedPat_rec);
+  //       //setRender(true);
+  //       console.log("chatPatsafternotification");
+  //       console.log(chatPatients);
+  //     }
+  //   });
 
- 
-
-const getDoctorUsername = async () => {
+  const getDoctorUsername = async () => {
     try {
       const response = await axios.get(API_PATHS.getDocUsernameSocket, {
         headers: { Authorization },
@@ -74,32 +74,31 @@ const getDoctorUsername = async () => {
     }
   };
 
-//   const getPatientUsername = async () => {
-//     try {
-//       const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
-//         headers: { Authorization },
-//       });
-//       setCurrentUsername(response.data);
-//       console.log(response.data);
-//       //socket.emit('addUser', response.data); // Add this line
-//     } catch (error) {
-//       console.log(error);
-//       toast({
-//         title: "Error",
-//         description: error.message,
-//         status: "error",
-//         duration: 9000,
-//         isClosable: true,
-//       });
-//     }
-//   };
-  
+  //   const getPatientUsername = async () => {
+  //     try {
+  //       const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
+  //         headers: { Authorization },
+  //       });
+  //       setCurrentUsername(response.data);
+  //       console.log(response.data);
+  //       //socket.emit('addUser', response.data); // Add this line
+  //     } catch (error) {
+  //       console.log(error);
+  //       toast({
+  //         title: "Error",
+  //         description: error.message,
+  //         status: "error",
+  //         duration: 9000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   };
 
   const fetchMessages = async () => {
     try {
       console.log("fetching messages");
       console.log(currentUsername);
-     // const patUser = currentPatient.Username;
+      // const patUser = currentPatient.Username;
       const response = await axios.get(API_PATHS.getMessages, {
         params: { Receiver: currentUsername },
         headers: { Authorization },
@@ -122,19 +121,17 @@ const getDoctorUsername = async () => {
 
   useEffect(() => {}, [messages]);
 
-
   useEffect(() => {
     console.log("user type");
     //console.log(user.Type);
     if (user.userType === "Doctor") {
-        getDoctorUsername();
+      getDoctorUsername();
     } else {
       getPatientUsername();
     }
     console.log("current username");
-   // fetchConversations();
-   fetchMessages();
-
+    // fetchConversations();
+    fetchMessages();
   }, []);
 
   return (
@@ -142,14 +139,12 @@ const getDoctorUsername = async () => {
       <HStack spacing="300" w="850px" align="start">
         <Box w="250px">
           <Text>The first available pharmacist will talk to you</Text>
-
         </Box>
-       
-          <Box w="600px">
-            <Text>Chat</Text>
-            <ChatBoxPharm messages={messages} receiver={currentPharmacist} />
-          </Box>
-        
+
+        <Box w="600px">
+          <Text>Chat</Text>
+          <ChatBoxPharm messages={messages} receiver={currentPharmacist} />
+        </Box>
       </HStack>
     </Flex>
   );
