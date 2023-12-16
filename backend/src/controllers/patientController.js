@@ -1571,8 +1571,10 @@ console.log(user);
     });
   
  
-   const Familymemberfound=await patientModel.findOne({Username:Username});
+   const Familymemberaddedtopatient=await patientModel.findOne({Username:Username});
+   console.log(Familymemberaddedtopatient);
 
+//new one yu just took
    const newFamilymember = await familyMemberModel.create({
        Patient: Familymemberaddedtopatient,
        FamilyMem:currentPatient,

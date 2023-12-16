@@ -18,7 +18,7 @@ const familyMemberSchema = new Schema(
       type: String,
       required: true,
     },
-    NationalId: {
+    NationalIdFam: {
       type: String,
       required: true,
       trim: true,
