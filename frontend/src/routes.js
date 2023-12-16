@@ -34,7 +34,7 @@ import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
-import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
+// import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
@@ -111,13 +111,13 @@ const dashRoutes = [
     component: ViewMyPackageswithstatus,
     layout: "/patient",
   },
-  {
-    path: "/ViewFamPackageswithstatus",
-    name: "Family Subscriptions",
-    icon: <HomeIcon color="inherit" />,
-    component: ViewFamPackageswithstatus,
-    layout: "/patient",
-  },
+  // {
+  //   path: "/ViewFamPackageswithstatus",
+  //   name: "Family Subscriptions",
+  //   icon: <HomeIcon color="inherit" />,
+  //   component: ViewFamPackageswithstatus,
+  //   layout: "/patient",
+  // },
 
   {
     path: "/package",

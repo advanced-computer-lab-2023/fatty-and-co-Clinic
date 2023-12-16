@@ -7,7 +7,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
-import jsPdf, { jsPDF } from "jspdf";
+import  { jsPDF } from "jspdf";
 import logo from "assets/img/ShebeenElkom.png";
 import OrderPrescription from "./components/OrderPrescription";
 import {
@@ -39,7 +39,6 @@ import {
 import { BsPrescription2 } from "react-icons/bs";
 import { IoEyeSharp } from "react-icons/io5";
 import { DownloadIcon } from "@chakra-ui/icons";
-import { jsPDF } from "jspdf";
 import { FaSignature } from "react-icons/fa";
 function PrescriptionTable() {
   const { patientUsername } = useParams();
