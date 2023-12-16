@@ -10,7 +10,9 @@ The motivation behind the Shebeen Health Clinic project is to provide a seamless
 
 ## Build Status
 
-[include all missing or broken requirements here]
+- Project is in development stage
+- unit tests are needed
+  [include all missing or broken requirements here]
 
 ## Code Style
 
@@ -23,13 +25,7 @@ This project adheres to certain coding conventions for consistency and readabili
 - **Braces:** Opening braces go on the same line as the statement.
 - **Variable Declaration:** Always use `let` or `const` to declare variables. Don't use `var`.
 
-We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to make sure formatting is proper and [ESLint](https://eslint.org/) with the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) to enforce these conventions. Before committing any code, make sure to run ESLint to check for and fix any style issues.
-
-To run ESLint, use the following command:
-
-```bash
-npm run lint
-```
+We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to make sure formatting is proper so make sure to use it when writing code.
 
 ## Screenshots
 
@@ -358,6 +354,28 @@ Please follow these steps to have your contribution considered by the maintainer
 
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
+## How Do I Submit A Good Bug Report?
+
+Bugs are tracked as GitHub issues. Create an issue on the repository and provide the following information:
+
+- Use a clear and descriptive title for the issue to identify the problem.
+- Describe the exact steps which reproduce the problem in as many details as possible. When listing steps, don't just say what you did, but explain how you did it.
+- Provide specific examples to demonstrate the steps. Include links to files or GitHub projects, or copy/pasteable snippets, which you use in those examples. If you're providing snippets in the issue, use Markdown code blocks.
+- Describe the behavior you observed after following the steps and point out what exactly is the problem with that behavior.
+- Explain which behavior you expected to see instead and why.
+- Include screenshots and animated GIFs which show you following the described steps and clearly demonstrate the problem.
+
+## How Do I Submit A Good Enhancement Suggestion?
+
+Enhancement suggestions are tracked as GitHub issues. Create an issue on the repository and provide the following information:
+
+- Use a clear and descriptive title for the issue to identify the suggestion.
+- Provide a step-by-step description of the suggested enhancement in as many details as possible.
+- Provide specific examples to demonstrate the steps or how the enhancement would work. Include copy/pasteable snippets which you use in those examples, as Markdown code blocks.
+- Describe the current behavior and explain which behavior you expected to see instead and why.
+- Include screenshots and animated GIFs which help you demonstrate the steps or point out the part of the project which the suggestion is related to.
+- Explain why this enhancement would be useful to most users and isn't something that can or should be implemented as a community plugin.
+
 ## Credits
 
 - [Readme Template](https://www.mygreatlearning.com/blog/readme-file/#Q5)
@@ -368,13 +386,19 @@ While the prerequisites above must be satisfied prior to having your pull reques
 ## Authors
 
 - [@ZeyadHabash](https://github.com/ZeyadHabash)
-- rest of authors here
+- [@a7madgom3a16](link here)
+- [@ahmedhgabr]
+- [@Hamza-gehad]
+- [@kholoudkhaledd]
+- [@mariam-alaa20031]
+- [@mariamhmostafa]
+- [@mariamtouny]
+- [@RafeeQq]
+- [@Shorok02]
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
-
-MIT License
+[MIT License](https://choosealicense.com/licenses/mit/)
 
 Copyright (c) 2023 [Fatty & co™]
 
@@ -399,25 +423,3 @@ SOFTWARE.
 ## Appendix
 
 Any additional information goes here
-
-## How Do I Submit A Good Bug Report?
-
-Bugs are tracked as GitHub issues. Create an issue on the repository and provide the following information:
-
-- Use a clear and descriptive title for the issue to identify the problem.
-- Describe the exact steps which reproduce the problem in as many details as possible. When listing steps, don't just say what you did, but explain how you did it.
-- Provide specific examples to demonstrate the steps. Include links to files or GitHub projects, or copy/pasteable snippets, which you use in those examples. If you're providing snippets in the issue, use Markdown code blocks.
-- Describe the behavior you observed after following the steps and point out what exactly is the problem with that behavior.
-- Explain which behavior you expected to see instead and why.
-- Include screenshots and animated GIFs which show you following the described steps and clearly demonstrate the problem.
-
-## How Do I Submit A Good Enhancement Suggestion?
-
-Enhancement suggestions are tracked as GitHub issues. Create an issue on the repository and provide the following information:
-
-- Use a clear and descriptive title for the issue to identify the suggestion.
-- Provide a step-by-step description of the suggested enhancement in as many details as possible.
-- Provide specific examples to demonstrate the steps or how the enhancement would work. Include copy/pasteable snippets which you use in those examples, as Markdown code blocks.
-- Describe the current behavior and explain which behavior you expected to see instead and why.
-- Include screenshots and animated GIFs which help you demonstrate the steps or point out the part of the project which the suggestion is related to.
-- Explain why this enhancement would be useful to most users and isn't something that can or should be implemented as a community plugin.
