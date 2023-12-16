@@ -9,7 +9,7 @@ import SignUp from "views/Auth/SignUp";
 import DocAcc from "views/Auth/docAccepted";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
-import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
+// import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
 import Package from "views/Admin/Package/package";
@@ -30,7 +30,7 @@ import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs"
+import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
@@ -252,7 +252,7 @@ const dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -261,7 +261,7 @@ const dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -269,7 +269,7 @@ const dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -321,7 +321,7 @@ const dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
-    show : false
+    show: false,
   },
   {
     path: "/dashboard",
