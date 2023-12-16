@@ -20,7 +20,6 @@ const {
   getAllAppointmentsPat,
 } = require("../controllers/appointmentController");
 
-
 //const {createAppointment} = require("../controllers/testController");
 const { checkDoctor, checkPatient } = require("../common/middleware/checkType");
 
@@ -72,13 +71,32 @@ router.post("/rescheduleAppointmentPatient", checkPatient, reschdulebypatient);
  */
 router.get("/getDoctorId", checkDoctor, getDoctorId);
 router.get("/getAppointmentsPat", checkPatient, getAppointmentsPat);
-router.get("/getAppointmentsfamilymembers", checkPatient, getAppointmentsfamilymembers);
-router.get("/filterAppointmentsByStatusDoc", checkPatient, filterAppointmentsByStatusDoc);
-router.get("/filterAppointmentsByStatusPat", checkPatient, filterAppointmentsByStatusPat);
-router.get("/filterAppointmentsByDateDoc", checkPatient, filterAppointmentsByDateDoc);
-router.get("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
-router.patch("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByDatePat);
 
+router.get(
+  "/filterAppointmentsByStatusDoc",
+  checkPatient,
+  filterAppointmentsByStatusDoc
+);
+router.get(
+  "/filterAppointmentsByStatusPat",
+  checkPatient,
+  filterAppointmentsByStatusPat
+);
+router.get(
+  "/filterAppointmentsByDateDoc",
+  checkPatient,
+  filterAppointmentsByDateDoc
+);
+router.get(
+  "/filterAppointmentsByDatePat",
+  checkPatient,
+  filterAppointmentsByDatePat
+);
+router.patch(
+  "/filterAppointmentsByDatePat",
+  checkPatient,
+  filterAppointmentsByDatePat
+);
 
 router.get("/testAppRef", testAppointRef);
 
@@ -87,7 +105,7 @@ router.post("/rescheduleForPatient",checkDoctor,reschedulePatient);
 
 // Cancel for family member + for myself
 
-router.patch("/cancelAppFam",checkPatient,cancelAppForFam)
-router.patch("/cancelAppointment",checkPatient,cancelAppForSelf)
+router.patch("/cancelAppFam", checkPatient, cancelAppForFam);
+router.patch("/cancelAppointment", checkPatient, cancelAppForSelf);
 
 module.exports = router;

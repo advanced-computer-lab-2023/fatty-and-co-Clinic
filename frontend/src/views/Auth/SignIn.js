@@ -17,6 +17,7 @@ import {
   Alert,
   AlertIcon,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
@@ -44,6 +45,8 @@ function SignIn() {
   // const [password, setPassword] = useState("");
   const { login, error, loading } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
+
+  const toast = useToast();
 
   const handleSubmit = async (values, { setSubmitting }) => {
     console.log(values);
