@@ -11,8 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import FamAppTable from "./components/FamAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
+import { FamAppTable } from "./components/FamAppTable";
+
 // window . location . reload
 export function ViewFamilyApp() {
   const [DoctorUsername, setDoctorUsername] = useState("");
