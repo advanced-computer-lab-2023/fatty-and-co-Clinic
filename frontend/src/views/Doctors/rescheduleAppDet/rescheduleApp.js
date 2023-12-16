@@ -24,8 +24,6 @@ import DocSlotAptsTable from "../viewMySlotDetails/DocSlotAptsTable";
 export function rescheduleApp() {
   const { isOpen, onToggle } = useDisclosure();
   const [isOpen1, setIsOpen1] = useState(false);
-  const history = useHistory();
-
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
