@@ -11,6 +11,7 @@ import {
   UseDisclosureProps,
   Select,
   useToast,
+Spinner 
 } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
@@ -25,7 +26,7 @@ export function reschduleappointment () {
   const { isOpen, onToggle } = useDisclosure();
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
@@ -73,6 +74,7 @@ console.log("heree",PatientUsername);
   };
 
 const dateConfirmHandler = async() => {
+  setIsLoading(true); 
     const hourMinString = StartTime.toString().split(":");
     console.log("hourmin: " + hourMinString);
     const bookingDate = new Date(aptDate);
@@ -157,25 +159,12 @@ const dateConfirmHandler = async() => {
           isClosable: true,
         });
       }
+      finally {
+        setIsLoading(false); // Set loading to false when function completes
+      }
   };
   
-//   const checkOutHandler = () => {
-//     let newUrl = `../AppointmentConfirmation`;
-//     let newState = {
-//       DoctorId: DoctorId,
-//       Date: DateFinal,
-//       FamMemName: FamMemName,
-//       Cost: Cost,
-//       CostFam: CostFam,
-//     };
 
-//     console.log(user.username);
-//     console.log(user.Username);
-//     console.log(user);
-//     // console.log("hellostate");
-//     console.log(newState);
-//     history.push(newUrl, newState);
-//   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
@@ -189,7 +178,7 @@ const dateConfirmHandler = async() => {
         size="lg"
         colorScheme="blue"
       >
-        reschdule for me 
+        reschdule Appointment
       </Button>
 
       <Box>
@@ -205,15 +194,7 @@ const dateConfirmHandler = async() => {
           </Box>
         </Collapse>
       </Box>
-{/* 
-      <Button
-        onClick={() => setIsOpen2(!isOpen2)}
-        mt="70px"
-        size="lg"
-        colorScheme="blue"
-      >
-        reschdule for fam member
-      </Button> */}
+
 
       <Box>
         <Collapse
@@ -235,6 +216,9 @@ const dateConfirmHandler = async() => {
           </Box>
         </Collapse>
       </Box>
+      {isLoading && (
+         <Spinner />
+      )}
       <Box mt="90px">
         {/* <Button onClick={checkOutHandler} colorScheme="red">
           Proceed to checkout
@@ -245,15 +229,3 @@ const dateConfirmHandler = async() => {
 }
 export default reschduleappointment;
 
-{
-  /* <Select size="md" 
-          //onChange={handleDayNumberToAdd}
-          >
-            <option value=""></option>
-            {famMemOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.key}
-              </option>
-            ))}
-          </Select> */
-}
