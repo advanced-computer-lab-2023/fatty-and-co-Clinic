@@ -18,6 +18,7 @@ import orange from "assets/img/orange.jpg";
 import logoChakra from "assets/svg/logo-white.svg";
 import BarChart from "components/Charts/BarChart";
 import LineChart from "components/Charts/LineChart";
+import { IoChatbubbleEllipses } from "react-icons/io5";
 // Custom icons
 import {
   CartIcon,
@@ -42,11 +43,15 @@ import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useHistory } from "react-router-dom";
-// const ENDPOINT = "http://localhost:8000";
-// const notificationSocket = socketIOClient(ENDPOINT);
+
 import { FaStethoscope, FaCalendarCheck } from "react-icons/fa";
 import AppointmentsRow from "components/Tables/AppointmentsRow";
 import AppointmentsRowDash from "components/Tables/AppointmentRowDash";
+import { set } from "date-fns";
+
+const ENDPOINT = "http://localhost:8000";
+const socket = socketIOClient(ENDPOINT);
+
 export default function DashboardPat() {
   const iconBoxInside = useColorModeValue("white", "white");
 
@@ -70,6 +75,9 @@ export default function DashboardPat() {
 
   //featured docs
   const [data, setData] = useState([{}]);
+  const [currentUsername, setCurrentUsername] = useState("");
+
+  const [hasNotif, setHasNotif] = useState(false);
 
   const [appointments, setAppointments] = useState([{}]); //my appointments
   const [searchParams, setSearchParams] = useState({
@@ -80,9 +88,31 @@ export default function DashboardPat() {
   //for the moreDoctors button
   let newUrl = `./viewDoctors`;
 
+  
+
+  const getPatientUsername = async () => {
+    try {
+      const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
+        headers: { Authorization },
+      });
+      setCurrentUsername(response.data);
+      console.log(response.data);
+      //socket.emit('addUser', response.data); // Add this line
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
   //For the moreAppointments button
   let appointmentsUrl = `./viewAppointPat`;
+  let chatUrl = `./chatWithDoctor`;
   useEffect(() => {
     const url = API_PATHS.viewDoctors;
     axios
@@ -98,18 +128,54 @@ export default function DashboardPat() {
     axios
       .get(url, { headers: { Authorization } })
       .then((response) => {
-        const upcomingAppointments = response.data.filter(appointment => appointment.Status === 'Upcoming');
+        const upcomingAppointments = response.data.filter(
+          (appointment) => appointment.Status === "Upcoming"
+        );
         setAppointments(upcomingAppointments);
       })
       .catch((err) => console.log(err));
+
+    getPatientUsername();
+
+    getHasNotifInitial(); //to know if he has notification mn abl kda msln afel el app w fata7o
   }, []);
 
-  useEffect(() => {}, [data]);
+  
+
+  useEffect(() => {}, [data, hasNotif]);
+
+  socket.on('receivedNotification', ( recUsername, sendUsername) => {
+    console.log("notif username");
+    console.log(recUsername);
+    console.log(currentUsername);
+    if(recUsername === currentUsername)
+    {
+      console.log("notification received");
+      setHasNotif(true);
+      //setRender(true);
+      console.log("chatDocsafternotification");
+    
+    }
+  });
+
+  //to know if he has notification mn abl kda msln afel el app w fata7o
+  const getHasNotifInitial = async () => {
+    const url = API_PATHS.getChatDoctors;
+    axios
+      .get(url, { headers: { Authorization } })
+      .then((response) => {
+        const hasNotif = response.data.some((doctor) => doctor.hasNotif === true);
+        setHasNotif(hasNotif);
+      })
+      .catch((err) => console.log(err));  
+  };
+
+
+
   return (
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-
-{/* //featured doctors */}
-<Flex
+      {/* //featured doctors */}
+      <Flex
         flexDirection="column"
         pt={{ base: "120px", md: "75px" }}
         align="center"
@@ -156,8 +222,7 @@ export default function DashboardPat() {
         my="26px"
         gap="24px"
       >
-
-<WorkWithTheRockets
+        <WorkWithTheRockets
           backgroundImage={alborglab}
           title={"Coming soon"}
           description={
@@ -178,23 +243,7 @@ export default function DashboardPat() {
             />
           }
         />
- 
       </Grid>
-
-
-      {/* //testing notifications */}
-      {/* <div>NOTIFICATIONS </div>
-      <Grid container spacing={3}>
-        {notifications.map((notification, index) => (
-          <Grid item xs={12} key={index}>
-            <div>{notification.message}</div>
-          </Grid>
-        ))}
-      </Grid> */}
-
-
-      
-
 
       {
         //my appointments
@@ -210,18 +259,18 @@ export default function DashboardPat() {
             <Heading mb="4" fontSize="xl">
               <Flex align="center">
                 <Box mr={3}>
-                <FaCalendarCheck size={20} />
+                  <FaCalendarCheck size={20} />
                 </Box>
                 Upcoming Appointments
               </Flex>
             </Heading>
           </Flex>
-          <Table >
+          <Table>
             {appointments.slice(0, 3).map((row) => (
               <AppointmentsRowDash
                 key={row.Username}
                 DoctorName={row.DoctorName}
-                Status={row.Status} 
+                Status={row.Status}
                 Type={row.FollowUp ? "Follow Up" : "First Time"}
                 DateTime={row.Date}
               />
@@ -238,6 +287,40 @@ export default function DashboardPat() {
               View My Appointments
             </Button>
           </Flex>
+        </Box>
+        <Box
+          position="fixed"
+          bottom="0"
+          right="0"
+          width="150px"
+          height="150px"
+          overflow="hidden"
+        >
+          <Button
+            colorScheme="white"
+            borderRadius="full"
+            boxShadow="lg"
+            p="7"
+            position="relative"
+            onClick={() => {
+              history.push(chatUrl);
+            }}
+          >
+            <IoChatbubbleEllipses size="3.0em" color="teal" />
+            {/* Green Dot */}
+            {hasNotif && (
+              <Box
+                position="absolute"
+                top="0px"
+                right="-1px"
+                width="14px"
+                height="14px"
+                borderRadius="full"
+                backgroundColor="teal"
+                zIndex="1"
+              />
+            )}
+          </Button>
         </Box>
       </Flex>
     </Flex>

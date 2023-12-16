@@ -113,6 +113,20 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('notification', ({sendUsername, recUsername}) => {
+    if(typeof getUser(recUsername) === 'undefined')
+    {
+      io.emit('receivedNotification', recUsername, sendUsername);
+      console.log("notification sent server");
+      console.log("sender")
+      console.log(sendUsername);
+      console.log("receiver");
+      console.log(recUsername);
+
+    }
+  });
+  
+
 });
 
 

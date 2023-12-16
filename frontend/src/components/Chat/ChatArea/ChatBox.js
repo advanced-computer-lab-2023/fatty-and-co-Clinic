@@ -142,16 +142,6 @@ const getDoctorUsername = async () => {
   }, [currentUsername]);
 
  
-  // useEffect(() => {
-  //   console.log("receiver changed");
-  //   console.log(receiver);
-  //   return () => {
-  //     if(currentUsername === receiver.Username)
-  //       socket.disconnect();
-  //   };
-  // }, [receiver]);
-  
-
   useEffect(() => {
     if (arrivalMessage !== "") {
       setMessages((messages) => [...messages, arrivalMessage]);
@@ -167,6 +157,8 @@ const getDoctorUsername = async () => {
         isCurrentUser: data.senderUsername === currentUsername,
       });
     });
+
+
   },[]);
 
   const fetchMessages = async () => {
@@ -228,6 +220,9 @@ const getDoctorUsername = async () => {
       setMessages((messages) => [...messages, response.data]);
       console.log(messages);
       setNewMessage("");
+
+      socket.emit('notification', {sendUsername: currentUsername, recUsername: receiver.Username });
+
     } catch (error) {
       console.error("Error sending message:", error);
     }

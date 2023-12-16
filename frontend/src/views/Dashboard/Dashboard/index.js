@@ -5,12 +5,16 @@ import {
   Image,
   SimpleGrid,
   useColorModeValue,
+  Box,
+  Button,
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
 import logoChakra from "assets/svg/logo-white.svg";
 import BarChart from "components/Charts/BarChart";
 import LineChart from "components/Charts/LineChart";
+
+import { IoChatbubbleEllipses } from "react-icons/io5";
 // Custom icons
 import {
   CartIcon,
@@ -38,12 +42,13 @@ export default function Dashboard() {
 
   const [notifications, setNotifications] = useState([]);
 
-  // useEffect(() => {
-  //   notificationSocket.on("notification", (data) => {
-  //     setNotifications((prevNotifications) => [...prevNotifications, data]);
-  //     console.log(data);
-  //   });
-  // }, []);
+
+  //const { user } = useAuthContext();
+ // const Authorization = `Bearer ${user.token}`;
+
+  const [currentUsername, setCurrentUsername] = useState("");
+
+  const [hasNotif, setHasNotif] = useState(false);
 
   return (
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
@@ -135,14 +140,42 @@ export default function Dashboard() {
           data={timelineData}
         />
       </Grid>
-      <div>NOTIFICATIONS </div>
-      <Grid container spacing={3}>
-        {notifications.map((notification, index) => (
-          <Grid item xs={12} key={index}>
-            <div>{notification.message}</div>
-          </Grid>
-        ))}
-      </Grid>
+      
+      <Box
+          position="fixed"
+          bottom="0"
+          right="0"
+          width="150px"
+          height="150px"
+          overflow="hidden"
+        >
+          <Button
+            colorScheme="white"
+            borderRadius="full"
+            boxShadow="lg"
+            p="7"
+            position="relative"
+            onClick={() => {
+              history.push(chatUrl);
+            }}
+          >
+            <IoChatbubbleEllipses size="3.0em" color="teal" />
+            {/* Green Dot */}
+            {hasNotif && (
+              <Box
+                position="absolute"
+                top="0px"
+                right="-1px"
+                width="14px"
+                height="14px"
+                borderRadius="full"
+                backgroundColor="teal"
+                zIndex="1"
+              />
+            )}
+          </Button>
+        </Box>
+      
     </Flex>
   );
 }

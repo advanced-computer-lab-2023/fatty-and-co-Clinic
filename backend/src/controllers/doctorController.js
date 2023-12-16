@@ -7,6 +7,7 @@ const systemUserModel = require("../models/systemusers");
 const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 const subscriptionModel = require("../models/subscriptions");
+const notificationModel = require("../models/notifications");
 const { Int32 } = require("bson");
 
 // I think this is useless?
@@ -1085,9 +1086,6 @@ const getChatPatients = async (req, res) => {
   try {
     // Find all appointments associated with the current doctor
     const docAppointments = await appointmentModel.find({ DoctorUsername: req.user.Username , Status : {$in: ["Upcoming" , "Completed"]}});
-    // console.log(docAppointments);
-    // console.log(req.user.Username);
-    // Create a set to store unique doctor usernames
     const uniquePatientUsernames = new Set();
   
     const chatPatients = await Promise.all(
@@ -1101,8 +1099,17 @@ const getChatPatients = async (req, res) => {
         if (!uniquePatientUsernames.has(patient.Username)) {
           // If not, add it to the set and include the patient in the result
           uniquePatientUsernames.add(patient.Username);
-      
-          return patient;
+          const notifications = await notificationModel.find({
+            senderUsername: patient.Username,
+            seen: false,
+          });
+
+          // If there are any unseen notifications, set hasNotif to true
+          const hasNotif = notifications.length > 0;
+          console.log("hasNotif");
+          console.log(hasNotif);
+          // Return the doctor and hasNotif in the result
+          return { ...patient._doc, hasNotif };
         }
 
         return null; // If the patient is already in the set, return null
