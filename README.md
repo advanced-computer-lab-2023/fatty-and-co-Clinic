@@ -408,7 +408,6 @@ Enhancement suggestions are tracked as GitHub issues. Create an issue on the rep
 - [Search Bar in React Tutorial - Cool Search Filter Tutorial](https://www.youtube.com/watch?v=x7niho285qs&list=PLs8AFNosNo41M5IvL5TdewlCzyOUrhDc1&index=16&t=1337s)
 - [React: Add/Remove Input Fields Dynamically on button click](https://youtu.be/XtS14dXwvwE?list=PLs8AFNosNo41M5IvL5TdewlCzyOUrhDc1)
 - [MERN Auth Tutorial](https://www.youtube.com/playlist?list=PL4cUxeGkcC9g8OhpOZxNdhXggFz2lOuCT)
-- (add youtube videos and any guides used)
 
 ## Authors
 
