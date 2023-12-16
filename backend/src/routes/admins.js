@@ -7,7 +7,7 @@ const {
   acceptRequest,
   rejectRequest,
   getRequests,
-  acceptDoc,
+  acceptRequestEmail,
 } = require("../controllers/adminController");
 
 const { checkAdmin } = require("../common/middleware/checkType");

@@ -505,7 +505,7 @@ var dashRoutes = [
         layout: "/auth",
       },
       {
-        path: "/docacc",
+        path: "/acceptContract",
         name: "Contract Accepted",
         icon: <RocketIcon color="inherit" />,
         component: DocAcc,

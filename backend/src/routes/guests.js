@@ -11,6 +11,7 @@ const {
   resetPass,
   getNotifs,
   viewNotif,
+  acceptRequestEmail,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
 const { cpUpload } = require("../common/middleware/doctorUpload");
@@ -30,6 +31,7 @@ router.post("/login", login);
 
 router.post("/sendOTP", sendOTP);
 router.post("/validateOTP", validateOTP);
+router.post("/acceptRequestEmail", acceptRequestEmail);
 
 /**
  * @route POST /patients/addPatient

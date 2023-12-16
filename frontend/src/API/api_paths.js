@@ -24,6 +24,8 @@ export const API_PATHS = {
   validateOTP: GUEST_BASE + "validateOTP/",
   getNotifs: GUEST_BASE + "getNotifs/",
   viewNotif: GUEST_BASE + "viewNotif/",
+  acceptContract: GUEST_BASE + "acceptRequestEmail/",
+
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",

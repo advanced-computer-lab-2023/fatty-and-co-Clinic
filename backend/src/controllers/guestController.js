@@ -6,6 +6,7 @@ const patientModel = require("../models/patients");
 const subscriptionModel = require("../models/subscriptions");
 const cartModel = require("../models/cart");
 const notificationsModel = require("../models/notifications");
+const doctorModel = require("../models/doctors");
 
 
 const bcrypt = require("bcrypt");
@@ -332,6 +333,35 @@ const viewNotif = async (req, res) => {
   }
 };
 
+const acceptRequestEmail = async (req, res) => {
+  const { Username } = req.query;
+  try {
+    const request = await requestModel.findOne(
+      { Username: Username },
+    );
+    console.log("User " + Username);
+    console.log("req " + request)
+    const user = await systemUserModel.create({
+      Username: Username,
+      Password: request.Password,
+      Email: request.Email,
+      Type: "Doctor",
+    });
+    const doc = await doctorModel.create({
+      Username: Username,
+      Name: request.Name,
+      DateOfBirth: request.DateOfBirth,
+      HourlyRate: request.HourlyRate,
+      Affiliation: request.Affiliation,
+      EducationalBackground: request.EducationalBackground,
+      Speciality: request.Speciality,
+    });
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createRequest,
   updateRequest,
@@ -344,4 +374,5 @@ module.exports = {
   resetPass,
   getNotifs,
   viewNotif,
+  acceptRequestEmail,
 };
