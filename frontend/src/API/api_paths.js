@@ -60,7 +60,7 @@ export const API_PATHS = {
   getFollowUp: DOCTOR_BASE + "getRequest/",
   rejectFollowUp: DOCTOR_BASE + "rejectFollowUp/",
   acceptFollowUp: DOCTOR_BASE + "acceptFollowUp/",
-
+  viewUpcomingAppointmentsDoc: DOCTOR_BASE + "viewUpcomingAppointmentsDoc",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",
