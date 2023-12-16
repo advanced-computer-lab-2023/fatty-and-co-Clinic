@@ -9,6 +9,7 @@ import SignUp from "views/Auth/SignUp";
 import DocAcc from "views/Auth/docAccepted";
 import docSignUp from "views/Auth/docSignUp";
 import UpdateEmail from "views/Doctors/updateInfo/UpdateEmail.js";
+import rescheduleApp from "views/Doctors/rescheduleAppDet/rescheduleApp";
 import ViewMyPackageswithstatus from "views/Patient/ViewMyPackagewithstatus";
 import CancelSubscription from "views/Patient/CancelSubscription/cancelsubscribtion.js";
 import SubscribePackage from "views/Patient/SubscribePackage/subscribePack.js";
@@ -19,6 +20,7 @@ import CreateAdmin from "views/Admin/CreateAdmin/CreateAdminForm";
 import createFamilymember from "views/Patient/createFamilyMember";
 import viewDoctors from "views/Patient/viewDoctors";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
+import ViewMySlots from "views/Doctors/viewMySlotDetails";
 import Viewmembers from "views/Patient/viewmembers";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
@@ -30,7 +32,7 @@ import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
+import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs"
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
@@ -38,6 +40,7 @@ import ViewFamPackageswithstatus from "views/Patient/viewpackagewithstatus";
 import MakePayment from "views/Patient/makePayment";
 import UpdateSlots from "views/Doctors/updateInfo/UpdateSlots";
 import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
+import reschduleappointment from "views/Patient/reschduleappointment/reschduleappointment";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
@@ -280,7 +283,14 @@ var dashRoutes = [
     component: DeleteUser,
     layout: "/admin",
   },
-
+  {
+    path: "/viewMySlots/",
+    name: "View Doctor Details",
+    icon: <HomeIcon color="inherit" />,
+    component: ViewMySlots,
+    layout: "/doctor",
+   show: false, // Add this to hide route from sidebar
+  },
   {
     path: "/chat",
     name: "Chat With Doctor",
@@ -301,16 +311,32 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
 
+  {
+    path: "/rescheduleApp/",
+    name: "Reschedule",
+    icon: <HomeIcon color="inherit" />,
+    component: rescheduleApp,
+    layout: "/doctor",
+   show: false, // Add this to hide route from sidebar
+  },
   {
     path: "/bookAptDetails/:row",
     name: "Book Appointment Details",
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
+  },
+  {
+    path: "/reschdule/:row",
+    name: "reschdule appointment",
+    icon: <HomeIcon color="inherit" />,
+    component: reschduleappointment,
+    layout: "/patient",
+   show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -318,8 +344,9 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
+  
 
   {
     path: "/viewDoctors",
@@ -364,7 +391,7 @@ var dashRoutes = [
     component: ViewDoctorsPatients,
     layout: "/doctor",
   },
-  {
+{
     path: "/patientRecords",
     name: "view patient records",
     icon: <CreditIcon color="inherit" />,

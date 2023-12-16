@@ -122,7 +122,7 @@ export default function PatientAppointmentsDoc() {
       );
       if (response.ok) {
         const result = await response.json();
-        setSelectedPrescription(result.prescription)
+        setSelectedPrescription(result.prescription);
         setMeds(result.prescription.Medicine);
         setDiagnosis(result.prescription.Diagnosis);
         setStatus(result.prescription.Status);

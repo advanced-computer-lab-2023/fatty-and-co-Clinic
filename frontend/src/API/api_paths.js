@@ -22,7 +22,7 @@ export const API_PATHS = {
   resetPass: GUEST_BASE + "resetPass/",
   sendOTP: GUEST_BASE + "sendOTP/",
   validateOTP: GUEST_BASE + "validateOTP/",
-  getNotifs: GUEST_BASE + "getNotifs/",
+getNotifs: GUEST_BASE + "getNotifs/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
@@ -53,6 +53,9 @@ export const API_PATHS = {
   getChatPatients: DOCTOR_BASE + "getChatPatients/",
   getDocUsernameSocket: DOCTOR_BASE + "getDocUsernameSocket/",
   getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
+  getDoctorByUser:DOCTOR_BASE+"getDoctorByUser/",
+  viewMySlots:DOCTOR_BASE+"viewMySlots/",
+  validateForDoctor:DOCTOR_BASE+"validateBookingDateDoctor/",
   viewUpcomingAppointmentsDoc: DOCTOR_BASE + "viewUpcomingAppointmentsDoc",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
@@ -97,12 +100,14 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
-  viewFamAppoint: APPOINTMENT_BASE + "getAppointmentsfamilymembers/",
+  viewFamAppoint:PATIENT_BASE+"viewfamilymembersappointments/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
-  cancellappointment: APPOINTMENT_BASE + "cancelAppointment/",
-  rescheduleForPatient: APPOINTMENT_BASE  + "rescheduleForPatient/",
+  cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
+  rescheduleForDoctor: APPOINTMENT_BASE+ "rescheduleForPatient/",
+  getDoctorId: APPOINTMENT_BASE+ "getDoctorId/",
+  rescheduleForPatient: APPOINTMENT_BASE+ "/rescheduleAppointmentPatient/",
   getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
 
   ///cancelAppFam

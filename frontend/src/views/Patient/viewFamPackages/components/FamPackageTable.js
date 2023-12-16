@@ -40,11 +40,10 @@ import {
               </Tr>
             </Thead>
             <Tbody>
-              {data.map((row) => {
+              {data&&data.map((row) => {
                 if(row){
                 const id = row.Patient?row.Patient._id:row.FamilyMem? row.FamilyMem._id:"" ;
                 const name = row.Patient?row.Patient.Name: row.FamilyMem?row.FamilyMem.Name:"" ;
-            
                 return (
                   <FamPackageRow
                     key={id}

@@ -40,7 +40,7 @@ function SubscribePackage() {
   const Authorization = `Bearer ${user.token}`;
 
   const { Wallet, dispatch } = useWalletContext();
-
+   
   const handleSubscribeCredit = async (e) => {
     e.preventDefault();
 
@@ -75,7 +75,12 @@ function SubscribePackage() {
             duration: 9000,
             isClosable: true,
           });
+          const timer = setTimeout(() => {
+            location.reload();
+          //  window.location.reload();
+          }, 700); 
           return;
+
         }
       } else if (PackageName && NationalId) {
         const response = await fetch(API_PATHS.getAmountCreditFam, {
@@ -146,6 +151,10 @@ function SubscribePackage() {
             duration: 9000,
             isClosable: true,
           });
+          const timer = setTimeout(() => {
+            location.reload();
+          //  window.location.reload();
+          }, 700); 
           try {
             const res = await axios.get(API_PATHS.getWalletAmount, {
               headers: { Authorization },
@@ -181,6 +190,10 @@ function SubscribePackage() {
             duration: 9000,
             isClosable: true,
           });
+          const timer = setTimeout(() => {
+            location.reload();
+          //  window.location.reload();
+          }, 700); 
           try {
             const res = await axios.get(API_PATHS.getWalletAmount, {
               headers: { Authorization },
