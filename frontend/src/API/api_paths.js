@@ -55,7 +55,7 @@ getNotifs: GUEST_BASE + "getNotifs/",
   getDoctorByUser:DOCTOR_BASE+"getDoctorByUser/",
   viewMySlots:DOCTOR_BASE+"viewMySlots/",
   validateForDoctor:DOCTOR_BASE+"validateBookingDateDoctor/",
-
+  viewUpcomingAppointmentsDoc: DOCTOR_BASE + "viewUpcomingAppointmentsDoc",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",

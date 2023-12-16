@@ -174,9 +174,7 @@ router.delete("/deleteMySlotsDoc/:id", checkDoctor, (req, res) => {
   deleteMySlotsDoc(req, res);
 });
 
-router.get("/viewUpcomingAppointmentsDoc", checkDoctor, (req, res) => {
-  viewUpcomingAppointmentsDoc(req, res);
-});
+router.get("/viewUpcomingAppointmentsDoc", checkDoctor,viewUpcomingAppointmentsDoc);
 
 router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
   viewPastAppoitmentsDoc(req, res);
