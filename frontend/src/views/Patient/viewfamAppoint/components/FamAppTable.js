@@ -19,7 +19,7 @@ import {
   
   import React from "react";
   
-  export const FamAppTable = ({ title, captions, data, isLoading ,handleCancelAppointment, }) => {
+  export const FamAppTable = ({ title, captions, data, isLoading ,handleCancelAppointment, handlereschdule}) => {
     //Table that uses row
     //color="teal" fontWeight="bold" pb=".1rem" borderBottom='3px solid #ddd' borderRadius="4px" justifyContent="center" alignItems="center"
     const textColor = useColorModeValue("gray.700", "white");
@@ -85,6 +85,7 @@ import {
                       DateTime={row.Date}
                       data={data}
                       isLoading={isLoading}
+                      handlereschdule={handlereschdule}
                       appointmentId={row._id} // Assuming the appointment ID is in the data row as _id
                       handleCancelAppointment={handleCancelAppointment} // Pass the function to the row component// Pass the cancellation function as a prop
                     />
