@@ -53,7 +53,7 @@ export const API_PATHS = {
   getChatPatients: DOCTOR_BASE + "getChatPatients/",
   getDocUsernameSocket: DOCTOR_BASE + "getDocUsernameSocket/",
   getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
-
+  viewUpcomingAppointmentsDoc: DOCTOR_BASE + "viewUpcomingAppointmentsDoc",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",
@@ -102,7 +102,7 @@ export const API_PATHS = {
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
   cancellappointment: APPOINTMENT_BASE + "cancelAppointment/",
-  rescheduleForPatient: APPOINTMENT_BASE + "rescheduleForPatient/",
+  rescheduleForPatient: APPOINTMENT_BASE  + "rescheduleForPatient/",
   getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
 
   ///cancelAppFam

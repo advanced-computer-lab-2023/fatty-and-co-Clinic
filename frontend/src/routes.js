@@ -41,11 +41,12 @@ import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
+import DashboardDoc from "views/Dashboard/DashboardDoc/index"
 import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
-import DashboardDoc from "views/Dashboard/DashboardDoc";
+
 import VideoCallPage from "views/Patient/VideoCallTemp";
 import {
   HomeIcon,
@@ -349,6 +350,13 @@ var dashRoutes = [
     show: false,
   },
   {
+    path: "/dashboard",
+    name: "home page",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardDoc,
+    layout: "/doctor",
+  },
+  {
     path: "/doctorPatients",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
@@ -361,7 +369,23 @@ var dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
-    show: false,
+    show : false
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: "/doctor",
   },
 
   {
