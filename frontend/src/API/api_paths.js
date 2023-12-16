@@ -8,7 +8,6 @@ const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
 const PRESCRIPTION_BASE = "http://localhost:8000/prescription/";
 
-
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
   // Guest
@@ -91,11 +90,11 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
-  viewFamAppoint:APPOINTMENT_BASE+"getAppointmentsfamilymembers/",
+  viewFamAppoint: APPOINTMENT_BASE + "getAppointmentsfamilymembers/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
-  cancellappointment:APPOINTMENT_BASE+"cancelAppointment/",
+  cancellappointment: APPOINTMENT_BASE + "cancelAppointment/",
   rescheduleForPatient: APPOINTMENT_BASE+ "rescheduleForPatient/",
 
   ///cancelAppFam
@@ -111,6 +110,7 @@ export const API_PATHS = {
   updateDosage: PRESCRIPTION_BASE + "updateDosage",
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
+  addToCart: PRESCRIPTION_BASE + "orderPrescription",
   updateDescription: PRESCRIPTION_BASE + "updateDescription",
   getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
   getPrescriptionAPP: PRESCRIPTION_BASE + "getPrescriptionAPP",
