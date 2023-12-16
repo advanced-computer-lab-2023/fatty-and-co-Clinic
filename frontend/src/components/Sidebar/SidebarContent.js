@@ -11,7 +11,8 @@ import {
 } from "@chakra-ui/react";
 import IconBox from "components/Icons/IconBox";
 import { CreativeTimLogo } from "components/Icons/Icons";
-import shebeenElkom from "assets/img/ShebeenElkom.png";
+import logo from "assets/img/GomaaLogo.gif";
+import ShebeenElkom from "assets/img/ShebeenElkom.png";
 import { Separator } from "components/Separator/Separator";
 import { SidebarHelp } from "components/Sidebar/SidebarHelp";
 import React from "react";
@@ -94,8 +95,6 @@ const SidebarContent = ({ logoText, routes }) => {
                 }}
                 py="12px"
                 borderRadius="15px"
-                _hover="none"
-                w="100%"
                 _active={{
                   bg: "inherit",
                   transform: "none",
@@ -103,6 +102,10 @@ const SidebarContent = ({ logoText, routes }) => {
                 }}
                 _focus={{
                   boxShadow: "none",
+                }}
+                _hover={{
+                  background: `url(${logo}) no-repeat center center`,
+                  backgroundSize: "cover",
                 }}
               >
                 <Flex>
@@ -199,7 +202,7 @@ const SidebarContent = ({ logoText, routes }) => {
           fontSize="11px"
         >
           <img
-            src={shebeenElkom}
+            src={logo}
             alt="Shebeen Elkom"
             width="64"
             height="64"
