@@ -434,8 +434,6 @@ GET /doctors/getDoctorInfo
 
 No parameters required.
 
-Here is the "Patient Routes" section for your `API_REFERENCE.md`:
-
 ### Patient Routes
 
 #### Create Patient
@@ -605,8 +603,6 @@ GET /patients/getPatientInfo
 
 No parameters required.
 
-Here is the "Appointment Routes" section for your `API_REFERENCE.md`:
-
 ### Appointment Routes
 
 #### Get Appointments
@@ -763,8 +759,6 @@ PATCH /appointments/cancelAppointment
 
 No parameters required.
 
-Here is the "Package Routes" section for your `API_REFERENCE.md`:
-
 ### Package Routes
 
 #### Get All Packages
@@ -844,8 +838,6 @@ POST /subscr
 ```
 
 No parameters required.
-
-Here is the "Prescription Routes" section for your `API_REFERENCE.md`:
 
 ### Prescription Routes
 

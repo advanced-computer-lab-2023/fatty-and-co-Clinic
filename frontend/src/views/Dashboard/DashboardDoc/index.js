@@ -1,4 +1,3 @@
-
 // Chakra imports
 import {
   Flex,
@@ -30,7 +29,7 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import Header from "./Header"
+import Header from "./Header";
 
 // Custom icons
 import {
@@ -38,7 +37,6 @@ import {
   DocumentIcon,
   GlobeIcon,
   WalletIcon,
-  
 } from "components/Icons/Icons.js";
 import { ChevronRightIcon, HamburgerIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from "react";
@@ -58,143 +56,142 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 import { set } from "date-fns";
 import ProfileBgImage from "assets/img/ProfileBackground.png";
 
-
 // const ENDPOINT = "http://localhost:8000";
 // const socket = socketIOClient(ENDPOINT);
 
 export default function DashboardDoc() {
   const iconBoxInside = useColorModeValue("white", "white");
-const toast = useToast();
+  const toast = useToast();
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [notifications, setNotifications] = useState([]);
+
+  let chatUrl = `./chat`;
 
   const history = useHistory();
   const [currentUsername, setCurrentUsername] = useState("");
   const [hasNotif, setHasNotif] = useState(false);
   const [upcoming, setUpcoming] = useState([]);
   const [doctor, setDoctor] = useState([{}]);
-    const bgProfile = useColorModeValue(
-      "hsla(0,0%,100%,.8)",
-      "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
-    );
-  
+  const bgProfile = useColorModeValue(
+    "hsla(0,0%,100%,.8)",
+    "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
+  );
 
-//   socket.on("receivedNotification", (recUsername, sendUsername) => {
-//     console.log("notif username");
-//     console.log(recUsername);
-//     console.log(currentUsername);
-//     if (recUsername === currentUsername) {
-//       console.log("notification received");
-//       setHasNotif(true);
-//     }
-//   });
+  //   socket.on("receivedNotification", (recUsername, sendUsername) => {
+  //     console.log("notif username");
+  //     console.log(recUsername);
+  //     console.log(currentUsername);
+  //     if (recUsername === currentUsername) {
+  //       console.log("notification received");
+  //       setHasNotif(true);
+  //     }
+  //   });
 
-//   let chatUrl = `./chatWithPatient`;
+  //   let chatUrl = `./chatWithPatient`;
 
-//   const getDoctorUsername = async () => {
-//     try {
-//       const response = await axios.get(API_PATHS.getDocUsernameSocket, {
-//         headers: { Authorization },
-//       });
-//       setCurrentUsername(response.data);
-//       console.log(response.data);
-//       //socket.emit('addUser', response.data); // Add this line
-//     } catch (error) {
-//       console.log(error);
-//       toast({
-//         title: "Error",
-//         description: error.message,
-//         status: "error",
-//         duration: 9000,
-//         isClosable: true,
-//       });
-//     }
-//   };
+  //   const getDoctorUsername = async () => {
+  //     try {
+  //       const response = await axios.get(API_PATHS.getDocUsernameSocket, {
+  //         headers: { Authorization },
+  //       });
+  //       setCurrentUsername(response.data);
+  //       console.log(response.data);
+  //       //socket.emit('addUser', response.data); // Add this line
+  //     } catch (error) {
+  //       console.log(error);
+  //       toast({
+  //         title: "Error",
+  //         description: error.message,
+  //         status: "error",
+  //         duration: 9000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   };
 
-//   const getHasNotifInitial = async () => {
-//     const url = API_PATHS.getChatPatients;
-//     axios
-//       .get(url, { headers: { Authorization } })
-//       .then((response) => {
-//         const hasNotif = response.data.some(
-//           (patient) => patient.hasNotif === true
-//         );
-//         console.log("hey");
-//         console.log(hasNotif);
-//         setHasNotif(hasNotif);
-//       })
-//       .catch((err) => console.log(err));
-//   };
+  //   const getHasNotifInitial = async () => {
+  //     const url = API_PATHS.getChatPatients;
+  //     axios
+  //       .get(url, { headers: { Authorization } })
+  //       .then((response) => {
+  //         const hasNotif = response.data.some(
+  //           (patient) => patient.hasNotif === true
+  //         );
+  //         console.log("hey");
+  //         console.log(hasNotif);
+  //         setHasNotif(hasNotif);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   };
 
-//   socket.on("receivedNotification", (recUsername, sendUsername) => {
-//     console.log("notif username");
-//     console.log(recUsername);
-//     console.log(currentUsername);
-//     if (recUsername === currentUsername) {
-//       console.log("notification received");
-//       setHasNotif(true);
-//       //setRender(true);
-//       console.log("chatDocsafternotification");
-//     }
-//   });
+  //   socket.on("receivedNotification", (recUsername, sendUsername) => {
+  //     console.log("notif username");
+  //     console.log(recUsername);
+  //     console.log(currentUsername);
+  //     if (recUsername === currentUsername) {
+  //       console.log("notification received");
+  //       setHasNotif(true);
+  //       //setRender(true);
+  //       console.log("chatDocsafternotification");
+  //     }
+  //   });
 
-
-   useEffect(() => {
-      const getUpcomingAppointments = async () => {
-        try {
-          const response = await fetch(`${API_PATHS.viewAppointments}`, {
-            headers: {
-              Authorization: Authorization,
-              // Other headers if needed
-            },
-          });
-          if (response.ok) {
-            const result = await response.json();
-            console.log(result);
-            setUpcoming(result);
-          } else {
-            console.error("Error getting appointments:", response.statusText);
-          }
-        } catch (error) {
-          console.error("Error checking appointment status:", error.message);
+  useEffect(() => {
+    const getUpcomingAppointments = async () => {
+      try {
+        const response = await fetch(`${API_PATHS.viewAppointments}`, {
+          headers: {
+            Authorization: Authorization,
+            // Other headers if needed
+          },
+        });
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+          setUpcoming(result);
+        } else {
+          console.error("Error getting appointments:", response.statusText);
         }
-      };
+      } catch (error) {
+        console.error("Error checking appointment status:", error.message);
+      }
+    };
     getUpcomingAppointments();
-   }, []);
-useEffect(() => {
-  console.log(upcoming); // Log the value here
-}, [upcoming]);
-//   useEffect(() => {}, [hasNotif]);
+  }, []);
+  useEffect(() => {
+    console.log(upcoming); // Log the value here
+  }, [upcoming]);
+  //   useEffect(() => {}, [hasNotif]);
 
-//   useEffect(() => {
-//     getDoctorUsername();
-//     getHasNotifInitial(); //to know if he has notification mn abl kda msln afel el app w fata7o
-//   }, []);
+  //   useEffect(() => {
+  //     getDoctorUsername();
+  //     getHasNotifInitial(); //to know if he has notification mn abl kda msln afel el app w fata7o
+  //   }, []);
   const handleViewAll = async () => {
     const redirectUrl = `/doctor/viewAppointments`;
     history.replace(redirectUrl);
   };
-    useEffect(() => {
-      getDoctorInfo();
-    }, []);
+  useEffect(() => {
+    getDoctorInfo();
+  }, []);
 
-    const getDoctorInfo = () => {
-      const url = API_PATHS.getDoctorInfo;
-      axios
-        .get(url, {
-          headers: {
-            Authorization: Authorization,
-          },
-        })
-        .then((response) => {
-          setDoctor(response.data.doctor);
-          console.log(response.data);
-          setSystemUser(response.data.user);
-        })
-        .catch((err) => console.log(err));
-    };
+  const getDoctorInfo = () => {
+    const url = API_PATHS.getDoctorInfo;
+    axios
+      .get(url, {
+        headers: {
+          Authorization: Authorization,
+        },
+      })
+      .then((response) => {
+        setDoctor(response.data.doctor);
+        console.log(response.data);
+        setSystemUser(response.data.user);
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <Flex direction="column">
       <Header
@@ -266,6 +263,40 @@ useEffect(() => {
             </Text>
           </Flex>
         </Card>
+      </Box>
+      <Box
+        position="fixed"
+        bottom="0"
+        right="0"
+        width="150px"
+        height="150px"
+        overflow="hidden"
+      >
+        <Button
+          colorScheme="white"
+          borderRadius="full"
+          boxShadow="lg"
+          p="7"
+          position="relative"
+          onClick={() => {
+            history.push(chatUrl);
+          }}
+        >
+          <IoChatbubbleEllipses size="3.0em" color="teal" />
+          {/* Green Dot */}
+          {hasNotif && (
+            <Box
+              position="absolute"
+              top="0px"
+              right="-1px"
+              width="14px"
+              height="14px"
+              borderRadius="full"
+              backgroundColor="teal"
+              zIndex="1"
+            />
+          )}
+        </Button>
       </Box>
     </Flex>
   );
