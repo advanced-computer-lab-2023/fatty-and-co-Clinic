@@ -27,10 +27,8 @@ import {
   useColorModeValue,
   Text,
   HStack,
-  Text,
   ModalFooter,
 } from "@chakra-ui/react";
-import { DownloadIcon } from "@chakra-ui/icons";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
@@ -117,12 +115,9 @@ export function PatientTable() {
     }
   };
 
-
   const handleViewRecords = async () => {
-   
     const redirectUrl = `/doctor/patientRecords/?username=${selectedPatient.Username}&name=${selectedPatient.Name}`;
     history.replace(redirectUrl);
-    
   };
 
   const closeInfoModal = () => {
@@ -131,9 +126,16 @@ export function PatientTable() {
     setModalOpen(false);
   };
 
+  const clearSearch = () => {
+    setDoctorName("");
+    setStatus("");
+    setDate("");
+    fetchPatient();
+  };
+
   return (
-    <Box pt="80px">
-      <Formik
+    <Box>
+      {/* <Formik
         initialValues={filters}
         onSubmit={(values, actions) => {
           setFilters(values); // Update filters state
@@ -184,13 +186,88 @@ export function PatientTable() {
             </Grid>
           </Flex>
         )}
-      </Formik>
-      <Card my="22px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+      </Formik> */}
+      <Card my="0px" overflowX={{ sm: "scroll", xl: "hidden" }}>
         <CardHeader p="6px 0px 22px 0px">
-          <Flex direction="column">
-            <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+          <Flex
+            direction="column"
+            alignItems="flex-start"
+            pt="50px"
+            justifyContent="flex-start"
+          >
+            <Text
+              fontSize="lg"
+              color={textColor}
+              fontWeight="bold"
+              pb=".5rem"
+              marginLeft={6}
+              marginTop={1}
+              marginRight={4}
+            >
               Patients
             </Text>
+          </Flex>
+          <Flex
+            direction="row"
+            alignItems="flex-start"
+            pt="50px"
+            justifyContent="flex-start"
+          >
+            <Formik
+              initialValues={filters}
+              onSubmit={(values, actions) => {
+                setFilters(values); // Update filters state
+                actions.setSubmitting(false);
+              }}
+            >
+              {(props) => (
+                <Grid
+                  templateColumns="repeat(4, 170px)"
+                  gap={10}
+                  marginLeft={4}
+                >
+                  <Field name="patientName">
+                    {({ field }) => (
+                      <FormControl w="100%">
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="Enter Patient name"
+                        />
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="upcoming" type="checkbox">
+                    {({ field }) => (
+                      <FormControl w="200%" marginTop="6px">
+                        <Checkbox
+                          {...field}
+                          onChange={(e) => {
+                            setFilters({
+                              ...filters,
+                              upcoming: e.target.checked,
+                            });
+                          }}
+                        >
+                          Filter for upcoming appointments?
+                        </Checkbox>
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Button
+                    w="100%"
+                    isLoading={props.isSubmitting}
+                    type="submit"
+                    marginLeft={20}
+                  >
+                    Search
+                  </Button>
+                  <Button w="100%" onClick={clearSearch} marginLeft={20}>
+                    Clear
+                  </Button>
+                </Grid>
+              )}
+            </Formik>
           </Flex>
         </CardHeader>
         <CardBody>
@@ -303,7 +380,7 @@ export function PatientTable() {
                 {/* <p>Package Name:{selectedPatient.PackageName}</p> */}
                 <HStack spacing="2">
                   <WarningTwoIcon color="teal.500" />
-                  <Text fontWeight="semibold">Emergency contact: </Text>
+                  <Text fontWeight="semibold">Emergency Contact</Text>
                 </HStack>
                 <HStack spacing="2">
                   <InfoOutlineIcon color="teal.500" />
@@ -316,8 +393,8 @@ export function PatientTable() {
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button onClick={handleViewRecords}>
-                View appointments and Health records.
+              <Button onClick={handleViewRecords} marginRight="45px">
+                View appointments and health records
               </Button>
             </ModalFooter>
           </ModalContent>

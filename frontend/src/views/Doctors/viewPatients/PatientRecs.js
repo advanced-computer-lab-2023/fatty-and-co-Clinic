@@ -305,7 +305,7 @@ export default function PatientAppointmentsDoc() {
                               color="white"
                               onClick={() => fetchPrescription(appointment._id)}
                             >
-                              View prescription
+                              View Prescription
                             </Button>
                           </Td>
                         </Tr>
@@ -328,7 +328,7 @@ export default function PatientAppointmentsDoc() {
           <Card>
             <CardHeader py="12px">
               <Text fontSize="lg" fontWeight="bold">
-                {patientName}'s Health records
+                {patientName}'s Health Records
               </Text>
             </CardHeader>
             <Flex direction="column" align="flex-start">

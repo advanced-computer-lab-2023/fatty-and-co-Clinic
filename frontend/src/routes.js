@@ -280,7 +280,7 @@ var dashRoutes = [
   },
   {
     path: "/prescriptions/:patientUsername",
-    name: "My prescriptions",
+    name: "My Prescriptions",
     icon: <HomeIcon color="inherit" />,
     component: viewPrescriptions,
     layout: "/patient",
@@ -302,11 +302,11 @@ var dashRoutes = [
   },
   {
     path: "/patientRecords",
-    name: "view patient records",
+    name: "View Patient Records",
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
-    show : false
+    show: false
   },
   {
     path: "/dashboard",
