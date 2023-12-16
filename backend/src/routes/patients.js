@@ -40,7 +40,6 @@ const {
   getChatDoctors,
   getPatientUsernameSocket,
   viewfamilymembersappointments,
-  
 } = require("../controllers/patientController");
 
 const { constants } = require("buffer");

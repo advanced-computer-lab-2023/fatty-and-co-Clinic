@@ -94,7 +94,7 @@ export const API_PATHS = {
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
   getChatDoctors: PATIENT_BASE + "getChatDoctors/",
   getPatientUsernameSocket: PATIENT_BASE + "getPatientUsernameSocket/",
-
+  requestFollowUp: PATIENT_BASE + "requestfollowupAppointment/",
   // Package
   packages: PACKAGE_BASE + "packages/",
   addPackage: PACKAGE_BASE + "addPackage/",

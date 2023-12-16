@@ -12,7 +12,7 @@ import {
   Button,
   } from "@chakra-ui/react";
   import React from "react";
-  import CreateFollowUpButton from "views/Doctors/viewAppointments/components/CreateFollowUpButton";
+  import CreateFollowUpButton from "views/Patient/viewAppointPat/components/CreateFollowUpButton";
 
   
   function PatientAppRow(props) {
@@ -88,7 +88,7 @@ import {
         </Td>
         {PatientUsername && Status === "Completed" && (
           <Td minWidth={{ sm: "150px" }}>
-            <CreateFollowUpButton patientUsername={PatientUsername} />
+            <CreateFollowUpButton doctorUsername={DoctorUsername} />
           </Td>
   
      

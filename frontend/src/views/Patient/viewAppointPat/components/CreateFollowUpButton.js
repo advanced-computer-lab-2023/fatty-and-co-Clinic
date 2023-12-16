@@ -21,10 +21,10 @@ import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
+import { usePatientAppointmentsContext } from "hooks/usePatientAppointmentsContext";
 
-export default function CreateFollowUpButton({ patientUsername }) {
-  const { appointments, dispatch } = useDoctorAppointmentsContext();
+export default function CreateFollowUpButton({ doctorUsername }) {
+  const { appointments, dispatch } = usePatientAppointmentsContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [date, setDate] = useState("");
 
@@ -37,17 +37,17 @@ export default function CreateFollowUpButton({ patientUsername }) {
   };
   const toast = useToast();
   const handleSubmit = () => {
-    const url = API_PATHS.followupAppointment;
+    const url = API_PATHS.requestFollowUp;
     axios
       .post(url, null, {
-        params: { date: date, PatientUsername: patientUsername },
+        params: { date: date, DoctorUsername: doctorUsername },
         headers: { Authorization },
       })
       .then((response) => {
         toast({
-          title: "Follow up appointment created",
+          title: "Follow up request submitted",
           description:
-            "We've created your the follow up appointment for the selected patient.",
+            "We've created your the follow up appointment request",
           status: "success",
           duration: 9000,
           isClosable: true,
@@ -58,7 +58,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
         toast({
           title: "Error ",
           description:
-            "We've encountered an error while creating your follow up appointment .",
+            "We've encountered an error while creating your follow up request .",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -74,7 +74,7 @@ export default function CreateFollowUpButton({ patientUsername }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>create follow up appointment</ModalHeader>
+          <ModalHeader>request follow up appointment</ModalHeader>
           <ModalCloseButton />
 
           <ModalBody>
