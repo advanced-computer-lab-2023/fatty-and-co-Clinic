@@ -13,6 +13,7 @@ export default function OrderPrescription({ appointmentId }) {
   const { user } = useAuthContext();
   const toast = useToast();
   const [addedToCart, setaddedToCart] = useState(false);
+  const [outOfStockMessage, setOutOfStockMessage] = useState("");
   const Authorization = `Bearer ${user.token}`;
   console.log(user);
 
@@ -37,9 +38,19 @@ export default function OrderPrescription({ appointmentId }) {
           description:
             "The Medicines in this prescription have been added to your pharmacy cart.",
           status: "success",
-          duration: 9000,
+          duration: 2000,
           isClosable: true,
         });
+        if (outOfStockMessage) {
+          // Display the out-of-stock message if available
+          toast({
+            title: "Out of Stock",
+            description: outOfStockMessage,
+            status: "warning",
+            duration: 2000,
+            isClosable: true,
+          });
+        }
         window.location.href = "http://localhost:4000/patient/cart";
       } else {
         toast({
