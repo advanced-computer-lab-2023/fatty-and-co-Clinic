@@ -46,7 +46,7 @@ import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
-import DashboardDoc from "views/Dashboard/DashboardDoc";
+
 import VideoCallPage from "views/Patient/VideoCallTemp";
 import {
   HomeIcon,
