@@ -22,6 +22,8 @@ const {
   validateBookingDate,
   getPaymentAmount,
   getDoctorInfo,
+  getChatPatients,
+  getDocUsernameSocket,
 } = require("../controllers/doctorController");
 
 const {
@@ -168,9 +170,7 @@ router.delete("/deleteMySlotsDoc/:id", checkDoctor, (req, res) => {
   deleteMySlotsDoc(req, res);
 });
 
-router.get("/viewUpcomingAppointmentsDoc", checkDoctor, (req, res) => {
-  viewUpcomingAppointmentsDoc(req, res);
-});
+router.get("/viewUpcomingAppointmentsDoc", checkDoctor,viewUpcomingAppointmentsDoc);
 
 router.get("/viewPastAppoitmentsDoc", checkDoctor, (req, res) => {
   viewPastAppoitmentsDoc(req, res);
@@ -192,6 +192,12 @@ router.get("/getPaymentAmount", checkPatient, (req, res) => {
   getPaymentAmount(req, res);
 });
 
+router.get("/getChatPatients", checkDoctor, (req, res) => {
+  getChatPatients(req, res);
+});
+// getDocUsernameSocket;
+router.get("/getDocUsernameSocket", checkDoctor, (req, res) => {
+  getDocUsernameSocket(req, res);
+});
 router.get("/getDoctorInfo", checkDoctor, getDoctorInfo);
-
 module.exports = router;

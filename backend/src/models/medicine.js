@@ -37,6 +37,12 @@ const medicineSchema = new Schema(
       type: Number,
       default: 0,
     },
+    SalesPerMonth: [
+      {
+        type: Number,
+        default: 0,
+      }
+    ],
     State: {
       type: String,
       enum: ["archived", "unarchived"],

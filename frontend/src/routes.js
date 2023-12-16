@@ -42,7 +42,11 @@ import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
 import PackageAll from "views/Patient/Package";
-import VideoCallPage from "views/Patient/VideoCallTemp";
+import DashboardDoc from "views/Dashboard/DashboardDoc/index";
+import DoctorProfile from "views/Doctors/viewProfile";
+import chatWithDoc from "views/Patient/chatwithDoc";
+import ChatWithPatient from "views/Doctors/chat/chatwithPat";
+import DashboardPat from "views/Dashboard/DashboardPat";
 
 import {
   HomeIcon,
@@ -53,8 +57,6 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
-import DoctorProfile from "views/Doctors/viewProfile";
-
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
 //component de 7aga fe views
@@ -62,11 +64,43 @@ import DoctorProfile from "views/Doctors/viewProfile";
 // TODO: organize routes by type of user
 var dashRoutes = [
   {
-    path: "/videoCall",
-    name: "Video Call",
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
     icon: <HomeIcon color="inherit" />,
-    component: VideoCallPage,
+    component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardPat,
     layout: "/patient",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardDoc,
+    layout: "/doctor",
+  },
+  {
+    path: "/package_all",
+    name: "Package",
+    icon: <HomeIcon color="inherit" />,
+    component: PackageAll,
+    layout: "/patient",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardDoc,
+    layout: "/doctor",
   },
   {
     path: "/package_all",
@@ -141,8 +175,9 @@ var dashRoutes = [
     component: ViewFamilyApp,
     layout: "/patient",
   },
+
   {
-    path: "/Subscribtions",
+    path: "/Subscribtions/",
     name: " Cancel Subscriptions",
     rtlName: "لوحة القيادة",
     icon: <PersonIcon color="inherit" />,
@@ -247,6 +282,20 @@ var dashRoutes = [
   },
 
   {
+    path: "/chat",
+    name: "Chat With Doctor",
+    icon: <HomeIcon color="inherit" />,
+    component: chatWithDoc,
+    layout: "/patient",
+  },
+  {
+    path: "/chat",
+    name: "Chat With Patient",
+    icon: <HomeIcon color="inherit" />,
+    component: ChatWithPatient,
+    layout: "/doctor",
+  },
+  {
     path: "/viewDoctorDetails/:username",
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,
@@ -287,7 +336,7 @@ var dashRoutes = [
     layout: "/patient",
   },
   {
-    path: "/medicalhistory",
+    path: "/medicalhistory/:patientUsername",
     name: "Medical History",
     icon: <HomeIcon color="inherit" />,
     component: MedicalHistoryPatient,

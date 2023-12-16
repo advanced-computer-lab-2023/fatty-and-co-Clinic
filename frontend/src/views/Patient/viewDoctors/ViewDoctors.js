@@ -6,6 +6,7 @@ import { Flex, Button, Box, Text, Input } from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
+import DoctorsView from "./components/DoctorsView";
 
 export function ViewDoctors() {
   const [data, setData] = useState([{}]);
@@ -232,7 +233,7 @@ export function ViewDoctors() {
             Clear
           </Button>
         </Flex>
-        <DoctorsTable
+        <DoctorsView
           title={"Available Doctors"}
           captions={["Name", "Speciality", "Cost"]}
           data={data}
