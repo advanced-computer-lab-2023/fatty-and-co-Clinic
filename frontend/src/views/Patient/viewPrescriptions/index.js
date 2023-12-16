@@ -9,6 +9,7 @@ import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
 import jsPdf from "jspdf";
 import logo from "assets/img/ShebeenElkom.png";
+import OrderPrescription from "./components/OrderPrescription";
 import {
   Box,
   Grid,
@@ -36,10 +37,12 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
+
+import { IoEyeSharp } from "react-icons/io5";
+
 import { DownloadIcon } from "@chakra-ui/icons";
 import { jsPDF } from "jspdf";
 import { FaSignature } from "react-icons/fa";
-
 function PrescriptionTable() {
   const { patientUsername } = useParams();
   const [prescriptions, setPrescriptions] = useState([]);
@@ -49,6 +52,7 @@ function PrescriptionTable() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [doctorNames, setDoctorNames] = useState(new Set());
+  const [addedToCart, setaddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuthContext();
@@ -87,6 +91,7 @@ function PrescriptionTable() {
         console.log(response.data);
         setPrescriptions(response.data);
         setIsLoading(false);
+        console.log(prescriptions);
       })
       .catch((error) => {
         console.error("Error fetching prescriptions:", error);
@@ -211,6 +216,7 @@ function PrescriptionTable() {
                   <Th>Doctor Name</Th>
                   <Th>Status</Th>
                   <Th></Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -242,15 +248,28 @@ function PrescriptionTable() {
                         : "N/A"}
                     </Td>
                     <Td>
-                      <Button
-                        colorScheme="teal"
-                        variant="solid"
-                        rightIcon={<BsPrescription2 />}
-                        onClick={() => openModal(prescription._id)}
-                      >
-                        View Prescribed Medicines
-                      </Button>
+                      <Flex justifyContent="flex-end">
+                        <Button
+                          colorScheme="teal"
+                          variant="solid"
+                          leftIcon={<IoEyeSharp />}
+                          rightIcon={<BsPrescription2 />}
+                          onClick={() => openModal(prescription._id)}
+                        >
+                          View Prescribed Medicines
+                        </Button>
+                      </Flex>
                     </Td>
+                    {/* {!setaddedToCart && ( */}
+                    <Td>
+                      <Flex justifyContent="center">
+                        <OrderPrescription
+                          appointmentId={prescription.AppointmentId}
+                          onClick={() => setaddedToCart(true)}
+                        ></OrderPrescription>
+                      </Flex>
+                    </Td>
+                    {/* )} */}
                   </Tr>
                 ))}
               </Tbody>
