@@ -14,7 +14,6 @@
     "@fontsource/open-sans": "^4.5.0",
     "@fontsource/raleway": "^4.5.0",
     "@fontsource/roboto": "^4.5.8",
-    "@jitsi/react-sdk": "^1.4.0",
     "@stripe/react-stripe-js": "^2.3.1",
     "@stripe/stripe-js": "^2.1.11",
     "apexcharts": "^3.27.3",
