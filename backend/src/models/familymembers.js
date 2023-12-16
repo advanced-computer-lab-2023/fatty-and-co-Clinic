@@ -22,7 +22,7 @@ const familyMemberSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,  //changed that false to test
+      unique: false,  //changed that false to test
     },
     Age: {
       type: Number,

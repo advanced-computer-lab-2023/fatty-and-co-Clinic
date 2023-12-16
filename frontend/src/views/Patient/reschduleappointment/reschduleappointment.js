@@ -106,6 +106,7 @@ const dateConfirmHandler = async() => {
         //     duration: 5000, // Adjust duration as needed
         //     isClosable: true,
         //   });
+    console.log(PatientUsername);
     
           // If the booking date is valid, proceed with cancellation logic
           try {

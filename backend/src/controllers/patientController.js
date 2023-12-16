@@ -1636,32 +1636,28 @@ const uploadFile = async (req, res) => {
   "EmergencyContactName":"HANA"
 } */
 const createFamilymember = async (req, res) => {
-  const  currentuser=req.user.Username;
- const  currentPatient=await patientModel.findOne({Username:currentuser});
- console.log("current patient ");
- console.log(currentPatient);
- const  {
-  Username,
-  Name,
-  Password,
-  Email,
-  MobileNum,
-  NationalId,
-  DateOfBirth,
-  Gender,
-  relation,
-  Wallet,
-} = req.body;
- 
- //taste test
-   try {
-    const user = await systemUserModel.addEntry(
+  try {
+    const currentuser = req.user.Username;
+    const currentPatient = await patientModel.findOne({ Username: currentuser });
+    const {
       Username,
+      Name,
       Password,
       Email,
-      "Patient"
-    );
-    console.log(user);
+      MobileNum,
+      NationalId,
+      DateOfBirth,
+      Gender,
+      relation,
+      Wallet,
+    } = req.body;
+
+    if (NationalId.length > 16) {
+      throw new Error("National id must be = 16 digits");
+    }
+
+    const user = await systemUserModel.addEntry(Username, Password, Email, "Patient");
+
     const familyMember = await patientModel.create({
       Username: Username,
       Name: Name,
@@ -1672,54 +1668,51 @@ const createFamilymember = async (req, res) => {
       EmergencyContact: {
         FullName: currentuser.Name,
         PhoneNumber: currentuser.PhoneNumber,
-        Relation:(relation === "Child") ? "Father" : "Spouse"
+        Relation: (relation === "Child") ? "Father" : "Spouse"
       },
       LinkedPatients: [],
       Wallet: Wallet,
     });
-    
-   console.log("here is the family member ");
- 
-   const Familymemberfound=await patientModel.findOne({Username:Username});
-   console.log(Familymemberfound);
-     const currentDate = new Date();
-     const dob = new Date(DateOfBirth);
-     const dob1=new Date(currentPatient.DateOfBirth);
 
-   const newFamilymember = await familyMemberModel.create({
-       Patient: currentPatient,
-       FamilyMem:Familymemberfound,
-       FamilyMemberUsername: Username,
-       Name: Name,
-       NationalId: NationalId,
-       Age: Math.floor(
-         Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-       ),
-       Gender: Gender,
-       Relation: relation
-     });
-     const newFamilymember2 = await familyMemberModel.create({
+    const Familymemberfound = await patientModel.findOne({ Username: Username });
+
+    const currentDate = new Date();
+    const dob = new Date(DateOfBirth);
+    const dob1 = new Date(currentPatient.DateOfBirth);
+
+    const newFamilymember = await familyMemberModel.create({
+      Patient: currentPatient,
+      FamilyMem: Familymemberfound,
+      FamilyMemberUsername: Username,
+      Name: Name,
+      NationalId: NationalId,
+      Age: Math.floor(Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000),
+      Gender: Gender,
+      Relation: relation
+    });
+
+    const newFamilymember2 = await familyMemberModel.create({
       Patient: Familymemberfound,
-      FamilyMem:currentPatient,
+      FamilyMem: currentPatient,
       FamilyMemberUsername: currentPatient.Username,
       Name: currentPatient.Name,
       NationalId: currentPatient.NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
-      ),
+      Age: Math.floor(Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000),
       Gender: currentPatient.Gender,
- 
     });
-   
-      const newUnsubscribed = await subscriptionModel.create({
-        Patient: Familymemberfound,
-        Status: "Unsubscribed",
-      });
-     res.status(200).json(newFamilymember);
-   } catch (error) {
-     res.status(500).json({ error: error.message });
-   }
- };
+
+    const newUnsubscribed = await subscriptionModel.create({
+      Patient: Familymemberfound,
+      Status: "Unsubscribed",
+    });
+
+    res.status(200).json(newFamilymember);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 const cancelSubscriptionfamilymember = async (req, res) => {
   try {

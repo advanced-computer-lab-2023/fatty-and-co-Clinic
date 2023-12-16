@@ -980,10 +980,14 @@ const reschdulebypatient= async (req, res) => {
   patient = await patientModel.findOne({ Username: username });
 //const familymember=null;
   const { DoctorId, FamMemName, Date } = req.body;
+  console.log(DoctorId);
+  console.log(FamMemName);
+  console.log(Date);
 // console.log("body: " + req.body.FamMemName);
   //this patient is technically fam member
   if (FamMemName) {
-   familymember=await patientModel.findOne({Username: FamMemName});
+   familymember= await patientModel.findOne({ Username: FamMemName });
+   console.log("here is fameme",familymember);
     patNameFinal = familymember;
   } else {
     patNameFinal = patient;
