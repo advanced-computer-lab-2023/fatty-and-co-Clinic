@@ -13,6 +13,7 @@ import {
   MenuItem,
   MenuList,
   Text,
+  Tooltip,
   useColorModeValue,
   ChakraProvider,
   extendTheme,
