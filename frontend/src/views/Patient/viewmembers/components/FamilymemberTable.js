@@ -48,7 +48,7 @@ export const FamilymemberTable = ({ title, captions, data }) => {
               return (
                 <FamilymemberRow
                   Name={row.Name}
-                  NationalId={row.NationalId}
+                  NationalId={row.NationalIdFam}
                   Age={row.Age}
                   Gender={row.Gender}
                   Relation={row.Relation}

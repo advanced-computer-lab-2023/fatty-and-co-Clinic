@@ -1063,7 +1063,7 @@ const viewHealthFamwithstatus = async (req, res) => {
     const username = req.user.Username;
     const Patient = await patientModel.findOne({ Username: username });
     const famMems = await familyMemberModel
-      .find({  $and: [{ Patient: Patient }, { FamilyMem: { $ne: Patient } }] })
+      .find({  $and: [{ FamilyMem: Patient }, { Patient: { $ne: Patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
 
@@ -1195,7 +1195,7 @@ const updateFamCredit = async (req, res) => {
     const Package = await packageModel.findOne({ Name: PackageName });
     const patient = await patientModel.findOne({ Username: curr_user });
     const relative = await familyMemberModel
-      .findOne({ Patient: patient, NationalId: NationalId })
+      .findOne({ Patient: patient, NationalIdFam: NationalId })
       .populate("Patient")
       .populate("FamilyMem");
     const subscription = await subscriptionModel
@@ -1319,7 +1319,7 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({  $and: [{ Patient: patient }, { FamilyMem: { $ne: patient } }] })
+      .find({  $and: [{ FamilyMem: patient }, { Patient: { $ne: patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
     res.status(200).send(fam);
@@ -1420,10 +1420,10 @@ const subscribepackagefamilymem = async (req, res) => {
     // console.log(Patient) //changed this
     const { NationalId, PackageName } = req.body;
     const Package = await packageModel.findOne({ Name: PackageName });
-    const fam = await familyMemberModel.findOne({ NationalId: NationalId });
+    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId });
     const famrelated = await familyMemberModel.find({
       Patient: Patient.id,
-      NationalId: NationalId,
+      NationalIdFam: NationalId,
     });
     const subscribedcheck = await subscriptionModel.findOne({ FamilyMem: fam });
 
@@ -1523,7 +1523,7 @@ const linkPatient = async (req, res) => {
       res.status(204).send({ message: "Can't link yourself" });
     } else {
       const formerlyLinked = await familyMemberModel.findOne({
-        NationalId: familyMember.NationalId,
+        NationalIdFam: familyMember.NationalId,
       });
       var newFamilymember = null;
       if (!formerlyLinked) {
@@ -1536,7 +1536,7 @@ const linkPatient = async (req, res) => {
           FamilyMem: familyMember,
           FamilyMemberUsername: familyMember.Username,
           Name: familyMember.Name,
-          NationalId: familyMember.NationalId,
+          NationalIdFam: familyMember.NationalId,
           Age: Math.floor(
             Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
           ),
@@ -1639,7 +1639,7 @@ const createFamilymember = async (req, res) => {
   const  currentuser=req.user.Username;
  const  currentPatient=await patientModel.findOne({Username:currentuser});
  console.log("current patient ");
- console.log(currentPatient);
+ //console.log(currentPatient);
  const  {
   Username,
   Name,
@@ -1655,13 +1655,29 @@ const createFamilymember = async (req, res) => {
  
  //taste test
    try {
-    const user = await systemUserModel.addEntry(
-      Username,
-      Password,
-      Email,
-      "Patient"
-    );
-    console.log(user);
+     if (NationalId.length !== 16) {
+    // Return an error message.
+    res.status(400).json({ error: "The national ID must be 16 digits long." });
+    return;
+  }
+  const currentDate = new Date();
+  const dob = new Date(DateOfBirth);// family memebr you create 
+  const dob1=new Date(currentPatient.DateOfBirth);// signed in 
+  // check if age are only 2 digitd
+  // if (Age.length === 0 || Age.length > 2 || Age == 0) {
+  //   // Return an error message.
+  //   res.status(400).json({ error: "The age must be 1 or 2 digits" });
+  //   return;
+  // }
+    
+    // const user = await systemUserModel.addEntry(
+    //   Username,
+    //   Password,
+    //   Email,
+    //   "Patient"
+    // );
+   // console.log(user);
+    // new family memeber
     const familyMember = await patientModel.create({
       Username: Username,
       Name: Name,
@@ -1677,45 +1693,52 @@ const createFamilymember = async (req, res) => {
       LinkedPatients: [],
       Wallet: Wallet,
     });
-    
+      const user = await systemUserModel.addEntry(
+      Username,
+      Password,
+      Email,
+      "Patient"
+    );
+  console.log(user);
    console.log("here is the family member ");
  
-   const Familymemberfound=await patientModel.findOne({Username:Username});
-   console.log(Familymemberfound);
-     const currentDate = new Date();
-     const dob = new Date(DateOfBirth);
-     const dob1=new Date(currentPatient.DateOfBirth);
+   const Familymemberaddedtopatient=await patientModel.findOne({Username:Username});
+   console.log(Familymemberaddedtopatient);
 
+//new one yu just took
    const newFamilymember = await familyMemberModel.create({
-       Patient: currentPatient,
-       FamilyMem:Familymemberfound,
+       Patient: Familymemberaddedtopatient,
+       FamilyMem:currentPatient,
        FamilyMemberUsername: Username,
        Name: Name,
-       NationalId: NationalId,
+       NationalIdFam: NationalId,
        Age: Math.floor(
          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
        ),
        Gender: Gender,
        Relation: relation
      });
+   // new one as apatient
+   console.log("Nationalid",currentPatient.NationalId);
      const newFamilymember2 = await familyMemberModel.create({
-      Patient: Familymemberfound,
-      FamilyMem:currentPatient,
-      FamilyMemberUsername: currentPatient.Username,
-      Name: currentPatient.Name,
-      NationalId: currentPatient.NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
-      ),
-      Gender: currentPatient.Gender,
- 
-    });
-   
+       Patient: currentPatient,
+     FamilyMem:Familymemberaddedtopatient,
+       FamilyMemberUsername: currentPatient.Username,
+       Name: currentPatient.Name,
+       NationalIdFam:currentPatient.NationalId,
+       Age: Math.floor(
+         Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
+       ),
+       Gender: currentPatient.Gender,
+       Relation: (relation === "Child") ? "Father" : "Spouse"
+       
+     });
+   console.log("Family memeber2",newFamilymember2);
       const newUnsubscribed = await subscriptionModel.create({
-        Patient: Familymemberfound,
+        Patient: Familymemberaddedtopatient,
         Status: "Unsubscribed",
       });
-     res.status(200).json(newFamilymember);
+     res.status(200).json(newFamilymember2);
    } catch (error) {
      res.status(500).json({ error: error.message });
    }
@@ -1733,14 +1756,14 @@ const cancelSubscriptionfamilymember = async (req, res) => {
     const day = String(Startdate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
     const patient = await patientModel.findOne({ Username: signedIn });
-    const fam = await familyMemberModel.findOne({ NationalId: NationalId });
+    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId });
     const subscribed = await subscriptionModel.findOne({
       FamilyMem: fam,
       FamilyMem: fam.id,
     });
     const famrelated = await familyMemberModel.find({
       Patient: patient.id,
-      NationalId: NationalId,
+      NationalIdFam: NationalId,
     });
     if (famrelated == null) {
       res.status(400).send({ Error: "Family member not related to you " });
