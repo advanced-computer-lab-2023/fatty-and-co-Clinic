@@ -165,6 +165,27 @@ const getDoctorByUsername = async (req, res) => {
   }
 };
 
+const getDoctorByUser = async (req, res) => {
+  const username  = req.user.Username;
+  try {
+    const doctor = await doctorModel.findOne({ Username: username });
+    if (!doctor) {
+      res.status(404).json({ error: "Doctor not found" });
+      return;
+    }
+    const { Name, Speciality, Affiliation, EducationalBackground } = doctor;
+    const doctorDetails = {
+      Name,
+      Speciality,
+      Affiliation,
+      EducationalBackground,
+    };
+    res.status(200).json(doctorDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // get doctor by name and/or speciality (search)
 const getDoctorByNameAndSpeciality = async (req, res) => {
   const { Name, Speciality } = req.body;
@@ -832,6 +853,31 @@ const viewAllAvailableSlots = async (req, res) => {
   }
 };
 
+const viewAllAvailableSlotsForMe = async (req, res) => {
+  const  username  = req.user.Username;
+  var slotsToView = new Array();
+  try {
+    const doctor = await doctorModel.findOne({ Username: username });
+    const allDocSlots = await docSlotsModel.find({ DoctorId: doctor._id });
+    for (let element of allDocSlots) {
+      const StartTime = element.StartTime.toFixed(2);
+      const strtTime2 = StartTime.toString().split(".");
+      console.log("strtTime2: " + strtTime2);
+
+      const StartTimeFinal = strtTime2[0].padStart(2, "0") + ":" + strtTime2[1];
+      console.log("StartTimeFinal: " + StartTimeFinal);
+      slotsToView.push({
+        DoctorId: element.DoctorId,
+        DayName: getDayNameFromNumber(element.WorkingDay),
+        StartTime: StartTimeFinal,
+      });
+    }
+    res.status(200).json(slotsToView);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
 //use: when booking appointment based on A doc slot, you need to validate that:
 //    -> the date day matches the day ; ex: 11/11 is Sat
 //     -> the doc has no appointment in that Day
@@ -899,6 +945,41 @@ const viewAllAvailableSlots = async (req, res) => {
 // };
 
 const validateBookingDate = async (req, res) => {
+  const { DayName, DateFinal, DoctorId } = req.query;
+
+  console.log(DateFinal);
+  console.log(new Date(DateFinal));
+  const tmpDate = new Date(DateFinal);
+
+  console.log(getDayNameFromNumber(tmpDate.getDay()));
+  console.log(DayName);
+
+  if (getDayNameFromNumber(tmpDate.getDay()) === DayName) {
+    try {
+      console.log(DateFinal);
+      const Doctor = await doctorModel.findOne({ _id: DoctorId });
+      const appointment = await appointmentModel.findOne({
+        DoctorUsername: Doctor.Username,
+        Date: DateFinal,
+        Status: "Upcoming",
+      });
+      if (appointment) {
+        console.log(appointment.Date);
+        console.log("invalid");
+        res.status(500).send({ message: "this date is unavailable" });
+      } else {
+        console.log("valid");
+        res.status(200).json("validDate");
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  } else
+    res.status(500).send({ message: "Chosen Date does not match chosen Day" });
+};
+
+
+const validateBookingDateDoctor = async (req, res) => {
   const { DayName, DateFinal, DoctorId } = req.query;
 
   console.log(DateFinal);
@@ -1138,6 +1219,7 @@ const rejectFollowUp = async (req, res) => {
 //TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
 module.exports = {
+  viewAllAvailableSlotsForMe,
   getDoctorByID,
   getDoctorByUsername,
   getDoctorByNameAndSpeciality,
@@ -1148,7 +1230,9 @@ module.exports = {
   deleteDoctor,
   viewPatientInfoAndHealthRecords,
   followupAppointment,
+  validateBookingDateDoctor,
   filterDoctorSlotEdition,
+  getDoctorByUser,
   addMySlotsDoc,
   deleteMySlotsDoc,
   updateMySlotsDoc,

@@ -5,7 +5,9 @@ import axios from "axios";
 import AppointmentsTable from "./components/AppointmentsTable";
 import { useAuthContext } from "hooks/useAuthContext";
 import { useDoctorAppointmentsContext } from "hooks/useDoctorAppointmentsContext";
-
+import { useHistory } from "react-router-dom";
+//const redirectUrl = `/patient/payment/?amount=${amount}&description=${description}&PackageName=${PackageName}`;
+//history.replace(redirectUrl);
 export default function ViewAppointmentsInner() {
   const { appointments, dispatch } = useDoctorAppointmentsContext();
   const [data, setData] = useState([{}]);
@@ -16,10 +18,10 @@ export default function ViewAppointmentsInner() {
   const [statusSearchValue, setStatusSearchValue] = useState("");
   const [dateSearchValue, setDateSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const [patientUsername,setPatientUsername]=useState("");
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-
+  const history = useHistory();
   // const { DoctorUsername } = useParams();
   const options = [
     { label: "Cancelled", value: "Cancelled" },
@@ -40,6 +42,15 @@ export default function ViewAppointmentsInner() {
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
   }, [searchParams]);
+
+  const handleRescheduleAppointment=(DoctorUsername,PatientUsername)=>{
+   setPatientUsername(PatientUsername);
+   const redirectUrl=`/doctor/viewMySlots/?username=${PatientUsername}&doctor=${DoctorUsername}`
+   history.replace(redirectUrl)
+  }
+
+
+
 
   const handleSearchButtonClick = () => {
     // Call both search functions with the current search values
@@ -107,6 +118,7 @@ export default function ViewAppointmentsInner() {
           captions={["Patient Name", "Status", "Type", "Date", "Time"]}
           data={appointments}
           isLoading={isLoading}
+          handleRescheduleAppointment={handleRescheduleAppointment}
         />
       </Flex>
     </Box>

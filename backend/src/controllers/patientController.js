@@ -1672,7 +1672,7 @@ const createFamilymember = async (req, res) => {
       EmergencyContact: {
         FullName: currentuser.Name,
         PhoneNumber: currentuser.PhoneNumber,
-        Relation:(relation === "Child") ? "Father" : "Spouse"
+        Relation: (relation === "Child") ? "Father" : "Spouse"
       },
       LinkedPatients: [],
       Wallet: Wallet,
@@ -1720,6 +1720,8 @@ const createFamilymember = async (req, res) => {
      res.status(500).json({ error: error.message });
    }
  };
+
+
 
 const cancelSubscriptionfamilymember = async (req, res) => {
   try {

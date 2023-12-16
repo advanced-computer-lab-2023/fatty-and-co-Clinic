@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  getDoctorId,
   cancelAppForFam,
   cancelAppForSelf,
   reschedulePatient,
@@ -13,8 +14,7 @@ const {
   filterAppointmentsByDateDoc,
   filterAppointmentsByDatePat,
   testAppointRef,
-  rescheduleAppointmentPatient,
-  reschedulefamilymember,
+  reschdulebypatient,
   createAppointment,
   getAppointmentsfamilymembers,
   getAllAppointmentsPat,
@@ -63,13 +63,14 @@ router.get("/searchpatient", checkDoctor, searchPatient);
  * @access Doctor
  */
 router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
-router.post("/rescheduleAppointmentPatient", checkPatient, rescheduleAppointmentPatient);
-router.post("/rescheduleAppointmentfamilymember", checkPatient, reschedulefamilymember);
+router.post("/rescheduleAppointmentPatient", checkPatient, reschdulebypatient);
+// router.post("/rescheduleAppointmentfamilymember", checkPatient, reschedulefamilymember);
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient
  * @access Patient
  */
+router.get("/getDoctorId", checkDoctor, getDoctorId);
 router.get("/getAppointmentsPat", checkPatient, getAppointmentsPat);
 router.get("/getAppointmentsfamilymembers", checkPatient, getAppointmentsfamilymembers);
 router.get("/filterAppointmentsByStatusDoc", checkPatient, filterAppointmentsByStatusDoc);
@@ -82,7 +83,7 @@ router.patch("/filterAppointmentsByDatePat", checkPatient, filterAppointmentsByD
 router.get("/testAppRef", testAppointRef);
 
 router.post("/createAppointment",checkPatient, createAppointment);
-router.post("/rescheduleForPatient",checkPatient,reschedulePatient);
+router.post("/rescheduleForPatient",checkDoctor,reschedulePatient);
 
 // Cancel for family member + for myself
 

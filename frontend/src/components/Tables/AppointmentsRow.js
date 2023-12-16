@@ -26,12 +26,14 @@ import { useAuthContext } from "hooks/useAuthContext";
 function AppointmentsRow(props) {
   const {
     customkey,
+    DoctorUsername,
     DoctorName,
     PatientName,
     PatientUsername,
     Status,
     Type,
     DateTime,
+    handleRescheduleAppointment
   } = props;
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -141,7 +143,18 @@ function AppointmentsRow(props) {
             <UpdatePrescription customkey={customkey} />
           </Td>
         )}
+           <Td minWidth={{ sm: "150px" }}>
+      {(Status === "Upcoming" ) && ( // Render the reschedule button only if status is "Upcoming"
+       <Button
+       colorScheme="teal"
+       onClick={() => props.handleRescheduleAppointment(DoctorUsername,PatientUsername)}
+     >
+       Reschedule
+     </Button>
+  )}
+</Td>
       </Stack>
+     
     </Tr>
   );
 }
