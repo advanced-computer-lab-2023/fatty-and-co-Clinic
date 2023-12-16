@@ -13,7 +13,7 @@ const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
-const notificationModel = require("../models/notifications");
+const notificationModel = require("../models/notificationsChat");
 
 const {
   findFiles,

@@ -8,7 +8,7 @@ const packageModel = require("../models/packages");
 const docSlotsModel = require("../models/docSlots");
 const subscriptionModel = require("../models/subscriptions");
 const requestModel = require("../models/appointmentrequests");
-const notificationModel = require("../models/notifications");
+const notificationModel = require("../models/notificationsChat");
 const { Int32 } = require("bson");
 
 // I think this is useless?
