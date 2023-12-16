@@ -252,7 +252,6 @@ function PrescriptionTable() {
                         <Button
                           colorScheme="teal"
                           variant="solid"
-                          leftIcon={<IoEyeSharp />}
                           rightIcon={<BsPrescription2 />}
                           onClick={() => openModal(prescription._id)}
                         >
@@ -372,7 +371,7 @@ function PrescriptionTable() {
                   selectedPrescription.Medicine.forEach((medicine, index) => {
                     doc.text(medicine.Name, 25, y);
                     doc.text(medicine.Dosage + " mg", 77, y);
-                   doc.text(medicine.Description, 105, y);
+                    doc.text(medicine.Description, 105, y);
                     y += 10;
                   });
 
