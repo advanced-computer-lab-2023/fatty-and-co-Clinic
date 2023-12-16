@@ -20,7 +20,9 @@ const familyMemberSchema = new Schema(
     },
     NationalIdFam: {
       type: String,
-      required: true,  
+      required: true,
+      trim: true,
+      unique: false,  
 
     },
     Age: {
@@ -34,7 +36,7 @@ const familyMemberSchema = new Schema(
     },
     Relation: {
       type: String,
-      enum: ["Spouse", "Child","Father"],
+      enum: ["Spouse", "Child"],
       required: false,
     },
   },

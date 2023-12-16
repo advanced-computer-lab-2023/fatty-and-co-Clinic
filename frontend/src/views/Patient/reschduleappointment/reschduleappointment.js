@@ -29,7 +29,7 @@ export function reschduleappointment () {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-  console.log(Authorization);
+
 
   const toast = useToast();
 
@@ -159,12 +159,25 @@ const dateConfirmHandler = async() => {
           isClosable: true,
         });
       }
-      finally {
-        setIsLoading(false); // Set loading to false when function completes
-      }
   };
   
+//   const checkOutHandler = () => {
+//     let newUrl = `../AppointmentConfirmation`;
+//     let newState = {
+//       DoctorId: DoctorId,
+//       Date: DateFinal,
+//       FamMemName: FamMemName,
+//       Cost: Cost,
+//       CostFam: CostFam,
+//     };
 
+//     console.log(user.username);
+//     console.log(user.Username);
+//     console.log(user);
+//     // console.log("hellostate");
+//     console.log(newState);
+//     history.push(newUrl, newState);
+//   };
 
   useEffect(() => {
     setFamMemOptions([{}]);
@@ -229,3 +242,15 @@ const dateConfirmHandler = async() => {
 }
 export default reschduleappointment;
 
+{
+  /* <Select size="md" 
+          //onChange={handleDayNumberToAdd}
+          >
+            <option value=""></option>
+            {famMemOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.key}
+              </option>
+            ))}
+          </Select> */
+}

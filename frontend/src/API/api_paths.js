@@ -7,7 +7,8 @@ const APPOINTMENT_BASE = "http://localhost:8000/appointment/";
 const GUEST_BASE = "http://localhost:8000/guest/";
 const PAYEMENT_BASE = "http://localhost:8000/payment/";
 const PRESCRIPTION_BASE = "http://localhost:8000/prescription/";
-
+const MESSAGE_BASE = "http://localhost:8000/message/";
+const NOTIFICATION_BASE = "http://localhost:8000/notification/";
 
 // Add comments that indicate if the path needs a param and what that param is
 export const API_PATHS = {
@@ -48,11 +49,13 @@ getNotifs: GUEST_BASE + "getNotifs/",
   validateBookingDate: DOCTOR_BASE + "validateBookingDate/", // validating booking date
   filterDoctorSlotEdition: DOCTOR_BASE + "filterDoctorSlotEdition/",
   getPaymentAmount: DOCTOR_BASE + "getPaymentAmount/",
+  getChatPatients: DOCTOR_BASE + "getChatPatients/",
+  getDocUsernameSocket: DOCTOR_BASE + "getDocUsernameSocket/",
   getDoctorInfo: DOCTOR_BASE + "getDoctorInfo/",
   getDoctorByUser:DOCTOR_BASE+"getDoctorByUser/",
   viewMySlots:DOCTOR_BASE+"viewMySlots/",
   validateForDoctor:DOCTOR_BASE+"validateBookingDateDoctor/",
-
+  viewUpcomingAppointmentsDoc: DOCTOR_BASE + "viewUpcomingAppointmentsDoc",
   // Patient
   viewMyPackage: PATIENT_BASE + "viewMyPackage",
   viewSubscription: PATIENT_BASE + "viewSubscription/",
@@ -84,6 +87,8 @@ getNotifs: GUEST_BASE + "getNotifs/",
   downloadFile: PATIENT_BASE + "downloadFile/", // get file by filename
   removeHealthRecord: PATIENT_BASE + "removeHealthRecord/", // remove file by filename
   getWalletAmount: PATIENT_BASE + "getWalletAmount/",
+  getChatDoctors: PATIENT_BASE + "getChatDoctors/",
+  getPatientUsernameSocket: PATIENT_BASE + "getPatientUsernameSocket/",
 
   // Package
   packages: PACKAGE_BASE + "packages/",
@@ -102,9 +107,10 @@ getNotifs: GUEST_BASE + "getNotifs/",
   rescheduleForDoctor: APPOINTMENT_BASE+ "rescheduleForPatient/",
   getDoctorId: APPOINTMENT_BASE+ "getDoctorId/",
   rescheduleForPatient: APPOINTMENT_BASE+ "/rescheduleAppointmentPatient/",
+  getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
 
   ///cancelAppFam
-  cancellappointmentfam:APPOINTMENT_BASE+"cancelAppFam/",
+  cancellappointmentfam: APPOINTMENT_BASE + "cancelAppFam/",
   // Payment
   cardPayment: PAYEMENT_BASE + "cardPayment",
   walletPayment: PAYEMENT_BASE + "walletPayment",
@@ -116,7 +122,15 @@ getNotifs: GUEST_BASE + "getNotifs/",
   updateDosage: PRESCRIPTION_BASE + "updateDosage",
   checkForPrescription: PRESCRIPTION_BASE + "checkForPrescription",
   getPrescriptionMeds: PRESCRIPTION_BASE + "getPrescriptionMeds",
-  updateDescription: PRESCRIPTION_BASE + "updateDescription",
-  getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
   getPrescriptionAPP: PRESCRIPTION_BASE + "getPrescriptionAPP",
+  addToCart: PRESCRIPTION_BASE + "orderPrescription",
+  updateDescription: PRESCRIPTION_BASE + "updateDescription",
+
+  //Message
+  getMessages: MESSAGE_BASE + "getMessages",
+  createMessage: MESSAGE_BASE + "createMessage",
+
+  //notifications
+  getNotifications: NOTIFICATION_BASE + "getNotifications",
+  setNotificationsToSeen: NOTIFICATION_BASE + "setNotificationsToSeen",
 };

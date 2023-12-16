@@ -26,6 +26,8 @@ import {
   HStack,
   Text,
   ModalFooter,
+  InputGroup,
+  InputLeftElement,
   
   
 } from "@chakra-ui/react";
@@ -34,6 +36,7 @@ import {
   InfoOutlineIcon,
   PhoneIcon,
   WarningTwoIcon,
+  SearchIcon,
 } from "@chakra-ui/icons";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
@@ -156,11 +159,18 @@ export function PatientTable() {
             <Field name="patientName">
               {({ field }) => (
                 <FormControl>
-                  <Input
-                    {...field}
-                    type="text"
-                    placeholder="Enter Patient name"
-                  />
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      children={<SearchIcon color="teal.400" />}
+                    />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Enter Patient name"
+                      style={{ maxWidth: "300px" }}
+                    />
+                  </InputGroup>
                 </FormControl>
               )}
             </Field>

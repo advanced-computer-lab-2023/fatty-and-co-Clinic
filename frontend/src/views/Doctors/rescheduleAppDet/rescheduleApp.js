@@ -28,7 +28,7 @@ export function rescheduleApp() {
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
-
+  const history=useHistory();
   const toast = useToast();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -101,6 +101,11 @@ export function rescheduleApp() {
                 duration: 9000,
                 isClosable: true,
               });
+              const timer = setTimeout(() => {
+                const url="/doctor/viewAppointments"
+                history.replace(url)
+              //  window.location.reload();
+              }, 700); 
     
             } else {
               toast({
