@@ -1636,32 +1636,56 @@ const uploadFile = async (req, res) => {
   "EmergencyContactName":"HANA"
 } */
 const createFamilymember = async (req, res) => {
-  const  currentuser=req.user.Username;
- const  currentPatient=await patientModel.findOne({Username:currentuser});
- console.log("current patient ");
- console.log(currentPatient);
- const  {
-  Username,
-  Name,
-  Password,
-  Email,
-  MobileNum,
-  NationalId,
-  DateOfBirth,
-  Gender,
-  relation,
-  Wallet,
-} = req.body;
- 
- //taste test
-   try {
+
+  try {
+    const currentuser = req.user.Username;
+    const currentPatient = await patientModel.findOne({ Username: currentuser });
+    const {
+      Username,
+      Name,
+      Password,
+      Email,
+      MobileNum,
+      NationalId,
+      DateOfBirth,
+      Gender,
+      relation,
+      Wallet,
+    } = req.body;
+    const currentDate = new Date();
+     const dob = new Date(DateOfBirth);
+     const dob1=new Date(currentPatient.DateOfBirth);
+    const nationalExists= await patientModel.findOne({NationalId:NationalId})
+    const userExists= await userModel.findOne({Username:Username})
+    const phoneExists= await patientModel.findOne({MobileNum:MobileNum})
+    const emailExists= await userModel.findOne({Email:Email})
+    if(NationalId.length!=16){
+      res.status(404).json({error:"NationalId must be 16 digits!"})
+    }
+    else if(MobileNum.length!=11){
+      res.status(404).json({error:"Phone number must be 11 digits!"})
+    }
+    else if(phoneExists){
+      res.status(404).json({error:"This phone number already exists"})
+    }
+    else if(nationalExists){
+      res.status(404).json({error:"A user with same NationalId exists!"})
+    }
+    else if(emailExists){
+      res.status(404).json({error:"Another user with same email address exists!"})
+    }
+    else if(userExists){
+      res.status(404).json({error:"Another user with same username exists!"})
+    }
+    // Create the patient
+    else{
     const user = await systemUserModel.addEntry(
       Username,
       Password,
       Email,
       "Patient"
     );
-    console.log(user);
+
     const familyMember = await patientModel.create({
       Username: Username,
       Name: Name,
@@ -1678,48 +1702,48 @@ const createFamilymember = async (req, res) => {
       Wallet: Wallet,
     });
     
-   console.log("here is the family member ");
- 
-   const Familymemberfound=await patientModel.findOne({Username:Username});
-   console.log(Familymemberfound);
-     const currentDate = new Date();
-     const dob = new Date(DateOfBirth);
-     const dob1=new Date(currentPatient.DateOfBirth);
+    // Create the family member
+    const familyMember1 = await familyMemberModel.create(
+      {
+        Patient: currentPatient,
+        FamilyMemberUsername: Username,
+        Name: Name,
+        NationalId: NationalId,
+        Age: Math.floor(
+          Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000),
+        Gender: Gender,
+        Relation: relation,
+      }
+    );
 
-   const newFamilymember = await familyMemberModel.create({
-       Patient: currentPatient,
-       FamilyMem:Familymemberfound,
-       FamilyMemberUsername: Username,
-       Name: Name,
-       NationalId: NationalId,
-       Age: Math.floor(
-         Math.abs(currentDate.getTime() - dob.getTime()) / 31557600000
-       ),
-       Gender: Gender,
-       Relation: relation
-     });
-     const newFamilymember2 = await familyMemberModel.create({
-      Patient: Familymemberfound,
-      FamilyMem:currentPatient,
-      FamilyMemberUsername: currentPatient.Username,
-      Name: currentPatient.Name,
-      NationalId: currentPatient.NationalId,
-      Age: Math.floor(
-        Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
-      ),
-      Gender: currentPatient.Gender,
- 
-    });
-   
-      const newUnsubscribed = await subscriptionModel.create({
-        Patient: Familymemberfound,
+    // Create the inverse relationship
+    const newFamilymember2 = await familyMemberModel.create(
+      {
+        Patient: currentPatient,
+        FamilyMemberUsername: currentPatient.Username,
+        Name: currentPatient.Name,
+        NationalId: currentPatient.NationalId,
+        Age: Math.floor(
+          Math.abs(currentDate.getTime() - dob1.getTime()) / 31557600000
+        ),
+        Gender: currentPatient.Gender,
+      }
+    );
+
+    // Create the unsubscribed entry
+    const newUnsubscribed = await subscriptionModel.create(
+      {
+        Patient: currentPatient,
         Status: "Unsubscribed",
-      });
-     res.status(200).json(newFamilymember);
-   } catch (error) {
-     res.status(500).json({ error: error.message });
-   }
- };
+      }
+    );
+
+
+    res.status(200).json(familyMember);}
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 const cancelSubscriptionfamilymember = async (req, res) => {
   try {
