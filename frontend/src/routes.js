@@ -30,7 +30,7 @@ import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs"
+import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
@@ -41,7 +41,7 @@ import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
-
+import VideoCallPage from "views/Patient/VideoCallTemp";
 
 import {
   HomeIcon,
@@ -60,6 +60,13 @@ import DoctorProfile from "views/Doctors/viewProfile";
 
 // TODO: organize routes by type of user
 var dashRoutes = [
+  {
+    path: "/videoCall",
+    name: "Video Call",
+    icon: <HomeIcon color="inherit" />,
+    component: VideoCallPage,
+    layout: "/patient",
+  },
   {
     path: "/package",
     name: "Package",
@@ -237,7 +244,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -246,7 +253,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -254,7 +261,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -306,7 +313,7 @@ var dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
-    show : false
+    show: false,
   },
   {
     path: "/dashboard",
