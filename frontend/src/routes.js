@@ -335,13 +335,6 @@ var dashRoutes = [
     show: false,
   },
   {
-    path: "/dashboard",
-    name: "home page",
-    icon: <HomeIcon color="inherit" />,
-    component: DashboardDoc,
-    layout: "/doctor",
-  },
-  {
     path: "/doctorPatients",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
