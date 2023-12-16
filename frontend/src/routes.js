@@ -150,13 +150,6 @@ var dashRoutes = [
     name: "Video Call",
     icon: <HomeIcon color="inherit" />,
     component: VideoCallPage,
-    layout: "/patient",
-  },
-  {
-    path: "/videoCall",
-    name: "Video Call",
-    icon: <HomeIcon color="inherit" />,
-    component: VideoCallPage,
     layout: "/doctor",
   },
   {
