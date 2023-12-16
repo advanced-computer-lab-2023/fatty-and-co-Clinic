@@ -42,12 +42,12 @@ import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
 import DashboardDoc from "views/Dashboard/DashboardDoc/index";
+import DashboardDoc from "views/Dashboard/DashboardDoc/index";
 import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
 
-import VideoCallPage from "views/Patient/VideoCallTemp";
 import {
   HomeIcon,
   StatsIcon,
@@ -146,23 +146,16 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/doctorPatients",
-    name: "My Patients",
-    icon: <ImAddressBook />,
-    component: ViewDoctorsPatients,
-    layout: "/doctor",
-  },
-  {
-    path: "/chat",
-    name: "Chat With a Patient",
-    icon: <IoIosChatbubbles />,
-    component: ChatWithPatient,
-    layout: "/doctor",
+    path: "/videoCall",
+    name: "Video Call",
+    icon: <HomeIcon color="inherit" />,
+    component: VideoCallPage,
+    layout: "/patient",
   },
   {
     path: "/videoCall",
     name: "Video Call",
-    icon: <FaVideo />,
+    icon: <HomeIcon color="inherit" />,
     component: VideoCallPage,
     layout: "/doctor",
   },
@@ -415,7 +408,61 @@ var dashRoutes = [
     layout: "/patient",
     show: false,
   },
+  {
+    path: "/dashboard",
+    name: "home page",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardDoc,
+    layout: "/doctor",
+  },
+  {
+    path: "/doctorPatients",
+    name: "View Doctor Patients",
+    icon: <CreditIcon color="inherit" />,
+    component: ViewDoctorsPatients,
+    layout: "/doctor",
+  },
+  {
+    path: "/patientRecords",
+    name: "view patient records",
+    icon: <CreditIcon color="inherit" />,
+    component: PatientAppointmentsDoc,
+    layout: "/doctor",
+    show : false
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: <HomeIcon color="inherit" />,
+    component: Dashboard,
+    layout: "/doctor",
+  },
 
+  {
+    path: "/tables",
+    name: "Tables",
+    rtlName: "لوحة القيادة",
+    icon: <StatsIcon color="inherit" />,
+    component: Tables,
+    layout: "/admin",
+  },
+  {
+    path: "/billing",
+    name: "Billing",
+    rtlName: "لوحة القيادة",
+    icon: <CreditIcon color="inherit" />,
+    component: Billing,
+    layout: "/admin",
+  },
   {
     path: "/rtl-support-page",
     name: "RTL",
@@ -449,7 +496,14 @@ var dashRoutes = [
     layout: "/patient",
     show: false,
   },
-
+  {
+    path: "/profile",
+    name: "View doctor profile",
+    component: DoctorProfile,
+    layout: "/doctor",
+    show: false,
+  },
+  
   {
     name: "ACCOUNT PAGES",
     category: "account",

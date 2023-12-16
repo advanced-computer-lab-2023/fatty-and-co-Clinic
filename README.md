@@ -12,6 +12,7 @@ The motivation behind the Shebeen Health Clinic project is to provide a seamless
 
 - Project is in development stage
 - unit tests are needed
+- UI and UX need to be improved in several areas such as booking an appointment
   [include all missing or broken requirements here]
 
 ## Code Style
@@ -29,7 +30,13 @@ We use [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.pre
 
 ## Screenshots
 
-![App Screenshot](./screenshots/your-image-name.png)
+![App Screenshot](./screenshots/website/loginPage.jpg)
+![App Screenshot](./screenshots/website/signupPage.jpg)
+![App Screenshot](./screenshots/website/homePage.jpg)
+![App Screenshot](./screenshots/website/profilePage.jpg)
+![App Screenshot](./screenshots/website/chatPage.jpg)
+![App Screenshot](./screenshots/website/viewDoctorsPage.jpg)
+[include anything else here]
 
 ## Tech Stack
 
@@ -258,11 +265,23 @@ Refer to all the API routes in [this file](API_REFERENCE.md)
 
 ## Tests
 
-To run tests, run the following command
+To run jest tests, run the following command
 
 ```bash
   npm run test
 ```
+
+The api routes were tested using postman , Postman is an application used for API testing. It is an HTTP client that tests HTTP requests, utilizing a graphical user interface, through which we obtain different types of responses that need to be subsequently validated. Postman offers many endpoint interaction methods. The following are some of the most used, including their functions:
+
+    GET: Obtain information
+    POST: Add information
+    PUT: Replace information
+    PATCH: Update certain information
+    DELETE: Delete information
+
+And we tested the behaviour of our routes and if they produce the correct status code and response according to our project flow .
+
+Many testing routes were created to test the various API endpoints through postman. You can find these in [API_REFERENCE.md](API_REFERENCE.md)
 
 ## How To Use
 
@@ -385,6 +404,10 @@ Enhancement suggestions are tracked as GitHub issues. Create an issue on the rep
 - [React Documentation](https://react.dev/)
 - [Chakra UI Documentation](https://chakra-ui.com/docs/)
 - [Template Documentation](https://demos.creative-tim.com/docs-purity-ui-dashboard/docs/)
+- [MERN stack authentication + profile](https://www.youtube.com/playlist?list=PLr_bWRQ_9ePVfQwf0LorPwTlOZSBoPGIu)
+- [Search Bar in React Tutorial - Cool Search Filter Tutorial](https://www.youtube.com/watch?v=x7niho285qs&list=PLs8AFNosNo41M5IvL5TdewlCzyOUrhDc1&index=16&t=1337s)
+- [React: Add/Remove Input Fields Dynamically on button click](https://youtu.be/XtS14dXwvwE?list=PLs8AFNosNo41M5IvL5TdewlCzyOUrhDc1)
+- [MERN Auth Tutorial](https://www.youtube.com/playlist?list=PL4cUxeGkcC9g8OhpOZxNdhXggFz2lOuCT)
 - (add youtube videos and any guides used)
 
 ## Authors
