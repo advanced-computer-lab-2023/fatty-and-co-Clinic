@@ -31,38 +31,6 @@ const {
   generatePassword,
   generateGender,
 } = require("../common/utils/generators");
-//hi Kholoud
-
-// const createPatient = async (req, res) => {
-//   const {
-//     Username,
-//     Name,
-//     Password,
-//     Email,
-//     MobileNum,
-//     DateOfBirth,
-//     Gender,
-//     EmergencyContactNumber,
-//     EmergencyContactName
-//   } = req.body;
-//   try {
-//     const user = await userModel.addEntry(Username, Password, Email, "Patient");
-//     const patient = await patientModel.create({
-//       Username: Username,
-//       Name: Name,
-//       MobileNum: MobileNum,
-//       DateOfBirth: DateOfBirth,
-//       Gender: Gender,
-//       EmergencyContact: {
-//         FullName: EmergencyContactName,
-//         PhoneNumber: EmergencyContactNumber,
-//       },
-//     });
-//     res.status(200).send({ patient, user });
-//   } catch (error) {
-//     res.status(400).send({ message: error.message });
-//   }
-// };
 
 const getAllPatients = async (req, res) => {
   try {
@@ -186,10 +154,6 @@ const updatePatient = async (req, res) => {
 const session_index = async (req, res) => {
   const { Name, Speciality } = req.query;
 
-  // if (!mongoose.Types.ObjectId.isValid(id)) {
-  //   return res.status(404).json({ error: "Invalid ID" });
-  // }
-
   try {
     const query = {
       ...(Name ? { Name: { $regex: Name.trim(), $options: "i" } } : {}),
@@ -290,11 +254,10 @@ const viewHealthFam = async (req, res) => {
       })
     );
     res.status(200).json(package);
-  } catch {
-    res.json(404).json({ error: "No family members are subscribed" });
+  } catch (error){
+    res.json(400).json({ error: "No family members are subscribed" });
   }
 };
-
 const viewOptionPackages = async (req, res) => {
   try {
     const packages = await packageModel.find({});
@@ -384,9 +347,7 @@ const payForSubscription = async (req, res) => {
     const day5 = String(renewCheck.getDate()).padStart(2, "0");
     const formattedDate5 = `${year5}-${month5}-${day5}`; // renewal Date el gdeda
     const amount = Package.Price - Package.Price * (max / 100);
-    //  console.log(patSubscription.Status==="Unsubscribed"||patSubscription.Status==="Cancelled");
-    //  console.log(patSubscription.Status==="Subscribed" && formattedDate===formattedDate4 && patSubscription.Package.Name
-    //  ===Package.Name)
+
     if (
       patSubscription.Status === "Unsubscribed" ||
       patSubscription.Status === "Cancelled"
@@ -1087,7 +1048,7 @@ const viewHealthFamwithstatus = async (req, res) => {
     const username = req.user.Username;
     const Patient = await patientModel.findOne({ Username: username });
     const famMems = await familyMemberModel
-      .find({ $and: [{ Patient: Patient }, { FamilyMem: { $ne: Patient } }] })
+      .find({ $and: [{ FamilyMem: Patient }, { Patient: { $ne: Patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
 
@@ -1128,85 +1089,8 @@ const viewHealthFamwithstatus = async (req, res) => {
 };
 //hi khalkhoola
 
-// const createFamilymember = async (req, res) => {
-//   /*   const { Id, Relation } = req.body;
-//   var familyMember = null;
-//   if (!isNaN(parseFloat(Id))) {
-//     familyMember = await patientModel.findOne({ MobileNum: Id });
-//   } else {
-//     const familyMemberUser = await userModel.findOne({ Email: Id });*/
-//   const { Email,MobileNum, Name, NationalId, Age, Gender, Relation } =
-//     req.body;
-//   const Createparameter = req.user.Username;
-//   const familymember=null;
 
-//   // Check if the national ID is not 16.
-//   if (NationalId.length !== 16) {
-//     // Return an error message.
-//     res.status(400).json({ error: "The national ID must be 16 digits long." });
-//     return;
-//   }
-//   // check if age are only 2 digitd
-//   if (Age.length === 0 || Age.length > 2 || Age == 0) {
-//     // Return an error message.
-//     res.status(400).json({ error: "The age must be 1 or 2 digits" });
-//     return;
-//   }
-//   try {
-//     // const findPatientRel = await patientModel.findOne({
-//     //   Username: FamilyMemberUsername,
-//     // });
-//     if (Email){
-//     familymember = await patientModel.findOne({
-//       Email: Email
-//     });
-//       if (familymember==null)
-//          res.status(404).send({ error: "No patient with such an email !" });
-//     }
-//  else if (MobileNum){
-//    familymember = await patientModel.findOne({
-//       MobileNum: MobileNum
-//     });
-//     if (familymember==null)
-//     res.status(404).send({ error: "No patient with such a number  !" });
-//   }
-//   else {
-//    familymember=null;
-//   }
-//     const findPatientMain = await patientModel.findOne({
-//       Username: Createparameter,
-//     });
-//     /*  Username: username,
-//       Name: name,
-//       MobileNum: mobileNum,
-//       NationalId: nationalId,
-//       Gender: gender,
-//       EmergencyContact: emergencyContact,
-//       DateOfBirth: dateOfBirth,
-//       PackageName: packageName, */
-//   // we want to make sure if a family member can be linked to more that one patient
-//     const newFamilymember = await familyMemberModel.create({
-//       Patient: findPatientMain,
-//       FamilyMem:familymember,
-//      // FamilyMemberUsername:familymember.username,
-//       Name: Name,
-//       NationalId: NationalId,
-//       Age: Age,
-//       Gender: Gender,
-//       Relation: Relation,
-//     });
 
-//     //test de tany
-//     if (familymember == null) {
-//       await subscriptionModel.addEntry1(newFamilymember);
-//       res.status(200).json(newFamilymember);
-//     } else {
-//       res.status(200).json(newFamilymember);
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const updateFamCredit = async (req, res) => {
   try {
@@ -1215,7 +1099,7 @@ const updateFamCredit = async (req, res) => {
     const Package = await packageModel.findOne({ Name: PackageName });
     const patient = await patientModel.findOne({ Username: curr_user });
     const relative = await familyMemberModel
-      .findOne({ Patient: patient, NationalIdFam: NationalId })
+      .findOne({ Patient: patient, NationalId: NationalId })
       .populate("Patient")
       .populate("FamilyMem");
     const subscription = await subscriptionModel
@@ -1338,7 +1222,7 @@ const getFamilymembers = async (req, res) => {
     const Username = req.user.Username;
     const patient = await patientModel.findOne({ Username: Username }); //changed this
     const fam = await familyMemberModel
-      .find({ $or: [{ Patient: patient }, { FamilyMem: patient }] })
+      .find({  $and: [{ FamilyMem: patient }, { patient: { $ne: patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
     res.status(200).send(fam);
@@ -1346,7 +1230,6 @@ const getFamilymembers = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
-
 const selectPatient = async (req, res) => {
   const id = req.query.id;
 
@@ -1600,48 +1483,7 @@ const uploadFile = async (req, res) => {
     .status(200)
     .send({ file: req.file, message: "File uploaded successfully" });
 };
-/*const createPatient = async (req, res) => {
-  const {
-    Username,
-    Name,
-    Password,
-    Email,
-    MobileNum,
-    NationalId,
-    DateOfBirth,
-    Gender,
-    EmergencyContactNumber,
-    EmergencyContactName,
-    Wallet,
-  } = req.body;
-  try {
-    const user = await systemUserModel.addEntry(
-      Username,
-      Password,
-      Email,
-      "Patient"
-    );
-    const patient = await patientModel.create({
-      Username: Username,
-      Name: Name,
-      MobileNum: MobileNum,
-      NationalId: NationalId,
-      DateOfBirth: DateOfBirth,
-      Gender: Gender,
-      EmergencyContact: {
-        FullName: EmergencyContactName,
-        PhoneNumber: EmergencyContactNumber,
-      },
-      LinkedPatients: [],
-      Wallet: Wallet,
-    });
-    await subscriptionModel.addEntry(patient, "Unsubscribed");
-    res.status(200).send({ patient, user });
-  } catch (error) {
-    res.status(400).send({ message: error.message });
-  }
-};
- */
+
 const createFamilymember = async (req, res) => {
   const  currentuser=req.user.Username;
  const  currentPatient=await patientModel.findOne({Username:currentuser});
@@ -1662,7 +1504,7 @@ const createFamilymember = async (req, res) => {
 
  //taste test
    try {
-    console.log(await patientModel.findOne({Username: Username}));
+  //  console.log(await patientModel.findOne({Username: currentuser}));
      if (NationalId.length !== 16) {
     // Return an error message.
     res.status(400).json({ error: "The national ID must be 16 digits long." });
@@ -1744,10 +1586,11 @@ console.log(user);
        Relation: relation
      });
    // new one as apatient
+   console.log("Here");
    console.log("Nationalid",currentPatient.NationalId);
      const newFamilymember2 = await familyMemberModel.create({
        Patient: currentPatient,
-     FamilyMem:Familymemberaddedtopatient,
+       FamilyMem:Familymemberaddedtopatient,
        FamilyMemberUsername: currentPatient.Username,
        Name: currentPatient.Name,
        NationalIdFam:currentPatient.NationalId,
@@ -1763,6 +1606,7 @@ console.log(user);
         Patient: Familymemberaddedtopatient,
         Status: "Unsubscribed",
       });
+  console.log(newFamilymember2);
      res.status(200).json(newFamilymember2);
    } catch (error) {
      res.status(500).json({ error: error.message });
@@ -1828,22 +1672,83 @@ const viewUpcomingAppointmentsPat = async (req, res) => {
 };
 
 const viewfamilymembersappointments = async (req, res) => {
-  const username = req.user.Username;
-  const { Status } = req.body;
-  try {
-    const appointments = await appointmentModel.find({
-      PatientUsername: { $ne: username }, // Filter for PatientUsername not equal to username
-      Status: Status, // Assuming 'Status' field is for filtering upcoming appointments
-      BookedBy: username, // Filter for appointments booked by the current user
-    });
+  const PatientUser = req.user.Username;
+  console.log("Here",PatientUser);
+  const query = req.query;
+  const Status = query.Status;
+  const dateValue = new Date(query.Date);
+  const newDate = dateValue.addDays(1);
+console.log(PatientUser);
 
-    if (appointments.length === 0) {
-      return res.status(404).json({ message: "No appointments found." });
-    }
+  const hasDate = isNaN(dateValue) ? "n" : "y";
 
+  // Check if the 'id' parameter is a valid MongoDB ObjectID
+  if (!await appointmentModel.findOne({ PatientUsername: PatientUser })) {
+    res.status(404).json({ error: "Invalid Username" });
+    return;
+  }
+
+  const appointments =
+    Status != "Rescheduled" &&
+    Status != "Completed" &&
+    Status != "Cancelled" &&
+    Status != "Upcoming" &&
+    hasDate == "n"
+      ? await appointmentModel.find(  {
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser // Filter for appointments booked by the current user
+      })
+      : (Status == "Rescheduled" ||
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
+        hasDate == "y" &&
+        dateValue.getUTCHours() === 0
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : (Status == "Rescheduled" ||
+          Status == "Completed" ||
+          Status == "Cancelled" ||
+          Status == "Upcoming") &&
+        hasDate == "n"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+        })
+      : Status == "Rescheduled" ||
+        Status == "Completed" ||
+        Status == "Cancelled" ||
+        Status == "Upcoming"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Status: Status,
+        })
+      : hasDate == "y" && dateValue.getUTCHours() == 0
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Date: { $lt: newDate, $gte: dateValue },
+        })
+      : hasDate == "y"
+      ? await appointmentModel.find({
+        PatientUsername: { $ne: PatientUser }, // Filter for PatientUsername not equal to username
+        BookedBy: PatientUser ,
+          Date: dateValue,
+        })
+      : "Bad request";
+
+  // Return a 200 success response with a JSON object that contains the 'mySessions' array
+  console.log("length",appointments.length);
+  if (appointments == "bad requests") {
+    res.status(404).json("No Appointments Found");
+  } else {
     res.status(200).json(appointments);
-  } catch (error) {
-    res.status(500).json(error);
   }
 };
 

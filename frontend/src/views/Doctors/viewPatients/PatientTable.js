@@ -28,6 +28,8 @@ import {
   ModalFooter,
   InputGroup,
   InputLeftElement,
+  
+  
 } from "@chakra-ui/react";
 import {
   DownloadIcon,
@@ -50,7 +52,7 @@ export function PatientTable() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
-  const [healthRecords, setHealthRecords] = useState([]);
+  const [healthRecords, setHealthRecords] = useState(null);
   const history = useHistory();
 
   const [filters, setFilters] = useState({
@@ -112,15 +114,30 @@ export function PatientTable() {
     } catch (error) {
       console.error("Error fetching info and health records:", error);
     }
+    const fetchHealthRecords = async () => {
+      const response = await fetch(
+        API_PATHS.getMedicalHistory + patientUsername,
+        {
+          headers: {
+            Authorization: Authorization,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setHealthRecords(data.MedicalHistory);
+        // dispatch({ type: "SET_PACKAGES", payload: data });
+      } else {
+        console.log(data);
+      }
+    };
+    fetchHealthRecords();
   };
 
-
-  const handleViewRecords = async () => {
-   
-    const redirectUrl = `/doctor/patientRecords/?username=${selectedPatient.Username}&name=${selectedPatient.Name}`;
-    history.replace(redirectUrl);
-    
-  };
+      const handleViewRecords = async () => {
+          const redirectUrl = `/doctor/patientRecords/?name=${selectedPatient.Username}`;
+          history.replace(redirectUrl);
+      };
 
   const closeInfoModal = () => {
     setSelectedPatientViewInfo(null);
@@ -270,7 +287,7 @@ export function PatientTable() {
             </ModalBody>
             <ModalFooter>
               <Button onClick={handleViewRecords}>
-                View appointments and Health records.
+                View Information and Health records.
               </Button>
             </ModalFooter>
           </ModalContent>

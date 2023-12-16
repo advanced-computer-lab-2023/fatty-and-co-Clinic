@@ -107,7 +107,7 @@ export const API_PATHS = {
   // Appointment
   viewAppointments: APPOINTMENT_BASE + "/getAppointmentsDoc/",
   viewAppointPat: APPOINTMENT_BASE + "getAppointmentsPat/",
-  viewFamAppoint: APPOINTMENT_BASE + "getAppointmentsfamilymembers/",
+  viewFamAppoint:PATIENT_BASE+"viewfamilymembersappointments/",
   viewDoctorPatients: APPOINTMENT_BASE + "searchpatient/",
   viewUpcomingAppointments: APPOINTMENT_BASE + "upcoming/",
   createAppointment: APPOINTMENT_BASE + "createAppointment",
@@ -116,6 +116,7 @@ export const API_PATHS = {
   getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
   getDoctorId: APPOINTMENT_BASE+ "getDoctorId/",
   rescheduleForPatient: APPOINTMENT_BASE+ "/rescheduleAppointmentPatient/",
+  getAllAppointmentsPat: APPOINTMENT_BASE + "getAllAppointmentsPat",
 
   ///cancelAppFam
   cancellappointmentfam: APPOINTMENT_BASE + "cancelAppFam/",

@@ -838,7 +838,7 @@ const cancelAppForFam = async (req, res) => {
      subject: "New Appointment",
      text: `Cancelled appointment with ${patient1.Name} that was scheduled on ${Date(upcomingApp.Date).toLocaleDateString("en-GB")}`,
    });
-     res.status(200).json(`Appointment cancelled and an amount of ${refund} refund restored successfully!`)
+     res.status(200).json({success:`Appointment cancelled and an amount of ${refund} refund restored successfully!`})
   }
     
   } catch (error) {

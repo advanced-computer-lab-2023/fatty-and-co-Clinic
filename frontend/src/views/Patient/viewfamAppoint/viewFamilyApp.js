@@ -29,6 +29,7 @@ export function ViewFamilyApp() {
     { label: "Completed", value: "Completed" },
     { label: "Rescheduled", value: "Rescheduled" },
   ];
+  console.log("API",API_PATHS.viewFamAppoint);
   const history = useHistory();
   useEffect(() => {
     const url = API_PATHS.viewFamAppoint;

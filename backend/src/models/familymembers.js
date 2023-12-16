@@ -20,7 +20,8 @@ const familyMemberSchema = new Schema(
     },
     NationalIdFam: {
       type: String,
-      required: true,  
+      required: true,
+ 
 
     },
     Age: {
