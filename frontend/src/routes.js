@@ -41,6 +41,7 @@ import bookAptDetails from "views/Patient/bookAptDetails/bookAptDetails";
 import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
+import DashboardDoc from "views/Dashboard/DashboardDoc/index"
 
 
 import {
@@ -237,7 +238,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -246,7 +247,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -254,7 +255,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -294,6 +295,13 @@ var dashRoutes = [
     show: false,
   },
   {
+    path: "/dashboard",
+    name: "home page",
+    icon: <HomeIcon color="inherit" />,
+    component: DashboardDoc,
+    layout: "/doctor",
+  },
+  {
     path: "/doctorPatients",
     name: "View Doctor Patients",
     icon: <CreditIcon color="inherit" />,
@@ -306,7 +314,7 @@ var dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
-    show : false
+    show: false,
   },
   {
     path: "/dashboard",
@@ -316,14 +324,14 @@ var dashRoutes = [
     component: Dashboard,
     layout: "/admin",
   },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
-    layout: "/doctor",
-  },
+  // {
+  //   path: "/dashboard",
+  //   name: "Dashboard",
+  //   rtlName: "لوحة القيادة",
+  //   icon: <HomeIcon color="inherit" />,
+  //   component: Dashboard,
+  //   layout: "/doctor",
+  // },
 
   {
     path: "/tables",
