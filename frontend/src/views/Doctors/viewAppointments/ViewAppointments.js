@@ -36,7 +36,6 @@ export default function ViewAppointmentsInner() {
       .then((response) => {
         // setData(response.data);
         dispatch({ type: "SET_APPOINTMENTS", payload: response.data });
-        
       })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));

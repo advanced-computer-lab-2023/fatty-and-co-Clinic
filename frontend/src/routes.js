@@ -29,6 +29,7 @@ import Requests from "views/Admin/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
+import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs"
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
@@ -208,7 +209,7 @@ var dashRoutes = [
   },
 
   {
-    path: "/createFamilymember/:Createparameter",
+    path: "/createFamilymember/",
     name: "Add Family Member",
     icon: <PersonIcon color="inherit" />,
     component: createFamilymember,
@@ -245,7 +246,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -254,7 +255,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -262,9 +263,8 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-    show: false, // Add this to hide route from sidebar
+   show: false, // Add this to hide route from sidebar
   },
-  
 
   {
     path: "/viewDoctors",
@@ -300,7 +300,7 @@ var dashRoutes = [
     icon: <PersonIcon color="inherit" />,
     component: linkPatient,
     layout: "/patient",
-    show: false
+    show: false,
   },
   {
     path: "/doctorPatients",
@@ -308,6 +308,14 @@ var dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,
     layout: "/doctor",
+  },
+  {
+    path: "/patientRecords",
+    name: "view patient records",
+    icon: <CreditIcon color="inherit" />,
+    component: PatientAppointmentsDoc,
+    layout: "/doctor",
+    show : false
   },
   {
     path: "/dashboard",

@@ -65,4 +65,5 @@ const FamPackagestatusTable = ({ title, captions, data }) => {
   );
 };
 
+
 export default FamPackagestatusTable ;

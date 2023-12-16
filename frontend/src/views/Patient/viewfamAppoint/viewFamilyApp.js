@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Button, Box, Input, Select,useToast,Text } from "@chakra-ui/react";
+import { Flex, Button, Box, Input, Select,useToast , Text,useColorModeValue} from "@chakra-ui/react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
-import PatientAppTable from "./components/PatientAppTable";
+import FamAppTable from "./components/FamAppTable";
 import { useAuthContext } from "hooks/useAuthContext";
-
-export function ViewPatientAppointments() {
+// window . location . reload 
+export function ViewFamilyApp() {
+  const [DoctorUsername, setDoctorUsername] = useState("");
   const [data, setData] = useState([{}]);
   const [searchParams, setSearchParams] = useState({
     Status: "",
@@ -27,7 +28,7 @@ export function ViewPatientAppointments() {
   ];
 
   useEffect(() => {
-    const url = API_PATHS.viewAppointPat;
+    const url = API_PATHS.viewFamAppoint;
     setIsLoading(true);
     axios
       .get(url, { params: searchParams, headers: { Authorization } })
@@ -44,21 +45,21 @@ export function ViewPatientAppointments() {
 
  
 
-  const handleCancelAppointment = async (DoctorUsername) => {
+  const handleCancelAppointment = async (DoctorUsername,PatientUsername) => {
    // e.preventDefault();
    //console.log("DoctorUsername:", DoctorUsername);
    setDoctorUsername(DoctorUsername);
 
     try {
    
-      const response = await fetch(API_PATHS.cancellappointment, {
+      const response = await fetch(API_PATHS.cancellappointmentfam, {
         method: "PATCH",
         headers: {
           Authorization,
           "Content-Type": "application/json",
         },
     
-        body: JSON.stringify({doctorUsername:DoctorUsername})
+        body: JSON.stringify({doctorUsername:DoctorUsername,patientUsername:PatientUsername})
       // body: JSON.stringify({Package2}),
       });
   
@@ -113,7 +114,7 @@ export function ViewPatientAppointments() {
   const handleDateSearchValueChange = (event) => {
     setDateSearchValue(event.target.value);
   };
-
+  const textColor = useColorModeValue("gray.700", "white");
   return (
     <Box pt="80px">
       <Flex
@@ -122,18 +123,20 @@ export function ViewPatientAppointments() {
         pt="50px"
         justifyContent="flex-start"
       >
-        <Flex direction="row" alignItems="flex-start">    <Text
+    
+        <Flex direction="row" alignItems="flex-start">
+              <Text
                 fontSize="lg"
-                color="black"
+                color={textColor}
                 fontWeight="bold"
                 pb=".2rem"
                 marginLeft={8}
-              
               >
                 Appointments
               </Text>
-
+         
           <Select
+               w="150%" h="10" 
             bg="white"
             marginLeft={10}
             onChange={(e) => {
@@ -148,42 +151,40 @@ export function ViewPatientAppointments() {
             ))}
           </Select>
           <Input
+               w="100%" h="10" 
             bg="white"
             type="date"
-            placeholder="Filter by Date"
             marginLeft={10}
+            placeholder="Filter by Date"
             onChange={handleDateSearchValueChange}
           />
+      
           <Button
-            colorScheme="teal"
-            borderColor="teal.300"
-            color="teal.300"
-            fontSize="xs"
-            p="8px 32px"
-           textColor="white"
-
+          //  marginLeft="10"
+          w="100%" h="10" 
+            p="15px 40px"
+           textColor="black"
            onClick={handleSearchButtonClick} marginLeft={10}>
             Search
           </Button>
 
           <Button
-           colorScheme="teal"
-            borderColor="teal.500"
-            color="teal.500"
-            fontSize="xs"
-            p="8px 32px"
-           textColor="white"
+          //  marginLeft="10"
+          w="100%" h="10" 
+          p="15px 40px"
+         textColor="black"
            onClick={handleClrButtonClick} marginLeft={10}>
             Clear
           </Button>
         </Flex>
 
         {/* {(PatientUsername && PatientUsername !== ":PatientUsername" && ( */}
-        <PatientAppTable
-          // title={"Your Appointments"}
-          captions={["Doctor Name", "Status", "Type", "Date", "Time","Cancell"]}
+        <FamAppTable
+        //  title={"Available Appointments"}
+          captions={["Doctor Name","Patient Name", "Status", "Type", "Date", "Time"]}
           data={data}
           isLoading={isLoading}
+          handleCancelAppointment={handleCancelAppointment}
         />
         {/* )) || (
                 <Text fontSize="3xl" fontWeight="bold">

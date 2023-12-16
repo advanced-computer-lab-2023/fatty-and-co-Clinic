@@ -1,20 +1,28 @@
-const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const notificationSchema = new mongoose.Schema({
+const notificationSchema = new Schema(
+  {
+    Title: {
+      type: String,
+      required: true,
+    },
+    Message: {
+      type: String,
+      required: true,
+    },
+    Username: {
+      type: String,
+      required: true,
+    },
+    Clicked: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
 
-  receiverUsername:{
-    type: String,
-  },
-  senderUsername:{
-    type: String,
-  },
-  seen: {
-    type: Boolean,
-  }
-  },
-  {timestamps: true});
-  
-  const Notification = mongoose.model('Notification', notificationSchema);
-  module.exports = Notification;
+const Notification = mongoose.model("Notification", notificationSchema);
+module.exports = Notification;

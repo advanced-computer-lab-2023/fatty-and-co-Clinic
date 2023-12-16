@@ -9,10 +9,12 @@ const doctorModel = require("../models/doctors");
 const appointmentModel = require("../models/appointments");
 const Patient = require("../models/patients");
 const prescriptionModel = require("../models/prescriptions");
+const requestModel = require("../models/appointmentrequests");
 const { isNull } = require("util");
 const { getPatients } = require("./testController");
 const User = require("../models/systemusers");
 const notificationModel = require("../models/notifications");
+
 const {
   findFiles,
   findFileByFilename,
@@ -31,6 +33,7 @@ const {
 
 } = require("../common/utils/generators");
 //hi Kholoud
+
 // const createPatient = async (req, res) => {
 //   const {
 //     Username,
@@ -1070,7 +1073,7 @@ const viewHealthFamwithstatus = async (req, res) => {
     const username = req.user.Username;
     const Patient = await patientModel.findOne({ Username: username });
     const famMems = await familyMemberModel
-      .find({ $or: [{ Patient: Patient }, { FamilyMem: Patient }] })
+      .find({  $and: [{ Patient: Patient }, { FamilyMem: { $ne: Patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
 
@@ -1252,7 +1255,6 @@ const updateFamCredit = async (req, res) => {
       const year12 = enddate2.getFullYear() + 1;
       const month12 = String(enddate2.getMonth() + 1).padStart(2, "0"); // Months are zero-based
       const day12 = String(enddate2.getDate()).padStart(2, "0");
-
       const formattedDate12 = `${year12}-${month12}-${day12}`;
       const max =
         patSubscription.Package != null &&
@@ -1354,7 +1356,7 @@ const selectPatient = async (req, res) => {
 };
 
 // Get prescriptions of a given patient. Can also be filtered
-// using `DoctorUsername` or `Date` or `Status`.
+// using DoctorUsername or Date or Status.
 const getPrescriptions = async (req, res) => {
   const query = req.body;
   // console.log(query);
@@ -1791,7 +1793,117 @@ Date.prototype.addDays = function (days) {
   date.setDate(date.getDate() + days);
   return date;
 };
+//followup issue for future ref
+// const followupAppointment = async (req, res) => {
 
+//   try {
+//     const doctorUsername = req.query.DoctorUsername;
+//     const familyMemberUsername = req.body.FamilyMemberUsername;
+//     const patientUsername = req.user.Username;
+//     const date = new Date(req.query.date);
+//     const today = new Date();
+//     const doctor = await doctorModel.findOne({
+//       Username: doctorUsername,
+//     });
+
+//     if (date < today) {
+//       res.status(400).json({ error: "invalid date" });
+//       return;
+//     } else {
+//       if(familyMemberUsername){
+//         const patient = await patientModel.findOne({
+//           Username: familyMemberUsername,
+//         });
+//         const request = await requestModel.create({
+//           DoctorUsername: doctorUsername,
+//           DoctorName: doctor.Name,
+//           PatientUsername: patientUsername,
+//           PatientName: patient.Name,
+//           Status: "Pending",
+//           FollowUp: true,
+//           Date: date,
+//         });
+//         res.status(200).json(request);
+
+//       }
+//       else {
+//         const patient = await patientModel.findOne({
+//           Username: patientUsername,
+//         });
+//         const request = await requestModel.create({
+//         DoctorUsername: doctorUsername,
+//         DoctorName: doctor.Name,
+//         PatientUsername: patientUsername,
+//         PatientName: patient.Name,
+//         Status: "Pending",
+//         FollowUp: true,
+//         Date: date,
+//       });
+//       res.status(200).json(request);
+
+//       }
+      
+//     }
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
+
+
+const followupAppointment = async (req, res) => {
+
+  try {
+    const doctorUsername = req.query.DoctorUsername;
+    const familyMemberUsername = req.body.FamilyMemberUsername;
+    const patientUsername = req.user.Username;
+    const date = new Date(req.query.date);
+    const today = new Date();
+    const doctor = await doctorModel.findOne({
+      Username: doctorUsername,
+    });
+
+    if (date < today) {
+      res.status(400).json({ error: "invalid date" });
+      return;
+    } else {
+      if(familyMemberUsername){
+        const patient = await patientModel.findOne({
+          Username: familyMemberUsername,
+        });
+        const request = await requestModel.create({
+          DoctorUsername: doctorUsername,
+          DoctorName: doctor.Name,
+          PatientUsername: patientUsername,
+          PatientName: patient.Name,
+          Status: "Pending",
+          FollowUp: true,
+          Date: date,
+        });
+        res.status(200).json(request);
+
+      }
+      else {
+        const patient = await patientModel.findOne({
+          Username: patientUsername,
+        });
+        const request = await requestModel.create({
+        DoctorUsername: doctorUsername,
+        DoctorName: doctor.Name,
+        PatientUsername: patientUsername,
+        PatientName: patient.Name,
+        Status: "Pending",
+        FollowUp: true,
+        Date: date,
+      });
+      res.status(200).json(request);
+
+      }
+      
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 const getFamSessionCost = async (req, res) => {
   const username = req.user.Username;
   const famName = req.query.FamName;
@@ -1948,6 +2060,7 @@ module.exports = {
   viewUpcomingAppointmentsPat,
   viewPastAppoitmentsPat,
   getWalletAmount,
+  followupAppointment,
   getChatDoctors,
   getPatientUsernameSocket,
 };
