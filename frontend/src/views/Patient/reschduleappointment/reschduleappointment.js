@@ -28,7 +28,7 @@ export function reschduleappointment () {
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
-  console.log(Authorization);
+
 
   const toast = useToast();
 
@@ -160,7 +160,7 @@ const dateConfirmHandler = async() => {
   };
   
 //   const checkOutHandler = () => {
-//     let newUrl = `../AppointmentConfirmation`;
+//     let newUrl = ../AppointmentConfirmation;
 //     let newState = {
 //       DoctorId: DoctorId,
 //       Date: DateFinal,
