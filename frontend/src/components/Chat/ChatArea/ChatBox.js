@@ -1,13 +1,24 @@
 import React from "react";
-import { Avatar, Box, Text, Input, Button, Flex } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Text,
+  Input,
+  Button,
+  Flex,
+  IconButton,
+  Icon,
+} from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
 import Message from "./Message";
 import { useEffect, useState } from "react";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-
+import { FaVideo } from "react-icons/fa";
+import VideoCallComponent from "./VideoCallComponent";
 import socketIOClient from "socket.io-client";
+import { SettingsIcon } from "@chakra-ui/icons";
 
 const ENDPOINT = "http://localhost:8000";
 const socket = socketIOClient(ENDPOINT);
@@ -18,6 +29,7 @@ console.log(socket);
 //TODO:
 //TODO: SEND THE NEW MESSAGE LOGIC (SETSTATE AND USESTATE TO THE INDEX FILE)
 const ChatBox = ({ messages: initialMessages, receiver }) => {
+  const [isVideoCall, setIsVideoCall] = useState(false);
   const [messages, setMessages] = useState(initialMessages); // [ { sender: "user1", content: "Hello", timestamp: "2021-05-01T12:00:00.000Z", isCurrentUser: true }, ...
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
@@ -29,6 +41,15 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
   const toast = useToast();
 
   const [currentUsername, setCurrentUsername] = useState("");
+
+  const [roomName, setRoomName] = useState("roomName"); // Replace with your room name
+
+  const bottomChatRef = React.useRef(null);
+  React.useEffect(() => {
+    if (bottomChatRef.current) {
+      bottomChatRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   console.log(user);
 
@@ -226,6 +247,54 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
   console.log("receiverhello");
   console.log(receiver);
 
+  const handleStartVideoCall = async () => {
+    try {
+      // Send a message to the doctor
+      const callMessage = "I have started a video call. Please join.";
+      socket.emit("sendMessage", {
+        sendUsername: currentUsername,
+        recUsername: receiver.Username,
+        text: callMessage,
+      });
+      const response = await axios.post(
+        API_PATHS.createMessage,
+        { Receiver: receiver.Username, text: callMessage },
+        { headers: { Authorization } }
+      );
+      setMessages((messages) => [...messages, response.data]);
+
+      // Start the video call
+      setIsVideoCall(true);
+    } catch (error) {
+      toast({
+        title: "Error starting video call",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+      console.error("Error starting video call:", error);
+    }
+  };
+
+  const generateRoomName = () => {
+    let patientName = "";
+    let doctorName = "";
+    if (user.userType === "Patient") {
+      patientName = currentUsername;
+      doctorName = receiver.Username;
+    } else if (user.userType === "Doctor") {
+      patientName = receiver.Username;
+      doctorName = currentUsername;
+    }
+    const roomName = `${patientName}-${doctorName}`;
+    setRoomName(roomName);
+  };
+
+  useEffect(() => {
+    generateRoomName();
+  }, []);
+
   return (
     <Flex
       direction="column"
@@ -238,29 +307,49 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
       h="600px"
       justifyContent="space-between"
     >
-      <Box>
-        {messages.length > 0 &&
-          messages.map((message, index) => (
-            <Message key={index} message={message} />
-          ))}
-      </Box>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSendMessage();
-        }}
-      >
-        <Flex mt={4}>
-          <Input
-            placeholder="Type your message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          <Button type="submit" colorScheme="teal">
-            Send
-          </Button>
-        </Flex>
-      </form>
+      {isVideoCall ? (
+        <VideoCallComponent
+          roomName={roomName}
+          setIsVideoCall={setIsVideoCall}
+        ></VideoCallComponent>
+      ) : (
+        <>
+          <Flex direction="column" overflowY="auto" maxHeight="400px">
+            <Box>
+              {messages.length > 0 &&
+                messages.map((message, index) => (
+                  <Message key={index} message={message} />
+                ))}
+              <div ref={bottomChatRef} style={{ height: "0px" }} />
+            </Box>
+          </Flex>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSendMessage();
+            }}
+          >
+            <Flex mt={4} position="sticky">
+              <IconButton
+                aria-label="Video Call"
+                icon={<Icon as={FaVideo} />}
+                onClick={handleStartVideoCall}
+                colorScheme="teal"
+                mr={2}
+              ></IconButton>
+              <Input
+                placeholder="Type your message..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                mr={2}
+              />
+              <Button type="submit" colorScheme="teal">
+                Send
+              </Button>
+            </Flex>
+          </form>
+        </>
+      )}
     </Flex>
   );
 };
