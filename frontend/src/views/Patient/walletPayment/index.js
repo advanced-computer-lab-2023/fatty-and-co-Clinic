@@ -203,6 +203,8 @@ const WalletPayment = ({ amount, doctorId, patientUsername, date }) => {
       console.error("Error processing wallet payment:", error);
       // Handle errors such as network issues, server errors, etc.
     }
+    history.push('./viewAppointPat');
+
   };
 
   return (

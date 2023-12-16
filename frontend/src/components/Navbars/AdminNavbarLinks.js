@@ -19,7 +19,7 @@ import {
   extendTheme,
   Divider,
 } from "@chakra-ui/react";
-import { BsBoxArrowRight } from "react-icons/bs";
+import { BsBoxArrowRight, BsWallet2, BsBellFill } from "react-icons/bs";
 import { Icon } from "@chakra-ui/icon";
 import { MdAttachMoney } from "react-icons/md";
 // Assets
@@ -60,7 +60,27 @@ export default function HeaderLinks(props) {
   const { Wallet, dispatch } = useWalletContext();
   const { notifications, Dispatch } = useNotificationsContext();
   // const [Wallet, setWallet] = useState(null);
-  
+  const handleClick = async (row) => {
+      try {
+        // console.log(row);
+        // console.log(row.Message);
+        // console.log(row.Title);
+        // console.log("here");
+        const notif = await axios.patch(API_PATHS.viewNotif ,{Message: row.Message, Title: row.Title} , {
+          headers: { Authorization },
+        });
+        console.log(notif.data);
+        //Dispatch({ type: "UPDATE_NOTIFICATION", payload: notif.data });
+      } catch (error) {
+        console.error("Error updating notification", error);
+      }
+      if(user.userType === "Patient"){
+        history.push('./viewAppointPat');
+      } else {
+        history.push('./viewAppointments');
+      }
+      window.location.reload();
+    };
   useEffect(() => {
     const fetchWalletAmount = async () => {
       try {
@@ -84,23 +104,7 @@ export default function HeaderLinks(props) {
         console.error("Error fetching notifications", error);
       }
     };
-    // const handleClick = async (Message, Title) => {
-    //   try {
-    //     const notif = await axios.patch(API_PATHS.viewNotif ,{Message, Title} , {
-    //       headers: { Authorization },
-    //     });
-    //     console.log(notif.data);
-    //     Dispatch({ type: "UPDATE_NOTIFICATION", payload: notif.data });
-    //   } catch (error) {
-    //     console.error("Error updating notification", error);
-    //   }
-    //   if(user.userType === "Patient"){
-    //     history.push('./viewAppointPat');
-    //   } else {
-    //     history.push('./viewAppointments');
-    //   }
-  
-    // };
+    
     fetchWalletAmount();
     fetchNotifications();
     console.log(notifications);
@@ -164,14 +168,14 @@ export default function HeaderLinks(props) {
                 ""
               ) : (
                 <Tooltip label="Profile" fontSize='md'> 
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"black"}}  />
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"teal.500"}}  />
                 </Tooltip>
               )
             }
             leftIcon={
               document.documentElement.dir ? (
                <Tooltip label="Profile" fontSize='md'> 
-                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"black"}}  />
+                <ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px"  _hover={{color:"teal.500"}}  />
                 </Tooltip>
               ) : (
                 ""
@@ -207,13 +211,13 @@ export default function HeaderLinks(props) {
             alignItems="center"
           >
         <Icon
-              as={MdAttachMoney}
+              as={BsWallet2}
               boxSize={5}
               color={navbarIcon}
               _hover={{ color: "teal.500", cursor: "pointer" }}
-              w="18px"
-              h="18px"
-              mb="2px"
+              w="2px"
+              h="2px"
+             // mb="1px"
             />
             <Text
               fontSize="sm"
@@ -222,7 +226,8 @@ export default function HeaderLinks(props) {
               _hover={{ color: "teal.500", cursor: "pointer" }}
               w="auto"
               h="27px"
-              mr="13px"
+              mr="15px"
+              ml="5px"
             >
           {Wallet !== null ? `${parseFloat(Wallet).toFixed(2)}` : ""}
         </Text>
@@ -230,10 +235,21 @@ export default function HeaderLinks(props) {
         </Tooltip>
       </ChakraProvider> 
       )}
+      {user.userType !== "Admin" && (
       <Menu>
       <Tooltip label="Notifications" fontSize='md'> 
         <MenuButton>
-          <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
+        <Icon
+              as={BsBellFill}
+              //boxSize={4}
+              color={navbarIcon}
+              _hover={{ color: "teal.500", cursor: "pointer" }}
+              w="15px"
+              h="15px"
+              mr = "15px"
+              //mb="2px"
+            />
+          {/* <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" _hover={{color:"teal.500", cursor: "pointer"}}/> */}
         </MenuButton>
       </Tooltip>
         <MenuList p="16px 8px">
@@ -241,7 +257,7 @@ export default function HeaderLinks(props) {
             
             {Array.isArray(notifications) && notifications.map((row) => {
               return (
-              <MenuItem borderRadius="8px" mb="10px" >
+              <MenuItem borderRadius="8px" mb="10px" onClick={() =>handleClick(row)}>
               <ItemContent
                 info= {row.Message}
                 boldInfo={row.Title}
@@ -252,6 +268,7 @@ export default function HeaderLinks(props) {
           </Flex>
         </MenuList>
       </Menu>
+      )}
       {user && (
           <Button
           ms="0px"

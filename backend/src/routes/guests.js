@@ -10,7 +10,7 @@ const {
   validateOTP,
   resetPass,
   getNotifs,
-  //viewNotif,
+  viewNotif,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
 const { cpUpload } = require("../common/middleware/doctorUpload");
@@ -68,7 +68,7 @@ router.patch("/resetPass/", resetPass);
 router.use(requireAuth);
 
 router.get("/getNotifs", getNotifs);
-//router.patch("/viewNotif", viewNotif);
+router.patch("/viewNotif", viewNotif);
 
 // TODO: add type check as middleware if needed
 router.put("/updateRequest/:id", updateRequest);

@@ -317,18 +317,20 @@ const getNotifs = async (req, res) => {
   }
 };
 
-// const viewNotif = async (req, res) => {
-//   const {Title, Message} = req.body;
-//   try {
-//     const notif = await notificationsModel.findOneAndUpdate(
-//       {Username: req.user.Username , Title, Message, Clicked: { $ne: true }},
-//       { $set: { Clicked: true } },
-//       { new: true });
-//     res.status(200).send(notif);
-//   } catch (error) {
-//     res.status(400).send({ message: error.message });
-//   }
-// };
+const viewNotif = async (req, res) => {
+  const {Title, Message} = req.body;
+  try {
+    console.log(Title);
+    console.log(Message);
+    const notif = await notificationsModel.findOneAndUpdate(
+      {Username: req.user.Username , Title, Message, Clicked: { $ne: true }},
+      { $set: { Clicked: true } },
+      { new: true });
+    res.status(200).send(notif);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
 
 module.exports = {
   createRequest,
@@ -341,5 +343,5 @@ module.exports = {
   validateOTP,
   resetPass,
   getNotifs,
-  //viewNotif,
+  viewNotif,
 };

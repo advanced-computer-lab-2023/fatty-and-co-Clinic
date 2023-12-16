@@ -21,7 +21,7 @@ export const API_PATHS = {
   sendOTP: GUEST_BASE + "sendOTP/",
   validateOTP: GUEST_BASE + "validateOTP/",
   getNotifs: GUEST_BASE + "getNotifs/",
-  //viewNotif: GUEST_BASE + "viewNotif/",
+  viewNotif: GUEST_BASE + "viewNotif/",
 
   // Admin
   getRequests: ADMIN_BASE + "requests/",
