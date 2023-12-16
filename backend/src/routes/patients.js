@@ -141,13 +141,13 @@ router.get("/view/doctors/", checkPatient, session_index);
  */
 router.post("/createFamilymember", checkPatient, createFamilymember);
 
-/**
- * @route GET familymembers appointments 
- * @desc Returns appoiments 
- * @access Public
+// /**
+//  * @route GET familymembers appointments
+//  * @desc Returns appoiments
+//  * @access Public
 
- */
-router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
+//  */
+// router.get("/viewfamilymembersappointments/", viewfamilymembersappointments);
 
 /**
  * @route GET /patients/getFamilymember

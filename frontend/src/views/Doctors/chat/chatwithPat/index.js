@@ -8,7 +8,7 @@ import Conversation from "components/Chat/Conversation";
 import ChatBox from "components/Chat/ChatArea/ChatBox";
 import socketIOClient from "socket.io-client";
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = API_PATHS.base;
 const socket = socketIOClient(ENDPOINT);
 const ChatWithPatient = () => {
   const { user } = useAuthContext();

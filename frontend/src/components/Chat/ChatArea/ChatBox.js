@@ -9,21 +9,20 @@ import { useAuthContext } from "hooks/useAuthContext";
 
 import socketIOClient from "socket.io-client";
 
-const ENDPOINT = "http://localhost:8000"; 
+const ENDPOINT = "http://localhost:8000";
 const socket = socketIOClient(ENDPOINT);
 
 console.log(socket);
 
-
 //TODO: SEND EVENT FOR LIVE NOTIFICATION
-//TODO: 
+//TODO:
 //TODO: SEND THE NEW MESSAGE LOGIC (SETSTATE AND USESTATE TO THE INDEX FILE)
 const ChatBox = ({ messages: initialMessages, receiver }) => {
   const [messages, setMessages] = useState(initialMessages); // [ { sender: "user1", content: "Hello", timestamp: "2021-05-01T12:00:00.000Z", isCurrentUser: true }, ...
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const [newMessage, setNewMessage] = useState("");
-   
+
   //const [receiverstate, setReceiverState] = useState
   const [arrivalMessage, setArrivalMessage] = useState("");
 
@@ -33,92 +32,90 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
 
   console.log(user);
 
-//   const getPatientUsername = async () => {
-//     try {
-//       const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
-//         headers: { Authorization },
-//       });
-//       setCurrentUsername(response.data);
-//       console.log(response.data);
-//     } catch (error) {
-//       console.log(error);
-//       toast({
-//         title: "Error",
-//         description: error.message,
-//         status: "error",
-//         duration: 9000,
-//         isClosable: true,
-//       });
-//     }
-//   };
+  //   const getPatientUsername = async () => {
+  //     try {
+  //       const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
+  //         headers: { Authorization },
+  //       });
+  //       setCurrentUsername(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //       toast({
+  //         title: "Error",
+  //         description: error.message,
+  //         status: "error",
+  //         duration: 9000,
+  //         isClosable: true,
+  //       });
+  //     }
+  //   };
 
-//   const getDoctorUsername = async () => { try {
-//     const response = await axios.get(API_PATHS.getDocUsernameSocket, {
-//       headers: { Authorization },
-//     });
-//     setCurrentUsername(response.data);
-//     console.log(response.data);
-//   } catch (error) {
-//     console.log(error);
-//     toast({
-//       title: "Error",
-//       description: error.message,
-//       status: "error",
-//       duration: 9000,
-//       isClosable: true,
-//     });
-//   }
-// };
+  //   const getDoctorUsername = async () => { try {
+  //     const response = await axios.get(API_PATHS.getDocUsernameSocket, {
+  //       headers: { Authorization },
+  //     });
+  //     setCurrentUsername(response.data);
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast({
+  //       title: "Error",
+  //       description: error.message,
+  //       status: "error",
+  //       duration: 9000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
-const getPatientUsername = async () => {
-  try {
-    const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
-      headers: { Authorization },
-    });
-    setCurrentUsername(response.data);
-    console.log(response.data);
-    socket.emit('addUser', response.data); // Add this line
-  } catch (error) {
-    console.log(error);
-    toast({
-      title: "Error",
-      description: error.message,
-      status: "error",
-      duration: 9000,
-      isClosable: true,
-    });
-  }
-};
+  const getPatientUsername = async () => {
+    try {
+      const response = await axios.get(API_PATHS.getPatientUsernameSocket, {
+        headers: { Authorization },
+      });
+      setCurrentUsername(response.data);
+      console.log(response.data);
+      socket.emit("addUser", response.data); // Add this line
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
-const getDoctorUsername = async () => {
-  try {
-    const response = await axios.get(API_PATHS.getDocUsernameSocket, {
-      headers: { Authorization },
-    });
-    setCurrentUsername(response.data);
-    console.log(response.data);
-    socket.emit('addUser', response.data); // Add this line
-  } catch (error) {
-    console.log(error);
-    toast({
-      title: "Error",
-      description: error.message,
-      status: "error",
-      duration: 9000,
-      isClosable: true,
-    });
-  }
-};
-
+  const getDoctorUsername = async () => {
+    try {
+      const response = await axios.get(API_PATHS.getDocUsernameSocket, {
+        headers: { Authorization },
+      });
+      setCurrentUsername(response.data);
+      console.log(response.data);
+      socket.emit("addUser", response.data); // Add this line
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
+  console.log("current username: " + currentUsername);
 
   useEffect(() => {
     // Connect to the Socket.IO server when the component mounts
-    
+
     console.log(user.userType);
-    if(user.userType === "Doctor")
-    getDoctorUsername();
-    else if(user.userType === "Patient")
-    getPatientUsername(); 
+    if (user.userType === "Doctor") getDoctorUsername();
+    else if (user.userType === "Patient") getPatientUsername();
 
     console.log("current username");
     console.log(currentUsername);
@@ -127,9 +124,6 @@ const getDoctorUsername = async () => {
     socket.on("connect", () => {
       console.log("Connected to server");
     });
-
-   
-
 
     socket.on("disconnect", () => {
       console.log("Disconnected from server");
@@ -141,14 +135,13 @@ const getDoctorUsername = async () => {
     // };
   }, [currentUsername]);
 
- 
   useEffect(() => {
     if (arrivalMessage !== "") {
       setMessages((messages) => [...messages, arrivalMessage]);
-    } 
-  },[arrivalMessage]);
+    }
+  }, [arrivalMessage]);
 
-  useEffect (() => {
+  useEffect(() => {
     socket.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.sendUsername,
@@ -157,9 +150,7 @@ const getDoctorUsername = async () => {
         isCurrentUser: data.senderUsername === currentUsername,
       });
     });
-
-
-  },[]);
+  }, []);
 
   const fetchMessages = async () => {
     try {
@@ -189,15 +180,13 @@ const getDoctorUsername = async () => {
     console.log(messages);
   }, [messages]);
 
-
-
   useEffect(() => {
     if (receiver) {
       // Emit a 'changeReceiver' event when the receiver changes
-      if(currentUsername == receiver.Username)
-      socket.emit('changeReceiver', currentUsername);
-    console.log("receiver");
-    console.log(receiver);
+      if (currentUsername == receiver.Username)
+        socket.emit("changeReceiver", currentUsername);
+      console.log("receiver");
+      console.log(receiver);
       fetchMessages();
     }
   }, [receiver]);
@@ -208,21 +197,27 @@ const getDoctorUsername = async () => {
 
   const handleSendMessage = async () => {
     try {
-      socket.emit('sendMessage', {sendUsername: currentUsername, recUsername: receiver.Username, text: newMessage});
+      setNewMessage("");
+      socket.emit("sendMessage", {
+        sendUsername: currentUsername,
+        recUsername: receiver.Username,
+        text: newMessage,
+      });
       console.log("Sending message:", newMessage);
       const response = await axios.post(
         API_PATHS.createMessage,
         { Receiver: receiver.Username, text: newMessage },
         { headers: { Authorization } }
       );
-      console.log(receiver.Username );
-      
+      console.log(receiver.Username);
+
       setMessages((messages) => [...messages, response.data]);
       console.log(messages);
-      setNewMessage("");
 
-      socket.emit('notification', {sendUsername: currentUsername, recUsername: receiver.Username });
-
+      socket.emit("notification", {
+        sendUsername: currentUsername,
+        recUsername: receiver.Username,
+      });
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -249,16 +244,23 @@ const getDoctorUsername = async () => {
             <Message key={index} message={message} />
           ))}
       </Box>
-      <Flex mt={4}>
-        <Input
-          placeholder="Type your message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <Button onClick={handleSendMessage} colorScheme="teal">
-          Send
-        </Button>
-      </Flex>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSendMessage();
+        }}
+      >
+        <Flex mt={4}>
+          <Input
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <Button type="submit" colorScheme="teal">
+            Send
+          </Button>
+        </Flex>
+      </form>
     </Flex>
   );
 };

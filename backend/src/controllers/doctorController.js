@@ -1137,6 +1137,7 @@ const getChatPatients = async (req, res) => {
 const getDocUsernameSocket = async (req, res) => {
   try {
     const username = req.user.Username;
+    console.log(username);
     res.status(200).json(username);
   } catch (error) {
     res.status(500).send({ message: error.message });
@@ -1201,7 +1202,18 @@ const rejectFollowUp = async (req, res) => {
   }
 };
 
-//TODO REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
+const getDoctorInfo = async (req, res) => {
+  try{
+    var username = req.user.Username;
+    const doctor = await doctorModel.findOne({ Username: username });
+    const user = await systemUserModel.findOne({ Username: username });
+    res.status(200).send({doctor, user});
+  }catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
+// TODO: REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
 module.exports = {
   getDoctorByID,
@@ -1229,4 +1241,5 @@ module.exports = {
   getDocUsernameSocket,
   acceptFollowUp,
   rejectFollowUp,
+  getDoctorInfo,
 };

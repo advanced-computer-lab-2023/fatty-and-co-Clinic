@@ -197,7 +197,7 @@ router.get("/getPaymentAmount", checkPatient, (req, res) => {
 router.get("/getChatPatients", checkDoctor, (req, res) => {
   getChatPatients(req, res);
 });
-getDocUsernameSocket;
+// getDocUsernameSocket;
 router.get("/getDocUsernameSocket", checkDoctor, (req, res) => {
   getDocUsernameSocket(req, res);
 });

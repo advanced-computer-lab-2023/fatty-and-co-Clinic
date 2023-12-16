@@ -10,6 +10,7 @@ import {
   Heading,
   Spacer,
   Table,
+  useToast,
 } from "@chakra-ui/react";
 // assets
 import peopleImage from "assets/img/people-image.png";
@@ -49,7 +50,7 @@ import AppointmentsRow from "components/Tables/AppointmentsRow";
 import AppointmentsRowDash from "components/Tables/AppointmentRowDash";
 import { set } from "date-fns";
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = API_PATHS.base;
 const socket = socketIOClient(ENDPOINT);
 
 export default function DashboardPat() {
@@ -88,7 +89,7 @@ export default function DashboardPat() {
   //for the moreDoctors button
   let newUrl = `./viewDoctors`;
 
-  
+  const toast = useToast();
 
   const getPatientUsername = async () => {
     try {
@@ -112,7 +113,7 @@ export default function DashboardPat() {
 
   //For the moreAppointments button
   let appointmentsUrl = `./viewAppointPat`;
-  let chatUrl = `./chatWithDoctor`;
+  let chatUrl = `./chat`;
   useEffect(() => {
     const url = API_PATHS.viewDoctors;
     axios
@@ -140,21 +141,17 @@ export default function DashboardPat() {
     getHasNotifInitial(); //to know if he has notification mn abl kda msln afel el app w fata7o
   }, []);
 
-  
-
   useEffect(() => {}, [data, hasNotif]);
 
-  socket.on('receivedNotification', ( recUsername, sendUsername) => {
+  socket.on("receivedNotification", (recUsername, sendUsername) => {
     console.log("notif username");
     console.log(recUsername);
     console.log(currentUsername);
-    if(recUsername === currentUsername)
-    {
+    if (recUsername === currentUsername) {
       console.log("notification received");
       setHasNotif(true);
       //setRender(true);
       console.log("chatDocsafternotification");
-    
     }
   });
 
@@ -164,13 +161,13 @@ export default function DashboardPat() {
     axios
       .get(url, { headers: { Authorization } })
       .then((response) => {
-        const hasNotif = response.data.some((doctor) => doctor.hasNotif === true);
+        const hasNotif = response.data.some(
+          (doctor) => doctor.hasNotif === true
+        );
         setHasNotif(hasNotif);
       })
-      .catch((err) => console.log(err));  
+      .catch((err) => console.log(err));
   };
-
-
 
   return (
     <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>

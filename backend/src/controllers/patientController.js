@@ -816,37 +816,33 @@ const payForFamSubscription = async (req, res) => {
             { Username: curr_user },
             { Wallet: patient.Wallet - amount }
           );
-          res
-            .status(200)
-            .json({
-              success:
-                "Amount paid " +
-                amount +
-                " after a discount of " +
-                discount +
-                "%" +
-                " for " +
-                famMem.Name +
-                "!",
-            });
+          res.status(200).json({
+            success:
+              "Amount paid " +
+              amount +
+              " after a discount of " +
+              discount +
+              "%" +
+              " for " +
+              famMem.Name +
+              "!",
+          });
         } else {
           const updateRenewal = await subscriptionModel.findOneAndUpdate(
             { Patient: relative.FamilyMem },
             { Status: "Cancelled", Enddate: formattedDate, Renewaldate: null }
           );
-          res
-            .status(200)
-            .json({
-              success:
-                "Amount paid " +
-                amount +
-                " after a discount of " +
-                discount +
-                "%" +
-                " for " +
-                famMem.Name +
-                "!",
-            });
+          res.status(200).json({
+            success:
+              "Amount paid " +
+              amount +
+              " after a discount of " +
+              discount +
+              "%" +
+              " for " +
+              famMem.Name +
+              "!",
+          });
         }
       } else if (
         subscription.Status === "Unsubscribed" ||
@@ -868,19 +864,17 @@ const payForFamSubscription = async (req, res) => {
               Enddate: formattedDate1,
             }
           );
-          res
-            .status(200)
-            .json({
-              success:
-                "Amount paid " +
-                amount +
-                " after a discount of " +
-                discount +
-                "%" +
-                " for " +
-                famMem.Name +
-                "!",
-            });
+          res.status(200).json({
+            success:
+              "Amount paid " +
+              amount +
+              " after a discount of " +
+              discount +
+              "%" +
+              " for " +
+              famMem.Name +
+              "!",
+          });
         } else {
           res.status(404).json({ error: "Not enough money" });
         }
@@ -2037,6 +2031,7 @@ const getChatDoctors = async (req, res) => {
 const getPatientUsernameSocket = async (req, res) => {
   try {
     const username = req.user.Username;
+    console.log(username);
     res.status(200).json(username);
   } catch (error) {
     res.status(500).send({ message: error.message });
