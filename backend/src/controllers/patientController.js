@@ -1541,10 +1541,6 @@ console.log(user);
   
  
    const Familymemberfound=await patientModel.findOne({Username:Username});
-   console.log(Familymemberfound);
-     const currentDate = new Date();
-     const dob = new Date(DateOfBirth);
-     const dob1=new Date(currentPatient.DateOfBirth);
 
    const newFamilymember = await familyMemberModel.create({
        Patient: currentPatient,
