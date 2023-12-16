@@ -26,14 +26,24 @@ import {
   Grid,
   useColorModeValue,
   Text,
+  HStack,
+  Text,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
+import {
+  DownloadIcon,
+  InfoOutlineIcon,
+  PhoneIcon,
+  WarningTwoIcon,
+} from "@chakra-ui/icons";
 import { API_PATHS } from "API/api_paths";
 import { useAuthContext } from "hooks/useAuthContext";
 import HealthRecordForm from "./components/HealthRecordForm";
+import { useHistory } from "react-router-dom";
 
 export function PatientTable() {
   const { user } = useAuthContext();
@@ -44,7 +54,8 @@ export function PatientTable() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPatientViewInfo, setSelectedPatientViewInfo] = useState(null);
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
-  const [healthRecords, setHealthRecords] = useState(null);
+  const [healthRecords, setHealthRecords] = useState([]);
+  const history = useHistory();
 
   const [filters, setFilters] = useState({
     patientName: "",
@@ -104,24 +115,14 @@ export function PatientTable() {
     } catch (error) {
       console.error("Error fetching info and health records:", error);
     }
-    const fetchHealthRecords = async () => {
-      const response = await fetch(
-        API_PATHS.getMedicalHistory + patientUsername,
-        {
-          headers: {
-            Authorization: Authorization,
-          },
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setHealthRecords(data.MedicalHistory);
-        // dispatch({ type: "SET_PACKAGES", payload: data });
-      } else {
-        console.log(data);
-      }
-    };
-    fetchHealthRecords();
+  };
+
+
+  const handleViewRecords = async () => {
+   
+    const redirectUrl = `/doctor/patientRecords/?username=${selectedPatient.Username}&name=${selectedPatient.Name}`;
+    history.replace(redirectUrl);
+    
   };
 
   const closeInfoModal = () => {
@@ -228,39 +229,97 @@ export function PatientTable() {
           </Table>
         </CardBody>
       </Card>
+
+      {/* <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Patient name</Th>
+            <Th>Mobile Number</Th>
+            <Th>Date of birth</Th>
+            <Th>Gender</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {patients?.map((patient) => (
+            <Tr
+              _hover={{ backgroundColor: "gray.200" }}
+              cursor="pointer"
+              key={patient._id}
+              onClick={() => openModal(patient._id)}
+            >
+              <Td fontWeight="semibold">
+                {patient && patient.Name ? patient.Name : "N/A"}
+              </Td>
+              <Td fontWeight="semibold">
+                {patient && patient.MobileNum ? patient.MobileNum : "N/A"}
+              </Td>
+              <Td fontWeight="semibold">
+                {patient && patient.DateOfBirth
+                  ? new Date(patient.DateOfBirth).toLocaleDateString("en-GB")
+                  : "N/A"}
+              </Td>
+              <Td fontWeight="semibold">
+                {patient && patient.Gender ? patient.Gender : "N/A"}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table> */}
       {selectedPatient && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Patient Details</ModalHeader>
+            <ModalHeader>
+              {" "}
+              <HStack spacing="2">
+                <InfoOutlineIcon color="teal.500" />
+                <Text>{selectedPatient.Name}</Text>
+                <Text>{selectedPatient.Gender}</Text>
+              </HStack>
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <p>patient Name: {selectedPatient.Name}</p>
-              <p>Mobile Number: {selectedPatient.MobileNum}</p>
-              <p>
-                Date of Birth:{" "}
-                {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
-                  "en-GB"
-                )}
-              </p>
-              <p>Gender:{selectedPatient.Gender}</p>
-              <p>Package Name:{selectedPatient.PackageName}</p>
-              <p>
-                Emergency Contact Name:
-                {selectedPatient.EmergencyContact.FullName}
-              </p>
-              <p>
-                Emergency Contact Phone Number:
-                {selectedPatient.EmergencyContact.PhoneNumber}
-              </p>
-              <Button
-                // onClick={() => {
-                //   openInfoModal(selectedPatient.Username);
-                // }}
-              >
-                View Information & Health Records
-              </Button>
+              <VStack spacing="2" align="stretch">
+                <HStack spacing="2">
+                  <PhoneIcon color="teal.500" />
+                  <Text>{selectedPatient.MobileNum}</Text>
+                </HStack>
+                <HStack spacing="2">
+                  <span
+                    role="img"
+                    aria-label="gift"
+                    style={{ fontSize: "20px" }}
+                  >
+                    🎁
+                  </span>
+                  <Text>
+                    {" "}
+                    {new Date(selectedPatient.DateOfBirth).toLocaleDateString(
+                      "en-GB"
+                    )}
+                  </Text>
+                </HStack>
+                <hr></hr>
+                {/* <p>Package Name:{selectedPatient.PackageName}</p> */}
+                <HStack spacing="2">
+                  <WarningTwoIcon color="teal.500" />
+                  <Text fontWeight="semibold">Emergency contact: </Text>
+                </HStack>
+                <HStack spacing="2">
+                  <InfoOutlineIcon color="teal.500" />
+                  <Text> {selectedPatient.EmergencyContact.FullName}</Text>
+                </HStack>
+                <HStack spacing="2">
+                  <PhoneIcon color="teal.500" />
+                  <Text>{selectedPatient.EmergencyContact.PhoneNumber}</Text>
+                </HStack>
+              </VStack>
             </ModalBody>
+            <ModalFooter>
+              <Button onClick={handleViewRecords}>
+                View appointments and Health records.
+              </Button>
+            </ModalFooter>
           </ModalContent>
         </Modal>
       )}

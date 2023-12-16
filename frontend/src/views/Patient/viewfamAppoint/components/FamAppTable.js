@@ -21,30 +21,49 @@ import {
   
   export const FamAppTable = ({ title, captions, data, isLoading ,handleCancelAppointment, }) => {
     //Table that uses row
+    //color="teal" fontWeight="bold" pb=".1rem" borderBottom='3px solid #ddd' borderRadius="4px" justifyContent="center" alignItems="center"
     const textColor = useColorModeValue("gray.700", "white");
     return (
       <Card my="12px" overflowX={{ sm: "scroll", xl: "hidden" }}>
         <CardHeader p="6px 0px 12px 0px">
           <Flex direction="column">
-            <Text fontSize="lg" color={textColor} fontWeight="bold" pb=".5rem">
+            <Text color="teal" fontWeight="bold" pb=".1rem" borderBottom='3px solid #ddd' borderRadius="4px" justifyContent="center" alignItems="center">
               {/* title will be All doctors  */}
               {title}
             </Text>
           </Flex>
+          {/* <Card my="0px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+          <CardHeader p="6px 0px 22px 0px">
+            <Flex direction="column">
+              <Text
+                fontSize="lg"
+                color={textColor}
+                fontWeight="bold"
+                pb=".5rem"
+                marginLeft={6}
+              >
+                Prescriptions
+              </Text>
+            </Flex> */}
         </CardHeader>
         <CardBody>
           {isLoading ? (
             <Spinner></Spinner>
           ) : (
-            <Table variant="simple" color={textColor}>
+            <Table variant="simple" color="teal">
               <Thead>
                 <Tr my=".6rem" pl="0px">
                   {captions.map((caption, idx) => {
                     return (
                       <Th
-                        color="gray.400"
-                        key={idx}
-                        ps={idx === 0 ? "0px" : null}
+                      color="#f0f0f0"
+                      key={idx}
+                      ps={idx === 0 ? "0px" : null}
+                      padding="12px"
+                      textAlign="left"
+                      borderBottom="1px solid #ddd"
+                      backgroundColor="teal"
+                      fontWeight="bold"
                       >
                         {caption}
                       </Th>
@@ -60,6 +79,7 @@ import {
                       PatientName = {row.PatientName}
                       DoctorName={row.DoctorName}
                       DoctorUsername={row.DoctorUsername}
+                      PatientUsername={row.PatientUsername}
                       Status={row.Status}
                       Type={row.FollowUp ? "Follow Up" : "First Time"}
                       DateTime={row.Date}

@@ -1090,7 +1090,7 @@ const viewHealthFamwithstatus = async (req, res) => {
     const username = req.user.Username;
     const Patient = await patientModel.findOne({ Username: username });
     const famMems = await familyMemberModel
-      .find({ $or: [{ Patient: Patient }, { FamilyMem: Patient }] })
+      .find({  $and: [{ Patient: Patient }, { FamilyMem: { $ne: Patient } }] })
       .populate("Patient")
       .populate("FamilyMem");
 
@@ -1270,7 +1270,6 @@ const updateFamCredit = async (req, res) => {
       const year12 = enddate2.getFullYear() + 1;
       const month12 = String(enddate2.getMonth() + 1).padStart(2, "0"); // Months are zero-based
       const day12 = String(enddate2.getDate()).padStart(2, "0");
-
       const formattedDate12 = `${year12}-${month12}-${day12}`;
       const max =
         patSubscription.Package != null &&
@@ -1372,7 +1371,7 @@ const selectPatient = async (req, res) => {
 };
 
 // Get prescriptions of a given patient. Can also be filtered
-// using `DoctorUsername` or `Date` or `Status`.
+// using DoctorUsername or Date or Status.
 const getPrescriptions = async (req, res) => {
   const query = req.body;
   // console.log(query);
