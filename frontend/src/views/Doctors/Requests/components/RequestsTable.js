@@ -12,7 +12,7 @@ import {
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
-import RequestsRow from "components/Tables/RequestsRow";
+import FollowUpRequestsRow from "components/Tables/FollowUpRequestsRow";
 import React from "react";
 
 const Requests = ({ title, captions, data }) => {
@@ -39,12 +39,14 @@ const Requests = ({ title, captions, data }) => {
           </Thead>
           <Tbody>
             {Array.isArray(data) && data.map((row) => {
+              console.log(row);
               return (
-                <RequestsRow
-                  key={`${row.Username}-${row.Name}`}
-                  Name={row.Name}
-                  Username= {row.Username}
+                <FollowUpRequestsRow
+                  key={`${row.PatientUsername}-${row.Date}`}
+                  Name={row.PatientName}
+                  Username= {row.PatientUsername}
                   Status={row.Status}
+                  FollowUpDate = {row.Date}
                 />
               );
             })}

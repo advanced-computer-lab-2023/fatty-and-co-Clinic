@@ -18,6 +18,7 @@ const {
   createAppointment,
   getAppointmentsfamilymembers,
   getAllAppointmentsPat,
+  rescheduleAppointmentPatient,
 } = require("../controllers/appointmentController");
 
 //const {createAppointment} = require("../controllers/testController");
@@ -65,13 +66,13 @@ router.get("/getAppointmentsDoc", checkDoctor, getAppointmentsDoc);
 router.post(
   "/rescheduleAppointmentPatient",
   checkPatient,
-  rescheduleAppointmentPatient
+  reschedulePatient
 );
-router.post(
-  "/rescheduleAppointmentfamilymember",
-  checkPatient,
-  reschedulefamilymember
-);
+// router.post(
+//   "/rescheduleAppointmentfamilymember",
+//   checkPatient,
+//   reschedulefamilymember
+// );
 /**
  * @route GET /getAppointmentsPat
  * @desc Retrieve all appointments for a specific patient

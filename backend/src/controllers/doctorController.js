@@ -1228,7 +1228,7 @@ const getDocUsernameSocket = async (req, res) => {
 const getRequest = async (req, res) => {
   const { Username, FollowUpDate } = req.query;
   try {
-    const request = await requestModel.findOne({ Username: Username, Date: FollowUpDate});
+    const request = await requestModel.findOne({Date: FollowUpDate, DoctorUsername: req.user.Username, PatientUsername: Username});
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -1267,11 +1267,12 @@ const acceptFollowUp = async (req, res) => {
       const appointment = await appointmentModel.create({
         DoctorUsername: docUsername,
         DoctorName: doctor.Name,
-        PatientUsername: patientUsername,
+        PatientUsername: Username,
         PatientName: patient.Name,
         Status: "Upcoming",
         FollowUp: true,
         Date: FollowUpDate,
+        BookedBy: Username,
       });
     }
 

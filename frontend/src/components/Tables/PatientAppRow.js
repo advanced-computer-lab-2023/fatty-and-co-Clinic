@@ -86,23 +86,14 @@ import {
             {new Date(DateTime).toLocaleTimeString("en-GB")}
           </Text>
         </Td>
-        {PatientUsername && Status === "Completed" && (
+        {Status === "Completed" && (
           <Td minWidth={{ sm: "150px" }}>
             <CreateFollowUpButton doctorUsername={DoctorUsername} />
           </Td>
   
      
         )}
-    <Td minWidth={{ sm: "150px" }}>
-    {(Status === "Upcoming" ) && ( // Render the cancel button only if status is "Upcoming"
-         <Button
-         colorScheme="red"
-         onClick={() => props.handleCancelAppointment(DoctorUsername)}
-       >
-         Cancel
-       </Button>
-    )}
-  </Td>
+    
   <Td minWidth={{ sm: "150px" }}>
 
     {(Status === "Upcoming" ) && ( // Render the cancel button only if status is "Upcoming"
@@ -112,6 +103,16 @@ import {
         onClick={() => props.handlereschdule(DoctorUsername)}
        >
          Reschedule
+       </Button>
+    )}
+  </Td>
+  <Td minWidth={{ sm: "150px" }}>
+    {(Status === "Upcoming" ) && ( // Render the cancel button only if status is "Upcoming"
+         <Button
+         colorScheme="red"
+         onClick={() => props.handleCancelAppointment(DoctorUsername)}
+       >
+         Cancel
        </Button>
     )}
   </Td>

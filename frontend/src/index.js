@@ -21,13 +21,19 @@ import { AuthContextProvider } from "context/AuthContext";
 import { WalletContextProvider } from "context/WalletContext";
 import { NotificationsContextProvider } from "context/NotificationsContext";
 import App from "./App";
+import { PatientAppointmentsContextProvider } from "context/PatientAppointmentsContext";
+import { FollowUpRequestsContextProvider } from "context/FollowUpRequestsContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthContextProvider>
       <WalletContextProvider>
         <NotificationsContextProvider>
+          <PatientAppointmentsContextProvider>
+            <FollowUpRequestsContextProvider>
         <App />
+        </FollowUpRequestsContextProvider>
+        </PatientAppointmentsContextProvider>
         </NotificationsContextProvider>
       </WalletContextProvider>
     </AuthContextProvider>

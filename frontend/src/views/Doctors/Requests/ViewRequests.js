@@ -16,7 +16,7 @@ export function ViewRequestsInner() {
   const toast = useToast();
   useEffect(() => {
     axios
-      .get(API_PATHS.getRequests, {
+      .get(API_PATHS.getFollowUps, {
         headers: {
           Authorization,
         },
