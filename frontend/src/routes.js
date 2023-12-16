@@ -42,7 +42,6 @@ import AppointmentConfirmation from "views/Patient/appointmentConfirmation";
 import WalletPayment from "views/Patient/walletPayment";
 import PatientProfile from "views/Patient/viewProfile";
 import DashboardDoc from "views/Dashboard/DashboardDoc/index";
-import DashboardDoc from "views/Dashboard/DashboardDoc/index";
 import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
