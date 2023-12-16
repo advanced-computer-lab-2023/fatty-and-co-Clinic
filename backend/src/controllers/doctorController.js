@@ -1,4 +1,4 @@
-const doctorModel = require("../models/doctors"); 
+const doctorModel = require("../models/doctors");
 const appointmentModel = require("../models/appointments");
 const prescriptionsModel = require("../models/prescriptions");
 const patientModel = require("../models/patients");
@@ -167,7 +167,7 @@ const getDoctorByUsername = async (req, res) => {
 };
 
 const getDoctorByUser = async (req, res) => {
-  const username  = req.user.Username;
+  const username = req.user.Username;
   try {
     const doctor = await doctorModel.findOne({ Username: username });
     if (!doctor) {
@@ -804,7 +804,7 @@ const viewAllAvailableSlots = async (req, res) => {
 };
 
 const viewAllAvailableSlotsForMe = async (req, res) => {
-  const  username  = req.user.Username;
+  const username = req.user.Username;
   var slotsToView = new Array();
   try {
     const doctor = await doctorModel.findOne({ Username: username });
@@ -929,40 +929,6 @@ const validateBookingDate = async (req, res) => {
 };
 
 
-const validateBookingDateDoctor = async (req, res) => { 
-  const { DayName, DateFinal, DoctorId } = req.query;
-
-  console.log(DateFinal);
-  console.log(new Date(DateFinal));
-  const tmpDate = new Date(DateFinal);
-
-  console.log(getDayNameFromNumber(tmpDate.getDay()));
-  console.log(DayName);
-
-  if (getDayNameFromNumber(tmpDate.getDay()) === DayName) {
-    try {
-      console.log(DateFinal);
-      const Doctor = await doctorModel.findOne({ _id: DoctorId });
-      const appointment = await appointmentModel.findOne({
-        DoctorUsername: Doctor.Username,
-        Date: DateFinal,
-        Status: "Upcoming",
-      });
-      if (appointment) {
-        console.log(appointment.Date);
-        console.log("invalid");
-        res.status(500).send({ message: "this date is unavailable" });
-      } else {
-        console.log("valid");
-        res.status(200).json("validDate");
-      }
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
-  } else
-    res.status(500).send({ message: "Chosen Date does not match chosen Day" });
-};
-
 
 const validateBookingDateDoctor = async (req, res) => {
   const { DayName, DateFinal, DoctorId } = req.query;
@@ -1047,12 +1013,10 @@ const rescheduleAppointmentPatient = async (req, res) => {
         .status(500)
         .send({ message: " This slot is not avaliable for this dctor  " });
     } else if (!hasappointment) {
-      res
-        .status(500)
-        .send({
-          message:
-            "You don't have any appointments with this doctor to reschdule ",
-        });
+      res.status(500).send({
+        message:
+          "You don't have any appointments with this doctor to reschdule ",
+      });
     } else {
       const rescheduledappointment = await appointmentModel.findOneAndUpdate(
         {
@@ -1319,15 +1283,15 @@ const rejectFollowUp = async (req, res) => {
 };
 
 const getDoctorInfo = async (req, res) => {
-  try{
+  try {
     var username = req.user.Username;
     const doctor = await doctorModel.findOne({ Username: username });
     const user = await systemUserModel.findOne({ Username: username });
-    res.status(200).send({doctor, user});
-  }catch (error) {
+    res.status(200).send({ doctor, user });
+  } catch (error) {
     res.status(400).send({ message: error.message });
   }
-}
+};
 
 // TODO: REGARDING ALL FUNCTIONS MAKE SURE THEY ARE WRAPPED IN TRY CATCH,
 
