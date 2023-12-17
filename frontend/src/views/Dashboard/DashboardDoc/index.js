@@ -74,6 +74,7 @@ export default function DashboardDoc() {
   const [hasNotif, setHasNotif] = useState(false);
   const [upcoming, setUpcoming] = useState([]);
   const [doctor, setDoctor] = useState([{}]);
+  const [systemUser, setSystemUser] = useState([{}]);
   const bgProfile = useColorModeValue(
     "hsla(0,0%,100%,.8)",
     "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"

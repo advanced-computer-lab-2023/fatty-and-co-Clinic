@@ -50,7 +50,7 @@ const ChatWithPatient = () => {
       console.log(response.data);
       //socket.emit('addUser', response.data); // Add this line
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "Error",
         description: error.message,
@@ -70,7 +70,7 @@ const ChatWithPatient = () => {
       console.log(response.data);
       //socket.emit('addUser', response.data); // Add this line
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "Error",
         description: error.message,
@@ -95,7 +95,7 @@ const ChatWithPatient = () => {
       setMessages(response.data);
       console.log(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "Error",
         description: error.message,
@@ -151,7 +151,7 @@ const ChatWithPatient = () => {
       setChatPatients(response.data);
       //console.log(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         title: "Error",
         description: error.response.data.message,

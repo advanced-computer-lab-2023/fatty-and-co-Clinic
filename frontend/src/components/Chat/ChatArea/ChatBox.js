@@ -51,6 +51,10 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
   //   }
   // }, [messages]);
 
+  console.log("receiver");
+  console.log(receiver);
+
+  console.log("user");
   console.log(user);
 
   //   const getPatientUsername = async () => {
@@ -246,10 +250,28 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
 
   console.log("receiverhello");
   console.log(receiver);
+  const generateRoomName = () => {
+    let patientName = "";
+    let doctorName = "";
+    if (user.userType === "Patient") {
+      patientName = currentUsername;
+      doctorName = receiver.Username;
+    } else if (user.userType === "Doctor") {
+      patientName = receiver.Username;
+      doctorName = currentUsername;
+    }
+    const roomName = `${patientName}-${doctorName}`;
+    setRoomName(roomName);
+  };
+
+  //  useEffect(() => {
+  //    generateRoomName();
+  //  }, [receiver]);
 
   const handleStartVideoCall = async () => {
     try {
       // Send a message to the doctor
+      generateRoomName();
       const callMessage = "I have started a video call. Please join.";
       socket.emit("sendMessage", {
         sendUsername: currentUsername,
@@ -276,24 +298,6 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
       console.error("Error starting video call:", error);
     }
   };
-
-  const generateRoomName = () => {
-    let patientName = "";
-    let doctorName = "";
-    if (user.userType === "Patient") {
-      patientName = currentUsername;
-      doctorName = receiver.Username;
-    } else if (user.userType === "Doctor") {
-      patientName = receiver.Username;
-      doctorName = currentUsername;
-    }
-    const roomName = `${patientName}-${doctorName}`;
-    setRoomName(roomName);
-  };
-
-  useEffect(() => {
-    generateRoomName();
-  }, []);
 
   return (
     <Flex

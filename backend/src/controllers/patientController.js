@@ -1965,7 +1965,7 @@ const getChatDoctors = async (req, res) => {
         });
 
         // Check if the doctor username is already in the set
-        if (!uniqueDoctorUsernames.has(doctor.Username)) {
+        if (doctor && !uniqueDoctorUsernames.has(doctor.Username)) {
           // If not, add it to the set and include the doctor in the result
           uniqueDoctorUsernames.add(doctor.Username);
 

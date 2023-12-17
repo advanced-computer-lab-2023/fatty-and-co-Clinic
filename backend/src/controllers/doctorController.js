@@ -1170,6 +1170,7 @@ const getPaymentAmount = async (req, res) => {
 
 const getChatPatients = async (req, res) => {
   try {
+    console.log(req.user.Username);
     // Find all appointments associated with the current doctor
     const docAppointments = await appointmentModel.find({
       DoctorUsername: req.user.Username,
@@ -1182,16 +1183,15 @@ const getChatPatients = async (req, res) => {
         const patient = await patientModel.findOne({
           Username: appointment.PatientUsername,
         });
-
+        console.log(patient);
         // Check if the patient username is already in the set
-        if (!uniquePatientUsernames.has(patient.Username)) {
+        if (patient && !uniquePatientUsernames.has(patient.Username)) {
           // If not, add it to the set and include the patient in the result
           uniquePatientUsernames.add(patient.Username);
           const notifications = await notificationModel.find({
             senderUsername: patient.Username,
             seen: false,
           });
-
           // If there are any unseen notifications, set hasNotif to true
           const hasNotif = notifications.length > 0;
           console.log("hasNotif");
@@ -1211,6 +1211,7 @@ const getChatPatients = async (req, res) => {
 
     res.status(200).json(filteredChatPatients);
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ error: error.message });
   }
 };
