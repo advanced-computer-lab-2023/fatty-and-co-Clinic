@@ -57,6 +57,10 @@ function Statuspackagerow(props) {
           isClosable: true,
         });
 
+        // wait 1 second before reloading the page
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         toast({
           title: "Failed to Cancel",
