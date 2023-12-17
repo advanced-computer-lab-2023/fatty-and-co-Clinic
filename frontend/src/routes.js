@@ -60,6 +60,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+import DashboardAdmin from "views/Dashboard/DashboardAdmin";
 import { ImAidKit } from "react-icons/im";
 import { ImAddressBook } from "react-icons/im";
 import { IoIosChatbubbles } from "react-icons/io";
@@ -85,7 +86,7 @@ var dashRoutes = [
     name: "Dashboard",
     rtlName: "لوحة القيادة",
     icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
+    component: DashboardAdmin,
     layout: "/admin",
   },
   {
@@ -456,22 +457,6 @@ var dashRoutes = [
     component: PatientAppointmentsDoc,
     layout: "/doctor",
     show: false,
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
-    layout: "/admin",
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
-    layout: "/doctor",
   },
 
   {
