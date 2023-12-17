@@ -375,7 +375,7 @@ var dashRoutes = [
     layout: "/doctor",
   },
   {
-    path: "/chatWithPatient",
+    path: "/chat",
     name: "Chat With a Patient",
     icon: <IoIosChatbubbles />,
     component: ChatWithPatient,
