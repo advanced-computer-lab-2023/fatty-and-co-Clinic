@@ -61,7 +61,8 @@ const PaymentForm = ({
   //     return () => clearTimeout(redirectTimeout);
   //   }
   // }, [success]);
-
+  console.log("Nationaid",NationalId);
+  console.log("Api Pathe",API_PATHS.updateFamSub);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -139,8 +140,10 @@ const PaymentForm = ({
           // setSuccess(true);}
           // else {
           //   console.log(error.message);
-          // }
+          // }	6666777755430000
+       
           else if (PackageName && NationalId) {
+         // console.log()
             const response = await fetch(API_PATHS.updateFamSub, {
               method: "PATCH",
               headers: {
