@@ -134,7 +134,7 @@ export default function HeaderLinks(props) {
           </Button>
         </NavLink>
       )}
-      {user && (
+      {user && user.userType !== "Admin" && (
         <Button
           ms="0px"
           px="0px"
@@ -195,6 +195,33 @@ export default function HeaderLinks(props) {
         h="18px"
       /> */}
 
+      <Menu>
+        <Tooltip label="Notifications" fontSize="md">
+          <MenuButton>
+            <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
+          </MenuButton>
+        </Tooltip>
+        <MenuList p="16px 8px">
+          <Flex flexDirection="column">
+            {Array.isArray(notifications) &&
+              notifications.map((row) => {
+                return (
+                  <MenuItem borderRadius="8px" mb="10px">
+                    <a
+                      href={
+                        user.userType === "Patient"
+                          ? "/patient/viewAppointPat"
+                          : "/doctor/viewAppointments"
+                      }
+                    >
+                      <ItemContent info={row.Message} boldInfo={row.Title} />
+                    </a>
+                  </MenuItem>
+                );
+              })}
+          </Flex>
+        </MenuList>
+      </Menu>
       {user.userType !== "Admin" && (
         <ChakraProvider theme={theme}>
           <Tooltip label="Wallet">
@@ -223,33 +250,6 @@ export default function HeaderLinks(props) {
           </Tooltip>
         </ChakraProvider>
       )}
-      <Menu>
-        <Tooltip label="Notifications" fontSize="md">
-          <MenuButton>
-            <BellIcon color={navbarIcon} w="18px" h="18px" me="18px" mb="5px" />
-          </MenuButton>
-        </Tooltip>
-        <MenuList p="16px 8px">
-          <Flex flexDirection="column">
-            {Array.isArray(notifications) &&
-              notifications.map((row) => {
-                return (
-                  <MenuItem borderRadius="8px" mb="10px">
-                    <a
-                      href={
-                        user.userType === "Patient"
-                          ? "/patient/viewAppointPat"
-                          : "/doctor/viewAppointments"
-                      }
-                    >
-                      <ItemContent info={row.Message} boldInfo={row.Title} />
-                    </a>
-                  </MenuItem>
-                );
-              })}
-          </Flex>
-        </MenuList>
-      </Menu>
       {user && (
         <Button
           ms="0px"
