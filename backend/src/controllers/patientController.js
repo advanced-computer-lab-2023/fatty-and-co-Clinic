@@ -166,6 +166,7 @@ const session_index = async (req, res) => {
     const discount = await getPackageDiscount(req.user.Username);
     const famDiscount = await getPackageFamDiscount(req.user.Username);
 
+  
     //to test smth in the front end
     const test = 900;
     const mySessions = doctors.map((doctor) => {
@@ -1092,33 +1093,38 @@ const viewHealthFamwithstatus = async (req, res) => {
 
 
 
+
 const updateFamCredit = async (req, res) => {
   try {
     const curr_user = req.user.Username;
     const { PackageName, NationalId } = req.body;
     const Package = await packageModel.findOne({ Name: PackageName });
     const patient = await patientModel.findOne({ Username: curr_user });
+    const Fammem = await patientModel.findOne({ NationalId: NationalId });
     const relative = await familyMemberModel
-      .findOne({ Patient: patient, NationalId: NationalId })
+      .findOne({ Patient: patient, FamilyMem: Fammem })
       .populate("Patient")
       .populate("FamilyMem");
+      
     const subscription = await subscriptionModel
-      .findOne({ FamilyMem: relative })
+      .findOne({ Patient: relative.FamilyMem })
       .populate("Package")
       .populate("FamilyMem");
     const patSubscription = await subscriptionModel
       .findOne({ Patient: patient })
       .populate("Patient")
       .populate("Package");
+      
     if (!Package) {
       res.status(404).send({ error: "Invalid package name!" });
     }
     if (relative == null) {
       res.status(400).send({ error: "Wrong National Id or not relative!" });
-    } else if (relative.FamilyMem != null) {
-      res
-        .status(400)
-        .send({ error: "Cannot subscribe for another system user!" });
+    
+    // } else if (relative.FamilyMem != null) {
+    //   res
+    //     .status(400)
+    //     .send({ error: "Cannot subscribe for another system user!" });
     } else {
       const currentDate = new Date();
       const year = currentDate.getFullYear();
@@ -1165,7 +1171,7 @@ const updateFamCredit = async (req, res) => {
         subscription.Package.Name == Package.Name
       ) {
         const patient12 = await subscriptionModel.findOneAndUpdate(
-          { FamilyMem: relative },
+          { Patient: relative.FamilyMem },
           {
             Package: Package,
             Status: "Subscribed",
@@ -1182,7 +1188,7 @@ const updateFamCredit = async (req, res) => {
         subscription.Status === "Cancelled"
       ) {
         const patient12 = await subscriptionModel.findOneAndUpdate(
-          { FamilyMem: relative },
+          { Patient: relative.FamilyMem },
           {
             Package: Package,
             Status: "Subscribed",
@@ -1200,6 +1206,7 @@ const updateFamCredit = async (req, res) => {
     res.status(400).send({ error: "Failed to subscribe!" });
   }
 };
+
 
 const getWalletAmount = async (req, res) => {
   try {
@@ -1615,7 +1622,7 @@ console.log(user);
 
 
 
-const cancelSubscriptionfamilymember = async (req, res) => {
+ const cancelSubscriptionfamilymember = async (req, res) => {
   try {
     const Startdate = new Date();
     const { NationalId } = req.body;
@@ -1625,11 +1632,14 @@ const cancelSubscriptionfamilymember = async (req, res) => {
     const day = String(Startdate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
     const patient = await patientModel.findOne({ Username: signedIn });
-    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId });
+    console.log(patient);
+    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId }).populate("Patient");
+    console.log(fam.Patient.Username);
+//console.log(fam.populate);
     const subscribed = await subscriptionModel.findOne({
-      FamilyMem: fam,
-      FamilyMem: fam.id,
+      Patient: fam.Patient,
     });
+    console.log("SUbscrinrd",subscribed);
     const famrelated = await familyMemberModel.find({
       Patient: patient.id,
       NationalIdFam: NationalId,
@@ -1640,10 +1650,10 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
-          .send({ error: "You have already cancelled your prescription" });
+          .send({ error: "You have already cancelled your subscription" });
       } else {
         const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
-          { FamilyMem: fam },
+          { Patient: fam.Patient },
           { Status: "Cancelled", Enddate: formattedDate }
         );
         res.status(200).json({ subscribedUpdate });

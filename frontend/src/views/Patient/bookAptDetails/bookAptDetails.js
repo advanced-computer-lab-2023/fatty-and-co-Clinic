@@ -34,9 +34,6 @@ export function bookAptDetails() {
 
   const history = useHistory();
 
-  //the doctor id
-  //   const { row } = useParams();
-  //   console.log(useParams());
   const location = useLocation();
   console.log(location);
   const { state } = location;
@@ -56,13 +53,12 @@ export function bookAptDetails() {
   console.log(DayName);
   console.log(DoctorId);
 
-  //const [famMemOptions, setFamMemOptions] = useState([{}]);
 
-  //check if date<new date
   const [aptDate, setAptDate] = useState(new Date());
-  //const [isFamMember, setIsFamMember] = useState(false);
+ 
   const [FamMemName, setFamMemName] = useState(null);
-
+  const [familyMembers, setFamilyMembers] = useState([]); // State to store the list of family members
+  const [selectedFamilyMember, setSelectedFamilyMember] = useState("");
 
   var DateFinal = new Date();
 
@@ -70,13 +66,29 @@ export function bookAptDetails() {
     setAptDate(event.target.value);
     console.log(event.target.value);
   };
+  useEffect(() => {
+    const fetchFamilyMembers = async () => {
+      try {
+        console.log(API_PATHS.viewFamilyMembers);
+        const response = await axios.get(API_PATHS.viewFamilyMembers, { headers: { Authorization } });
+       // console.log(API_PATHS.familyMembers);
+        console.log(response);
+        // Assuming the API response contains an array of family members with 'username' field
+        setFamilyMembers(response.data); // Assuming the response is an array of family members
+      } catch (error) {
+        console.error("Error fetching family members:", error);
+        // Handle error fetching family members
+      }
+    };
+
+    fetchFamilyMembers();
+  }, [Authorization]);
 
   const dateConfirmHandler = () => {
     const hourMinString = StartTime.toString().split(":");
     console.log("hourmin: " + hourMinString);
     const bookingDate = new Date(aptDate);
-    // console.log((new Date(aptDate)).getFullYear());
-    //const formattedDate = formatISO(date);
+ 
 
     const dateToCheck = new Date(
       bookingDate.getFullYear(),
@@ -97,16 +109,15 @@ export function bookAptDetails() {
         headers: { Authorization },
       })
       .then((response) => {
-        // If the response is successful (status 2xx), display a toast or perform any action here
-        // For example, assuming you want to display a success toast:
+     
         toast({
-          title: "Success",
-          description: "Valid date proceed",
+          title: "Valid date !",
+          description: `Booked at ${DateFinal} Proceed`,
           status: "success",
           duration: 5000, // Adjust duration as needed
           isClosable: true,
         });
-        // You can also handle the response data if needed: response.data
+    
       })
       .catch((error) => {
         console.log(error);
@@ -182,32 +193,17 @@ export function bookAptDetails() {
         >
           <Box>
             <Input bg="white" type="date" onChange={dateAptHandler} />
-            {/* <Select
-              size="md"
-             // onChange={handleFamMember}
+            <Select
+              bg="white"
+              placeholder="Select Family Member"
+              onChange={(event) => setFamMemName(event.target.value)}
             >
-              <option value=""></option>
-              {famMemOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.key}
+              {familyMembers.map((member, index) => (
+                <option key={index} value={member.Patient.Username}>
+                  {member.Patient.Username}
                 </option>
               ))}
-            </Select> */}
-            {/* <Text>Registered </Text>
-            <Input
-              bg="white"
-              type="text"
-              placeholder="Username"
-              onChange={(event) => setFamMemUsername(event.target.value)}
-            /> */}
-
-            {/* <Text>Unregistered </Text> */}
-            <Input
-              bg="white"
-              type="text"
-              placeholder="Family Member Name"
-              onChange={(event) => setFamMemName(event.target.value)}
-            />
+            </Select>
             <Button onClick={dateConfirmHandler} colorScheme="green">
               Confirm
             </Button>
@@ -224,15 +220,4 @@ export function bookAptDetails() {
 }
 export default bookAptDetails;
 
-{
-  /* <Select size="md" 
-          //onChange={handleDayNumberToAdd}
-          >
-            <option value=""></option>
-            {famMemOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.key}
-              </option>
-            ))}
-          </Select> */
-}
+
