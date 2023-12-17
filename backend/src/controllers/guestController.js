@@ -38,7 +38,7 @@ const createRequest = async (req, res) => {
     const MedicalLicenseName = MedicalLicense[0].filename;
     const MedicalDegreeName = MedicalDegree[0].filename;
     const request = await requestModel.addEntry(
-      Username,
+      {Username,
       Password,
       Email,
       Name,
@@ -50,7 +50,7 @@ const createRequest = async (req, res) => {
       IdFileName,
       MedicalLicenseName,
       MedicalDegreeName,
-      Type: "Doctor",
+      Type: "Doctor",}
     );
 
     res.status(200).send({ request });
