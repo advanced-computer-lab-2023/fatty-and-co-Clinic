@@ -102,7 +102,7 @@ export function CreateFamilyMember() {
         setGender(""),
         setRelation(""),
         setUsername(""),
-        setPassword(""),setMobileNum(""),setSelectedDate(null),setEmergencyContactName(""),setEmergencyContactNumber("")
+        setPassword(""),setMobileNum(""),setSelectedDate(""),setEmergencyContactName(""),setEmergencyContactNumber("")
         setEmail("");
       } else {
         // Handle errors or provide feedback to the user

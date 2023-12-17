@@ -117,6 +117,16 @@ import {
        </Button>
     )}
   </Td>
+  <Td minWidth={{ sm: "150px" }}>
+    {(Status === "Upcoming" ) && ( // Render the cancel button only if status is "Upcoming"
+         <Button
+         colorScheme="teal"
+        onClick={() => props.handlereschdule(DoctorUsername,PatientUsername)}
+       >
+         reschdule
+       </Button>
+    )}
+  </Td>
        
   
       </Tr>
