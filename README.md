@@ -11,8 +11,9 @@ The motivation behind the Shebeen Health Clinic project is to provide a seamless
 ## Build Status
 
 - Project is in development stage
-- unit tests are needed
+- Unit tests are needed
 - UI and UX need to be improved in several areas such as booking an appointment and viewing doctor requests
+- Pharmacist chatting does not show notifications
 - [include all missing or broken requirements here]
 
 ## Code Style
