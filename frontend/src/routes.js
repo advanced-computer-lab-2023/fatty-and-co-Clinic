@@ -32,7 +32,7 @@ import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewFamilyApp from "views/Patient/viewfamAppoint/";
 import ViewDoctorsPatients from "views/Doctors/viewPatients";
-import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs"
+import PatientAppointmentsDoc from "views/Doctors/viewPatients/PatientRecs";
 import linkPatient from "views/Patient/linkPatient";
 import ViewMyPackage from "views/Patient/viewMyPackage";
 import ViewFamPackages from "views/Patient/viewFamPackages";
@@ -59,6 +59,7 @@ import {
   RocketIcon,
   SupportIcon,
 } from "components/Icons/Icons";
+import DashboardAdmin from "views/Dashboard/DashboardAdmin";
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
 //component de 7aga fe views
@@ -70,7 +71,7 @@ var dashRoutes = [
     name: "Dashboard",
     rtlName: "لوحة القيادة",
     icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
+    component: DashboardAdmin,
     layout: "/admin",
   },
   {
@@ -266,7 +267,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewMySlots,
     layout: "/doctor",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/chat",
@@ -288,7 +289,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: ViewDoctorDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
 
   {
@@ -297,7 +298,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: rescheduleApp,
     layout: "/doctor",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/bookAptDetails/:row",
@@ -305,7 +306,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: bookAptDetails,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/reschdule/:row",
@@ -313,7 +314,7 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: reschduleappointment,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
   {
     path: "/AppointmentConfirmation",
@@ -321,9 +322,8 @@ var dashRoutes = [
     icon: <HomeIcon color="inherit" />,
     component: AppointmentConfirmation,
     layout: "/patient",
-   show: false, // Add this to hide route from sidebar
+    show: false, // Add this to hide route from sidebar
   },
-  
 
   {
     path: "/viewDoctors",
@@ -368,29 +368,13 @@ var dashRoutes = [
     component: ViewDoctorsPatients,
     layout: "/doctor",
   },
-{
+  {
     path: "/patientRecords",
     name: "view patient records",
     icon: <CreditIcon color="inherit" />,
     component: PatientAppointmentsDoc,
     layout: "/doctor",
     show: false,
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
-    layout: "/admin",
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: <HomeIcon color="inherit" />,
-    component: Dashboard,
-    layout: "/doctor",
   },
 
   {
