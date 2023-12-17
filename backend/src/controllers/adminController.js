@@ -53,7 +53,7 @@ const getRequestFile = async (req, res) => {
 
 const getRequests = async (req, res) => {
   try {
-    const requests = await requestModel.find();
+    const requests = await requestModel.find({Type: "Doctor"});
     res.status(200).json(requests);
   } catch (error) {
     res.status(400).json({ error: error.message });

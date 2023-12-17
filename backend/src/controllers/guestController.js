@@ -49,7 +49,8 @@ const createRequest = async (req, res) => {
       Speciality,
       IdFileName,
       MedicalLicenseName,
-      MedicalDegreeName
+      MedicalDegreeName,
+      Type: "Doctor",
     );
 
     res.status(200).send({ request });
