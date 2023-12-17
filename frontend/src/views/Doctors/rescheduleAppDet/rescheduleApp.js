@@ -104,7 +104,7 @@ export function rescheduleApp() {
                 const url="/doctor/viewAppointments"
                 history.replace(url)
                 window.location.reload();
-              }, 700); 
+              }, 100); 
     
             } else {
               toast({

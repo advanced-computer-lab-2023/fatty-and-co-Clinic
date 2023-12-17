@@ -140,7 +140,7 @@ const dateConfirmHandler = async() => {
                 const url="/patient/viewAppointPat"
                 history.replace(url)
                 window.location.reload();
-              }, 2000); 
+              }, 200); 
     
             } else {
               toast({
