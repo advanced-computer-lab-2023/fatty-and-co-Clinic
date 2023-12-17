@@ -45,11 +45,11 @@ const ChatBox = ({ messages: initialMessages, receiver }) => {
   const [roomName, setRoomName] = useState("roomName"); // Replace with your room name
 
   const bottomChatRef = React.useRef(null);
-  React.useEffect(() => {
-    if (bottomChatRef.current) {
-      bottomChatRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+  // React.useEffect(() => {
+  //   if (bottomChatRef.current) {
+  //     bottomChatRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [messages]);
 
   console.log(user);
 

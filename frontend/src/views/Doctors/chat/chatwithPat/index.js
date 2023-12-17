@@ -186,16 +186,14 @@ const ChatWithPatient = () => {
             />
           ))}
         </Box>
-        <Flex position="sticky">
-          {selectedPatient ? (
-            <Box w="600px">
-              <Text>Chat</Text>
-              <ChatBox messages={messages} receiver={currentPatient} />
-            </Box>
-          ) : (
-            <span>Open a conversation to see Chat</span>
-          )}
-        </Flex>
+        {selectedPatient ? (
+          <Box w="600px">
+            <Text>Chat</Text>
+            <ChatBox messages={messages} receiver={currentPatient} />
+          </Box>
+        ) : (
+          <span>Open a conversation to see Chat</span>
+        )}
       </HStack>
     </Flex>
   );

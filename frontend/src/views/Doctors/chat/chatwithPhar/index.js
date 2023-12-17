@@ -140,12 +140,10 @@ const ChatWithPharmacist = () => {
         <Box w="250px">
           <Text>The first available pharmacist will talk to you</Text>
         </Box>
-        <Flex position="sticky">
-          <Box w="600px">
-            <Text>Chat</Text>
-            <ChatBoxPharm messages={messages} receiver={currentPharmacist} />
-          </Box>
-        </Flex>
+        <Box w="600px">
+          <Text>Chat</Text>
+          <ChatBoxPharm messages={messages} receiver={currentPharmacist} />
+        </Box>
       </HStack>
     </Flex>
   );
