@@ -21,7 +21,7 @@ const ChatWithPharmacist = () => {
 
   const currentPharmacist = {
     _id: "6569fc002440c3dfac738b9a",
-    Username: "HusseinPha2@",
+    Username: "evalpharm",
     Name: "Ethan Clark",
     DateOfBirth: "1962-01-25T22:00:00.000+00:00",
     HourlyRate: 13,
