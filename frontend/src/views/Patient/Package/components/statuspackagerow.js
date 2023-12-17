@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { API_PATHS } from "API/api_paths";
+import { CloseIcon } from '@chakra-ui/icons'
 
 import { useAuthContext } from "hooks/useAuthContext";
 
@@ -150,7 +151,7 @@ function Statuspackagerow(props) {
       <Td>
         {Status === "Subscribed" && (
           <Button bg="red.500" onClick={handleCancellation}>
-            {" "}
+            <CloseIcon color="white"/>
           </Button>
         )}
       </Td>

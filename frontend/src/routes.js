@@ -22,6 +22,7 @@ import viewDoctors from "views/Patient/viewDoctors";
 import ViewDoctorDetails from "views/Patient/viewDoctorDetails";
 import ViewMySlots from "views/Doctors/viewMySlotDetails";
 import Viewmembers from "views/Patient/viewmembers";
+import PackageAll from "views/Patient/Package";
 import ViewAppointments from "views/Doctors/viewAppointments";
 import viewPrescriptions from "views/Patient/viewPrescriptions";
 import MedicalHistoryPatient from "views/Patient/viewMedicalHistory/medicalHistory";
@@ -235,7 +236,13 @@ var dashRoutes = [
     component: DashboardPat,
     layout: "/patient",
   },
-
+  {
+    path: "/package_all",
+    name: "Package",
+    icon: <HomeIcon color="inherit" />,
+    component: PackageAll,
+    layout: "/patient",
+  },
   {
     path: "/videoCall",
     name: "Video Call",

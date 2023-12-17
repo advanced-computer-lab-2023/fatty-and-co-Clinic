@@ -1615,7 +1615,7 @@ console.log(user);
 
 
 
-const cancelSubscriptionfamilymember = async (req, res) => {
+ const cancelSubscriptionfamilymember = async (req, res) => {
   try {
     const Startdate = new Date();
     const { NationalId } = req.body;
@@ -1625,11 +1625,14 @@ const cancelSubscriptionfamilymember = async (req, res) => {
     const day = String(Startdate.getDate()).padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
     const patient = await patientModel.findOne({ Username: signedIn });
-    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId });
+    console.log(patient);
+    const fam = await familyMemberModel.findOne({ NationalIdFam: NationalId }).populate("Patient");
+    console.log(fam.Patient.Username);
+//console.log(fam.populate);
     const subscribed = await subscriptionModel.findOne({
-      FamilyMem: fam,
-      FamilyMem: fam.id,
+      Patient: fam.Patient,
     });
+    console.log("SUbscrinrd",subscribed);
     const famrelated = await familyMemberModel.find({
       Patient: patient.id,
       NationalIdFam: NationalId,
@@ -1640,10 +1643,10 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
-          .send({ error: "You have already cancelled your prescription" });
+          .send({ error: "You have already cancelled your subscription" });
       } else {
         const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
-          { FamilyMem: fam },
+          { Patient: fam.Patient },
           { Status: "Cancelled", Enddate: formattedDate }
         );
         res.status(200).json({ subscribedUpdate });
