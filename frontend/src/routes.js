@@ -51,7 +51,6 @@ import DoctorProfile from "views/Doctors/viewProfile";
 import chatWithDoc from "views/Patient/chatwithDoc";
 import ChatWithPatient from "views/Doctors/chat/chatwithPat";
 import DashboardPat from "views/Dashboard/DashboardPat";
-import VideoCallPage from "components/VideoCall/VideoChat";
 import ChatWithPharmacist from "views/Doctors/chat/chatwithPhar";
 import {
   HomeIcon,
@@ -158,13 +157,7 @@ var dashRoutes = [
     component: DashboardDoc,
     layout: "/doctor",
   },
-  {
-    path: "/videoCall",
-    name: "Video Call",
-    icon: <FaVideo />,
-    component: VideoCallPage,
-    layout: "/doctor",
-  },
+
   {
     path: "/updateEmailDoc",
     name: "Update Email",
@@ -249,14 +242,6 @@ var dashRoutes = [
     icon: <TbPackages />,
     component: PackageAll,
     layout: "/patient",
-  },
-  {
-    path: "/videoCall",
-    name: "Video Call",
-    icon: <FaVideo />,
-    component: VideoCallPage,
-    layout: "/patient",
-    show: false,
   },
 
   {
