@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { API_PATHS } from "API/api_paths";
 import axios from "axios";
 import { useAuthContext } from "hooks/useAuthContext";
-import { MdLocalPharmacy } from "react-icons/md";
+import { IoAddCircleSharp } from "react-icons/io5";
 
 import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -13,7 +13,6 @@ export default function OrderPrescription({ appointmentId }) {
   const { user } = useAuthContext();
   const toast = useToast();
   const [addedToCart, setaddedToCart] = useState(false);
-  const [outOfStockMessage, setOutOfStockMessage] = useState("");
   const Authorization = `Bearer ${user.token}`;
   console.log(user);
 
@@ -38,19 +37,9 @@ export default function OrderPrescription({ appointmentId }) {
           description:
             "The Medicines in this prescription have been added to your pharmacy cart.",
           status: "success",
-          duration: 2000,
+          duration: 9000,
           isClosable: true,
         });
-        if (outOfStockMessage) {
-          // Display the out-of-stock message if available
-          toast({
-            title: "Out of Stock",
-            description: outOfStockMessage,
-            status: "warning",
-            duration: 2000,
-            isClosable: true,
-          });
-        }
         window.location.href = "http://localhost:4000/patient/cart";
       } else {
         toast({
@@ -71,7 +60,7 @@ export default function OrderPrescription({ appointmentId }) {
       <Button
         colorScheme="teal"
         variant="solid"
-        rightIcon={<MdLocalPharmacy />}
+        rightIcon={<IoAddCircleSharp />}
         onClick={handleSubmit}
       >
         Add To Pharmacy Cart

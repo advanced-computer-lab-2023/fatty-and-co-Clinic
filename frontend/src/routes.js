@@ -73,6 +73,7 @@ import { TbPackages } from "react-icons/tb";
 import { ImUserCheck } from "react-icons/im";
 import { MdAccessTimeFilled } from "react-icons/md";
 import { TiCancel } from "react-icons/ti";
+import { GiMedicines } from "react-icons/gi";
 //path da el url el added lama ben doos 3ala a certain component fel ui
 //icon ben7ot fe el component name
 //component de 7aga fe views
@@ -292,15 +293,14 @@ var dashRoutes = [
 
   {
     path: "/viewAppointPat",
-    name: "View Patient Appointments ",
-    icon: <HomeIcon color="inherit" />,
+    name: "My Appointments ",
+    icon: <MdAccessTimeFilled />,
     component: PatientAppointments,
     layout: "/patient",
-    show: false,
   },
   {
     path: "/viewfamAppoint",
-    name: "View family Appointments ",
+    name: "View Family Appointments ",
     icon: <MdAccessTimeFilled />,
     component: ViewFamilyApp,
     layout: "/patient",
@@ -423,10 +423,9 @@ var dashRoutes = [
   {
     path: "/prescriptions/:patientUsername",
     name: "My prescriptions",
-    icon: <HomeIcon color="inherit" />,
+    icon: <GiMedicines />,
     component: viewPrescriptions,
     layout: "/patient",
-    show: false,
   },
   {
     path: "/linkPatient",
