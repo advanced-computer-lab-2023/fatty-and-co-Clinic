@@ -868,26 +868,26 @@ const cancelAppForSelf = async (req, res) => {
       const doctor= await doctorModel.findOne({Username:doctorUsername})
       const n1 = await notificationModel.create({
       Title: "Cancelled Appointment",
-      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + Date(upcomingApp.Date).toLocaleDateString("en-GB"),
+      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + upcomingApp.Date,
       Username: patientUsername,
     })
 
     const n2 = await notificationModel.create({
       Title: "Cancelled Appointment",
-      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + Date(upcomingApp.Date).toLocaleDateString("en-GB"),
+      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + upcomingApp.Date,
       Username: doctorUsername,
     })
 
     await transporter.sendMail({
       to: user.Email,
       subject: "Cancelled Appointment",
-      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${Date(upcomingApp.Date).toLocaleDateString("en-GB")}`,
+      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${upcomingApp.Date}`,
     });
 
     await transporter.sendMail({
       to: doc.Email,
       subject: "Cancelled Appointment",
-      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${Date(upcomingApp.Date).toLocaleDateString("en-GB")}`,
+      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
     });
       
       res.status(200).json({success:"Appointment cancelled successfully!"})
@@ -905,26 +905,26 @@ const cancelAppForSelf = async (req, res) => {
 
      const n1 = await notificationModel.create({
       Title: "Cancelled Appointment",
-      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + Date(upcomingApp.Date).toLocaleDateString("en-GB"),
+      Message: "Cancelled appointment with Dr. " + doctor.Name +" that was scheduled on " + upcomingApp.Date,
       Username: patientUsername,
     })
 
     const n2 = await notificationModel.create({
       Title: "Cancelled Appointment",
-      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + Date(upcomingApp.Date).toLocaleDateString("en-GB"),
+      Message: "Cancelled appointment with " + patient.Name +" that was scheduled on " + upcomingApp.Date,
       Username: doctorUsername,
     })
 
     await transporter.sendMail({
       to: user.Email,
       subject: "Cancelled Appointment",
-      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${Date(upcomingApp.Date).toLocaleDateString("en-GB")}`,
+      text: `You have successfully cancelled an appointment with Dr. ${doctor.Name} that was scheduled on ${upcomingApp.Date}`,
     });
 
     await transporter.sendMail({
       to: doc.Email,
       subject: "Cancelled Appointment",
-      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${Date(upcomingApp.Date).toLocaleDateString("en-GB")}`,
+      text: `Cancelled appointment with ${patient.Name} that was scheduled on ${upcomingApp.Date}`,
     });
      
     res.status(200).json({success:`Appointment cancelled and an amount of ${refund} refund restored successfully!`})
