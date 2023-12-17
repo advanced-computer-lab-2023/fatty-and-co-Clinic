@@ -38,11 +38,10 @@ export function ViewRequestsInner() {
   }, []);
 
   return (
-    <Box pt="80px">
+    <Box>
       <Flex
         direction="column"
         alignItems="flex-start"
-        pt="50px"
         justifyContent="flex-start"
       >
         <Requests
