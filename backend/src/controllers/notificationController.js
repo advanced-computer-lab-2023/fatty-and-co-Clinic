@@ -26,7 +26,7 @@ const setNotificationsToSeen = async (req, res) => {
     console.log(senderUsername);
     console.log(receiverUsername);
     // Find the notifications that need to be updated
-    const notifsToUpdate = await Notification.find({ seen: false });
+    //const notifsToUpdate = await Notification.find({ seen: false });
 
     //console.log(notifsToUpdate);
     // Update the notifications
@@ -34,10 +34,8 @@ const setNotificationsToSeen = async (req, res) => {
       { receiverUsername, senderUsername, seen: false },
       { seen: true }
     ).exec();
-
-    // Print the notifications that got updated
-    //console.log("hellonotifupdate");
-    //console.log(notifsToUpdate);
+      console.log("set notification to seen");
+    
 
     res.status(200).json({ message: "Notifications updated successfully" });
   } catch (error) {
