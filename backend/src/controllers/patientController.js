@@ -166,6 +166,7 @@ const session_index = async (req, res) => {
     const discount = await getPackageDiscount(req.user.Username);
     const famDiscount = await getPackageFamDiscount(req.user.Username);
 
+  
     //to test smth in the front end
     const test = 900;
     const mySessions = doctors.map((doctor) => {

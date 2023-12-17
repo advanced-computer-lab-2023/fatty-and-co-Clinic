@@ -63,9 +63,9 @@ export default function DashboardPat() {
   const history = useHistory();
 
   const handleRowClick = (row) => {
-    setSelectedRow(row);
+    //setSelectedRow(row);
 
-    history.push(newUrl, newState);
+    history.push(newUrl);
   };
   // useEffect(() => {
   //   notificationSocket.on("notification", (data) => {
