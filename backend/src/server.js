@@ -58,6 +58,8 @@ const io = socketIo(server, {
   cors: { origin: `http://localhost:3000` },
 });
 
+const pharmacySocket = require("socket.io-client")("http://localhost:7000");
+
 io.on("connection", (socket) => {
   //upon connection
   console.log("New client connected");
@@ -92,6 +94,11 @@ io.on("connection", (socket) => {
       // io.emit('notification', { message: "new message" });
       // console.log("notification sent")
     }
+  });
+
+  socket.on("sendPharmacy", () => {
+    console.log("sendPharmacy");
+    pharmacySocket.emit("receivedMessage", "evalpharm");
   });
 
   //upon disconnection
