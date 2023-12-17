@@ -3,7 +3,9 @@ import {
   Badge,
   Button,
   Flex,
+  HStack,
   Td,
+  Divider,
   Text,
   Tr,
   useColorModeValue,
@@ -21,9 +23,24 @@ import {
 import { DownloadIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect } from "react";
 import { API_PATHS } from "API/api_paths";
-import { useAuthContext } from "hooks/useAuthContext";
 import axios from "axios";
+import { useAuthContext } from "hooks/useAuthContext";
 import { useRequestsContext } from "hooks/useRequestsContext";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
+import CardHeader from "components/Card/CardHeader.js";
+import {
+  FaBirthdayCake,
+  FaMoneyBillAlt,
+  FaHospital,
+  FaGraduationCap,
+} from "react-icons/fa";
+import {
+  ChevronRightIcon,
+  HamburgerIcon,
+  InfoOutlineIcon,
+  EmailIcon,
+} from "@chakra-ui/icons";
 
 function RequestButton({ Username, Status }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,22 +57,16 @@ function RequestButton({ Username, Status }) {
         params: { Username: Username },
         headers: { Authorization },
       })
-      .then(async (response) => {
+      .then((response) => {
         setData(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        toast({
-          title: "Error",
-          description: error.response.data.error,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
       });
-  }, []); // Empty dependency array ensures this effect runs only once
+  }, []);
 
-  const jsonData = JSON.stringify(data);
+  // const jsonData = JSON.stringify(data);
 
   const handleAccept = async () => {
     axios
@@ -121,8 +132,10 @@ function RequestButton({ Username, Status }) {
       });
   };
 
+  // handle file download
   const downloadIdFile = async () => {
-    const idF = await fetch(API_PATHS.getRequestFile + data.IdFileName, {
+    let IdFileName = data.IdFileName;
+    const idF = await fetch(API_PATHS.getRequestFile + IdFileName, {
       headers: {
         Authorization: Authorization,
       },
@@ -132,51 +145,51 @@ function RequestButton({ Username, Status }) {
 
     const link = document.createElement("a");
     link.href = idFileurl;
-    link.download = "id file" + data.IdFileName;
+    link.download = "id file" + IdFileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const downloadMedicalDegreeFile = async () => {
-    const MedicalDegre = await fetch(
-      API_PATHS.getRequestFile + data.MedicalDegreeName,
+  const downloadPharmacyDegreeFile = async () => {
+    let PharmacyDegreeName = data.PharmacyDegreeName;
+    const PharmacyDegre = await fetch(
+      API_PATHS.getRequestFile + PharmacyDegreeName,
       {
         headers: {
           Authorization: Authorization,
         },
       }
     );
-    const MedicalDegreeBlob = await MedicalDegre.blob();
-    const MedicalDegreurl = URL.createObjectURL(MedicalDegreeBlob);
+    const PharmacyDegreeBlob = await PharmacyDegre.blob();
+    const PharmacyDegreurl = URL.createObjectURL(PharmacyDegreeBlob);
 
     const link = document.createElement("a");
-    link.href = MedicalDegreurl;
-    link.download = "medical degree file" + data.MedicalDegreeName;
+    link.href = PharmacyDegreurl;
+    link.download = "pharmacy degree file" + PharmacyDegreeName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const downloadMedicallicenseFile = async () => {
-    const license = await fetch(
-      API_PATHS.getRequestFile + data.MedicalLicenseName,
-      {
-        headers: {
-          Authorization: Authorization,
-        },
-      }
-    );
+  const downloadWorkingLicenseFile = async () => {
+    let WorkingLicenseName = data.WorkingLicenseName;
+    const license = await fetch(API_PATHS.getRequestFile + WorkingLicenseName, {
+      headers: {
+        Authorization: Authorization,
+      },
+    });
     const licenseBlob = await license.blob();
     const licenseurl = URL.createObjectURL(licenseBlob);
 
     const link = document.createElement("a");
     link.href = licenseurl;
-    link.download = "medical license file" + data.MedicalLicenseName;
+    link.download = "working license file" + WorkingLicenseName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+  // end of handle file download
 
   return (
     <>
@@ -186,28 +199,93 @@ function RequestButton({ Username, Status }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
           <ModalBody>
             {data ? (
               <div>
-                <p>Request Details: {jsonData}</p>
+                <Card mr="30">
+                  <CardHeader p="12px 5px" mb="12px">
+                    <HStack>
+                      <InfoOutlineIcon color="teal.400" />
+                      <Text fontSize="lg" fontWeight="bold">
+                        {data.Username} Information
+                      </Text>
+                    </HStack>
+                  </CardHeader>
+                  <CardBody>
+                    {data.Username && data.Username !== ":username" ? (
+                      <Flex flexDirection="column">
+                        <HStack>
+                          <Icon
+                            as={EmailIcon}
+                            boxSize={6}
+                            color={useColorModeValue("teal.500", "teal.300")}
+                          />
+                          <Text fontWeight="normal">{data.Email}</Text>
+                        </HStack>
+                        <Divider my="2" />
+                        <HStack>
+                          <Icon
+                            as={FaBirthdayCake}
+                            boxSize={6}
+                            color={useColorModeValue("teal.500", "teal.300")}
+                          />
+                          <Text fontWeight="normal">{data.DateOfBirth}</Text>
+                        </HStack>
+                        <Divider my="2" />
+                        <HStack>
+                          <Icon
+                            as={FaMoneyBillAlt}
+                            boxSize={6}
+                            color={useColorModeValue("teal.500", "teal.300")}
+                          />
+                          <Text>${data.HourlyRate}</Text>
+                        </HStack>
+                        <Divider my="2" />
+                        <HStack>
+                          <Icon
+                            as={FaHospital}
+                            boxSize={6}
+                            color={useColorModeValue("teal.500", "teal.300")}
+                          />
+                          <Text>{data.Affiliation}</Text>
+                        </HStack>
+                        <Divider my="2" />
+                        <HStack>
+                          <Icon
+                            as={FaGraduationCap}
+                            boxSize={6}
+                            color={useColorModeValue("teal.500", "teal.300")}
+                          />
+                          <Text>{data.EducationalBackground}</Text>
+                        </HStack>
+                      </Flex>
+                    ) : (
+                      <Text fontSize="3xl" fontWeight="bold" textAlign="center">
+                        Username not found
+                      </Text>
+                    )}
+                  </CardBody>
+                </Card>
+                {/* <p>Request Details: {jsonData}</p> */}
                 <VStack spacing={3} w="80%">
                   <button onClick={downloadIdFile}>
                     ID File
                     <Icon as={DownloadIcon} me="3px" />
                   </button>
-                  <button onClick={downloadMedicalDegreeFile}>
-                    Medical Degree
+                  <button onClick={downloadPharmacyDegreeFile}>
+                    Pharmacy Degree
                     <Icon as={DownloadIcon} me="3px" />
                   </button>
-                  <button onClick={downloadMedicallicenseFile}>
-                    Medical License
+                  <button onClick={downloadWorkingLicenseFile}>
+                    Working License
                     <Icon as={DownloadIcon} me="3px" />
                   </button>
                 </VStack>
               </div>
             ) : (
-              <p>Loading data...</p>
+              <Flex align="center" justify="center" height="200px">
+                <Text fontSize="lg">Loading user data...</Text>
+              </Flex>
             )}
           </ModalBody>
           <ModalFooter>
@@ -219,9 +297,22 @@ function RequestButton({ Username, Status }) {
                 <Button colorScheme="red" mr={3} onClick={handleReject}>
                   Reject
                 </Button>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Close
+                </Button>
               </div>
             ) : (
-              <div></div>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={() => setIsModalOpen(false)}
+              >
+                Close
+              </Button>
             )}
           </ModalFooter>
         </ModalContent>
@@ -229,4 +320,5 @@ function RequestButton({ Username, Status }) {
     </>
   );
 }
+
 export default RequestButton;
