@@ -38,6 +38,28 @@ function SubscribePackage({ packages, familyPackages }) {
 
   const { Wallet, dispatch } = useWalletContext();
 
+
+  const [FamMemName, setFamMemName] = useState(null);
+  const [familyMembers, setFamilyMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchFamilyMembers = async () => {
+      try {
+        console.log(API_PATHS.viewFamilyMembers);
+        const response = await axios.get(API_PATHS.viewFamilyMembers, { headers: { Authorization } });
+       // console.log(API_PATHS.familyMembers);
+        console.log(response);
+        // Assuming the API response contains an array of family members with 'username' field
+        setFamilyMembers(response.data); // Assuming the response is an array of family members
+      } catch (error) {
+        console.error("Error fetching family members:", error);
+        // Handle error fetching family members
+      }
+    };
+
+    fetchFamilyMembers();
+  }, [Authorization]);
+
   const handleSubscribeCredit = async (e) => {
     e.preventDefault();
 
@@ -260,18 +282,12 @@ function SubscribePackage({ packages, familyPackages }) {
                   }}
                 >
                   <option value="">Myself</option>
-                  {/* {familyPackages && familyPackages.map((row) => {
-                    if (row.Patient === null) {
-                    } else {
-                      var name = row.Patient
-                        ? row.Patient.Name
-                        : row.FamilyMem.Name;
-                      var ni = row.Patient
-                        ? row.Patient.NationalId
-                        : row.FamilyMem.NationalId;
-                      return <option value={ni}>{name}</option>;
-                    }
-                  })} */}
+                  {familyMembers.map((member, index) => (
+                <option key={index} value={member.Patient.NationalId}>
+                  {member.Patient.Name}
+                </option>
+              ))}
+
                 </select>
               </Box>
               <Box>

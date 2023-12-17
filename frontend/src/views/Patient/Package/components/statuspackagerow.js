@@ -16,20 +16,26 @@ import { API_PATHS } from "API/api_paths";
 
 import { useAuthContext } from "hooks/useAuthContext";
 
-
 function Statuspackagerow(props) {
-  const { Name, Status, Package, Enddate, Startdate, Renewaldate , NationalId } = props;
+  const {
+    Name,
+    Status,
+    Package,
+    Enddate,
+    Startdate,
+    Renewaldate,
+    NationalId,
+  } = props;
   const textColor = useColorModeValue("gray.700", "white");
 
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   const toast = useToast();
-  
+
   const handleCancellation = async (e) => {
     e.preventDefault();
-
+    console.log("NationalId", NationalId);
     try {
-      console.log("NationalId", NationalId);
       const response = await fetch(API_PATHS.CancelFamilysubscribtion, {
         method: "PATCH",
         headers: {
@@ -63,6 +69,7 @@ function Statuspackagerow(props) {
       console.error("An error occurred", error);
     }
   };
+
 
   return (
     <Tr>
@@ -141,7 +148,11 @@ function Statuspackagerow(props) {
         </Flex>
       </Td>
       <Td>
-        <Button  bg="red.500" onClick={handleCancellation} > </Button>
+        {Status === "Subscribed" && (
+          <Button bg="red.500" onClick={handleCancellation}>
+            {" "}
+          </Button>
+        )}
       </Td>
     </Tr>
   );
