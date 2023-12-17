@@ -154,7 +154,7 @@ var dashRoutes = [
   {
     path: "/videoCall",
     name: "Video Call",
-    icon: <HomeIcon color="inherit" />,
+    icon: <FaVideo />,
     component: VideoCallPage,
     layout: "/doctor",
   },
@@ -337,8 +337,6 @@ var dashRoutes = [
     show: false,
   },
 
- 
-
   {
     path: "/deleteUser",
     name: "Delete User",
@@ -365,8 +363,15 @@ var dashRoutes = [
   {
     path: "/chatWithPharmacist",
     name: "Chat With Pharmacist",
-    icon: <HomeIcon color="inherit" />,
+    icon: <IoIosChatbubbles />,
     component: ChatWithPharmacist,
+    layout: "/doctor",
+  },
+  {
+    path: "/chatWithPatient",
+    name: "Chat With a Patient",
+    icon: <IoIosChatbubbles />,
+    component: ChatWithPatient,
     layout: "/doctor",
   },
   {
@@ -418,7 +423,7 @@ var dashRoutes = [
     component: viewDoctors,
     layout: "/patient",
   },
-  
+
   {
     path: "/medicalhistory/:patientUsername",
     name: "Medical History",
@@ -457,15 +462,8 @@ var dashRoutes = [
     show: false,
   },
   {
-    path: "/dashboard",
-    name: "home page",
-    icon: <HomeIcon color="inherit" />,
-    component: DashboardDoc,
-    layout: "/doctor",
-  },
-  {
     path: "/doctorPatients",
-    name: "View Doctor Patients",
+    name: "My Patients",
     icon: <CreditIcon color="inherit" />,
     component: ViewDoctorsPatients,
     layout: "/doctor",
