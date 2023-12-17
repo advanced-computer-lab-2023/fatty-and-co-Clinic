@@ -1222,16 +1222,36 @@ const getDocUsernameSocket = async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
+}
+
+const getRequest = async (req, res) => {
+  const { Username, FollowUpDate } = req.query;
+  try {
+    const request = await requestModel.findOne({Date: FollowUpDate, DoctorUsername: req.user.Username, PatientUsername: Username});
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getRequests = async (req, res) => {
+  try {
+    const requests = await requestModel.find();
+    res.status(200).json(requests);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 const acceptFollowUp = async (req, res) => {
-  const { Username } = req.body;
+  const { Username, FollowUpDate } = req.body;
+  
   const docUsername = req.user.Username;
   console.log(Username, docUsername);
   try {
+  const today = new Date();
     const request = await requestModel.findOne({
-      PatientUsername: Username,
-      DoctorUsername: docUsername,
+      PatientUsername: Username, DoctorUsername: docUsername, Date: FollowUpDate,
       Status: { $ne: "Accepted" },
     });
     console.log(request);
@@ -1239,18 +1259,19 @@ const acceptFollowUp = async (req, res) => {
     const doctor = await doctorModel.findOne({
       Username: docUsername,
     });
-    if (date < today) {
+    if (FollowUpDate < today) {
       res.status(400).json({ error: "invalid date" });
       return;
     } else {
       const appointment = await appointmentModel.create({
         DoctorUsername: docUsername,
         DoctorName: doctor.Name,
-        PatientUsername: patientUsername,
+        PatientUsername: Username,
         PatientName: patient.Name,
         Status: "Upcoming",
         FollowUp: true,
-        Date: date,
+        Date: FollowUpDate,
+        BookedBy: Username,
       });
     }
 
@@ -1264,7 +1285,7 @@ const acceptFollowUp = async (req, res) => {
 };
 
 const rejectFollowUp = async (req, res) => {
-  const { Username } = req.body;
+  const { Username, FollowUpDate } = req.body;
   const docUsername = req.user.Username;
   try {
     const request = await requestModel.findOneAndUpdate(
@@ -1324,5 +1345,7 @@ module.exports = {
   getDocUsernameSocket,
   acceptFollowUp,
   rejectFollowUp,
+  getRequest,
+  getRequests,
   getDoctorInfo,
 };

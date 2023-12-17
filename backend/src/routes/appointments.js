@@ -18,6 +18,7 @@ const {
   createAppointment,
   getAppointmentsfamilymembers,
   getAllAppointmentsPat,
+  rescheduleAppointmentPatient,
 } = require("../controllers/appointmentController");
 
 //const {createAppointment} = require("../controllers/testController");

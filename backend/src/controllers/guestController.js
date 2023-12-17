@@ -6,6 +6,7 @@ const patientModel = require("../models/patients");
 const subscriptionModel = require("../models/subscriptions");
 const cartModel = require("../models/cart");
 const notificationsModel = require("../models/notifications");
+const doctorModel = require("../models/doctors");
 
 
 const bcrypt = require("bcrypt");
@@ -37,7 +38,7 @@ const createRequest = async (req, res) => {
     const MedicalLicenseName = MedicalLicense[0].filename;
     const MedicalDegreeName = MedicalDegree[0].filename;
     const request = await requestModel.addEntry(
-      Username,
+      {Username,
       Password,
       Email,
       Name,
@@ -48,7 +49,8 @@ const createRequest = async (req, res) => {
       Speciality,
       IdFileName,
       MedicalLicenseName,
-      MedicalDegreeName
+      MedicalDegreeName,
+      Type: "Doctor",}
     );
 
     res.status(200).send({ request });
@@ -310,11 +312,54 @@ const createPatient = async (req, res) => {
 
 const getNotifs = async (req, res) => {
   try {
-    const notifs = await notificationsModel.find({Username: req.user.Username});
-    const count = notifs.length;
-    res.status(200).send({ notifs, count });
+    const notifs = await notificationsModel.find({Username: req.user.Username , Clicked: false});
+    res.status(200).send(notifs);
   } catch (error) {
     res.status(400).send({ message: error.message });
+  }
+};
+
+const viewNotif = async (req, res) => {
+  const {Title, Message} = req.body;
+  try {
+    console.log(Title);
+    console.log(Message);
+    const notif = await notificationsModel.findOneAndUpdate(
+      {Username: req.user.Username , Title, Message, Clicked: { $ne: true }},
+      { $set: { Clicked: true } },
+      { new: true });
+    res.status(200).send(notif);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+const acceptRequestEmail = async (req, res) => {
+  const { Username } = req.query;
+  try {
+    const request = await requestModel.findOne(
+      { Username: Username },
+    );
+    console.log("User " + Username);
+    console.log("req " + request)
+    const user = await systemUserModel.create({
+      Username: Username,
+      Password: request.Password,
+      Email: request.Email,
+      Type: "Doctor",
+    });
+    const doc = await doctorModel.create({
+      Username: Username,
+      Name: request.Name,
+      DateOfBirth: request.DateOfBirth,
+      HourlyRate: request.HourlyRate,
+      Affiliation: request.Affiliation,
+      EducationalBackground: request.EducationalBackground,
+      Speciality: request.Speciality,
+    });
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -329,4 +374,6 @@ module.exports = {
   validateOTP,
   resetPass,
   getNotifs,
+  viewNotif,
+  acceptRequestEmail,
 };

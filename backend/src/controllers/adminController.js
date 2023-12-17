@@ -53,7 +53,7 @@ const getRequestFile = async (req, res) => {
 
 const getRequests = async (req, res) => {
   try {
-    const requests = await requestModel.find();
+    const requests = await requestModel.find({Type: "Doctor"});
     res.status(200).json(requests);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -82,22 +82,6 @@ const acceptRequest = async (req, res) => {
     );
     const Email = request.Email;
 
-    // create instead of addentry so that the password is not hashed twice
-    const user = await userModel.create({
-      Username: Username,
-      Password: request.Password,
-      Email: request.Email,
-      Type: "Doctor",
-    });
-    const doc = await doctorModel.create({
-      Username: Username,
-      Name: request.Name,
-      DateOfBirth: request.DateOfBirth,
-      HourlyRate: request.HourlyRate,
-      Affiliation: request.Affiliation,
-      EducationalBackground: request.EducationalBackground,
-      Speciality: request.Speciality,
-    });
 
     await transporter.sendMail({
       to: Email,
@@ -163,13 +147,12 @@ const acceptRequest = async (req, res) => {
   IN WITNESS WHEREOF, the parties have executed this Employment Contract as of the date first above written.</p>
     
         <p>To accept the contract, click the button below:</p>
-        <a href="http://localhost:3000/auth/signin" class="button">Accept</a>
+        <a href="http://localhost:3000/auth/acceptContract?username=${Username}" class="button">Accept</a>
 
       `,
     });
-
     request.Status = "Accepted";
-    await request.save();
+    request.save();
     res.status(200).json(request);
   } catch (error) {
     console.log(error);
@@ -185,6 +168,35 @@ const rejectRequest = async (req, res) => {
       { $set: { Status: "Rejected" } },
       { new: true }
     );
+    res.status(200).json(request);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const acceptRequestEmail = async (req, res) => {
+  const { Username } = req.body;
+  try {
+    const request = await requestModel.findOneAndUpdate(
+      { Username: Username, Status: { $ne: "Accepted" } },
+      { $set: { Status: "Accepted" } },
+      { new: true }
+    );
+    const user = await userModel.create({
+      Username: Username,
+      Password: request.Password,
+      Email: request.Email,
+      Type: "Doctor",
+    });
+    const doc = await doctorModel.create({
+      Username: Username,
+      Name: request.Name,
+      DateOfBirth: request.DateOfBirth,
+      HourlyRate: request.HourlyRate,
+      Affiliation: request.Affiliation,
+      EducationalBackground: request.EducationalBackground,
+      Speciality: request.Speciality,
+    });
     res.status(200).json(request);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -250,4 +262,5 @@ module.exports = {
   rejectRequest,
   getRequests,
   getRequestFile,
+  acceptRequestEmail,
 };

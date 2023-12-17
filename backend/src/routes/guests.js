@@ -10,6 +10,8 @@ const {
   validateOTP,
   resetPass,
   getNotifs,
+  viewNotif,
+  acceptRequestEmail,
 } = require("../controllers/guestController");
 const requireAuth = require("../common/middleware/requireAuth");
 const { cpUpload } = require("../common/middleware/doctorUpload");
@@ -29,6 +31,7 @@ router.post("/login", login);
 
 router.post("/sendOTP", sendOTP);
 router.post("/validateOTP", validateOTP);
+router.post("/acceptRequestEmail", acceptRequestEmail);
 
 /**
  * @route POST /patients/addPatient
@@ -67,6 +70,7 @@ router.patch("/resetPass/", resetPass);
 router.use(requireAuth);
 
 router.get("/getNotifs", getNotifs);
+router.patch("/viewNotif", viewNotif);
 
 // TODO: add type check as middleware if needed
 router.put("/updateRequest/:id", updateRequest);

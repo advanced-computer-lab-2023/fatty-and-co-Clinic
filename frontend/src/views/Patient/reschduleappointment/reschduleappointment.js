@@ -139,8 +139,8 @@ const dateConfirmHandler = async() => {
               const timer = setTimeout(() => {
                 const url="/patient/viewAppointPat"
                 history.replace(url)
-              //  window.location.reload();
-              }, 2000); 
+                window.location.reload();
+              }, 200); 
     
             } else {
               toast({
@@ -151,6 +151,7 @@ const dateConfirmHandler = async() => {
                 isClosable: true,
               });
             }
+
           } catch (error) {
             console.error("An error occurred during Resceduling", error);
           }

@@ -29,6 +29,7 @@ import MedicalHistoryPatient from "views/Patient/viewMedicalHistory/medicalHisto
 import UpdateAffil from "views/Doctors/updateInfo/UpdateAffil";
 import UpdatePass from "views/Doctors/updateInfo/UpdatePass";
 import Requests from "views/Admin/Requests";
+import FollowUpRequests from "views/Doctors/Requests";
 import UpdateHourly from "views/Doctors/updateInfo/UpdateHourly";
 import PatientAppointments from "views/Patient/viewAppointPat/";
 import ViewFamilyApp from "views/Patient/viewfamAppoint/";
@@ -112,7 +113,13 @@ var dashRoutes = [
     component: Requests,
     layout: "/admin",
   },
-
+  {
+    path: "/viewRequests",
+    name: "View Requests",
+    icon: <HomeIcon color="inherit" />,
+    component: FollowUpRequests,
+    layout: "/doctor",
+  },
   {
     path: "/addAdmin",
     name: "Add Admin",
@@ -581,7 +588,7 @@ var dashRoutes = [
         layout: "/auth",
       },
       {
-        path: "/docacc",
+        path: "/acceptContract",
         name: "Contract Accepted",
         icon: <RocketIcon color="inherit" />,
         component: DocAcc,

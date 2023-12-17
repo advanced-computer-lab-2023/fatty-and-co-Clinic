@@ -659,10 +659,94 @@ const testAppointRef = async (req, res) => {
     });
 };
 
+// const reschedulePatient = async (req, res) => {
+ 
+//   try {
+
+//      const docUsername= req.user.Username
+//      const {patientUsername,date}=req.body
+//      const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, Status:"Upcoming"})
+//      const reqDate= new Date(date)
+//      const user = await User.findOne({Username: patientUsername});
+//      const doc = await User.findOne({Username: docUsername});
+//      const patient= await patientModel.findOne({Username:patientUsername})
+//       const doctor= await doctorModel.findOne({Username:docUsername})
+//      if(!prevApp){
+//       res.status(404).json({err:"Patient wasn't scheduled for an upcoming appointment!"})
+//       return;
+//      }
+//      else if(prevApp.Date.getFullYear()==reqDate.getFullYear()&& prevApp.Date.getMonth()+1==reqDate.getMonth()+1&& prevApp.Date.getDate()+1==reqDate.getDate()+1&& prevApp.Date.getUTCHours()==reqDate.getUTCHours()){
+//       console.log("First else")
+//       res.status(404).json({err:"You're rescheduling appointment on the same date it's scheduled on!"})
+//      }
+//      else{
+//      const patientApp= await appointmentModel.find({
+//       $or: [  { PatientUsername: patientUsername, Status:"Upcoming"},
+//       { DoctorUsername:docUsername,Status:"Upcoming"},
+//     ],
+//   })
+//      const reqDate= new Date(date)
+//      let isBooked = false
+//      for(const appReserved of patientApp){      
+//      if(reqDate.getFullYear()==appReserved.Date.getFullYear() && reqDate.getMonth()+1==appReserved.Date.getMonth()+1 && reqDate.getDate()==appReserved.Date.getDate() &&reqDate.getUTCHours()==appReserved.Date.getUTCHours() ){
+//           isBooked= true;
+//           break;
+//      }
+//      console.log("isBooked "+ isBooked)
+//      if(isBooked){
+//       console.log("error another app booked on same day")
+//       res.status(400).json({err:"There is another appointment booked on same date!"})
+//       return;
+//      }
+//      else{
+//       console.log("hereee");
+//      const updateAppOld=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date,Status:"Rescheduled"})      
+//      console.log("heree");
+
+//      const newApp= await appointmentModel.create({PatientUsername:patientUsername,BookedBy: updateAppOld.BookedBy,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
+//      console.log("here");
+
+//      const n1 = await notificationModel.create({
+//       Title: "Rescheduled Appointment",
+//       Message: `Rescheduled appointment with Dr. ${doctor.Name} scheduled on ${newApp.Date}`,
+//       Username: patientUsername,
+//     })
+//     console.log("here1");
+
+//     const n2 = await notificationModel.create({
+//       Title: "Rescheduled Appointment",
+//       Message: `Rescheduled appointment with ${patient.Name} scheduled on ${newApp.Date}`,
+//       Username: docUsername,
+//     })
+//     console.log("here2");
+
+//     await transporter.sendMail({
+//       to: user.Email,
+//       subject: "Rescheduled Appointment",
+//       text: `Rescheduled appointment with Dr. ${doctor.Name} scheduled on ${newApp.Date}`,
+//     });
+//     console.log("here3");
+
+//     await transporter.sendMail({
+//       to: doc.Email,
+//       subject: "Rescheduled Appointment",
+//       text: `Rescheduled appointment with ${patient.Name} scheduled on ${newApp.Date}`,
+//     });
+//     console.log("here4");
+
+//      res.status(200).json("You have rescheduled appointment successfully!")
+//      return;}
+//     }}
+//   } catch (error) {
+//     res.status(404).json(error)
+//   }
+// }
+
 const reschedulePatient = async (req, res) => {
  
   try {
 
+    
      const docUsername= req.user.Username
      const {patientUsername,date}=req.body
      const prevApp=await appointmentModel.findOne({DoctorUsername:docUsername,PatientUsername:patientUsername, Status:"Upcoming"})
@@ -695,8 +779,43 @@ const reschedulePatient = async (req, res) => {
       return;
      }
      else{
+
+      const user = await User.findOne({Username: patientUsername});
+    const doc = await User.findOne({Username: docUsername});
+    const patient= await patientModel.findOne({Username:patientUsername})
+    const doctor= await doctorModel.findOne({Username:docUsername})
+    console.log("doctor",docUsername);
+    console.log("patient",patientUsername);
+    console.log("user",user);
+    console.log("doc",doc);
      const updateAppOld=await appointmentModel.findOneAndUpdate({PatientUsername:patientUsername,DoctorUsername:docUsername,Status:"Upcoming"},{Date:date,Status:"Rescheduled"})      
      const newApp= await appointmentModel.create({PatientUsername:patientUsername,BookedBy: updateAppOld.BookedBy,PatientName:updateAppOld.PatientName,DoctorName:updateAppOld.DoctorName,DoctorUsername:docUsername,Status:"Upcoming",Date:date})
+     const n1 = await notificationModel.create({
+      Title: "Rescheduled Appointment",
+      Message: `Rescheduled appointment with Dr. ${doctor.Name} scheduled on ${newApp.Date}`,
+      Username: patientUsername,
+    })
+    console.log("here1");
+
+    const n2 = await notificationModel.create({
+      Title: "Rescheduled Appointment",
+      Message: `Rescheduled appointment with ${patient.Name} scheduled on ${newApp.Date}`,
+      Username: docUsername,
+    })
+    console.log("here2");
+
+    await transporter.sendMail({
+      to: user.Email,
+      subject: "Rescheduled Appointment",
+      text: `Rescheduled appointment with Dr. ${doctor.Name} scheduled on ${newApp.Date}`,
+    });
+    console.log("here3");
+
+    await transporter.sendMail({
+      to: doc.Email,
+      subject: "Rescheduled Appointment",
+      text: `Rescheduled appointment with ${patient.Name} scheduled on ${newApp.Date}`,
+    });
      res.status(200).json("You have rescheduled appointment successfully!")
      return;}
     }}
@@ -717,6 +836,8 @@ const getDoctorId= async(req,res)=>{
     res.status(404).json({err:"Cannot find doctor"})
   }
 }
+
+
 const cancelAppForFam = async (req, res) => {
  
   try {
@@ -988,6 +1109,8 @@ const createAppointment = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+
+
 const reschdulebypatient= async (req, res) => {
   const username = req.user.Username;
   var patient;
@@ -1035,27 +1158,27 @@ const reschdulebypatient= async (req, res) => {
     });
 
     const n1 = await notificationModel.create({
-      Title: "New Appointment",
-      Message: `You have successfully reschduled an appointment with Dr. ${DoctorName} scheduled on ${Date}`,
+      Title: "Rescheduled Appointment",
+      Message: `You have successfully rescheduled an appointment with Dr. ${DoctorName} scheduled on ${Date}`,
       Username: PatientUsernameFinal,
     })
 
     const n2 = await notificationModel.create({
-      Title: "New Appointment",
-      Message: `New appointment with ${patient.Name} scheduled on ${Date}`,
+      Title: "Rescheduled Appointment",
+      Message: `Rescheduled appointment with ${patient.Name} scheduled on ${Date}`,
       Username: DoctorUsername,
     })
 
     await transporter.sendMail({
       to: user.Email,
-      subject: "New Appointment",
-      text: `You have successfully booked an appointment with Dr. ${DoctorName} scheduled on ${Date}`,
+      subject: "Rescheduled Appointment",
+      text: `You have successfully rescheduled an appointment with Dr. ${DoctorName} scheduled on ${Date}`,
     });
 
     await transporter.sendMail({
       to: doc.Email,
-      subject: "New Appointment",
-      text: `New appointment with ${patient.Name} scheduled on ${Date}`,
+      subject: "Rescheduled Appointment",
+      text: `Rescheduled appointment with ${patient.Name} scheduled on ${Date}`,
     });
 
     console.log("created");

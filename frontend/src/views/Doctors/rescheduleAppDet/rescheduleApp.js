@@ -24,7 +24,6 @@ import DocSlotAptsTable from "../viewMySlotDetails/DocSlotAptsTable";
 export function rescheduleApp() {
   const { isOpen, onToggle } = useDisclosure();
   const [isOpen1, setIsOpen1] = useState(false);
-
   const { user } = useAuthContext();
   const Authorization = `Bearer ${user.token}`;
   console.log(Authorization);
@@ -104,8 +103,8 @@ export function rescheduleApp() {
               const timer = setTimeout(() => {
                 const url="/doctor/viewAppointments"
                 history.replace(url)
-              //  window.location.reload();
-              }, 700); 
+                window.location.reload();
+              }, 100); 
     
             } else {
               toast({

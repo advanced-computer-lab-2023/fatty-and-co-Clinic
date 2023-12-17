@@ -27,6 +27,10 @@ const {
   getDoctorInfo,
   getChatPatients,
   getDocUsernameSocket,
+  getRequest,
+  getRequests,
+  acceptFollowUp,
+  rejectFollowUp,
 } = require("../controllers/doctorController");
 
 const {
@@ -134,6 +138,13 @@ router.get("/getAllDoctors", getAllDoctors);
  */
 // TODO: add type check as middleware if needed
 router.delete("/deleteDoctor/:id", deleteDoctor); // TODO: check if the one deleting is an admin or the currently logged in doctor
+
+
+router.get("/followUps", getRequests);
+router.get("/getRequest", getRequest);
+
+router.post("/acceptFollowUp", acceptFollowUp);
+router.put("/rejectFollowUp", rejectFollowUp);
 
 /**
  * @route GET /doctors/getDoctor/:id
