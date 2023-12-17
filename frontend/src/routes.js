@@ -239,7 +239,7 @@ var dashRoutes = [
   {
     path: "/package_all",
     name: "Package",
-    icon: <HomeIcon color="inherit" />,
+    icon: <TbPackages />,
     component: PackageAll,
     layout: "/patient",
   },
@@ -274,6 +274,7 @@ var dashRoutes = [
     icon: <TbPackages />,
     component: ViewFamPackages,
     layout: "/patient",
+    show: false,
   },
   {
     path: "/viewMyPackageStatus",
@@ -289,6 +290,7 @@ var dashRoutes = [
     icon: <ImUserCheck />,
     component: ViewFamPackageswithstatus,
     layout: "/patient",
+    show: false,
   },
 
   {
@@ -297,6 +299,7 @@ var dashRoutes = [
     icon: <GoPackage />,
     component: Package2,
     layout: "/patient",
+    show: false,
   },
 
   {
@@ -321,6 +324,7 @@ var dashRoutes = [
     icon: <TiCancel />,
     component: CancelSubscription,
     layout: "/patient",
+    show: false,
   },
 
   {
@@ -333,13 +337,7 @@ var dashRoutes = [
     show: false,
   },
 
-  {
-    path: "/createFamilymember/",
-    name: "Add a Family Member",
-    icon: <MdOutlineGroupAdd />,
-    component: createFamilymember,
-    layout: "/patient",
-  },
+ 
 
   {
     path: "/deleteUser",
@@ -420,13 +418,7 @@ var dashRoutes = [
     component: viewDoctors,
     layout: "/patient",
   },
-  {
-    path: "/viewmembers",
-    name: "View Registered Family Members",
-    icon: <MdFamilyRestroom />,
-    component: Viewmembers,
-    layout: "/patient",
-  },
+  
   {
     path: "/medicalhistory/:patientUsername",
     name: "Medical History",
@@ -440,6 +432,20 @@ var dashRoutes = [
     name: "My prescriptions",
     icon: <GiMedicines />,
     component: viewPrescriptions,
+    layout: "/patient",
+  },
+  {
+    path: "/createFamilymember/",
+    name: "Add a Family Member",
+    icon: <MdOutlineGroupAdd />,
+    component: createFamilymember,
+    layout: "/patient",
+  },
+  {
+    path: "/viewmembers",
+    name: "View Registered Family Members",
+    icon: <MdFamilyRestroom />,
+    component: Viewmembers,
     layout: "/patient",
   },
   {
