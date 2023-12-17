@@ -11,6 +11,7 @@ import {
   Flex,
   Icon,
 } from "@chakra-ui/react";
+//import { copyCSSStyles } from "html2canvas/dist/types/dom/document-cloner";
 import React from "react";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { FaUserMd, FaHeart, FaTooth, FaEye , FaLungs } from "react-icons/fa";
@@ -78,10 +79,10 @@ function DoctorCard(props) {
                   <span
                     style={{ textDecoration: "line-through", color: "teal" }}
                   >
-                    {Cost} EGP
+                    {CostOld} EGP
                   </span>{" "}
                   {"  "}
-                  <span style={{ color: "red" }}>{"    "}{CostOld} EGP</span>
+                  <span style={{ color: "red" }}>{"    "}{Cost} EGP</span>
                 </>
               ) : (
                 <span style={{ color: "teal" }}>{Cost} EGP</span>

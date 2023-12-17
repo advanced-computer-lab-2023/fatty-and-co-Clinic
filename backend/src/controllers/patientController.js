@@ -166,6 +166,7 @@ const session_index = async (req, res) => {
     const discount = await getPackageDiscount(req.user.Username);
     const famDiscount = await getPackageFamDiscount(req.user.Username);
 
+  
     //to test smth in the front end
     const test = 900;
     const mySessions = doctors.map((doctor) => {
@@ -1095,6 +1096,7 @@ const viewHealthFamwithstatus = async (req, res) => {
 
 
 
+
 const updateFamCredit = async (req, res) => {
   try {
     const curr_user = req.user.Username;
@@ -1207,6 +1209,7 @@ const updateFamCredit = async (req, res) => {
     res.status(400).send({ error: "Failed to subscribe!" });
   }
 };
+
 
 const getWalletAmount = async (req, res) => {
   try {
@@ -1622,7 +1625,7 @@ console.log(user);
 
 
 
-const cancelSubscriptionfamilymember = async (req, res) => {
+ const cancelSubscriptionfamilymember = async (req, res) => {
   try {
     const Startdate = new Date();
     const { NationalId } = req.body;
@@ -1650,7 +1653,7 @@ const cancelSubscriptionfamilymember = async (req, res) => {
       if (subscribed.Status === "Cancelled") {
         res
           .status(400)
-          .send({ error: "You have already cancelled your prescription" });
+          .send({ error: "You have already cancelled your subscription" });
       } else {
         const subscribedUpdate = await subscriptionModel.findOneAndUpdate(
           { Patient: fam.Patient },
