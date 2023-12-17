@@ -12,6 +12,7 @@ import {
 import IconBox from "components/Icons/IconBox";
 import { CreativeTimLogo } from "components/Icons/Icons";
 import shebeenElkom from "assets/img/ShebeenElkom.png";
+import GomaaLogo from "assets/img/GomaaLogo.gif";
 import { Separator } from "components/Separator/Separator";
 import { SidebarHelp } from "components/Sidebar/SidebarHelp";
 import React from "react";
@@ -199,7 +200,7 @@ const SidebarContent = ({ logoText, routes }) => {
           fontSize="11px"
         >
           <img
-            src={shebeenElkom}
+            src={GomaaLogo}
             alt="Shebeen Elkom"
             width="64"
             height="64"

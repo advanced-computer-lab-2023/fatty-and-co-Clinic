@@ -9,6 +9,7 @@ import { SearchBar } from "components/Navbars/SearchBar/SearchBar";
 import { useAuthContext } from "hooks/useAuthContext";
 import jsPdf from "jspdf";
 import logo from "assets/img/ShebeenElkom.png";
+import OrderPrescription from "./components/OrderPrescription";
 import {
   Box,
   Grid,
@@ -36,10 +37,9 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
-import { DownloadIcon } from '@chakra-ui/icons'
+import { DownloadIcon } from "@chakra-ui/icons";
 import { jsPDF } from "jspdf";
 import { FaSignature } from "react-icons/fa";
-
 function PrescriptionTable() {
   const { patientUsername } = useParams();
   const [prescriptions, setPrescriptions] = useState([]);
@@ -49,6 +49,7 @@ function PrescriptionTable() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [doctorNames, setDoctorNames] = useState(new Set());
+  const [addedToCart, setaddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuthContext();
@@ -64,15 +65,19 @@ function PrescriptionTable() {
     let url = API_PATHS.viewPrescriptions;
     setIsLoading(true);
     axios
-      .post(url, {
-            DoctorName: doctorName,
-            Date: date,
-            Status: status,
-        },{
-        headers: {
-          Authorization: Authorization,
+      .post(
+        url,
+        {
+          DoctorName: doctorName,
+          Date: date,
+          Status: status,
         },
-      })
+        {
+          headers: {
+            Authorization: Authorization,
+          },
+        }
+      )
       .then((response) => {
         // get unique doctor names for filtering using doctor name
         const uniqueNames = new Set();
@@ -83,6 +88,7 @@ function PrescriptionTable() {
         console.log(response.data);
         setPrescriptions(response.data);
         setIsLoading(false);
+        console.log(prescriptions);
       })
       .catch((error) => {
         console.error("Error fetching prescriptions:", error);
@@ -121,13 +127,13 @@ function PrescriptionTable() {
   const handleDateChange = (event) => {
     setDate(event.target.value);
   };
-  
+
   const clearSearch = () => {
     setDoctorName("");
     setStatus("");
     setDate("");
     fetchPrescriptions();
-  }
+  };
 
   return (
     <Box>
@@ -137,7 +143,6 @@ function PrescriptionTable() {
         pt="50px"
         justifyContent="flex-start"
       >
-        
         <Card my="0px" overflowX={{ sm: "scroll", xl: "hidden" }}>
           <CardHeader p="6px 0px 22px 0px">
             <Flex direction="column">
@@ -152,48 +157,53 @@ function PrescriptionTable() {
               </Text>
             </Flex>
             <Flex direction="row" alignItems="flex-start">
-          <Grid templateColumns="repeat(5, 1fr)" gap={6} marginLeft={4}>
-            <FormControl>
-              <Select
-                bg="white"
-                placeholder="Select Doctor"
-                value={doctorName}
-                onChange={handleDoctorNameChange}
-              >
-                {Array.from(doctorNames).map((name, index) => (
-                  <option key={index} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl>
-              <Input
-                bg="white"
-                type="date"
-                placeholder="Filter by Date"
-                onChange={handleDateChange}
-              />
-            </FormControl>
-            <FormControl id="status" w="100%" h="10">
-              <Select
-                bg="white"
-                placeholder="Select status"
-                value={status}
-                onChange={handleStatusChange}
-              >
-                <option value="Filled">Filled</option>
-                <option value="Unfilled">Unfilled</option>
-              </Select>
-            </FormControl>
-            <Button w="100%" h="10" onClick={fetchPrescriptions} marginLeft={4}>
-              Search
-            </Button>
-            <Button w="100%" h="10" onClick={clearSearch} marginLeft={4}>
-              Clear
-            </Button>
-          </Grid>
-        </Flex>
+              <Grid templateColumns="repeat(5, 1fr)" gap={6} marginLeft={4}>
+                <FormControl>
+                  <Select
+                    bg="white"
+                    placeholder="Select Doctor"
+                    value={doctorName}
+                    onChange={handleDoctorNameChange}
+                  >
+                    {Array.from(doctorNames).map((name, index) => (
+                      <option key={index} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <Input
+                    bg="white"
+                    type="date"
+                    placeholder="Filter by Date"
+                    onChange={handleDateChange}
+                  />
+                </FormControl>
+                <FormControl id="status" w="100%" h="10">
+                  <Select
+                    bg="white"
+                    placeholder="Select status"
+                    value={status}
+                    onChange={handleStatusChange}
+                  >
+                    <option value="Filled">Filled</option>
+                    <option value="Unfilled">Unfilled</option>
+                  </Select>
+                </FormControl>
+                <Button
+                  w="100%"
+                  h="10"
+                  onClick={fetchPrescriptions}
+                  marginLeft={4}
+                >
+                  Search
+                </Button>
+                <Button w="100%" h="10" onClick={clearSearch} marginLeft={4}>
+                  Clear
+                </Button>
+              </Grid>
+            </Flex>
           </CardHeader>
           <CardBody>
             <Table variant="simple">
@@ -203,24 +213,26 @@ function PrescriptionTable() {
                   <Th>Doctor Name</Th>
                   <Th>Status</Th>
                   <Th></Th>
+                  <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {prescriptions.map((prescription) => (
-                  <Tr
-                    key={prescription._id}
-                  >
+                  <Tr key={prescription._id}>
                     <Td>
-                        <Heading as="h4" size="md" color="teal">
-                            {prescription && prescription.Diagnosis
-                        ? prescription.Diagnosis
-                        : "N/A"}
-                        </Heading>
-                        <Text fontSize="s" color="gray.500">
-                            Diagnosed on {" "} {prescription && prescription.Date
-                        ?  new Date(prescription.Date).toLocaleDateString("en-GB")
-                        : "N/A"}
-                        </Text>
+                      <Heading as="h4" size="md" color="teal">
+                        {prescription && prescription.Diagnosis
+                          ? prescription.Diagnosis
+                          : "N/A"}
+                      </Heading>
+                      <Text fontSize="s" color="gray.500">
+                        Diagnosed on{" "}
+                        {prescription && prescription.Date
+                          ? new Date(prescription.Date).toLocaleDateString(
+                              "en-GB"
+                            )
+                          : "N/A"}
+                      </Text>
                     </Td>
                     <Td>
                       {prescription && prescription.DoctorName
@@ -233,17 +245,32 @@ function PrescriptionTable() {
                         : "N/A"}
                     </Td>
                     <Td>
-                        <Button colorScheme="teal" variant="solid" 
-                            rightIcon={<BsPrescription2 />} onClick={() => openModal(prescription._id)}>
-                            View Prescribed Medicines
+                      <Flex justifyContent="center">
+                        <Button
+                          colorScheme="teal"
+                          variant="solid"
+                          rightIcon={<BsPrescription2 />}
+                          onClick={() => openModal(prescription._id)}
+                        >
+                          View Prescribed Medicines
                         </Button>
+                      </Flex>
                     </Td>
-                    
+                    {/* {!setaddedToCart && ( */}
+                    <Td>
+                      <Flex justifyContent="center">
+                        <OrderPrescription
+                          appointmentId={prescription.AppointmentId}
+                          onClick={() => setaddedToCart(true)}
+                        ></OrderPrescription>
+                      </Flex>
+                    </Td>
+                    {/* )} */}
                   </Tr>
                 ))}
-                </Tbody>
+              </Tbody>
             </Table>
-            </CardBody>
+          </CardBody>
         </Card>
       </Flex>
       {selectedPrescription && (
@@ -257,10 +284,14 @@ function PrescriptionTable() {
             <ModalHeader>Medicine Prescribed</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <ul className="myList" style={{  marginLeft: "40px" }}>
+              <ul className="myList" style={{ marginLeft: "40px" }}>
                 {selectedPrescription.Medicine.map((medicine, index) => (
-                  <li key={index}><span className="medicine-name">{medicine.Name}</span>
-                  <span className="medicine-dosage">{", " + medicine.Dosage + " mg"}</span> </li>
+                  <li key={index}>
+                    <span className="medicine-name">{medicine.Name}</span>
+                    <span className="medicine-dosage">
+                      {", " + medicine.Dosage + " mg"}
+                    </span>{" "}
+                  </li>
                 ))}
               </ul>
               <style>
@@ -277,7 +308,6 @@ function PrescriptionTable() {
                     color: #7f8c8d;
                   }
                   `
-
                 }
               </style>
               <Button
@@ -290,7 +320,7 @@ function PrescriptionTable() {
                   //write the prescription details text with css
                   let y = 23;
                   doc.addImage(logo, 50, 10, 20, 20);
-                  
+
                   doc.setTextColor("teal");
                   doc.setFontSize(20);
                   doc.text("SHEBEEN HEALTH ClINC", 75, y);
@@ -301,9 +331,20 @@ function PrescriptionTable() {
                   doc.text("Prescription", 15, y);
                   doc.setFontSize(10);
                   y += 8;
-                  doc.text("Date: " + new Date(selectedPrescription.Date).toLocaleDateString("en-GB"), 20, y);
+                  doc.text(
+                    "Date: " +
+                      new Date(selectedPrescription.Date).toLocaleDateString(
+                        "en-GB"
+                      ),
+                    20,
+                    y
+                  );
                   y += 8;
-                  doc.text("Diagnosis: " + selectedPrescription.Diagnosis, 20, y);
+                  doc.text(
+                    "Diagnosis: " + selectedPrescription.Diagnosis,
+                    20,
+                    y
+                  );
                   y += 8;
                   doc.text("Status: " + selectedPrescription.Status, 20, y);
                   y += 8;
@@ -333,7 +374,7 @@ function PrescriptionTable() {
                   doc.setFont("Arial", "normal"); // Set font family and style for doctor name
                   doc.text("Doctor Signature ", 150, y);
                   y += 8;
-                  
+
                   doc.setFont("Arial", "italic"); // Set font family and style for doctor signature
                   doc.text(selectedPrescription.DoctorName, 150, y);
 
