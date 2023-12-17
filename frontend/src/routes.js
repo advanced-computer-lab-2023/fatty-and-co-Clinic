@@ -327,7 +327,7 @@ var dashRoutes = [
 
   {
     path: "/viewDoctors",
-    name: "View Doctors",
+    name: "Book Appointment",
     icon: <HomeIcon color="inherit" />,
     component: viewDoctors,
     layout: "/patient",
