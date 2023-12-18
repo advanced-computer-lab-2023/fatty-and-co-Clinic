@@ -101,7 +101,7 @@ var dashRoutes = [
   {
     path: "/package",
     name: "Package",
-    icon: <HomeIcon color="inherit" />,
+    icon: <TbPackages />,
     component: Package,
     layout: "/admin",
   },
@@ -140,6 +140,7 @@ var dashRoutes = [
     icon: <StatsIcon color="inherit" />,
     component: Tables,
     layout: "/admin",
+    show: false,
   },
   {
     path: "/billing",
@@ -148,6 +149,7 @@ var dashRoutes = [
     icon: <CreditIcon color="inherit" />,
     component: Billing,
     layout: "/admin",
+    show: false,
   },
   {
     path: "/dashboard",
@@ -330,13 +332,6 @@ var dashRoutes = [
   },
 
   {
-    path: "/deleteUser",
-    name: "Delete User",
-    icon: <HomeIcon color="inherit" />,
-    component: DeleteUser,
-    layout: "/admin",
-  },
-  {
     path: "/viewMySlots/",
     name: "View Doctor Details",
     icon: <HomeIcon color="inherit" />,
@@ -469,22 +464,6 @@ var dashRoutes = [
     show: false,
   },
 
-  {
-    path: "/tables",
-    name: "Tables",
-    rtlName: "لوحة القيادة",
-    icon: <StatsIcon color="inherit" />,
-    component: Tables,
-    layout: "/admin",
-  },
-  {
-    path: "/billing",
-    name: "Billing",
-    rtlName: "لوحة القيادة",
-    icon: <CreditIcon color="inherit" />,
-    component: Billing,
-    layout: "/admin",
-  },
   {
     path: "/rtl-support-page",
     name: "RTL",
