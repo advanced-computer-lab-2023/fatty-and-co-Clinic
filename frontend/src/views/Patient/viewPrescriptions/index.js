@@ -37,6 +37,9 @@ import {
   StackDivider,
 } from "@chakra-ui/react";
 import { BsPrescription2 } from "react-icons/bs";
+
+import { IoEyeSharp } from "react-icons/io5";
+
 import { DownloadIcon } from "@chakra-ui/icons";
 import { jsPDF } from "jspdf";
 import { FaSignature } from "react-icons/fa";
@@ -245,7 +248,7 @@ function PrescriptionTable() {
                         : "N/A"}
                     </Td>
                     <Td>
-                      <Flex justifyContent="center">
+                      <Flex justifyContent="flex-end">
                         <Button
                           colorScheme="teal"
                           variant="solid"
@@ -354,9 +357,10 @@ function PrescriptionTable() {
                   doc.setFontSize(12);
                   doc.setTextColor("white");
                   doc.setFillColor(0, 128, 128); // Set table header background color to teal
-                  doc.rect(20, y, 80, 10, "F");
+                  doc.rect(20, y, 140, 10, "F");
                   doc.text("Medicine", 25, y + 8);
                   doc.text("Dosage", 75, y + 8);
+                  doc.text("Description", 100, y + 8);
                   y += 18;
 
                   doc.setFont("Arial", "normal");
@@ -367,6 +371,7 @@ function PrescriptionTable() {
                   selectedPrescription.Medicine.forEach((medicine, index) => {
                     doc.text(medicine.Name, 25, y);
                     doc.text(medicine.Dosage + " mg", 77, y);
+                   doc.text(medicine.Description, 105, y);
                     y += 10;
                   });
 
