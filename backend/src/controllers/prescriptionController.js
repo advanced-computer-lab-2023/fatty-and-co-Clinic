@@ -56,7 +56,6 @@ const getPrescriptionAPP = async (req, res) => {
     });
 
     // Check if a prescription is found
-    
 
     res.status(200).json({ prescription });
   } catch (error) {
@@ -69,7 +68,7 @@ const getPrescriptionMeds = async (req, res) => {
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
-    const meds = prescription.Medicine
+    const meds = prescription.Medicine;
 
     // Check if a prescription is found
 
@@ -81,7 +80,7 @@ const getPrescriptionMeds = async (req, res) => {
 
 const addMedToPrescription = async (req, res) => {
   try {
-    const { appointmentId, medicine, dosage,description } = req.query;
+    const { appointmentId, medicine, dosage, description } = req.query;
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
@@ -129,7 +128,7 @@ const deleteMedFromPrescription = async (req, res) => {
     }
     prescription.Medicine.splice(medicineIndex, 1);
     const updatedPrescription = await prescription.save();
-    
+
     res.status(200).json(updatedPrescription);
   } catch (error) {
     res.status(400).send({ message: error.message });
@@ -162,8 +161,7 @@ const updateDosage = async (req, res) => {
 
   const updatedPrescription = await prescription.save();
 
-  res.status(200).json(updatedPrescription
-  );
+  res.status(200).json(updatedPrescription);
 };
 const updateDescription = async (req, res) => {
   const AppointmentId = req.query.AppointmentId;
@@ -225,27 +223,48 @@ const calculatePrescriptionCost = async (req, res) => {
 //place an order to the pharmacy using the medicine list
 const placeOrder = async (req, res) => {
   try {
-    const { appointmentId, address, paymentType } = req.query;
+    console.log(req.body);
+    const { appointmentId } = req.body;
+    console.log(appointmentId);
+    const username = req.user.Username;
+    console.log("username" + username);
+    const password = req.user.Password;
+    console.log("password" + password);
     const prescription = await prescriptionsModel.findOne({
       AppointmentId: appointmentId,
     });
-    const patient = await patientModel.findOne({
-      Username: prescription.PatientUsername,
-    });
-    const TotalCost = await calculatePrescriptionCost(req, res);
+    console.log("appointmentId" + appointmentId);
+    // const TotalCost = await calculatePrescriptionCost(req, res);
     const med = await medicineModel.find({
       Name: { $in: prescription.Medicine.map((medicine) => medicine.Name) },
     });
-    const order = await orderModel.create({
-      PatientUsername: patient.Username,
-      Date: new Date(),
-      Status: "In Progress",
-      Details: "Prescription",
-      TotalCost: TotalCost,
-      PaymentMethod: paymentType,
-      Medicine: med,
-      DeliveryAddress: address,
-    });
+    for (var medicine of med) {
+      console.log(medicine.Name);
+      console.log("quantity" + medicine.Quantity);
+      if (medicine.Quantity < 1) {
+        med.splice(med.indexOf(medicine), 1);
+        console.log(medicine.Name + " is out of stock");
+      }
+    }
+    console.log("med" + med + "ay 7aga");
+    //find user's cart
+    const cart = await cartModel.findOne({ PatientUsername: username });
+    console.log("cart" + cart);
+    //call add medicine to cart for each in med
+    for (var medicine of med) {
+      console.log("medicine" + medicine);
+      cart.TotalCost += medicine.Price;
+      cart.Medicine.push(medicine);
+      await cart.save();
+    }
+    // await axios.post("http://localhost:7000/guest/cartLogin", {
+    //   body: {
+    //     Username: username,
+    //     Password: "Pa55word!",
+    //     Medicines: med,
+    //   },
+    // });
+    res.status(200).json({ message: "Medicines added to cart successfully." });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
