@@ -264,6 +264,7 @@ function PrescriptionTable() {
                       <Flex justifyContent="center">
                         <OrderPrescription
                           appointmentId={prescription.AppointmentId}
+                          status={prescription.Status}
                           onClick={() => setaddedToCart(true)}
                         ></OrderPrescription>
                       </Flex>

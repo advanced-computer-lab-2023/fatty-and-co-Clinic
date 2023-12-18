@@ -138,6 +138,21 @@ const deleteMedFromPrescription = async (req, res) => {
     res.status(400).send({ message: error.message });
   }
 };
+
+const updateStatus = async (req, res) => {
+  const { appointmentId } = req.body;
+  try {
+    const prescription = await prescriptionsModel.findOne({
+      AppointmentId: appointmentId,
+    });
+    prescription.Status = "Filled";
+    await prescription.save();
+    res.status(200).json(prescription);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+}
+
 const updateDosage = async (req, res) => {
   const AppointmentId = req.query.AppointmentId;
   const medicineName = req.query.medicineName;
@@ -278,6 +293,7 @@ module.exports = {
   addPrescription,
   addMedToPrescription,
   deleteMedFromPrescription,
+  updateStatus,
   updateDosage,
   checkForPrescription,
   // calculatePrescriptionCost,

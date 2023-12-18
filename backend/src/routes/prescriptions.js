@@ -3,6 +3,7 @@ const {
   addPrescription,
   addMedToPrescription,
   deleteMedFromPrescription,
+  updateStatus,
   updateDosage,
   checkForPrescription,
   // calculatePrescriptionCost,
@@ -19,7 +20,7 @@ router.post("/deleteMedFromPrescription", deleteMedFromPrescription);
 router.post("/updateDescription", updateDescription);
 router.post("/orderPrescription", placeOrder);
 router.get("/getPrescriptionAPP", getPrescriptionAPP);
-
+router.post("/updateStatus", updateStatus);
 router.post("/updateDosage", updateDosage);
 
 router.get("/checkForPrescription", checkForPrescription);

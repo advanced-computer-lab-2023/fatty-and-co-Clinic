@@ -134,6 +134,7 @@ export const API_PATHS = {
   getPrescriptionAPP: PRESCRIPTION_BASE + "getPrescriptionAPP",
   addToCart: PRESCRIPTION_BASE + "orderPrescription",
   updateDescription: PRESCRIPTION_BASE + "updateDescription",
+  updateStatus: PRESCRIPTION_BASE + "updateStatus",
 
   //Message
   getMessages: MESSAGE_BASE + "getMessages",

@@ -9,7 +9,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { usePrescriptionContext } from "hooks/usePrescriptionContext";
 // import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-export default function OrderPrescription({ appointmentId }) {
+export default function OrderPrescription({ appointmentId , status}) {
   const { user } = useAuthContext();
   const toast = useToast();
   const [addedToCart, setaddedToCart] = useState(false);
@@ -40,7 +40,17 @@ export default function OrderPrescription({ appointmentId }) {
           duration: 9000,
           isClosable: true,
         });
+
         window.location.href = "http://localhost:4000/patient/cart";
+
+        await fetch(API_PATHS.updateStatus, {
+          method: "POST",
+          headers: {
+            Authorization,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ appointmentId }),
+        });
       } else {
         toast({
           title: "Error ",
@@ -62,6 +72,7 @@ export default function OrderPrescription({ appointmentId }) {
         variant="solid"
         rightIcon={<IoAddCircleSharp />}
         onClick={handleSubmit}
+        disabled={status === "Filled"}
       >
         Add To Pharmacy Cart
       </Button>
